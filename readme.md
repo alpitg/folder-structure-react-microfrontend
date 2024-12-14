@@ -1,6 +1,6 @@
 ### Features
 
-- [-]  UI component
+- [ ]  UI component
     - [x]  Folder structure
     - [ ]  Login
     - [ ]  Side bar
