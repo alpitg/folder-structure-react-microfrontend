@@ -1,3 +1,18 @@
+### Features
+
+- [-]  UI component
+    - [x]  Folder structure
+    - [ ]  Login
+    - [ ]  Side bar
+    - [ ]  header
+- [x]  Microfrotend support
+- [ ]  Axios
+- [ ]  Redux - `npm install @reduxjs/toolkit react-redux`
+- [ ]  Slice
+- [ ]  Thunk
+- [ ]  Custom Theme selection 
+- [ ]  -----
+
 ### usefull commands
 ```shell
 npm create vite@latest host-app --template react-ts
@@ -11,6 +26,9 @@ cd micro-widget
 npm install                                                
 npm run dev                                                
 npm install @originjs/vite-plugin-federation --save-dev
+
+npm run build
+npm run preview
 ```
 
 ### micro frontend setting
