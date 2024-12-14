@@ -6,14 +6,16 @@
     - [ ]  Side bar
     - [ ]  header
 - [x]  Microfrotend support
-- [ ]  Axios
-- [ ]  Redux - `npm install @reduxjs/toolkit react-redux`
-- [ ]  Slice
+- [x]  Axios
+- [x]  Redux - `npm install @reduxjs/toolkit react-redux --save`
+- [x]  Slice
 - [ ]  Thunk
 - [ ]  Custom Theme selection 
 - [ ]  -----
 
-### usefull commands
+
+### For fresh start
+#### usefull commands
 ```shell
 npm create vite@latest host-app --template react-ts
 cd host-app                                       
@@ -31,7 +33,7 @@ npm run build
 npm run preview
 ```
 
-### micro frontend setting
+##### micro frontend setting
 ```ts
 import { defineConfig } from 'vite'
 import federation from '@originjs/vite-plugin-federation'
@@ -59,7 +61,7 @@ export default defineConfig({
 })
 ```
 
-### host/parent app setting
+##### host/parent app setting
 ```ts
 import { defineConfig } from 'vite'
 import federation from '@originjs/vite-plugin-federation'
