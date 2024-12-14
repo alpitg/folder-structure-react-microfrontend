@@ -7,13 +7,13 @@ export default defineConfig({
   plugins: [
     react(),
     federation({
-    name: "micro-widge", // Does not matter for import as microfrontend
-    filename: "remoteEntry.js",
-    exposes: {
-      "./Widge": "./src/App",
-    },
-    shared: ["react", "react-dom"],
-  })
+      name: "micro-widget", // Does not matter for import as microfrontend
+      filename: "remoteEntry.js",
+      exposes: {
+        "./Widget": "./src/App",
+      },
+      shared: ["react", "react-dom"],
+    })
   ],
   build: {
     modulePreload: false,

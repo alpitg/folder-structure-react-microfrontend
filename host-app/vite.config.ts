@@ -9,7 +9,8 @@ export default defineConfig({
     federation({
       name: "app",
       remotes: {
-        microfrontWidge: "http://localhost:4174/assets/remoteEntry.js"
+        // Module name is used to import app in modules
+        microWidget: "http://localhost:4173/assets/remoteEntry.js"
       },
       shared: ["react", "react-dom"]
     })

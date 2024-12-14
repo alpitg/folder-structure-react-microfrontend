@@ -1,3 +1,3 @@
 /// <reference types="vite/client" />
 
-declare module "microfrontWidge/Widge";
+declare module "microWidget/Widget";
