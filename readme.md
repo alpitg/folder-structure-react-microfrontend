@@ -1,4 +1,4 @@
-## usefull commands
+### usefull commands
 ```shell
 npm create vite@latest host-app --template react-ts
 cd host-app                                       
@@ -13,7 +13,7 @@ npm run dev
 npm install @originjs/vite-plugin-federation --save-dev
 ```
 
-## micro frontend
+### micro frontend setting
 ```ts
 import { defineConfig } from 'vite'
 import federation from '@originjs/vite-plugin-federation'
@@ -41,7 +41,7 @@ export default defineConfig({
 })
 ```
 
-## host/parent app
+### host/parent app setting
 ```ts
 import { defineConfig } from 'vite'
 import federation from '@originjs/vite-plugin-federation'
