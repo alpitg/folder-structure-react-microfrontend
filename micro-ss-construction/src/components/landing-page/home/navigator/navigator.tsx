@@ -1,6 +1,6 @@
 import "./navigator.scss";
 
-import React, { useState } from "react";
+import { useState } from "react";
 
 const Navigator = () => {
   const [menuOpen, setMenuOpen] = useState(false);

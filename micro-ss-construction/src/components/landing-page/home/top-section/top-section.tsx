@@ -3,6 +3,15 @@ import "./top-section.scss";
 import MicroButton from "../../../ui/button/button";
 
 const TopSection = () => {
+  const handleDownload = () => {
+    const link = document.createElement("a");
+    link.href = "files/Brochure.pdf"; // Path to the PDF file in the public folder
+    link.download = "SS_Construction_Brochure.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <section className="top-section">
       <div className="content">
@@ -11,8 +20,13 @@ const TopSection = () => {
           We build your dream home, <small>since 1990</small>
         </p>
         <p className="contact"> {`Contact us: +91 8149403097`}</p>
-        <MicroButton variant="secondary" className="our-service-button">
-          {`Get a Quotation`}
+        <br />
+        <MicroButton
+          variant="secondary"
+          className="our-service-button"
+          onClick={handleDownload}
+        >
+          {`DOWNLOAD BROCHURE`}
         </MicroButton>
       </div>
 

@@ -1,6 +1,5 @@
 .navigator {
-  background-color: #333;
-  color: white;
+  background-color: #1e1e1f;
   padding: 10px 20px;
   position: fixed;
   width: 100%;
@@ -21,19 +20,19 @@
         display: flex;
         list-style: none;
         margin: 0;
-        padding: 0;
+        padding: 0 50px;
 
         li {
-          margin-left: 20px;
+          margin-left: 50px;
 
           a {
-            color: white;
+            color: var(--white-color);
             text-decoration: none;
             font-size: 1rem;
             transition: color 0.3s ease;
 
             &:hover {
-              color: #f4bc16;
+              color: var(--primary-yellow-color);
             }
           }
         }
