@@ -1,7 +1,10 @@
 .request-a-quote {
-  display: flex;
-  justify-content: space-around;
   padding: 20px 0 20px 0;
+
+  .row {
+    display: flex;
+    justify-content: space-around;
+  }
 
   .cost-of-renovation {
     width: 50%;
@@ -30,5 +33,36 @@
 
   .quote {
     align-content: center;
+  }
+
+  .quote-form {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 40px;
+    background-color: var(--app-bg-color);
+    box-shadow: 0 2px 4px var(--app-bg-color);
+
+    .form-group {
+      margin-bottom: 15px;
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 10px 0;
+        border: 1px solid var(--app-bg-color);
+        font-size: 1rem;
+      }
+
+      textarea {
+        resize: vertical;
+        height: 100px;
+      }
+    }
   }
 }

@@ -35,13 +35,14 @@ const TopSection = () => {
           <h3>OUR SERVICES</h3>
         </div>
         <ul className="services-list">
-          <li>Residential Construction</li>
-          <li>Commercial Construction</li>
-          <li>Civil Work</li>
-          <li>Painting</li>
-          <li>Tiling</li>
-          <li>Interior Design</li>
-          <li>Renovation</li>
+          <li>Civil construction</li>
+          <li>Marble work</li>
+          <li>Furniture work</li>
+          <li>Ceiling work</li>
+          <li>Painting work</li>
+          <li>Interior Renovation</li>
+          <li>Design and Build</li>
+          <li>Tiling and Painting</li>
         </ul>
       </div>
     </section>
