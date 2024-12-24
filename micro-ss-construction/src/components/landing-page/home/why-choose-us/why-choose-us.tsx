@@ -4,7 +4,7 @@ import MicroHeaderDescribe from "../../../ui/header-describe/header-describe";
 
 const WhyChooseUs = () => {
   return (
-    <section className="why-choose-us">
+    <section className="why-choose-us" id="why-choose-us">
       <div className="text-align-center">
         <MicroHeaderDescribe header="WHY CHOOSE US">
           <p>

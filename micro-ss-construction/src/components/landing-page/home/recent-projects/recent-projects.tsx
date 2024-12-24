@@ -5,7 +5,7 @@ import MicroHeaderDescribe from "../../../ui/header-describe/header-describe";
 
 const RecentProjects = () => {
   return (
-    <section className="recent-projects">
+    <section className="recent-projects" id="our-projects">
       <div className="text-align-center">
         <MicroHeaderDescribe header="RECENT PROJECTS">
           <p>

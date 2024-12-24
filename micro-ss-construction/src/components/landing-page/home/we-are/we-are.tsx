@@ -26,7 +26,6 @@ const WeAre = () => {
               <div className="ornament"></div>
               <MicroHeaderDescribe header="WE'RE FRIENDLY" headerSize="h5">
                 <p>
-                  {" "}
                   Morbi nulla tortor, dignissim est node cursus euismod est
                   arcu. Nomad at vehicula novum justo magna.
                 </p>
@@ -40,7 +39,6 @@ const WeAre = () => {
               <div className="ornament"></div>
               <MicroHeaderDescribe header="WE'RE ACCURATE" headerSize="h5">
                 <p>
-                  {" "}
                   Morbi nulla tortor, dignissim est node cursus euismod est
                   arcu. Nomad at vehicula novum justo magna.
                 </p>
@@ -54,7 +52,6 @@ const WeAre = () => {
               <div className="ornament"></div>
               <MicroHeaderDescribe header="WE'RE TRUSTED" headerSize="h5">
                 <p>
-                  {" "}
                   Morbi nulla tortor, dignissim est node cursus euismod est
                   arcu. Nomad at vehicula novum justo magna.
                 </p>

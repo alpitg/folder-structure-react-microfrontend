@@ -24,7 +24,7 @@ const Navigator = () => {
               <a href="#top-section">Home</a>
             </li>
             <li>
-              <a href="#our-services">Our Services</a>
+              <a href="#our-projects">Projects</a>
             </li>
             <li>
               <a href="#why-choose-us">Why Choose Us</a>

@@ -13,7 +13,7 @@ const TopSection = () => {
   };
 
   return (
-    <section className="top-section">
+    <section className="top-section" id="top-section">
       <div className="content">
         <h1 className="header">SS Construction</h1>
         <p className="sub-header">
