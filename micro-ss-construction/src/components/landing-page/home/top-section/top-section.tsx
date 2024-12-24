@@ -10,16 +10,25 @@ const TopSection = () => {
         <p className="sub-header">
           We build your dream home, <small>since 1990</small>
         </p>
-
+        <p className="contact"> {`Contact us: +91 8149403097`}</p>
         <MicroButton variant="secondary" className="our-service-button">
-          {`VIEW OUR SERVICES >>`}
+          {`Get a Quotation`}
         </MicroButton>
       </div>
-      <div className="banner">
-        <div className="image image-1"></div>
-        <div className="image image-2"></div>
-        <div className="image image-3"></div>
-        <div className="image image-4"></div>
+
+      <div className="right">
+        <div className="service-header">
+          <h3>OUR SERVICES</h3>
+        </div>
+        <ul className="services-list">
+          <li>Residential Construction</li>
+          <li>Commercial Construction</li>
+          <li>Civil Work</li>
+          <li>Painting</li>
+          <li>Tiling</li>
+          <li>Interior Design</li>
+          <li>Renovation</li>
+        </ul>
       </div>
     </section>
   );

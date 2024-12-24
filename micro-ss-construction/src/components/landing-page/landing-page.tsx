@@ -1,6 +1,7 @@
 import "./landing-page.scss";
 
 import ContactStrip from "./home/contact-strip/contact-strip";
+import CostOfRenovation from "./home/renovation/cost-of-renovation/cost-of-renovation";
 import Footer from "./home/footer/footer";
 import Navigator from "./home/navigator/navigator";
 import OurServices from "./home/our-services/our-services";
@@ -17,6 +18,8 @@ const LandingPage = () => {
       <Navigator />
 
       <TopSection />
+
+      <CostOfRenovation />
 
       <WeAre />
 

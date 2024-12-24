@@ -4,8 +4,9 @@
   align-items: center;
   padding: 0 5%; // Add some padding for better spacing
   overflow: hidden;
-  background-image: url("/images/banner3.png"); // Adjust the path to your image
+  position: relative; // Ensure the pseudo-element is positioned correctly
 
+  background-image: url("/images/banner3.png"); // Adjust the path to your image
   background-size: cover; // Ensures the image covers the entire background
   background-position: center; // Centers the image
   background-repeat: no-repeat; // Prevents the image from repeating
@@ -25,7 +26,7 @@
   .content {
     color: var(--white-color);
     text-align: left;
-    z-index: 2; // Ensure content is above the banner
+    z-index: 2; // Ensure content is above the overlay
     max-width: 50%; // Limit the width of the content
 
     .header {
@@ -36,13 +37,74 @@
 
     .sub-header {
       color: var(--white-color);
-      font-size: 22px;
+      font-size: 1.5rem;
       margin-bottom: 2rem;
       animation: fadeInLeft 1.5s ease-in-out;
     }
 
+    .contact {
+      color: var(--white-color);
+      font-size: 1.5rem;
+    }
+
     .our-service-button {
       animation: fadeInLeft 2s ease-in-out;
+    }
+  }
+
+  .right {
+    flex: 1;
+    justify-content: flex-end;
+    text-align: right;
+    z-index: 2; // Ensure content is above the overlay
+    color: var(--white-color);
+
+    .service-header:after {
+      display: block;
+      content: "";
+      background: var(--primary-yellow-color);
+      height: 2px;
+      width: 80px;
+      margin-left: auto;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .services-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        margin: 10px 0;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: color 0.1s ease;
+        animation: fadeInLeft 0.2s ease-in;
+        animation-fill-mode: both;
+
+        &:nth-child(1) {
+          animation-delay: 0.2s;
+        }
+        &:nth-child(2) {
+          animation-delay: 0.4s;
+        }
+        &:nth-child(3) {
+          animation-delay: 0.6s;
+        }
+        &:nth-child(4) {
+          animation-delay: 0.8s;
+        }
+        &:nth-child(5) {
+          animation-delay: 1s;
+        }
+        &:nth-child(6) {
+          animation-delay: 1.2s;
+        }
+        &:nth-child(7) {
+          animation-delay: 1.4s;
+        }
+      }
     }
   }
 }

@@ -13,7 +13,6 @@ const WeAre = () => {
 
               <MicroHeaderDescribe header="WE'RE EXPERTS" headerSize="h5">
                 <p>
-                  {" "}
                   Morbi nulla tortor, dignissim est node cursus euismod est
                   arcu. Nomad at vehicula novum justo magna.
                 </p>
