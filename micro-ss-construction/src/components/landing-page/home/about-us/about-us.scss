@@ -1,0 +1,25 @@
+.about-us {
+  .short-about-us {
+    margin-top: 40px;
+
+    .image-wrapper > img {
+      border-radius: 50%;
+    }
+
+    .about-features-list {
+      ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        list-style: none;
+
+        li {
+          position: relative;
+          width: 390px; // Set the card width
+          background: var(--white-color);
+          overflow: hidden;
+        }
+      }
+    }
+  }
+}

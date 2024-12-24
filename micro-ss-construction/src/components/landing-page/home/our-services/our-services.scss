@@ -1,0 +1,52 @@
+.our-services {
+  text-align: center;
+  padding-top: 40px;
+
+  img {
+    display: block;
+    transition: opacity 0.3s ease 0s;
+    opacity: 1;
+    max-width: 100%;
+    height: auto;
+  }
+
+  img:hover {
+    opacity: 0.8;
+  }
+
+  .services-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-top: 50px;
+    list-style: none;
+
+    li {
+      position: relative;
+      width: 390px; // Set the card width
+      background: var(--white-color);
+      overflow: hidden;
+
+      p {
+        padding: 0 20px 0 20px;
+        font-size: 14px;
+        line-height: 24px;
+      }
+
+      h4.box-header::after {
+        margin-top: 13px;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+        content: "";
+        background: var(--primary-yellow-color);
+        width: 40px;
+        height: 2px;
+      }
+    }
+  }
+
+  .view-all-services {
+    padding: 60px 0 70px 0;
+  }
+}
