@@ -7,7 +7,7 @@ const Footer = () => {
     <div className="footer">
       <div className="row text-align-center padding-top-bottom-30">
         <span className="copyright">
-          {`© Copyright ${new Date().getFullYear()} ${companyName}, Designed by `}
+          {`Copyright © ${new Date().getFullYear()} ${companyName} | Designed by `}
           <a
             href="https://www.technossplash.com"
             title="Technossplash"

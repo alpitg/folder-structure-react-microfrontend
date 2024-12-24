@@ -20,52 +20,37 @@ const OurServices = () => {
 
         <ul className="services-list">
           <li>
-            <img src="src/assets/images/samples/image1.png" alt="" />
-            <h4 className="box-header">
-              <a
-                href="?page=service_interior_renovation"
-                title="Interior Renovation"
-              >
-                INTERIOR RENOVATION
-              </a>
-            </h4>
-            <p>
-              We can help you bring new life to existing rooms and develop
-              unused spaces.
-            </p>
+            <img src="/images/samples/image1.png" alt="" />
+            <MicroHeaderDescribe header="INTERIOR RENOVATION" headerSize="h4">
+              <p>
+                We can help you bring new life to existing rooms and develop
+                unused spaces.
+              </p>
+            </MicroHeaderDescribe>
           </li>
 
           <li>
-            <img src="src/assets/images/samples/image2.png" alt="" />
-            <h4 className="box-header">
-              <a href="?page=service_design_build" title="Design and Build">
-                DESIGN AND BUILD
-              </a>
-            </h4>
-            <p>
-              From initial design and project specification to archieving a high
-              end finish.
-            </p>
+            <img src="/images/samples/image2.png" alt="" />
+            <MicroHeaderDescribe header="DESIGN AND BUILD" headerSize="h4">
+              <p>
+                From initial design and project specification to archieving a
+                high end finish.
+              </p>
+            </MicroHeaderDescribe>
           </li>
 
           <li>
             <img
-              src="src/assets/images/samples/image3.png"
+              src="/images/samples/image3.png"
               alt=""
               title="Tiling and Painting"
             />
-            <h4 className="box-header">
-              <a
-                href="?page=service_tiling_painting"
-                title="Tiling and Painting"
-              >
-                TILING AND PAINTING
-              </a>
-            </h4>
-            <p>
-              We offer quality tiling and painting solutions for interior and
-              exterior.
-            </p>
+            <MicroHeaderDescribe header="TILING AND PAINTING" headerSize="h4">
+              <p>
+                We offer quality tiling and painting solutions for interior and
+                exterior.
+              </p>
+            </MicroHeaderDescribe>
           </li>
         </ul>
       </div>

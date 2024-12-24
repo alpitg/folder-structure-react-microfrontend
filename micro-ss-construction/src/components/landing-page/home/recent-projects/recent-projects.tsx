@@ -20,7 +20,7 @@ const RecentProjects = () => {
           <ul className="projects-list">
             <li>
               <a href="?page=project_design_build" title="Design and Build">
-                <img src="/src/assets/images/projects/project1.png" alt="" />
+                <img src="/images/projects/project1.png" alt="" />
               </a>
               <div className="view align-center">
                 <div className="vertical-align-table">
@@ -38,7 +38,7 @@ const RecentProjects = () => {
                 href="?page=project_garden_renovation"
                 title="Garden Renovation"
               >
-                <img src="/src/assets/images/projects/project2.png" alt="" />
+                <img src="/images/projects/project2.png" alt="" />
               </a>
               <div className="view align-center">
                 <div className="vertical-align-table">
@@ -56,7 +56,7 @@ const RecentProjects = () => {
                 href="?page=project_interior_renovation"
                 title="Interior Renovation"
               >
-                <img src="/src/assets/images/projects/project3.png" alt="" />
+                <img src="/images/projects/project3.png" alt="" />
               </a>
               <div className="view align-center">
                 <div className="vertical-align-table">
@@ -71,7 +71,7 @@ const RecentProjects = () => {
             </li>
             <li>
               <a href="?page=project_solar_systems" title="Solar Systems">
-                <img src="/src/assets/images/projects/project4.png" alt="" />
+                <img src="/images/projects/project4.png" alt="" />
               </a>
               <div className="view align-center">
                 <div className="vertical-align-table">

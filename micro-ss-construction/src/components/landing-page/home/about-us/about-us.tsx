@@ -20,7 +20,7 @@ const AboutUs = () => {
         <div className="d-flex">
           <div className="image-wrapper">
             <img
-              src="/src/assets/images/samples/image4.png"
+              src="/images/samples/image4.png"
               alt=""
               className="radius"
             />
