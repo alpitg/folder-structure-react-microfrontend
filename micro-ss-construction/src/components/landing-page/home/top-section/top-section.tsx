@@ -44,6 +44,14 @@ const TopSection = () => {
           <li>Design and Build</li>
           <li>Tiling and Painting</li>
         </ul>
+        <br />
+        <MicroButton
+          variant="primary"
+          title="REQUEST A QUOTE"
+          className="request-a-quote-button"
+        >
+          <a href="#request-a-quote">REQUEST A QUOTE</a>
+        </MicroButton>
       </div>
     </section>
   );
