@@ -1,9 +1,19 @@
 .about-us {
   .short-about-us {
     margin-top: 40px;
+    display: flex;
+    width: 100%;
 
-    .image-wrapper > img {
-      border-radius: 50%;
+    .image-wrapper {
+      text-align: center;
+      width: 100%;
+      height: 100%;
+
+      img {
+        border-radius: 50%;
+        width: 90%;
+        padding: 20px;
+      }
     }
 
     .about-features-list {
@@ -20,6 +30,10 @@
           overflow: hidden;
         }
       }
+    }
+
+    @media (max-width: 768px) {
+      display: grid;
     }
   }
 }

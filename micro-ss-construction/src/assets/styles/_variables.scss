@@ -1,4 +1,19 @@
+/************************************/
+/*** 	 01. Global Variables	  ***/
+/************************************/
+
 :root {
+  --primary-color: #2c2c2c;
+  --secondary-color: #f9f9f9;
+  --text-color: #707070;
+  --accent-color: #3797e4;
+  --white-color: #ffffff;
+  --divider-color: #eeeeee;
+  --dark-divider-color: #ffffff33;
+  --error-color: rgb(230, 87, 87);
+  --default-font: "Montserrat", sans-serif;
+  --accent-font: "Jost", sans-serif;
+
   --primary-yellow-color: #f4bc16;
   --white-color: #fff;
   --black-color: #000;
@@ -13,6 +28,17 @@
 }
 
 [data-theme="dark"] {
+  --primary-color: #2c2c2c;
+  --secondary-color: #f9f9f9;
+  --text-color: #707070;
+  --accent-color: #3797e4;
+  --white-color: #ffffff;
+  --divider-color: #eeeeee;
+  --dark-divider-color: #ffffff33;
+  --error-color: rgb(230, 87, 87);
+  --default-font: "Montserrat", sans-serif;
+  --accent-font: "Jost", sans-serif;
+
   --primary-yellow-color: #f4bc16;
   --white-color: #fff;
   --black-color: #000;
@@ -22,6 +48,6 @@
   --app-divider-color: #e2e6e7;
   --app-button-primary-alt-border-color: #e2e6e7;
   --app-button-primary-alt-color: #999;
-  
+
   --app-font-disabled-color: #999;
 }

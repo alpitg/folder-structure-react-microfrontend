@@ -1,5 +1,6 @@
 import "./recent-projects.scss";
 
+import ImageViewer from "../image-viewer/image-viewer";
 import MicroButton from "../../../ui/button/button";
 import MicroHeaderDescribe from "../../../ui/header-describe/header-describe";
 
@@ -10,9 +11,8 @@ const RecentProjects = () => {
         <MicroHeaderDescribe header="RECENT PROJECTS">
           <p>
             Here are a few of many projects we have completed for our customers.
-            We provide a professional service
-            which includes consultation, free estimate, design, supply of
-            materials and installation.
+            We provide a professional service which includes consultation, free
+            estimate, design, supply of materials and installation.
           </p>
         </MicroHeaderDescribe>
 
@@ -96,6 +96,10 @@ const RecentProjects = () => {
               VIEW ALL PROJECTS
             </MicroButton>
           </div>
+        </div>
+
+        <div className="row">
+          <ImageViewer />
         </div>
       </div>
     </section>

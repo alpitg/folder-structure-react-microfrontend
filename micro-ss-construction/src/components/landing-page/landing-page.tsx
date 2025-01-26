@@ -1,8 +1,10 @@
 import "./landing-page.scss";
 
+import AboutUs from "./home/about-us/about-us";
 import ContactStrip from "./home/contact-strip/contact-strip";
 import CostOfRenovation from "./home/renovation/cost-of-renovation/cost-of-renovation";
 import Footer from "./home/footer/footer";
+import ImageViewer from "./home/image-viewer/image-viewer";
 import Navigator from "./home/navigator/navigator";
 import OurServices from "./home/our-services/our-services";
 import Overall from "./home/overall/overall";
@@ -17,6 +19,10 @@ const LandingPage = () => {
     <div className="landing-page">
       <Navigator />
 
+      <br />
+      <br />
+      <br />
+
       <TopSection />
 
       <CostOfRenovation />
@@ -27,19 +33,19 @@ const LandingPage = () => {
 
       <RecentProjects />
 
-      {/* <AboutUs /> */}
+      <AboutUs />
 
       <WeOffer />
 
       <WhyChooseUs />
-
-      {/* <Testimonial /> */}
 
       <ContactStrip />
 
       <Overall />
 
       <Footer />
+
+      {/* <Testimonial /> */}
     </div>
   );
 };
