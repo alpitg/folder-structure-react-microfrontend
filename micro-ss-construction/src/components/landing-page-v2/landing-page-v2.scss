@@ -839,6 +839,7 @@ header.main-header .header-sticky.active {
   position: absolute;
   top: 3px;
   left: 0;
+  font-family: "Font Awesome 6 Free";
   font-weight: 900;
   font-size: 20px;
   color: var(--accent-color);
@@ -2229,7 +2230,7 @@ header.main-header .header-sticky.active {
 
 .footer-header {
   display: flex;
-  flex-wrap: wrap;
+  // flex-wrap: wrap;
   align-items: center;
   gap: 20px;
   background-color: var(--primary-color);
@@ -2251,8 +2252,8 @@ header.main-header .header-sticky.active {
   width: calc(80% - 10px);
   display: flex;
   flex-wrap: wrap;
-  justify-content: end;
-  gap: 30px 80px;
+  justify-content: center;
+  gap: 30px 90px;
 }
 
 .footer-contact-item {
@@ -2559,7 +2560,7 @@ header.main-header .header-sticky.active {
   position: absolute;
   font-weight: 900;
   font-size: 20px;
-  font-family: 'Font Awesome 6 Free';
+  font-family: "Font Awesome 6 Free";
   color: var(--accent-color);
   display: inline-block;
   line-height: normal;
@@ -4745,6 +4746,12 @@ header.main-header .header-sticky.active {
 /*** 	30. Contact Us Page css	  ***/
 /************************************/
 
+.icon-box-qr img {
+  width: 100px;
+  height: 100px;
+  border-radius: 33%;
+}
+
 .page-contact-us {
   background: var(--white-color);
   padding: 100px 0 150px;
@@ -4786,7 +4793,7 @@ header.main-header .header-sticky.active {
 .contact-info-list {
   position: absolute;
   right: 40px;
-  bottom: 40px;
+  bottom: 25%;
   left: 40px;
   display: flex;
   flex-wrap: wrap;
@@ -6205,6 +6212,7 @@ header.main-header .header-sticky.active {
   }
 
   .footer-contact-box {
+    display: block;
     width: 100%;
     gap: 20px;
   }

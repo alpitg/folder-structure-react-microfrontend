@@ -21,7 +21,7 @@ const ContactStrip = () => {
               <p>
                 Plot No: 17 Balaji Nagar west Opposite Rahul medical store
                 <br />
-                Manewada road Nagpur 440027 272 Linden Avenue
+                Manewada road, Nagpur 440027
               </p>
             </li>
           </ul>

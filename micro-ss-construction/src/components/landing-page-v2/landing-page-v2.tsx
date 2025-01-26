@@ -1,6 +1,18 @@
 import "./landing-page-v2.scss";
 
+import Gallery from "./gallery/gallery";
+import MicroButton from "../ui/button/button";
+
 const LandingPageV2 = () => {
+  const handleDownload = () => {
+    const link = document.createElement("a");
+    link.href = "files/Brochure.pdf"; // Path to the PDF file in the public folder
+    link.download = "SS_Construction_Brochure.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="landing-page-v2">
       <div className="hero parallaxie">
@@ -14,18 +26,20 @@ const LandingPageV2 = () => {
                     Your home's trusted repair experts
                   </h1>
                 </div>
-                <div className="hero-btn wow fadeInUp" data-wow-delay="0.2s">
-                  <a href="#" className="btn-default">
-                    get started
+                <div
+                  className="hero-btn wow fadeInUp d-flex"
+                  data-wow-delay="0.2s"
+                >
+                  <a href="#" className="btn-default" onClick={handleDownload}>
+                    {`DOWNLOAD BROCHURE`}
                   </a>
                   <a
-                    href="contact.html"
+                    href="#page-contact-us"
                     className="btn-default btn-highlighted"
                   >
                     contact now
                   </a>
                 </div>
-
                 <div className="hero-list wow fadeInUp" data-wow-delay="0.4s">
                   <ul>
                     <li>24/7 emergency services</li>
@@ -335,7 +349,7 @@ const LandingPageV2 = () => {
 
                 <div className="best-services-image">
                   <figure className="image-anime">
-                    <img src="/images/samples/about-img-2.jpg" alt="" />
+                    <img src="/images/samples/about-img-1.jpg" alt="" />
                   </figure>
                 </div>
               </div>
@@ -891,7 +905,7 @@ const LandingPageV2 = () => {
         </div>
       </div>
 
-      <div className="page-contact-us bg-radius-section">
+      <div className="page-contact-us bg-radius-section" id="page-contact-us">
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-2"></div>
@@ -955,9 +969,14 @@ const LandingPageV2 = () => {
                       <p>location:</p>
                       <h3>
                         Plot No: 17 Balaji Nagar west Opposite Rahul medical
-                        store, Manewada road Nagpur 440027 272 Linden Avenue
+                        store <br />
+                        Manewada road, Nagpur 440027
                       </h3>
                     </div>
+                  </div>
+
+                  <div className="icon-box-qr">
+                    <img src="files/ss-construction-qr.png" alt="ss-qr" />
                   </div>
                 </div>
               </div>
@@ -1526,13 +1545,15 @@ const LandingPageV2 = () => {
         </div>
       </>
 
+      <Gallery />
+
       <footer className="main-footer bg-radius-section">
         <div className="container">
           <div className="row">
             <div className="col-lg-12">
               <div className="footer-header">
                 <div className="footer-logo">
-                  <img src="images/footer-logo.svg" alt="" />
+                  <img src="images/logo/white-logo-transparent.gif" alt="" />
                 </div>
 
                 <div className="footer-contact-box">
@@ -1543,10 +1564,9 @@ const LandingPageV2 = () => {
 
                     <div className="footer-contact-content">
                       <h3>contact</h3>
-                      <p>+1.809.120.6705</p>
+                      <p>+91 8149403097</p>
                     </div>
                   </div>
-
                   <div className="footer-contact-item">
                     <div className="icon-box">
                       <img src="/images/icons/icon-mail.svg" alt="" />
@@ -1554,7 +1574,7 @@ const LandingPageV2 = () => {
 
                     <div className="footer-contact-content">
                       <h3>email</h3>
-                      <p>info@domain.com</p>
+                      <p>vivaanassociates01@gmail.com</p>
                     </div>
                   </div>
                 </div>
