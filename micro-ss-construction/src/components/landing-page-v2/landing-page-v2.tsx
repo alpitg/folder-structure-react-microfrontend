@@ -1,9 +1,14 @@
 import "./landing-page-v2.scss";
 
+import { useEffect, useState } from "react";
+
+import { CompanyDetailsModel } from "../interfaces/company-details.model";
 import Gallery from "./gallery/gallery";
-import MicroButton from "../ui/button/button";
+import { fetchCompanyDetails } from "../../services/company-details";
 
 const LandingPageV2 = () => {
+  const [detail, setDetail] = useState<CompanyDetailsModel>();
+
   const handleDownload = () => {
     const link = document.createElement("a");
     link.href = "files/Brochure.pdf"; // Path to the PDF file in the public folder
@@ -13,6 +18,14 @@ const LandingPageV2 = () => {
     document.body.removeChild(link);
   };
 
+  useEffect(() => {
+    fetchCompanyDetails()
+      .then((data) => setDetail(data))
+      .catch((error) =>
+        console.error("Error fetching company details:", error)
+      );
+  }, []);
+
   return (
     <div className="landing-page-v2">
       <div className="hero parallaxie">
@@ -21,10 +34,24 @@ const LandingPageV2 = () => {
             <div className="col-lg-12">
               <div className="hero-content">
                 <div className="section-title dark-section">
-                  <h3 className="wow fadeInUp">welcome to handyman</h3>
-                  <h1 className="text-anime-style-3" data-cursor="-opaque">
-                    Your home's trusted repair experts
-                  </h1>
+                  <div className="icon-box">
+                    <img src="images/logos/white-logo-transparent.png" alt="" />
+                  </div>
+                  <h3 className="wow fadeInUp">welcome to {detail?.name}</h3>
+                  <h2
+                    className="wow fadeInUp"
+                    style={{
+                      visibility: "visible",
+                      animationName: "fadeInUp",
+                      transitionDelay: "0.2s",
+                    }}
+                  >
+                    Build your Luxury Residential Bungalows & Commercial
+                    Complexes with us
+                  </h2>
+                  <p className="wow fadeInUp">
+                    We deliver excellence in every project.
+                  </p>
                 </div>
                 <div
                   className="hero-btn wow fadeInUp d-flex"
@@ -42,8 +69,9 @@ const LandingPageV2 = () => {
                 </div>
                 <div className="hero-list wow fadeInUp" data-wow-delay="0.4s">
                   <ul>
-                    <li>24/7 emergency services</li>
-                    <li>online booking and scheduling</li>
+                    <li>Best in construction services</li>
+                    <li>Exquisite Luxury Residential Bungalow</li>
+                    <li> Innovative Commercial Complexes</li>
                   </ul>
                 </div>
               </div>
@@ -61,13 +89,13 @@ const LandingPageV2 = () => {
 
                 <div className="scroll-down-circle-box">
                   <div className="scroll-circle-text">
-                    <figure>
+                    {/* <figure>
                       <img src="/images/svg/scroll-circle-text.svg" alt="" />
-                    </figure>
+                    </figure> */}
 
                     <div className="scroll-down-arrow">
                       <a href="#about-us">
-                        <i className="fa-solid fa-arrow-down"></i>
+                        <img src="files/ss-construction-qr.png" alt="ss-qr" />
                       </a>
                     </div>
                   </div>
@@ -86,11 +114,11 @@ const LandingPageV2 = () => {
                 <div className="section-title">
                   <h3 className="wow fadeInUp">about us</h3>
                   <h2 className="text-anime-style-3" data-cursor="-opaque">
-                    Handyman services for your home
+                    {detail?.name} services for your construction needs
                   </h2>
                   <p className="wow fadeInUp" data-wow-delay="0.2s">
-                    Skilled and dependable handyman services for all your home
-                    repair and improvement needs.
+                    Skilled and dependable {detail?.name} services for all your
+                    construction and building needs.
                   </p>
                 </div>
 
@@ -99,11 +127,11 @@ const LandingPageV2 = () => {
                     className="about-us-info-item wow fadeInUp"
                     data-wow-delay="0.4s"
                   >
-                    <h3>booking and scheduling system</h3>
+                    <h3>Comprehensive Construction Services</h3>
                     <p>
-                      Effortlessly book and schedule your handyman services
-                      online Choose a convenient date and time, view
-                      availability.
+                      From residential bungalows to commercial complexes, we
+                      offer a wide range of construction services tailored to
+                      your needs.
                     </p>
                   </div>
 
@@ -111,22 +139,22 @@ const LandingPageV2 = () => {
                     className="about-us-info-item wow fadeInUp"
                     data-wow-delay="0.6s"
                   >
-                    <h3>emergency service A vailability</h3>
+                    <h3>Quality and Excellence</h3>
                     <p>
-                      Get prompt assistance with our 24/7 emergency services for
-                      urgent repairs when you need them most.
+                      We are committed to delivering high-quality construction
+                      projects with excellence and attention to detail.
                     </p>
                   </div>
                 </div>
 
-                <div
+                {/* <div
                   className="about-us-btn wow fadeInUp"
                   data-wow-delay="0.8s"
                 >
                   <a href="about.html" className="btn-default">
                     more about
                   </a>
-                </div>
+                </div> */}
               </div>
             </div>
 
@@ -183,7 +211,7 @@ const LandingPageV2 = () => {
                   data-cursor="-opaque"
                   style={{ perspective: "400px" }}
                 >
-                  hi dfhjkdfkjdfjkd f dfhdjhf
+                  Building Excellence in Every Project
                 </h2>
               </div>
             </div>
@@ -199,8 +227,9 @@ const LandingPageV2 = () => {
                 }}
               >
                 <p>
-                  From repairs to home improvements, our comprehensive handyman
-                  services cover everything you
+                  From building luxury residential bungalows to innovative
+                  commercial complexes, our comprehensive construction services
+                  cover everything you need to bring your vision to life.
                 </p>
               </div>
             </div>
@@ -212,7 +241,11 @@ const LandingPageV2 = () => {
                 <div className="fact-counter-item">
                   <h3>experience</h3>
                   <h2>
-                    <span className="counter">25</span>+
+                    <span className="counter">
+                      {new Date().getFullYear() -
+                        Number(detail?.startedInYear ?? 0)}
+                    </span>
+                    +
                   </h2>
                   <p>years of experience</p>
                 </div>
@@ -220,7 +253,8 @@ const LandingPageV2 = () => {
                 <div className="fact-counter-item">
                   <h3>people</h3>
                   <h2>
-                    <span className="counter">320</span>k
+                    <span className="counter">{detail?.numberOfEmployees}</span>
+                    k
                   </h2>
                   <p>working staff</p>
                 </div>
@@ -238,7 +272,10 @@ const LandingPageV2 = () => {
                 <div className="fact-counter-item">
                   <h3>work</h3>
                   <h2>
-                    <span className="counter">8</span>k+
+                    <span className="counter">
+                      {detail?.numberOfProjectsCompleted}
+                    </span>
+                    +
                   </h2>
                   <p>project complete</p>
                 </div>
@@ -246,10 +283,85 @@ const LandingPageV2 = () => {
                 <div className="fact-counter-item">
                   <h3>client</h3>
                   <h2>
-                    <span className="counter">100</span>%
+                    <span className="counter">
+                      {detail?.clientSatisfaction}
+                    </span>
+                    %
                   </h2>
                   <p>satisfaction guarante</p>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="our-services bg-radius-section">
+        <div className="container">
+          <div className="row section-row align-items-center">
+            <div className="col-lg-6">
+              <div className="section-title">
+                <h3 className="wow fadeInUp">services</h3>
+                <h2 className="text-anime-style-3" data-cursor="-opaque">
+                  Comprehensive services
+                </h2>
+              </div>
+            </div>
+
+            <div className="col-lg-6">
+              <div
+                className="section-title-content wow fadeInUp"
+                data-wow-delay="0.2s"
+              >
+                <p>
+                  Our comprehensive construction services cover everything you
+                  need to bring your vision to life.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="row">
+            {detail?.services?.map((x) => {
+              return (
+                <div className="col-lg-3 col-md-6">
+                  <div className="service-item wow fadeInUp">
+                    <div className="service-item-header">
+                      {/* <div className="icon-box">
+                        <img src="images/samples/icon-service-1.svg" alt="" />
+                      </div> */}
+
+                      <div className="service-item-content">
+                        <h3>
+                          <a href="service-single.html">{x?.name}</a>
+                        </h3>
+                        <p>{x?.description}</p>
+                      </div>
+                    </div>
+
+                    <div className="service-image">
+                      <a href="service-single.html" data-cursor-text="View">
+                        <figure className="image-anime">
+                          <img src="images/samples/service-img-1.jpg" alt="" />
+                        </figure>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+
+            <div className="col-lg-12">
+              <div
+                className="service-footer wow fadeInUp"
+                data-wow-delay="0.8s"
+              >
+                <p>
+                  You will be satisfy with our work. Contact us today{" "}
+                  <a href={`tel:${detail?.contact?.phone}`}>
+                    {detail?.contact?.phone}
+                  </a>
+                </p>
               </div>
             </div>
           </div>
@@ -270,7 +382,7 @@ const LandingPageV2 = () => {
                         animationName: "fadeInUp",
                       }}
                     >
-                      what we do
+                      Other services
                     </h3>
                     <h2
                       className="text-anime-style-3"
@@ -285,15 +397,15 @@ const LandingPageV2 = () => {
                           position: "relative",
                         }}
                       >
-                        hihsdf dfdfidhf
+                        Other Construction Services
                       </div>
                     </h2>
                   </div>
 
                   <div className="best-services-body">
-                    <div className="contact-now-circle">
-                      <img src="/images/samples/image1.png" alt="" />
-                    </div>
+                    {/* <div className="contact-now-circle">
+                      <img src="/images/logo/black-logo-transparent.png" alt="" />
+                    </div> */}
 
                     <div className="best-services-box">
                       <div
@@ -311,10 +423,10 @@ const LandingPageV2 = () => {
                         </div>
 
                         <div className="best-services-item-content">
-                          <h3>electrical services</h3>
+                          <h3>plumbing services</h3>
                           <p>
-                            Our skilled electricians ensure efficient lighting,
-                            and power systems.
+                            Expert plumbing solutions for residential and
+                            commercial properties.
                           </p>
                         </div>
                       </div>
@@ -336,10 +448,10 @@ const LandingPageV2 = () => {
                         </div>
 
                         <div className="best-services-item-content">
-                          <h3>painting and drywall</h3>
+                          <h3>carpentry services</h3>
                           <p>
-                            Quality interior and the exterior painting patching
-                            and finishing.
+                            High-quality carpentry work for custom furniture,
+                            repairs, and more.
                           </p>
                         </div>
                       </div>
@@ -352,148 +464,6 @@ const LandingPageV2 = () => {
                     <img src="/images/samples/about-img-1.jpg" alt="" />
                   </figure>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="our-services bg-radius-section">
-        <div className="container">
-          <div className="row section-row align-items-center">
-            <div className="col-lg-6">
-              <div className="section-title">
-                <h3 className="wow fadeInUp">services</h3>
-                <h2 className="text-anime-style-3" data-cursor="-opaque">
-                  Comprehensive handyman services
-                </h2>
-              </div>
-            </div>
-
-            <div className="col-lg-6">
-              <div
-                className="section-title-content wow fadeInUp"
-                data-wow-delay="0.2s"
-              >
-                <p>
-                  From repairs to home improvement, our comprehensive handyman
-                  services cover everything you need to keep your home in top
-                  shape.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-lg-3 col-md-6">
-              <div className="service-item wow fadeInUp">
-                <div className="service-item-header">
-                  <div className="icon-box">
-                    <img src="images/samples/icon-service-1.svg" alt="" />
-                  </div>
-
-                  <div className="service-item-content">
-                    <h3>
-                      <a href="service-single.html">electrical repairs</a>
-                    </h3>
-                    <p>Expert electrical repairs including outlet</p>
-                  </div>
-                </div>
-
-                <div className="service-image">
-                  <a href="service-single.html" data-cursor-text="View">
-                    <figure className="image-anime">
-                      <img src="images/samples/service-img-1.jpg" alt="" />
-                    </figure>
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-lg-3 col-md-6">
-              <div className="service-item wow fadeInUp" data-wow-delay="0.2s">
-                <div className="service-item-header">
-                  <div className="icon-box">
-                    <img src="images/samples/icon-service-2.svg" alt="" />
-                  </div>
-
-                  <div className="service-item-content">
-                    <h3>
-                      <a href="service-single.html">plumbing services</a>
-                    </h3>
-                    <p>Expert electrical repairs including outlet</p>
-                  </div>
-                </div>
-
-                <div className="service-image">
-                  <a href="service-single.html" data-cursor-text="View">
-                    <figure className="image-anime">
-                      <img src="images/samples/service-img-2.jpg" alt="" />
-                    </figure>
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-lg-3 col-md-6">
-              <div className="service-item wow fadeInUp" data-wow-delay="0.4s">
-                <div className="service-item-header">
-                  <div className="icon-box">
-                    <img src="images/samples/icon-service-3.svg" alt="" />
-                  </div>
-
-                  <div className="service-item-content">
-                    <h3>
-                      <a href="service-single.html">painting & drywall</a>
-                    </h3>
-                    <p>Expert electrical repairs including outlet</p>
-                  </div>
-                </div>
-
-                <div className="service-image">
-                  <a href="service-single.html" data-cursor-text="View">
-                    <figure className="image-anime">
-                      <img src="images/samples/service-img-3.jpg" alt="" />
-                    </figure>
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-lg-3 col-md-6">
-              <div className="service-item wow fadeInUp" data-wow-delay="0.6s">
-                <div className="service-item-header">
-                  <div className="icon-box">
-                    <img src="images/samples/icon-service-4.svg" alt="" />
-                  </div>
-
-                  <div className="service-item-content">
-                    <h3>
-                      <a href="service-single.html">home maintenance</a>
-                    </h3>
-                    <p>Expert electrical repairs including outlet</p>
-                  </div>
-                </div>
-
-                <div className="service-image">
-                  <a href="service-single.html" data-cursor-text="View">
-                    <figure className="image-anime">
-                      <img src="images/samples/service-img-4.jpg" alt="" />
-                    </figure>
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-lg-12">
-              <div
-                className="service-footer wow fadeInUp"
-                data-wow-delay="0.8s"
-              >
-                <p>
-                  You will be satisfy with our work. Contact us today{" "}
-                  <a href="tel:123456789">(+91) 8149403097</a>
-                </p>
               </div>
             </div>
           </div>
@@ -516,56 +486,17 @@ const LandingPageV2 = () => {
                   data-cursor="-opaque"
                   style={{ perspective: "400px" }}
                 >
-                  hihihhihi ihb
+                  Streamlined Process for Your Convenience
                 </h2>
               </div>
             </div>
-
-            {/* <div className="col-lg-6">
-              <div className="samples/trusted-client-content">
-                <div className="samples/trusted-client-box">
-                  <div className="samples/trusted-client-images">
-                    <div className="client-image">
-                      <figure className="image-anime">
-                        <img src="images/samples/trusted-client-img-2.jpg" alt="" />
-                      </figure>
-                    </div>
-
-                    <div className="client-image">
-                      <figure className="image-anime">
-                        <img src="images/samples/trusted-client-img-2.jpg" alt="" />
-                      </figure>
-                    </div>
-
-                    <div className="client-image">
-                      <figure className="image-anime">
-                        <img src="images/samples/trusted-client-img-2.jpg" alt="" />
-                      </figure>
-                    </div>
-
-                    <div className="client-image add-more">
-                      <h3>
-                        <span className="counter">60</span>+
-                      </h3>
-                    </div>
-                  </div>
-
-                  <div className="samples/trusted-client-title">
-                    <h3>
-                      Trusted from our <span className="counter">1500</span>{" "}
-                      client
-                    </h3>
-                  </div>
-                </div>
-              </div>
-            </div> */}
           </div>
 
           <div className="row align-items-center">
             <div className="col-lg-6">
               <div className="how-work-image">
                 <div className="how-work-image-title">
-                  <h2>handyman</h2>
+                  <h2>{detail?.name}</h2>
                 </div>
 
                 <figure className="image-anime">
@@ -576,99 +507,28 @@ const LandingPageV2 = () => {
 
             <div className="col-lg-6">
               <div className="how-work-steps">
-                <div
-                  className="how-work-step-item wow fadeInUp"
-                  style={{
-                    visibility: "visible",
-                    animationName: "fadeInUp",
-                  }}
-                >
-                  <div className="icon-box">
-                    <img src="images/samples/icon-service-1.svg" alt="" />
+                {detail?.projectSteps?.map((step, index) => (
+                  <div
+                    className="how-work-step-item wow fadeInUp"
+                    data-wow-delay={`${0.2 * (index + 1)}s`}
+                    style={{
+                      visibility: "visible",
+                      animationDelay: `${0.2 * (index + 1)}s`,
+                      animationName: "fadeInUp",
+                    }}
+                    key={index}
+                  >
+                    <div className="icon-box">
+                      <img src={step.src} alt="" />
+                    </div>
+                    <div className="how-work-step-content">
+                      <h3>
+                        <span>{`0${index + 1}.`}</span> {step.title}
+                      </h3>
+                      <p>{step.description}</p>
+                    </div>
                   </div>
-
-                  <div className="how-work-step-content">
-                    <h3>
-                      <span>01.</span> electrical repairs
-                    </h3>
-                    <p>
-                      Electrical Repairs involve diagnosing and fixing issues in
-                      electrical systems to ensure.
-                    </p>
-                  </div>
-                </div>
-
-                <div
-                  className="how-work-step-item wow fadeInUp"
-                  data-wow-delay="0.2s"
-                  style={{
-                    visibility: "visible",
-                    animationDelay: "0.2s",
-                    animationName: "fadeInUp",
-                  }}
-                >
-                  <div className="icon-box">
-                    <img src="images/samples/icon-service-2.svg" alt="" />
-                  </div>
-
-                  <div className="how-work-step-content">
-                    <h3>
-                      <span>02.</span> Professional Service Delivery
-                    </h3>
-                    <p>
-                      Our skilled handyman arrives on time with the necessary
-                      tools and expertise, completing.
-                    </p>
-                  </div>
-                </div>
-
-                <div
-                  className="how-work-step-item wow fadeInUp"
-                  data-wow-delay="0.4s"
-                  style={{
-                    visibility: "visible",
-                    animationDelay: "0.4s",
-                    animationName: "fadeInUp",
-                  }}
-                >
-                  <div className="icon-box">
-                    <img src="images/samples/icon-service-3.svg" alt="" />
-                  </div>
-
-                  <div className="how-work-step-content">
-                    <h3>
-                      <span>03.</span> Quality Check
-                    </h3>
-                    <p>
-                      After completion, we ensure the quality of work meets our
-                      standards and your satisfaction.
-                    </p>
-                  </div>
-                </div>
-
-                <div
-                  className="how-work-step-item wow fadeInUp"
-                  data-wow-delay="0.6s"
-                  style={{
-                    visibility: "visible",
-                    animationDelay: "0.6s",
-                    animationName: "fadeInUp",
-                  }}
-                >
-                  <div className="icon-box">
-                    <img src="images/samples/icon-service-4.svg" alt="" />
-                  </div>
-
-                  <div className="how-work-step-content">
-                    <h3>
-                      <span>04.</span> Payment and Follow-Up
-                    </h3>
-                    <p>
-                      Pay easily through our secure payment options. We'll
-                      follow up to ensure.
-                    </p>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
@@ -702,17 +562,7 @@ const LandingPageV2 = () => {
                       position: "relative",
                     }}
                   >
-                    hi dfhkdf dfhdf
-                  </div>
-                  <div
-                    className="split-line"
-                    style={{
-                      display: "block",
-                      textAlign: "start",
-                      position: "relative",
-                    }}
-                  >
-                    this is dummy text
+                    Frequently Asked Questions
                   </div>
                 </h2>
               </div>
@@ -720,182 +570,315 @@ const LandingPageV2 = () => {
 
             <div className="col-lg-6">
               <div className="faq-accordion" id="accordion">
-                <div
-                  className="accordion-item wow fadeInUp"
-                  style={{ visibility: "visible", animationName: "fadeInUp" }}
-                >
-                  <h2 className="accordion-header" id="heading1">
-                    <button
-                      className="accordion-button collapsed"
-                      type="button"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#collapse1"
-                      aria-expanded="false"
-                      aria-controls="collapse1"
-                    >
-                      1. How do I schedule a service?
-                    </button>
-                  </h2>
+                {detail?.faqs?.map((faq, index) => (
                   <div
-                    id="collapse1"
-                    className="accordion-collapse collapse"
-                    aria-labelledby="heading1"
-                    data-bs-parent="#accordion"
+                    className="accordion-item wow fadeInUp"
+                    data-wow-delay={`${0.2 * index}s`}
+                    style={{
+                      visibility: "visible",
+                      animationDelay: `${0.2 * index}s`,
+                      animationName: "fadeInUp",
+                    }}
+                    key={index}
                   >
-                    <div className="accordion-body">
-                      <p>
-                        Yes, all of our handymen are fully licensed and insured
-                        to ensure safe, high-quality work and give you peace of
-                        mind.
-                      </p>
+                    <h2 className="accordion-header" id={`heading${index}`}>
+                      <button
+                        className="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target={`#collapse${index}`}
+                        aria-expanded="false"
+                        aria-controls={`collapse${index}`}
+                      >
+                        {faq.question}
+                      </button>
+                    </h2>
+                    <div
+                      id={`collapse${index}`}
+                      className="accordion-collapse collapse"
+                      aria-labelledby={`heading${index}`}
+                      data-bs-parent="#accordion"
+                    >
+                      <div className="accordion-body">
+                        <p>{faq.answer}</p>
+                      </div>
                     </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <>
+        <div className="why-choose-us">
+          <div className="why-choose-box bg-radius-section">
+            <div className="container">
+              <div className="row section-row align-items-end">
+                <div className="col-lg-6">
+                  <div className="section-title">
+                    <h3
+                      className="wow fadeInUp"
+                      style={{
+                        visibility: "visible",
+                        animationName: "fadeInUp",
+                      }}
+                    >
+                      why choose us
+                    </h3>
+                    <h2
+                      className="text-anime-style-3"
+                      data-cursor="-opaque"
+                      style={{ perspective: "400px" }}
+                    >
+                      Showcasing our best features
+                    </h2>
                   </div>
                 </div>
 
-                <div
-                  className="accordion-item wow fadeInUp"
-                  data-wow-delay="0.2s"
-                  style={{
-                    visibility: "visible",
-                    animationDelay: "0.2s",
-                    animationName: "fadeInUp",
-                  }}
-                >
-                  <h2 className="accordion-header" id="heading2">
-                    <button
-                      className="accordion-button"
-                      type="button"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#collapse2"
-                      aria-expanded="true"
-                      aria-controls="collapse2"
-                    >
-                      2. Are you licensed and insured?
-                    </button>
-                  </h2>
-                  <div
-                    id="collapse2"
-                    className="accordion-collapse collapse show"
-                    aria-labelledby="heading2"
-                    data-bs-parent="#accordion"
-                  >
-                    <div className="accordion-body">
-                      <p>
-                        Yes, all of our handymen are fully licensed and insured
-                        to ensure safe, high-quality work and give you peace of
-                        mind.
-                      </p>
-                    </div>
+                <div className="col-lg-6">
+                  <div className="why-choose-image">
+                    <figure className="image-anime">
+                      <img src="images/samples/why-choose-img.jpg" alt="" />
+                    </figure>
                   </div>
                 </div>
+              </div>
 
-                <div
-                  className="accordion-item wow fadeInUp"
-                  data-wow-delay="0.4s"
-                  style={{
-                    visibility: "visible",
-                    animationDelay: "0.4s",
-                    animationName: "fadeInUp",
-                  }}
-                >
-                  <h2 className="accordion-header" id="heading3">
-                    <button
-                      className="accordion-button collapsed"
-                      type="button"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#collapse3"
-                      aria-expanded="false"
-                      aria-controls="collapse3"
-                    >
-                      3. How do you price your services?
-                    </button>
-                  </h2>
+              <div className="row">
+                <div className="col-lg-12">
+                  <div className="why-choose-project-box">
+                    {detail?.whyChooseUs?.map((x) => {
+                      return (
+                        <div
+                          className="why-choose-project-item wow fadeInUp"
+                          data-wow-delay="0.2s"
+                          style={{
+                            visibility: "visible",
+                            animationName: "fadeInUp",
+                            animationDelay: "0.2s",
+                          }}
+                        >
+                          <div className="icon-box">
+                            <img src={x.src} alt="" />
+                          </div>
+
+                          <div className="why-choose-project-content">
+                            <h3>{x.title}</h3>
+                            <p>{x.description}</p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
                   <div
-                    id="collapse3"
-                    className="accordion-collapse collapse"
-                    aria-labelledby="heading3"
-                    data-bs-parent="#accordion"
+                    className="why-choose-footer wow fadeInUp"
+                    data-wow-delay="0.8s"
+                    style={{
+                      visibility: "visible",
+                      animationName: "fadeInUp",
+                      animationDelay: "0.8s",
+                    }}
                   >
-                    <div className="accordion-body">
-                      <p>
-                        Yes, all of our handymen are fully licensed and insured
-                        to ensure safe, high-quality work and give you peace of
-                        mind.
-                      </p>
-                    </div>
+                    <p>
+                      Our construction company is the perfect choice for your
+                      dream.{" "}
+                      <a href="#page-contact-us">Contact us now today!</a>
+                    </p>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-                <div
-                  className="accordion-item wow fadeInUp"
-                  data-wow-delay="0.6s"
-                  style={{
-                    visibility: "visible",
-                    animationDelay: "0.6s",
-                    animationName: "fadeInUp",
-                  }}
-                >
-                  <h2 className="accordion-header" id="heading4">
-                    <button
-                      className="accordion-button collapsed"
-                      type="button"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#collapse4"
-                      aria-expanded="false"
-                      aria-controls="collapse4"
-                    >
-                      4. How long does typical job take?
-                    </button>
-                  </h2>
-                  <div
-                    id="collapse4"
-                    className="accordion-collapse collapse"
-                    aria-labelledby="heading4"
-                    data-bs-parent="#accordion"
-                  >
-                    <div className="accordion-body">
-                      <p>
-                        Yes, all of our handymen are fully licensed and insured
-                        to ensure safe, high-quality work and give you peace of
-                        mind.
-                      </p>
-                    </div>
+        <div className="our-approch bg-radius-section">
+          <div className="container">
+            <div className="row align-items-center">
+              <div className="col-lg-6">
+                <div className="our-approch-image">
+                  <div className="our-approch-img-1">
+                    <figure className="image-anime">
+                      <img src="images/samples/our-approch-img-1.jpg" alt="" />
+                    </figure>
+                  </div>
+
+                  <div className="our-approch-img-2">
+                    <figure className="image-anime">
+                      <img src="images/samples/our-approch-img-2.jpg" alt="" />
+                    </figure>
                   </div>
                 </div>
+              </div>
 
-                <div
-                  className="accordion-item wow fadeInUp"
-                  data-wow-delay="0.8s"
-                  style={{
-                    visibility: "visible",
-                    animationDelay: "0.8s",
-                    animationName: "fadeInUp",
-                  }}
-                >
-                  <h2 className="accordion-header" id="heading5">
-                    <button
-                      className="accordion-button collapsed"
-                      type="button"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#collapse5"
-                      aria-expanded="false"
-                      aria-controls="collapse5"
+              <div className="col-lg-6">
+                <div className="our-approch-content">
+                  <div className="section-title">
+                    <h3
+                      className="wow fadeInUp"
+                      style={{
+                        visibility: "visible",
+                        animationName: "fadeInUp",
+                      }}
                     >
-                      5. What areas do you service?
-                    </button>
-                  </h2>
-                  <div
-                    id="collapse5"
-                    className="accordion-collapse collapse"
-                    aria-labelledby="heading5"
-                    data-bs-parent="#accordion"
-                  >
-                    <div className="accordion-body">
-                      <p>
-                        Yes, all of our handymen are fully licensed and insured
-                        to ensure safe, high-quality work and give you peace of
-                        mind.
-                      </p>
+                      our approach
+                    </h3>
+                    <h2
+                      className="text-anime-style-3"
+                      data-cursor="-opaque"
+                      style={{ perspective: "400px" }}
+                    >
+                      <div
+                        className="split-line"
+                        style={{
+                          display: "block",
+                          textAlign: "start",
+                          position: "relative",
+                        }}
+                      >
+                        Services with personal touch
+                      </div>
+                    </h2>
+                  </div>
+
+                  <div className="our-approch-tab">
+                    <div
+                      className="our-approch-tab-nav wow fadeInUp"
+                      data-wow-delay="0.2s"
+                      style={{
+                        visibility: "visible",
+                        animationDelay: "0.2s",
+                        animationName: "fadeInUp",
+                      }}
+                    >
+                      <ul className="nav nav-tabs" id="myTab" role="tablist">
+                        <li className="nav-item" role="presentation">
+                          <button
+                            className="nav-link btn-default btn-highlighted active"
+                            id="mission-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#mission"
+                            type="button"
+                            role="tab"
+                            aria-selected="true"
+                          >
+                            our mission
+                          </button>
+                        </li>
+                        <li className="nav-item" role="presentation">
+                          <button
+                            className="nav-link btn-default btn-highlighted"
+                            id="vision-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#vision"
+                            type="button"
+                            role="tab"
+                            aria-selected="false"
+                            tabIndex={-1}
+                          >
+                            our vision
+                          </button>
+                        </li>
+                        <li className="nav-item" role="presentation">
+                          <button
+                            className="nav-link btn-default btn-highlighted"
+                            id="value-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#value"
+                            type="button"
+                            role="tab"
+                            aria-selected="false"
+                            tabIndex={-1}
+                          >
+                            our value
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div className="approch-box tab-content" id="myTabContent">
+                      <div
+                        className="approch-item tab-pane fade active show"
+                        id="mission"
+                        role="tabpanel"
+                        aria-labelledby="mission-tab"
+                      >
+                        <div className="row align-items-center">
+                          <div className="col-lg-12">
+                            <div className="approch-tab-content">
+                              <div className="approch-tab-content-header">
+                                <p>{detail?.ourMission.description}</p>
+                              </div>
+
+                              <div className="approch-tab-content-list">
+                                {detail?.ourMission?.values?.map((x) => {
+                                  return (
+                                    <ul>
+                                      <li>{x}</li>
+                                    </ul>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div
+                        className="approch-item tab-pane fade"
+                        id="vision"
+                        role="tabpanel"
+                        aria-labelledby="vision-tab"
+                      >
+                        <div className="row align-items-center">
+                          <div className="col-lg-12">
+                            <div className="approch-tab-content">
+                              <div className="approch-tab-content-header">
+                                <p>{detail?.ourVision?.description}</p>
+                              </div>
+
+                              <div className="approch-tab-content-list">
+                                {detail?.ourVision?.values?.map((x) => {
+                                  return (
+                                    <ul>
+                                      <li>{x}</li>
+                                    </ul>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div
+                        className="approch-item tab-pane fade"
+                        id="value"
+                        role="tabpanel"
+                        aria-labelledby="value-tab"
+                      >
+                        <div className="row align-items-center">
+                          <div className="col-lg-12">
+                            <div className="approch-tab-content">
+                              <div className="approch-tab-content-header">
+                                <p>{detail?.ourValue?.description}</p>
+                              </div>
+
+                              <div className="approch-tab-content-list">
+                                {detail?.ourValue?.values?.map((x) => {
+                                  return (
+                                    <ul>
+                                      <li>{x}</li>
+                                    </ul>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -903,7 +886,52 @@ const LandingPageV2 = () => {
             </div>
           </div>
         </div>
-      </div>
+
+        <div className="our-awards bg-radius-section">
+          <div className="container">
+            <div className="row">
+              <div className="col-lg-12">
+                <div className="our-awards-box">
+                  <div className="row align-items-center">
+                    <div className="col-lg-6">
+                      <div className="our-awards-counter">
+                        <h2>
+                          <span className="counter">
+                            {detail?.numberOfProjectsCompleted}
+                          </span>
+                          +
+                        </h2>
+                        <p>Total number of projects completed</p>
+                      </div>
+                    </div>
+
+                    <div className="col-lg-6">
+                      <div className="our-awards-list">
+                        {detail?.workWith?.map((work, index) => (
+                          <div
+                            className="our-awards-item wow fadeInUp"
+                            data-wow-delay={`${0.2 * (index + 1)}s`}
+                            style={{
+                              visibility: "visible",
+                              animationName: "fadeInUp",
+                              animationDelay: `${0.2 * (index + 1)}s`,
+                            }}
+                            key={index}
+                          >
+                            <img src={work.src} />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+
+      <Gallery />
 
       <div className="page-contact-us bg-radius-section" id="page-contact-us">
         <div className="container">
@@ -929,7 +957,7 @@ const LandingPageV2 = () => {
 
                     <div className="contact-info-content">
                       <p>contact:</p>
-                      <h3>+01 8149403097</h3>
+                      <h3>{detail?.contact?.phone}</h3>
                     </div>
                   </div>
 
@@ -948,7 +976,7 @@ const LandingPageV2 = () => {
 
                     <div className="contact-info-content">
                       <p>email:</p>
-                      <h3>vivaanassociates01@gmail.com</h3>
+                      <h3>{detail?.contact?.email}</h3>
                     </div>
                   </div>
 
@@ -967,11 +995,7 @@ const LandingPageV2 = () => {
 
                     <div className="contact-info-content">
                       <p>location:</p>
-                      <h3>
-                        Plot No: 17 Balaji Nagar west Opposite Rahul medical
-                        store <br />
-                        Manewada road, Nagpur 440027
-                      </h3>
+                      <h3>{detail?.contact?.address}</h3>
                     </div>
                   </div>
 
@@ -1102,451 +1126,6 @@ const LandingPageV2 = () => {
         </div>
       </div>
 
-      <>
-        <div className="why-choose-us">
-          <div className="why-choose-box bg-radius-section">
-            <div className="container">
-              <div className="row section-row align-items-end">
-                <div className="col-lg-6">
-                  <div className="section-title">
-                    <h3
-                      className="wow fadeInUp"
-                      style={{
-                        visibility: "visible",
-                        animationName: "fadeInUp",
-                      }}
-                    >
-                      why choose us
-                    </h3>
-                    <h2
-                      className="text-anime-style-3"
-                      data-cursor="-opaque"
-                      style={{ perspective: "400px" }}
-                    >
-                      Showcasing our best features
-                    </h2>
-                  </div>
-                </div>
-
-                <div className="col-lg-6">
-                  <div className="why-choose-image">
-                    <figure className="image-anime">
-                      <img src="images/samples/why-choose-img.jpg" alt="" />
-                    </figure>
-                  </div>
-                </div>
-              </div>
-
-              <div className="row">
-                <div className="col-lg-12">
-                  <div className="why-choose-project-box">
-                    <div
-                      className="why-choose-project-item wow fadeInUp"
-                      style={{
-                        visibility: "visible",
-                        animationName: "fadeInUp",
-                      }}
-                    >
-                      <div className="icon-box">
-                        <img src="images/icons/icon-service-1.svg" alt="" />
-                      </div>
-
-                      <div className="why-choose-project-content">
-                        <h3>locally owned</h3>
-                        <p>
-                          As a local business, we care about our community and
-                          take pride in serving our.
-                        </p>
-                      </div>
-                    </div>
-
-                    <div
-                      className="why-choose-project-item wow fadeInUp"
-                      data-wow-delay="0.2s"
-                      style={{
-                        visibility: "visible",
-                        animationName: "fadeInUp",
-                        animationDelay: "0.2s",
-                      }}
-                    >
-                      <div className="icon-box">
-                        <img src="images/icons/icon-service-2.svg" alt="" />
-                      </div>
-
-                      <div className="why-choose-project-content">
-                        <h3>on-time service</h3>
-                        <p>
-                          As a local business, we care about our community and
-                          take pride in serving our.
-                        </p>
-                      </div>
-                    </div>
-
-                    <div
-                      className="why-choose-project-item wow fadeInUp"
-                      data-wow-delay="0.4s"
-                      style={{
-                        visibility: "visible",
-                        animationName: "fadeInUp",
-                        animationDelay: "0.4s",
-                      }}
-                    >
-                      <div className="icon-box">
-                        <img src="images/icons/icon-service-3.svg" alt="" />
-                      </div>
-
-                      <div className="why-choose-project-content">
-                        <h3>transparent pricing</h3>
-                        <p>
-                          As a local business, we care about our community and
-                          take pride in serving our.
-                        </p>
-                      </div>
-                    </div>
-
-                    <div
-                      className="why-choose-project-item wow fadeInUp"
-                      data-wow-delay="0.6s"
-                      style={{
-                        visibility: "visible",
-                        animationName: "fadeInUp",
-                        animationDelay: "0.6s",
-                      }}
-                    >
-                      <div className="icon-box">
-                        <img src="images/icons/icon-service-4.svg" alt="" />
-                      </div>
-
-                      <div className="why-choose-project-content">
-                        <h3>quality assurance</h3>
-                        <p>
-                          As a local business, we care about our community and
-                          take pride in serving our.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div
-                    className="why-choose-footer wow fadeInUp"
-                    data-wow-delay="0.8s"
-                    style={{
-                      visibility: "visible",
-                      animationName: "fadeInUp",
-                      animationDelay: "0.8s",
-                    }}
-                  >
-                    <p>
-                      Our construction company is the perfect choice for your
-                      dream. <a href="contact.html">Contact us now today!</a>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="our-approch bg-radius-section">
-          <div className="container">
-            <div className="row align-items-center">
-              <div className="col-lg-6">
-                <div className="our-approch-image">
-                  <div className="our-approch-img-1">
-                    <figure className="image-anime">
-                      <img src="images/samples/our-approch-img-1.jpg" alt="" />
-                    </figure>
-                  </div>
-
-                  <div className="our-approch-img-2">
-                    <figure className="image-anime">
-                      <img src="images/samples/our-approch-img-2.jpg" alt="" />
-                    </figure>
-                  </div>
-                </div>
-              </div>
-
-              <div className="col-lg-6">
-                <div className="our-approch-content">
-                  <div className="section-title">
-                    <h3
-                      className="wow fadeInUp"
-                      style={{
-                        visibility: "visible",
-                        animationName: "fadeInUp",
-                      }}
-                    >
-                      our approach
-                    </h3>
-                    <h2
-                      className="text-anime-style-3"
-                      data-cursor="-opaque"
-                      style={{ perspective: "400px" }}
-                    >
-                      <div
-                        className="split-line"
-                        style={{
-                          display: "block",
-                          textAlign: "start",
-                          position: "relative",
-                        }}
-                      >
-                        Services with personal touch
-                      </div>
-                    </h2>
-                  </div>
-
-                  <div className="our-approch-tab">
-                    <div
-                      className="our-approch-tab-nav wow fadeInUp"
-                      data-wow-delay="0.2s"
-                      style={{
-                        visibility: "visible",
-                        animationDelay: "0.2s",
-                        animationName: "fadeInUp",
-                      }}
-                    >
-                      <ul className="nav nav-tabs" id="myTab" role="tablist">
-                        <li className="nav-item" role="presentation">
-                          <button
-                            className="nav-link btn-default btn-highlighted active"
-                            id="mission-tab"
-                            data-bs-toggle="tab"
-                            data-bs-target="#mission"
-                            type="button"
-                            role="tab"
-                            aria-selected="true"
-                          >
-                            our mission
-                          </button>
-                        </li>
-                        <li className="nav-item" role="presentation">
-                          <button
-                            className="nav-link btn-default btn-highlighted"
-                            id="vision-tab"
-                            data-bs-toggle="tab"
-                            data-bs-target="#vision"
-                            type="button"
-                            role="tab"
-                            aria-selected="false"
-                            tabIndex={-1}
-                          >
-                            our vision
-                          </button>
-                        </li>
-                        <li className="nav-item" role="presentation">
-                          <button
-                            className="nav-link btn-default btn-highlighted"
-                            id="value-tab"
-                            data-bs-toggle="tab"
-                            data-bs-target="#value"
-                            type="button"
-                            role="tab"
-                            aria-selected="false"
-                            tabIndex={-1}
-                          >
-                            our value
-                          </button>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <div className="approch-box tab-content" id="myTabContent">
-                      <div
-                        className="approch-item tab-pane fade active show"
-                        id="mission"
-                        role="tabpanel"
-                        aria-labelledby="mission-tab"
-                      >
-                        <div className="row align-items-center">
-                          <div className="col-lg-12">
-                            <div className="approch-tab-content">
-                              <div className="approch-tab-content-header">
-                                <p>
-                                  Our mission is to provide reliable,
-                                  high-quality handyman services that enhance
-                                  homes and simplify lives, delivering
-                                  craftsmanship with integrity and care.
-                                </p>
-                              </div>
-
-                              <div className="approch-tab-content-list">
-                                <ul>
-                                  <li>dependable repairs, every time</li>
-                                  <li>improving homes, enhancing lives</li>
-                                  <li>customer-centered approach</li>
-                                </ul>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div
-                        className="approch-item tab-pane fade"
-                        id="vision"
-                        role="tabpanel"
-                        aria-labelledby="vision-tab"
-                      >
-                        <div className="row align-items-center">
-                          <div className="col-lg-12">
-                            <div className="approch-tab-content">
-                              <div className="approch-tab-content-header">
-                                <p>
-                                  Our vision is to provide reliable,
-                                  high-quality handyman services that enhance
-                                  homes and simplify lives, delivering
-                                  craftsmanship with integrity and care.
-                                </p>
-                              </div>
-
-                              <div className="approch-tab-content-list">
-                                <ul>
-                                  <li>dependable repairs, every time</li>
-                                  <li>improving homes, enhancing lives</li>
-                                  <li>customer-centered approach</li>
-                                </ul>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div
-                        className="approch-item tab-pane fade"
-                        id="value"
-                        role="tabpanel"
-                        aria-labelledby="value-tab"
-                      >
-                        <div className="row align-items-center">
-                          <div className="col-lg-12">
-                            <div className="approch-tab-content">
-                              <div className="approch-tab-content-header">
-                                <p>
-                                  Our value is to provide reliable, high-quality
-                                  handyman services that enhance homes and
-                                  simplify lives, delivering craftsmanship with
-                                  integrity and care.
-                                </p>
-                              </div>
-
-                              <div className="approch-tab-content-list">
-                                <ul>
-                                  <li>dependable repairs, every time</li>
-                                  <li>improving homes, enhancing lives</li>
-                                  <li>customer-centered approach</li>
-                                </ul>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="our-awards bg-radius-section">
-          <div className="container">
-            <div className="row">
-              <div className="col-lg-12">
-                <div className="our-awards-box">
-                  <div className="row align-items-center">
-                    <div className="col-lg-6">
-                      <div className="our-awards-counter">
-                        <h2>
-                          <span className="counter">25</span>+
-                        </h2>
-                        <p>Awards from all over world</p>
-                      </div>
-                    </div>
-
-                    <div className="col-lg-6">
-                      <div className="our-awards-list">
-                        <div
-                          className="our-awards-item wow fadeInUp"
-                          style={{
-                            visibility: "visible",
-                            animationName: "fadeInUp",
-                          }}
-                        >
-                          <img src="images/samples/award-1.svg" alt="" />
-                        </div>
-
-                        <div
-                          className="our-awards-item wow fadeInUp"
-                          data-wow-delay="0.2s"
-                          style={{
-                            visibility: "visible",
-                            animationName: "fadeInUp",
-                            animationDelay: "0.2s",
-                          }}
-                        >
-                          <img src="images/samples/award-2.svg" alt="" />
-                        </div>
-
-                        <div
-                          className="our-awards-item wow fadeInUp"
-                          data-wow-delay="0.4s"
-                          style={{
-                            visibility: "visible",
-                            animationName: "fadeInUp",
-                            animationDelay: "0.4s",
-                          }}
-                        >
-                          <img src="images/samples/award-3.svg" alt="" />
-                        </div>
-
-                        <div
-                          className="our-awards-item wow fadeInUp"
-                          data-wow-delay="0.6s"
-                          style={{
-                            visibility: "visible",
-                            animationName: "fadeInUp",
-                            animationDelay: "0.6s",
-                          }}
-                        >
-                          <img src="images/samples/award-4.svg" alt="" />
-                        </div>
-
-                        <div
-                          className="our-awards-item wow fadeInUp"
-                          data-wow-delay="0.8s"
-                          style={{
-                            visibility: "visible",
-                            animationName: "fadeInUp",
-                            animationDelay: "0.8s",
-                          }}
-                        >
-                          <img src="images/samples/award-5.svg" alt="" />
-                        </div>
-
-                        <div
-                          className="our-awards-item wow fadeInUp"
-                          data-wow-delay="1s"
-                          style={{
-                            visibility: "visible",
-                            animationName: "fadeInUp",
-                            animationDelay: "1s",
-                          }}
-                        >
-                          <img src="images/samples/award-6.svg" alt="" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </>
-
-      <Gallery />
-
       <footer className="main-footer bg-radius-section">
         <div className="container">
           <div className="row">
@@ -1564,7 +1143,7 @@ const LandingPageV2 = () => {
 
                     <div className="footer-contact-content">
                       <h3>contact</h3>
-                      <p>+91 8149403097</p>
+                      <p>{detail?.contact?.phone}</p>
                     </div>
                   </div>
                   <div className="footer-contact-item">
@@ -1574,7 +1153,7 @@ const LandingPageV2 = () => {
 
                     <div className="footer-contact-content">
                       <h3>email</h3>
-                      <p>vivaanassociates01@gmail.com</p>
+                      <p>{detail?.contact?.email}</p>
                     </div>
                   </div>
                 </div>
@@ -1584,10 +1163,7 @@ const LandingPageV2 = () => {
             <div className="col-lg-6">
               <div className="about-footer footer-links">
                 <h3>About Company</h3>
-                <p>
-                  Your go-to handyman for reliable, efficient, and expert home
-                  and business repair solutions.
-                </p>
+                <p>{detail?.about}</p>
               </div>
             </div>
 
@@ -1634,20 +1210,13 @@ const LandingPageV2 = () => {
             <div className="col-lg-2 col-md-4">
               <div className="footer-links">
                 <h3>follow us</h3>
-                <ul>
-                  <li>
-                    <a href="#">facebook</a>
-                  </li>
-                  <li>
-                    <a href="#">instagram</a>
-                  </li>
-                  <li>
-                    <a href="#">twitter</a>
-                  </li>
-                  <li>
-                    <a href="#">linkedin</a>
-                  </li>
-                </ul>
+                {detail?.contact?.social?.map((social) => (
+                  <ul key={social?.id}>
+                    <li>
+                      <a href={social?.url}>{social?.name}</a>
+                    </li>
+                  </ul>
+                ))}
               </div>
             </div>
           </div>
@@ -1657,7 +1226,9 @@ const LandingPageV2 = () => {
               <div className="col-lg-12">
                 <div className="footer-copyright-text">
                   <p>
-                    {`Copyright © ${new Date().getFullYear()} ${"SS Construction"} | All Rights Reserved.`}
+                    {`Copyright © ${new Date().getFullYear()} ${
+                      detail?.name
+                    } | All Rights Reserved.`}
                   </p>
                 </div>
               </div>

@@ -4,8 +4,8 @@
   }
 }
 /* ----------------------------------------------------------------------------------------
-* Author        : Awaiken
-* Template Name : Diyer - Handyman & Repair Services HTML Template
+* Author        : Alpit G
+* Template Name : Construction HTML Template
 * File          : CSS File
 * Version       : 1.0
 * ---------------------------------------------------------------------------------------- */
@@ -184,6 +184,9 @@ body {
   transition: all 0.5s ease-in-out;
   overflow: hidden;
   z-index: 0;
+
+  display: flex;
+  align-items: center;
 }
 
 .btn-default:hover {
@@ -379,7 +382,6 @@ body {
   font-weight: 500;
   text-transform: uppercase;
   margin-bottom: 0;
-  cursor: none;
 }
 
 .section-title p {
@@ -870,7 +872,7 @@ header.main-header .header-sticky.active {
 }
 
 .scroll-down-circle-box {
-  width: calc(16%);
+  width: calc(15%);
   background-color: var(--white-color);
   border-radius: 50%;
   background-repeat: no-repeat;
@@ -885,7 +887,12 @@ header.main-header .header-sticky.active {
   margin: 10px;
 }
 
-.scroll-circle-text figure img {
+.scroll-down-arrow img {
+  border-radius: 30%;
+  width: 80%;
+}
+
+.scroll-circle-text figure div {
   width: 100%;
   max-width: 165px;
   animation: textrotate 25s infinite linear;
@@ -900,43 +907,43 @@ header.main-header .header-sticky.active {
   }
 }
 
-.scroll-down-arrow {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
+// .scroll-down-arrow {
+//   position: absolute;
+//   top: 50%;
+//   left: 50%;
+//   transform: translate(-50%, -50%);
+// }
 
-.scroll-down-arrow a {
-  width: 90px;
-  height: 90px;
-  background-color: var(--accent-color);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease-in-out;
-}
+// .scroll-down-arrow a {
+//   width: 90px;
+//   height: 90px;
+//   background-color: var(--accent-color);
+//   border-radius: 50%;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   transition: all 0.3s ease-in-out;
+// }
 
-.scroll-down-arrow a:hover {
-  background-color: var(--primary-color);
-}
+// .scroll-down-arrow a:hover {
+//   background-color: var(--primary-color);
+// }
 
-.scroll-down-arrow i {
-  font-size: 20px;
-  color: var(--white-color);
-  border: 3px solid var(--white-color);
-  border-radius: 40px;
-  padding: 10px 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease-in-out;
-}
+// .scroll-down-arrow i {
+//   font-size: 20px;
+//   color: var(--white-color);
+//   border: 3px solid var(--white-color);
+//   border-radius: 40px;
+//   padding: 10px 5px;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   transition: all 0.3s ease-in-out;
+// }
 
-.scroll-down-arrow a:hover i {
-  transform: translateY(3px);
-}
+// .scroll-down-arrow a:hover i {
+//   transform: translateY(3px);
+// }
 
 /************************************/
 /***       05. About Us css       ***/
@@ -1100,17 +1107,25 @@ header.main-header .header-sticky.active {
 }
 
 .service-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+
   background-color: var(--white-color);
   border: 1px solid var(--divider-color);
   border-radius: 20px;
-  height: calc(100% - 30px);
-  margin-bottom: 30px;
   overflow: hidden;
+
+  .service-image {
+    margin-top: auto;
+  }
 }
 
 .service-item-header {
   position: relative;
   padding: 30px;
+  height: 100%;
 }
 
 .service-item-header::before {
@@ -1173,25 +1188,36 @@ header.main-header .header-sticky.active {
   color: var(--white-color);
 }
 
-.service-image a {
-  display: block;
-  cursor: none;
-}
+// .service-item-flex {
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: space-between;
+//   height: 100%;
+// }
 
-.service-image figure {
-  display: block;
-}
+// .service-image {
+//   margin-top: auto;
+// }
 
-.service-image img {
-  width: 100%;
-  object-fit: cover;
-  aspect-ratio: 1 / 0.55;
-  transition: all 0.4s ease-in-out;
-}
+// .service-image a {
+//   display: block;
+//   cursor: none;
+// }
 
-.service-item:hover .service-image img {
-  transform: scale(1.1);
-}
+// .service-image figure {
+//   display: block;
+// }
+
+// .service-image img {
+//   width: 100%;
+//   object-fit: cover;
+//   aspect-ratio: 1 / 0.55;
+//   transition: all 0.4s ease-in-out;
+// }
+
+// .service-item:hover .service-image img {
+//   transform: scale(1.1);
+// }
 
 .service-footer {
   margin-top: 20px;
@@ -1514,7 +1540,7 @@ header.main-header .header-sticky.active {
 .contact-now-circle img {
   width: 100%;
   max-width: 140px;
-  animation: infiniterotate 30s infinite linear;
+  // animation: infiniterotate 30s infinite linear;
 }
 
 @keyframes infiniterotate {
@@ -2304,7 +2330,6 @@ header.main-header .header-sticky.active {
 
 .about-footer {
   width: 100%;
-  max-width: 420px;
 }
 
 .footer-links h3 {
@@ -2334,9 +2359,9 @@ header.main-header .header-sticky.active {
   margin-bottom: 15px;
 }
 
-.footer-links ul li:last-child {
-  margin-bottom: 0;
-}
+// .footer-links ul li:last-child {
+//   margin-bottom: 0;
+// }
 
 .footer-links ul li a {
   color: inherit;
@@ -4749,7 +4774,7 @@ header.main-header .header-sticky.active {
 .icon-box-qr img {
   width: 100px;
   height: 100px;
-  border-radius: 33%;
+  border-radius: 10%;
 }
 
 .page-contact-us {
@@ -5032,7 +5057,7 @@ header.main-header .header-sticky.active {
     width: calc(38% - 20px);
   }
 
-  .scroll-circle-text figure img {
+  .scroll-circle-text figure div {
     max-width: 130px;
   }
 
@@ -5987,7 +6012,7 @@ header.main-header .header-sticky.active {
     width: calc(35% - 13.33px);
   }
 
-  .scroll-circle-text figure img {
+  .scroll-circle-text figure div {
     max-width: 80px;
   }
 
