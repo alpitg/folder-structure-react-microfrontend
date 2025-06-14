@@ -1,11 +1,11 @@
 import "./App.css";
 
-import LandingPage from "./components/landing-page/landing-page";
+import RoutesApp from "./components/landing-page/auth/routes";
 
 function App() {
   return (
     <>
-      <LandingPage />
+      <RoutesApp />
     </>
   );
 }

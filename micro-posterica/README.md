@@ -1,5 +1,31 @@
 # React + TypeScript + Vite
 
+src/
+├── components/
+│   ├── ui/         # reusable buttons, inputs, cards
+│   ├── estimates/
+│   ├── bills/
+│   └── customers/
+├── pages/
+│   ├── Dashboard.tsx
+│   ├── Customers.tsx
+│   ├── EstimateForm.tsx
+│   └── Bills.tsx
+├── services/
+│   └── api.ts      # axios-based API client
+├── hooks/
+├── utils/
+└── App.tsx
+
+
+## Future plan -
+1. Multi tenancy
+
+
+
+
+
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
