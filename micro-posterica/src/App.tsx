@@ -1,6 +1,6 @@
 import "./App.css";
 
-import RoutesApp from "./components/landing-page/auth/routes";
+import RoutesApp from "./components/auth/routes";
 
 function App() {
   return (

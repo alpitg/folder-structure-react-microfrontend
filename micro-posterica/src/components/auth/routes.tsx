@@ -1,18 +1,17 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 import { Suspense, lazy } from "react";
 
+import LoadingApp from "../loading/loading";
 import { ROUTE_URL } from "./constants/routes.const";
 
-const Login = lazy(() => import("../auth/login/login"));
-const LandingPage = lazy(() => import("../../landing-page/landing-page"));
+const LandingPageApp = lazy(() => import("../landing-page/landing-page"));
 
 const RoutesApp = () => {
   return (
-    <Suspense fallback={<div>{"LOADING..."}</div>}>
+    <Suspense fallback={<div>{<LoadingApp />}</div>}>
       <BrowserRouter>
         <Routes>
-          <Route path={ROUTE_URL.LOGIN} element={<Login />} />
-          <Route path={ROUTE_URL.DASHBOARD} element={<LandingPage />} />
+          <Route path={ROUTE_URL.DASHBOARD} element={<LandingPageApp />} />
 
           {/* PAGES */}
           {/* <Route>
