@@ -1,3 +1,209 @@
+// .sidebar-app {
+//   position: fixed;
+//   left: 0;
+//   top: 0;
+//   height: 100%;
+//   width: var(--sidebar-width);
+//   user-select: none;
+//   padding-top: 5px;
+//   background: var(--sidebar-bg-color);
+//   font-size: 13px;
+//   font-weight: 400;
+
+//   .toggle-button {
+//     position: absolute;
+//     top: 20px;
+//     left: calc(var(--sidebar-width) - 15px);
+//     padding: 2px;
+//     border-radius: 22%;
+//     background: var(--app-bg-color);
+//     color: #009ef7;
+//     :hover {
+//       cursor: pointer;
+//     }
+//   }
+//   .rotate-180 {
+//     transform: rotate(180deg);
+//   }
+
+//   ul::-webkit-scrollbar {
+//     width: 18px;
+//   }
+//   ul::-webkit-scrollbar-track {
+//     background: var(--sidebar-bg-color);
+//   }
+//   ul::-webkit-scrollbar-thumb {
+//     background-color: var(--scrollbar-thumb);
+//     border: 5px solid var(--sidebar-bg-color);
+//     border-radius: 20px;
+//   }
+
+//   ul {
+//     position: absolute;
+//     top: 75px;
+//     bottom: 10px;
+//     padding: 10px;
+//     max-height: 86vh;
+//     max-height: 86vh;
+//     overflow-y: auto;
+//     width: 100%;
+//     padding: 10px;
+
+//     .accordion-button {
+//       color: var(--default-font-color);
+//       padding: 0.65rem 1rem;
+//       margin-bottom: 2px;
+//     }
+//     .accordion-button::after {
+//       color: var(--default-font-color);
+//       content: "\276F";
+//     }
+//     .accordion-button.collapsed::after {
+//       background-image: none;
+//       display: flex;
+//       justify-content: center;
+//       align-items: center;
+//     }
+//     .accordion-button:not(.collapsed)::after {
+//       background-image: none;
+//       display: flex;
+//       justify-content: center;
+//       align-items: center;
+//       transform: rotate(90deg);
+//     }
+//     .accordion-collapse > a {
+//       margin-left: 1rem;
+//       margin-right: 1rem;
+//     }
+
+//     li {
+//       .icon {
+//         width: 30px;
+//         display: inline-block;
+//         padding-right: 5px;
+//       }
+
+//       a {
+//         display: block;
+//         padding: 0.65rem 1rem;
+//         color: var(--default-font-color);
+//         text-decoration: none;
+//       }
+//       a:hover {
+//         color: var(--white-color);
+//       }
+//       .accordion-button.active,
+//       a.active {
+//         color: var(--white-color);
+//         background: var(--sidebar-active-color);
+//         border-radius: 0.475rem;
+//       }
+//       a:hover:before,
+//       a.active:before {
+//         display: block;
+//       }
+//     }
+//   }
+
+//   // override accordion css
+//   .accordion-button,
+//   .accordion-item,
+//   .accordion-button:focus,
+//   .accordion-button:not(.collapsed) {
+//     background-color: transparent;
+//     box-shadow: none;
+//     border: none;
+//     font-size: 13px;
+//     border-bottom-right-radius: 0 !important;
+//     border-bottom-left-radius: 0 !important;
+//     border-top-right-radius: 0 !important;
+//     border-top-left-radius: 0 !important;
+//   }
+
+//   .sidebar-bottom {
+//     position: absolute;
+//     bottom: 0px;
+//     width: 100%;
+//     text-align: center;
+//     color: var(--sidebar-light-secondary);
+
+//     input[type="checkbox"] {
+//       display: none;
+//     }
+
+//     p {
+//       color: var(--default-font-color);
+//     }
+
+//     & ~ #sidebar-footer {
+//       width: calc(var(--sidebar-width-min));
+//     }
+
+//     #sidebar-footer {
+//       position: relative;
+//       width: var(--sidebar-width);
+//       background: var(--sidebar-dark-secondary);
+//       display: flex;
+//       flex-direction: column;
+
+//       height: 3rem;
+//       -webkit-box-align: center;
+//       -ms-flex-align: center;
+//       align-items: center;
+//       justify-content: center;
+//       -webkit-transition: width 0.2s ease;
+//       -o-transition: width 0.2s ease;
+//       transition: width 0.2s ease;
+
+//       i {
+//         padding-right: 10px;
+//       }
+//     }
+
+//     #sidebar-footer:hover {
+//       cursor: pointer;
+//     }
+//   }
+// }
+
+// .sidebar-toggle:checked {
+//   & ~ #sidebar-header {
+//     #sidebar-title {
+//       opacity: 0;
+//       pointer-events: none;
+//       transition: opacity 0.1s;
+//     }
+
+//     label[for="sidebar-toggle"] {
+//       left: calc(50% - 8px);
+//       transform: translate(-50%);
+//     }
+//   }
+
+//   & ~ #sidebar-content {
+//     width: var(--sidebar-width-min);
+
+//     .sidebar-button {
+//       span {
+//         opacity: 0;
+//         transition: opacity 0.1s;
+//       }
+
+//       .bi {
+//         min-width: calc(100% - 16px);
+//       }
+//     }
+//   }
+
+//   & ~ #sidebar-footer {
+//     width: calc(var(--sidebar-width-min));
+//   }
+
+//   & ~ .sidebar-app {
+//     width: calc(var(--sidebar-width-min));
+//   }
+// }
+
 #sidebar-toggle:checked {
   & ~ #sidebar-header {
     #sidebar-title {
@@ -32,7 +238,7 @@
   }
 }
 
-#sidebar-app {
+.sidebar-app {
   position: absolute;
   height: calc(100% - 0vw);
   display: flex;
@@ -42,6 +248,118 @@
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   overflow: hidden;
   user-select: none;
+
+
+//   .toggle-button {
+//     position: absolute;
+//     top: 20px;
+//     left: calc(var(--sidebar-width) - 15px);
+//     padding: 2px;
+//     border-radius: 22%;
+//     background: var(--app-bg-color);
+//     color: #009ef7;
+//     :hover {
+//       cursor: pointer;
+//     }
+//   }
+//   .rotate-180 {
+//     transform: rotate(180deg);
+//   }
+
+//   ul::-webkit-scrollbar {
+//     width: 18px;
+//   }
+//   ul::-webkit-scrollbar-track {
+//     background: var(--sidebar-bg-color);
+//   }
+//   ul::-webkit-scrollbar-thumb {
+//     background-color: var(--scrollbar-thumb);
+//     border: 5px solid var(--sidebar-bg-color);
+//     border-radius: 20px;
+//   }
+
+//   ul {
+//     position: absolute;
+//     top: 75px;
+//     bottom: 10px;
+//     padding: 10px;
+//     max-height: 86vh;
+//     max-height: 86vh;
+//     overflow-y: auto;
+//     width: 100%;
+//     padding: 10px;
+
+//     .accordion-button {
+//       color: var(--default-font-color);
+//       padding: 0.65rem 1rem;
+//       margin-bottom: 2px;
+//     }
+//     .accordion-button::after {
+//       color: var(--default-font-color);
+//       content: "\276F";
+//     }
+//     .accordion-button.collapsed::after {
+//       background-image: none;
+//       display: flex;
+//       justify-content: center;
+//       align-items: center;
+//     }
+//     .accordion-button:not(.collapsed)::after {
+//       background-image: none;
+//       display: flex;
+//       justify-content: center;
+//       align-items: center;
+//       transform: rotate(90deg);
+//     }
+//     .accordion-collapse > a {
+//       margin-left: 1rem;
+//       margin-right: 1rem;
+//     }
+
+//     li {
+//       .icon {
+//         width: 30px;
+//         display: inline-block;
+//         padding-right: 5px;
+//       }
+
+//       a {
+//         display: block;
+//         padding: 0.65rem 1rem;
+//         color: var(--default-font-color);
+//         text-decoration: none;
+//       }
+//       a:hover {
+//         color: var(--white-color);
+//       }
+//       .accordion-button.active,
+//       a.active {
+//         color: var(--white-color);
+//         background: var(--sidebar-active-color);
+//         border-radius: 0.475rem;
+//       }
+//       a:hover:before,
+//       a.active:before {
+//         display: block;
+//       }
+//     }
+//   }
+
+//   // override accordion css
+//   .accordion-button,
+//   .accordion-item,
+//   .accordion-button:focus,
+//   .accordion-button:not(.collapsed) {
+//     background-color: transparent;
+//     box-shadow: none;
+//     border: none;
+//     font-size: 13px;
+//     border-bottom-right-radius: 0 !important;
+//     border-bottom-left-radius: 0 !important;
+//     border-top-right-radius: 0 !important;
+//     border-top-left-radius: 0 !important;
+//   }
+
 
   hr {
     margin: 0;
