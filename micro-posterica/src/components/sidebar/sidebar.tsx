@@ -9,179 +9,20 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
     {
       label: "Dashboard",
       path: ROUTE_URL.DASHBOARD,
-      icon: "pi pi-fw pi-chart-line",
+      icon: "bi bi-pie-chart-fill",
       claims: [],
     },
     {
       label: "Administration",
       path: ROUTE_URL.ADMIN.BASE,
-      icon: "pi pi-fw pi-sliders-h",
+      icon: "bi bi-person-fill-gear",
       claims: [],
-      route: [
-        {
-          label: "Organization Units",
-          path: ROUTE_URL.ADMIN.ORGANIZATION_UNITS.BASE,
-          icon: "pi pi-fw pi-th-large",
-          claims: [],
-        },
-        {
-          label: "Tenant",
-          path: ROUTE_URL.ADMIN.TENANT.BASE,
-          icon: "pi pi-fw pi-sitemap",
-          claims: [],
-        },
-        {
-          label: "Roles",
-          path: ROUTE_URL.ADMIN.ROLE.BASE,
-          icon: "pi pi-fw pi-briefcase",
-          claims: [],
-        },
-      ],
-    },
-    {
-      label: "Pages",
-      path: "",
-      icon: "pi pi-fw pi-users",
-      claims: [],
-      route: [
-        {
-          label: "About",
-          path: ROUTE_URL.ABOUT,
-          icon: "pi pi-fw pi-file",
-          claims: [],
-        },
-        {
-          label: "Contact",
-          path: ROUTE_URL.CONTACT,
-          icon: "pi pi-fw pi-comments",
-          claims: [],
-        },
-        {
-          label: "Login",
-          path: ROUTE_URL.LOGIN,
-          claims: [],
-          icon: "pi pi-fw pi-sign-in",
-        },
-        {
-          label: "Register",
-          path: ROUTE_URL.REGISTER,
-          claims: [],
-          icon: "pi pi-fw pi-sign-in",
-        },
-        {
-          label: "Social Media",
-          path: ROUTE_URL.SOCIAL_MEDIA_MANAGEMENT,
-          claims: [],
-          icon: "pi pi-fw pi-verified",
-        },
-        {
-          label: "UI",
-          path: ROUTE_URL.UI,
-          icon: "pi pi-fw pi-bolt",
-          claims: [],
-        },
-      ],
-    },
-    {
-      label: "Gymkhana",
-      path: ROUTE_URL.HOME,
-      icon: "pi pi-fw pi-chart-line",
-      claims: [],
-      route: [
-        {
-          label: "Facility Type",
-          path: ROUTE_URL.GYMKHANACLUB.ADMIN.FACILITY_TYPE.BASE,
-          icon: "pi pi-fw pi-ticket",
-          claims: [],
-        },
-        {
-          label: "Facility Sports",
-          path: ROUTE_URL.GYMKHANACLUB.ADMIN.FACILITY.BASE,
-          icon: "pi pi-fw pi-tablet",
-          claims: [],
-        },
-        {
-          label: "Facility Costing",
-          path: ROUTE_URL.GYMKHANACLUB.ADMIN.FACILITY_COSTING.BASE,
-          icon: "pi pi-fw pi-tag",
-          claims: [],
-        },
-        {
-          label: "Book Slots",
-          path: ROUTE_URL.GYMKHANACLUB.FACILITY_BOOK_SLOTS.BASE,
-          icon: "pi pi-fw pi-id-card",
-          claims: [],
-        },
-        {
-          label: "Signup",
-          path: ROUTE_URL.GYMKHANACLUB.SIGNUP,
-          icon: "pi pi-fw pi-bolt",
-          claims: [],
-        },
-      ],
-    },
-    {
-      label: "Ticketing tool",
-      path: ROUTE_URL.TICKETING_TOOL.BASE,
-      icon: "pi pi-fw pi-chart-line",
-      claims: [],
-      route: [
-        {
-          label: "Social Login",
-          path: ROUTE_URL.TICKETING_TOOL.SOCIAL_LOGINS,
-          icon: "pi pi-fw pi-ticket",
-          claims: [],
-        },
-      ],
-    },
-    {
-      label: "Orm tool",
-      path: ROUTE_URL.ORM.BASE,
-      icon: "pi pi-fw pi-chart-line",
-      claims: [],
-      route: [
-        {
-          label: "Home",
-          path: ROUTE_URL.ORM.HOME,
-          icon: "pi pi-fw pi-ticket",
-          claims: [],
-        },
-        {
-          label: "Dashboard",
-          path: ROUTE_URL.ORM.DASHBOARD,
-          icon: "pi pi-fw pi-ticket",
-          claims: [],
-        },
-        {
-          label: "Reports",
-          path: ROUTE_URL.ORM.REPORTS.BASE,
-          icon: "pi pi-fw pi-ticket",
-          claims: [],
-        },
-        {
-          label: "Social Listening",
-          path: ROUTE_URL.ORM.SOCIAL_LISTENING.BASE,
-          icon: "pi pi-fw pi-ticket",
-          claims: [],
-        },
-        {
-          label: "Survey",
-          path: ROUTE_URL.ORM.SURVEY.BASE,
-          icon: "pi pi-fw pi-ticket",
-          claims: [],
-        },
-        {
-          label: "Settings",
-          path: ROUTE_URL.ORM.SETTINGS,
-          icon: "pi pi-fw pi-ticket",
-          claims: [],
-        },
-      ],
+      route: [],
     },
     {
       label: "Settings",
       path: ROUTE_URL.TENANT_SETTINGS,
-      icon: "pi pi-fw pi-cog",
+      icon: "bi bi-shield-check",
       claims: [],
     },
   ];
@@ -201,10 +42,10 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
         to={route.path}
         className={({ isActive }) => (isActive ? "active" : "inactive")}
       >
-        <span className="icon">
-          <i className={route.icon}></i>
-        </span>
-        {route.label}
+        <div className="sidebar-button">
+          <i className={route?.icon}></i>
+          <span>{route?.label}</span>
+        </div>
       </NavLink>
     );
   };
@@ -283,7 +124,6 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
       </div> */}
 
       <input id="sidebar-toggle" type="checkbox" />
-      <div id="sidebar-header"></div>
       <div id="sidebar-content">
         {/* <ul>
           {routes.map((route: IRoutes) => {
@@ -335,45 +175,12 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
           })}
         </ul> */}
 
-        <div className="sidebar-button">
-          <i className="bi bi-app"></i>
-
-          <span>Your Work</span>
-        </div>
-        <div className="sidebar-button">
-          <i className="bi bi-app"></i>
-          <span>Assets</span>
-        </div>
-        <div className="sidebar-button">
-          <i className="bi bi-app"></i>
-          <span>Pinned Items</span>
-        </div>
-        <hr />
-        <div className="sidebar-button">
-          <i className="bi bi-app"></i>
-          <span>Following</span>
-        </div>
-        <div className="sidebar-button">
-          <i className="bi bi-app"></i>
-          <span>Trending</span>
-        </div>
-        <div className="sidebar-button">
-          <i className="bi bi-app"></i>
-          <span>Challenges</span>
-        </div>
-        <div className="sidebar-button">
-          <i className="bi bi-app"></i>
-          <span>Spark</span>
-        </div>
-        <hr />
-        <div className="sidebar-button">
-          <i className="bi bi-app"></i>
-          <span>Codepen Pro</span>
-        </div>
-        <div id="sidebar-content-highlight"></div>
+        {routes.map((route: IRoutes) => {
+          return <SideBarNav route={route} key={route.label} />;
+        })}
       </div>
-      <input id="sidebar-footer-toggle" type="checkbox" />
 
+      <input id="sidebar-footer-toggle" type="checkbox" />
       <label
         id="sidebar-footer"
         htmlFor="sidebar-toggle"

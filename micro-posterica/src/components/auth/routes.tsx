@@ -5,13 +5,21 @@ import LoadingApp from "../loading/loading";
 import { ROUTE_URL } from "./constants/routes.const";
 
 const LandingPageApp = lazy(() => import("../landing-page/landing-page"));
+const AdministrationApp = lazy(
+  () => import("../../features/administration/administration")
+);
 
 const RoutesApp = () => {
   return (
     <Suspense fallback={<div>{<LoadingApp />}</div>}>
       <BrowserRouter>
         <Routes>
-          <Route path={ROUTE_URL.DASHBOARD} element={<LandingPageApp />} />
+          <Route path={ROUTE_URL.DASHBOARD} element={<LandingPageApp />}>
+            <Route
+              path={ROUTE_URL.ADMIN.BASE}
+              element={<AdministrationApp />}
+            />
+          </Route>
 
           {/* PAGES */}
           {/* <Route>
