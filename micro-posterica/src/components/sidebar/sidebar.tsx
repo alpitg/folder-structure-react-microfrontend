@@ -21,7 +21,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
     },
     {
       label: "Settings",
-      path: ROUTE_URL.TENANT_SETTINGS,
+      path: ROUTE_URL.APP_SETTINGS,
       icon: "bi bi-shield-check",
       claims: [],
     },

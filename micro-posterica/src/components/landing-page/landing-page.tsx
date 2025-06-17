@@ -1,6 +1,7 @@
 import "./landing-page.scss";
 
 import NavbarApp from "../navbar/navbar";
+import { Outlet } from "react-router";
 import Sidebar from "../sidebar/sidebar";
 import { useState } from "react";
 
@@ -21,8 +22,7 @@ const LandingPageApp = () => {
             !isOpen ? `landing-page-content` : `landing-page-content-collapsed`
           }
         >
-          <h1>Welcome to the Landing Page</h1>
-          <p>This is a simple landing page component.</p>
+          <Outlet />
         </div>
       </div>
     </div>
