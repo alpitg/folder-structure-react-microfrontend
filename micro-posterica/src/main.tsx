@@ -4,7 +4,7 @@ import App from "./App.tsx";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
-fetch("./environment.json")
+fetch("/environment.json")
   .then((response) => {
     if (!response.ok) {
       throw new Error("Failed to load environment configuration");
