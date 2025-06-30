@@ -1,9 +1,44 @@
 [
   {
     "FrameTypeID": 1,
-    "Name": "Classic Wood",
+    "Name": "0.5 inch moulding (4mm board)",
+    "WidthInches": 0.5,
+    "Description": "Plain moulding with 4mm board",
+    "CostPerInch": 0.5
+  },
+  {
+    "FrameTypeID": 2,
+    "Name": "1.25 inch moulding ordinary/plain",
+    "WidthInches": 1.25,
+    "Description": "Ordinary plain moulding",
+    "CostPerInch": 1.0
+  },
+  {
+    "FrameTypeID": 3,
+    "Name": "1.25 inch Black silver /Premium",
+    "WidthInches": 1.25,
+    "Description": "Black silver premium moulding",
+    "CostPerInch": 1.5
+  },
+  {
+    "FrameTypeID": 4,
+    "Name": "2 inch Flat moulding 8mm board",
+    "WidthInches": 2.0,
+    "Description": "Flat moulding with 8mm board",
+    "CostPerInch": 1.25
+  },
+  {
+    "FrameTypeID": 5,
+    "Name": "2 inch artist premium 8 mm board",
     "WidthInches": 2.5,
     "Description": "Walnut brown wooden frame",
     "CostPerInch": 1.75
+  },
+  {
+    "FrameTypeID": 6,
+    "Name": "3 inch super premium royale grade",
+    "WidthInches": 3.0,
+    "Description": "Super premium royale grade moulding",
+    "CostPerInch": 2.5
   }
 ]

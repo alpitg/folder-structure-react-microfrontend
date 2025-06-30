@@ -17,12 +17,16 @@ const LandingPageApp = () => {
       <NavbarApp />
       <div className="landing-page-container">
         <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
-        <div
-          className={
-            !isOpen ? `landing-page-content` : `landing-page-content-collapsed`
-          }
-        >
-          <Outlet />
+        <div className="base-container">
+          <div
+            className={
+              !isOpen
+                ? `landing-page-content`
+                : `landing-page-content-collapsed`
+            }
+          >
+            <Outlet />
+          </div>
         </div>
       </div>
     </div>

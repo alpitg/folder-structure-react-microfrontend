@@ -8,6 +8,42 @@ export const ROUTE_URL = {
   UI: "/ui",
   NOT_ALLOWED: "/not-allowed",
   SOCIAL_MEDIA_MANAGEMENT: "/social-media",
+  BILL_CALCULATION: "/bill-calculation",
+  CUSTOMERS: "/customers",
+  MASTER: {
+    BASE: "/master",
+    PRODUCTS: {
+      BASE: "/master/products",
+      LIST: "",
+      EDIT: "edit/:id",
+      ADD: "add",
+    },
+    FRAME_TYPES: {
+      BASE: "/master/frame-types",
+      LIST: "",
+      EDIT: "edit/:id",
+      ADD: "add",
+    },
+    GLASS_TYPES: {
+      BASE: "/master/glass-types",
+      LIST: "",
+      EDIT: "edit/:id",
+      ADD: "add",
+    },
+    MISC_CHARGES: {
+      BASE: "/master/misc-charges",
+      LIST: "",
+      EDIT: "edit/:id",
+      ADD: "add",
+    },
+    MOUNT_TYPES: {
+      BASE: "/master/mount-types",
+      LIST: "",
+      EDIT: "edit/:id",
+      ADD: "add",
+    },
+  },
+  BILLS: "/bills",
   APP_SETTINGS: "/app-settings",
   TENANT_SETTINGS: "/tenant-settings",
   ADMIN: {

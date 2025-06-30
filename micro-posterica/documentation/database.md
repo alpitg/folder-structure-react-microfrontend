@@ -11,6 +11,16 @@ CREATE TABLE FrameType (
     CostPerInch DECIMAL(10,2)
 );
 
+CREATE TABLE FrameType (
+    FrameTypeID INT PRIMARY KEY,
+    Name NVARCHAR(100),
+    Category NVARCHAR(100),
+    Multiplier DECIMAL(6,2), -- Multipliers for pricing
+    Description NVARCHAR(255),
+    IsActive BIT DEFAULT 1
+);
+
+
 CREATE TABLE GlassType (
     GlassTypeID INT IDENTITY PRIMARY KEY,
     Name NVARCHAR(100),
