@@ -64,7 +64,9 @@ const NavbarApp = () => {
               role="switch"
               id="switchCheckChecked"
               checked={isDarkMode}
-              onChange={() => setIsDarkMode(!isDarkMode)}
+              onChange={() => {
+                setIsDarkMode(!isDarkMode);
+              }}
             />
             <label
               className="form-check-label"

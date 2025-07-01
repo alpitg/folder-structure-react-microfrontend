@@ -10,6 +10,9 @@ const SettingsApp = lazy(() => import("../../features/settings/settings"));
 const AdministrationApp = lazy(
   () => import("../../features/administration/administration")
 );
+
+const UIApp = lazy(() => import("../../components/ui/ui"));
+
 const BillCalculationApp = lazy(() => import("../../features/bills/calculate"));
 
 const MasterApp = lazy(() => import("../../features/master/master"));
@@ -32,6 +35,7 @@ const RoutesApp = () => {
         <Routes>
           <Route path={ROUTE_URL.DASHBOARD} element={<LandingPageApp />}>
             <Route path={ROUTE_URL.DASHBOARD} element={<DashboardApp />} />
+            <Route path={ROUTE_URL.UI} element={<UIApp />} />
             <Route
               path={ROUTE_URL.ADMIN.BASE}
               element={<AdministrationApp />}

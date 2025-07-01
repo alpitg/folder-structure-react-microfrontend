@@ -1,6 +1,6 @@
 ## reference -
-https://prium.github.io/phoenix/v1.22.0/modules/forms/advance/date-picker.html
-
+- https://prium.github.io/phoenix/v1.22.0/modules/forms/advance/date-picker.html
+- https://coderthemes.com/hyper/layouts/index.html
 
 # React + TypeScript + Vite
 
@@ -10,7 +10,7 @@ src/
 │   ├── estimates/
 │   ├── bills/
 │   └── customers/
-├── pages/
+├── features/
 │   ├── Dashboard.tsx
 │   ├── Customers.tsx
 │   ├── EstimateForm.tsx
