@@ -1,0 +1,5 @@
+[
+  { "id": 1, "name": "Normal", "rate": 0.35, "rateIn": "per sq. inch" },
+  { "id": 2, "name": "Acrylic", "rate": 1.39, "rateIn": "per sq. inch" },
+  { "id": 3, "name": "NR Glass", "rate": 2.78, "rateIn": "per sq. inch" }
+]

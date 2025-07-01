@@ -1,11 +1,18 @@
-import { useState } from "react";
+import type { AppDispatch, AppState } from "../../../app/store";
+import { useDispatch, useSelector } from "react-redux";
+
+import { fetchGlassTypes } from "../../../app/features/master/glass-types/glass-types.thunk";
+import { useEffect } from "react";
 
 const GlassTypesMasterApp = () => {
-  const [glassTypes] = useState([
-    { id: 1, name: "Normal", rate: 0.35 },
-    { id: 2, name: "Acrylic", rate: 1.39 },
-    { id: 3, name: "NR Glass", rate: 2.78 },
-  ]);
+  const { glassTypes } = useSelector(
+    (state: AppState) => state?.master?.glassTypes
+  );
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(fetchGlassTypes());
+  }, []);
 
   return (
     <div className="container my-4">
@@ -17,7 +24,7 @@ const GlassTypesMasterApp = () => {
             <div className="card shadow-sm h-100">
               <div className="card-body">
                 <h5 className="card-title">{glass.name}</h5>
-                <p className="card-text">Rate: ₹{glass.rate} per sq. inch</p>
+                <p className="card-text">Rate: ₹{glass?.rate} {glass?.rateIn}</p>
               </div>
             </div>
           </div>

@@ -1,64 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+import type { AppDispatch } from "../../../../app/store";
+import type { AppState } from "../../../../app/store";
+import { fetchFrameTypes } from "../../../../app/features/master/frame-types/frame-types.thunk";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 const FrameTypesMasterApp = () => {
-  const [frameTypes, setFrameTypes] = useState([
-    {
-      id: 1,
-      name: "0.5 inch moulding (4mm board)",
-      category: "Standard Framing",
-      baseCost: 0,
-    },
-    {
-      id: 2,
-      name: "1.25 inch moulding ordinary/plain",
-      category: "Standard Framing",
-      baseCost: 403.2,
-    },
-    {
-      id: 3,
-      name: "1.25 inch premium Black/Silver",
-      category: "Standard Framing",
-      baseCost: 491.62,
-    },
-    {
-      id: 4,
-      name: "2 inch Flat moulding (8mm board)",
-      category: "Standard Framing",
-      baseCost: 619.2,
-    },
-    {
-      id: 5,
-      name: "Double Box frame with glass",
-      category: "Double Box Frame",
-      baseCost: 1321.0,
-    },
-    {
-      id: 6,
-      name: "Basic Stretch Canvas",
-      category: "Stretch Canvas",
-      baseCost: 481.0,
-    },
-    {
-      id: 7,
-      name: "Sandwich glass with 0.5 inch frame",
-      category: "Sandwich Glass Frame",
-      baseCost: 1760.0,
-    },
-    {
-      id: 8,
-      name: "Floater frame",
-      category: "Floater Frame",
-      baseCost: 1200.0,
-    },
-    {
-      id: 9,
-      name: "Clip on LED frame",
-      category: "Clip on LED Frame",
-      baseCost: 1575.52,
-    },
-  ]);
-
   const [editFrameType, setEditFrameType] = useState(false);
+
+  const { frameTypes } = useSelector((state: AppState) => state?.master?.frameTypes);
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(fetchFrameTypes());
+  }, []);
 
   return (
     <div className="container my-4">
@@ -107,14 +63,14 @@ const FrameTypesMasterApp = () => {
           <br />
         </div>
       )}
-      {frameTypes.length === 0 && (
+      {frameTypes?.length === 0 && (
         <div className="alert alert-info" role="alert">
           No frame types available. Please add a new frame type.
         </div>
       )}
 
       <div className="row">
-        {frameTypes.map((frame) => (
+        {frameTypes?.map((frame) => (
           <div key={frame.id} className="col-md-4 mb-3">
             <div className="card shadow-sm h-100">
               <div className="card-body">
