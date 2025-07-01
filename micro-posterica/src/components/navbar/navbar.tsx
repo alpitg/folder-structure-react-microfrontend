@@ -57,7 +57,7 @@ const NavbarApp = () => {
             </nav>
           </div>
           <i className="bi bi-sun-fill ms-2" title="Light theme"></i>
-          <div className="mb-3 ms-2 form-check form-switch">
+          <div className="ms-2 form-check form-switch">
             <input
               className="form-check-input"
               type="checkbox"
@@ -72,7 +72,7 @@ const NavbarApp = () => {
               className="form-check-label"
               htmlFor="switchCheckChecked"
             ></label>
-            <i className="bi bi-moon-fill ms-2" title="Dark theme"></i>
+            <i className="bi bi-moon-fill" title="Dark theme"></i>
           </div>
         </div>
       </nav>

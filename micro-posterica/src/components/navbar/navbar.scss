@@ -23,6 +23,11 @@
     .nav-right {
       text-align: end;
       display: flex;
+      align-items: center;
+
+      .breadcrumb {
+        margin: 0;
+      }
     }
   }
 
