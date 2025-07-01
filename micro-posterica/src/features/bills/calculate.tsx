@@ -1,314 +1,407 @@
-import { useState } from "react";
+import type { AppDispatch, AppState } from "../../app/store";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+
+import { fetchFrameTypes } from "../../app/features/master/frame-types/frame-types.thunk";
+import { fetchGlassTypes } from "../../app/features/master/glass-types/glass-types.thunk";
 
 const BillCalculationApp = () => {
+  const {
+    glassTypes: { glassTypes },
+    frameTypes: { frameTypes },
+    miscCharges: { miscCharges },
+  } = useSelector((state: AppState) => state?.master);
+
+  const dispatch = useDispatch<AppDispatch>();
   const [isTableView, setIsTableView] = useState(false);
 
-  const [items, setItems] = useState([
-    {
-      artName: "",
-      width: "",
-      height: "",
-      frameType: "",
-      glassType: "",
-      mountType: "",
-      quantity: 1,
-      total: 0,
-    },
-  ]);
-
-  const addItem = () => {
-    setItems([
-      ...items,
+  const [bill, setBill] = useState({
+    customerName: "",
+    date: "",
+    expectedDeliveryDate: "",
+    artDetails: [
       {
         artName: "",
         width: "",
         height: "",
         frameType: "",
         glassType: "",
-        mountType: "",
+        additional: {
+          mounting: false,
+          varnish: false,
+          lamination: false,
+          routerCut: false,
+        },
         quantity: 1,
         total: 0,
       },
-    ]);
+    ],
+    subtotal: 0,
+    discountPercentage: 0,
+    discountAmount: 0,
+    finalAmount: 0,
+    miscCharges: [],
+    miscChargesAmount: 0,
+    totalAmount: 0,
+  });
+
+  const handleInputChange = (
+    index: number,
+    field: string,
+    value: object | string | number
+  ) => {
+    const updatedArtDetails = [...bill.artDetails];
+    updatedArtDetails[index] = {
+      ...updatedArtDetails[index],
+      [field]: value,
+    };
+
+    // Auto-calculate total for the item
+    if (field === "width" || field === "height" || field === "quantity") {
+      const width = parseFloat(updatedArtDetails[index].width) || 0;
+      const height = parseFloat(updatedArtDetails[index].height) || 0;
+      const quantity =
+        parseInt(updatedArtDetails[index].quantity.toString()) || 1;
+      updatedArtDetails[index].total = width * height * quantity;
+    }
+
+    const subtotal = updatedArtDetails.reduce(
+      (sum, item) => sum + item.total,
+      0
+    );
+    const discountAmount = (subtotal * bill.discountPercentage) / 100;
+    const finalAmount = subtotal - discountAmount;
+
+    setBill({
+      ...bill,
+      artDetails: updatedArtDetails,
+      subtotal,
+      discountAmount,
+      finalAmount,
+    });
   };
 
-  const removeItem = (index: any) => {
-    setItems(items.filter((_, i) => i !== index));
+  const handleDiscountChange = (field: string, value: number) => {
+    const discountPercentage =
+      field === "discountPercentage" ? value : bill.discountPercentage;
+    const discountAmount =
+      field === "discountAmount" ? value : (bill.subtotal * value) / 100;
+    const finalAmount = bill.subtotal - discountAmount;
+
+    setBill({
+      ...bill,
+      discountPercentage,
+      discountAmount,
+      finalAmount,
+    });
   };
+
+  const handleAddItem = () => {
+    setBill({
+      ...bill,
+      artDetails: [
+        ...bill.artDetails,
+        {
+          artName: "",
+          width: "",
+          height: "",
+          frameType: "",
+          glassType: "",
+          additional: {
+            mounting: false,
+            varnish: false,
+            lamination: false,
+            routerCut: false,
+          },
+          quantity: 1,
+          total: 0,
+        },
+      ],
+    });
+  };
+
+  const handleRemoveItem = (index: number) => {
+    const updatedArtDetails = bill.artDetails.filter((_, i) => i !== index);
+    const subtotal = updatedArtDetails.reduce(
+      (sum, item) => sum + item.total,
+      0
+    );
+    const discountAmount = (subtotal * bill.discountPercentage) / 100;
+    const finalAmount = subtotal - discountAmount;
+
+    setBill({
+      ...bill,
+      artDetails: updatedArtDetails,
+      subtotal,
+      discountAmount,
+      finalAmount,
+    });
+  };
+
+  const generateBill = () => {
+    // Logic to generate the bill, e.g., save to database or print
+    console.log("Bill Generated:", bill);
+  };
+
+  useEffect(() => {
+    dispatch(fetchFrameTypes());
+    dispatch(fetchGlassTypes());
+  }, []);
+
   return (
     <div>
       <h3>Bill Calculation</h3>
       <p>Calculate the bill here.</p>
 
-      {isTableView ? (
-        <div className="p-4">
-          {/* Customer and Date */}
-          <div className="row mb-3">
-            <div className="col-md-6">
-              <label className="form-label">Customer</label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Enter customer name"
-              />
-            </div>
-            <div className="col-md-6">
-              <label className="form-label">Date</label>
-              <input type="date" className="form-control" />
-            </div>
-          </div>
-
-          {/* Line Items */}
-          <table className="table table-bordered">
-            <thead>
-              <tr>
-                <th>Art Name</th>
-                <th>Width (in)</th>
-                <th>Height (in)</th>
-                <th>Frame Type</th>
-                <th>Glass Type</th>
-                <th>Mount Type</th>
-                <th>Quantity</th>
-                <th>Total</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((item, index) => (
-                <tr key={index}>
-                  <td>
-                    <input className="form-control" type="text" />
-                  </td>
-                  <td>
-                    <input className="form-control" type="number" />
-                  </td>
-                  <td>
-                    <input className="form-control" type="number" />
-                  </td>
-                  <td>
-                    <select className="form-select">
-                      <option>Select</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select className="form-select">
-                      <option>Select</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select className="form-select">
-                      <option>Select</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input
-                      className="form-control"
-                      type="number"
-                      value={item.quantity}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      className="form-control"
-                      type="text"
-                      value={item.total}
-                      disabled
-                    />
-                  </td>
-                  <td>
-                    <button
-                      className="btn btn-outline-danger btn-sm"
-                      onClick={() => removeItem(index)}
-                    >
-                      🗑️
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
-          <button className="btn btn-outline-primary mb-3" onClick={addItem}>
-            + Add Item
-          </button>
-
-          {/* Totals */}
-          <div className="row">
-            <div className="col-md-3">
-              <label className="form-label">Subtotal</label>
-              <input type="text" className="form-control" />
-            </div>
-            <div className="col-md-3">
-              <label className="form-label">Discount %</label>
-              <input type="text" className="form-control" />
-            </div>
-            <div className="col-md-3">
-              <label className="form-label">Discount Amount</label>
-              <input type="text" className="form-control" />
-            </div>
-            <div className="col-md-3">
-              <label className="form-label">Final Amount</label>
-              <input type="text" className="form-control" />
-            </div>
-          </div>
-
-          {/* Generate Button */}
-          <div className="mt-4">
-            <button className="btn btn-success">Generate Bill</button>
-          </div>
+      {/* Customer Info */}
+      <div className="row mb-3">
+        <div className="col-md-6">
+          <label className="form-label">Customer</label>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Enter customer name"
+            value={bill.customerName}
+            onChange={(e) => setBill({ ...bill, customerName: e.target.value })}
+          />
         </div>
-      ) : (
-        <div className="flex-grow-1 p-4">
-          <h3>Generate Bill</h3>
+        <div className="col-md-6">
+          <label className="form-label">Date</label>
+          <input type="date" className="form-control" />
+        </div>
+      </div>
 
-          {/* Customer Info */}
-          <div className="row mb-3">
-            <div className="col-md-6">
-              <label className="form-label">Customer</label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Enter customer name"
-              />
-            </div>
-            <div className="col-md-6">
-              <label className="form-label">Date</label>
-              <input type="date" className="form-control" />
-            </div>
-          </div>
+      {/* Line Item Cards */}
+      {bill.artDetails.map((item, index) => (
+        <div className="card mb-3" key={index}>
+          <div className="card-body">
+            <div className="row g-2">
+              <div className="col-md-4">
+                <label className="form-label">Art Name</label>
+                <input
+                  className="form-control"
+                  type="text"
+                  value={item.artName}
+                  onChange={(e) =>
+                    handleInputChange(index, "artName", e.target.value)
+                  }
+                />
+              </div>
+              <div className="col-md-2">
+                <label className="form-label">Width (in)</label>
+                <input
+                  className="form-control"
+                  type="number"
+                  value={item.width}
+                  onChange={(e) =>
+                    handleInputChange(index, "width", e.target.value)
+                  }
+                />
+              </div>
+              <div className="col-md-2">
+                <label className="form-label">Height (in)</label>
+                <input
+                  className="form-control"
+                  type="number"
+                  value={item.height}
+                  onChange={(e) =>
+                    handleInputChange(index, "height", e.target.value)
+                  }
+                />
+              </div>
+              <div className="col-md-4">
+                <label className="form-label">Frame Type</label>
+                <select
+                  className="form-select"
+                  value={item.frameType}
+                  onChange={(e) =>
+                    handleInputChange(index, "frameType", e.target.value)
+                  }
+                >
+                  <option value="">None</option>
+                  {frameTypes.map((frame) => (
+                    <option key={frame.id} value={frame.name}>
+                      {frame.name} {frame.category} - (₹ {frame.baseCost})
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="col-md-4">
+                <label className="form-label">Glass Type</label>
+                <select
+                  className="form-select"
+                  value={item.glassType}
+                  onChange={(e) =>
+                    handleInputChange(index, "glassType", e.target.value)
+                  }
+                >
+                  <option value="">None</option>
+                  {glassTypes.map((glass) => (
+                    <option key={glass.id} value={glass.name}>
+                      {glass.name} (₹{glass.rate} {glass.rateIn})
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-          {/* Line Item Cards */}
-          {items.map((item, index) => (
-            <div className="card mb-3" key={index}>
-              <div className="card-body">
-                <div className="row g-2">
-                  <div className="col-md-4">
-                    <label className="form-label">Art Name</label>
-                    <input className="form-control" type="text" />
-                  </div>
-                  <div className="col-md-2">
-                    <label className="form-label">Width (in)</label>
-                    <input className="form-control" type="number" />
-                  </div>
-                  <div className="col-md-2">
-                    <label className="form-label">Height (in)</label>
-                    <input className="form-control" type="number" />
-                  </div>
+              <div className="col-md-2">
+                <label className="form-label pe-2">Mounting</label>
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  checked={item?.additional?.mounting}
+                  onChange={(e) =>
+                    handleInputChange(index, "additional", {
+                      ...item.additional,
+                      mounting: e.target.checked,
+                    })
+                  }
+                />
+              </div>
+              <div className="col-md-2">
+                <label className="form-label pe-2">Varnish</label>
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  checked={item?.additional?.varnish}
+                  onChange={(e) =>
+                    handleInputChange(index, "additional", {
+                      ...item.additional,
+                      varnish: e.target.checked,
+                    })
+                  }
+                />
+              </div>
 
-                  <div className="col-md-4">
-                    <label className="form-label">Frame Type</label>
-                    <select className="form-select">
-                      <option>0.5 inch moulding (4mm board)</option>
-                      <option>1.25 inch ordinary</option>
-                      <option>1.25 inch premium</option>
-                      <option>2 inch flat 8mm board</option>
-                    </select>
-                  </div>
+              <div className="col-md-2">
+                <label className="form-label pe-2">Lamination</label>
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  checked={item?.additional?.lamination}
+                  onChange={(e) =>
+                    handleInputChange(index, "additional", {
+                      ...item.additional,
+                      lamination: e.target.checked,
+                    })
+                  }
+                />
+              </div>
 
-                  <div className="col-md-4">
-                    <label className="form-label">Glass Type</label>
-                    <select className="form-select">
-                      <option>None</option>
-                      <option>Normal (₹0.35/in²)</option>
-                      <option>Acrylic (₹1.39/in²)</option>
-                      <option>NR Glass (₹2.78/in²)</option>
-                    </select>
-                  </div>
+              <div className="col-md-2">
+                <label className="form-label pe-2">Router Cut</label>
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  checked={item?.additional?.routerCut}
+                  onChange={(e) =>
+                    handleInputChange(index, "additional", {
+                      ...item.additional,
+                      routerCut: e.target.checked,
+                    })
+                  }
+                />
+              </div>
 
-                  <div className="col-md-2">
-                    <label className="form-label">Mounting</label>
-                    <select className="form-select">
-                      <option>No</option>
-                      <option>Yes</option>
-                    </select>
-                  </div>
+              <div className="col-md-2">
+                <label className="form-label">Quantity</label>
+                <input
+                  className="form-control"
+                  type="number"
+                  value={item.quantity}
+                  onChange={(e) =>
+                    handleInputChange(index, "quantity", e.target.value)
+                  }
+                />
+              </div>
 
-                  <div className="col-md-2">
-                    <label className="form-label pe-2">Varnish</label>
-                    <input className="form-check-input" type="checkbox" />
-                  </div>
+              {/* <div className="col-md-3">
+                <label className="form-label">Total Area (in²)</label>
+                <input
+                  className="form-control"
+                  type="text"
+                  value="auto"
+                  disabled
+                />
+              </div> */}
 
-                  <div className="col-md-2">
-                    <label className="form-label pe-2">Lamination</label>
-                    <input className="form-check-input" type="checkbox" />
-                  </div>
-
-                  <div className="col-md-2">
-                    <label className="form-label pe-2">Router Cut</label>
-                    <input className="form-check-input" type="checkbox" />
-                  </div>
-
-                  <div className="col-md-2">
-                    <label className="form-label">Quantity</label>
-                    <input
-                      className="form-control"
-                      type="number"
-                      value={item.quantity}
-                    />
-                  </div>
-
-                  <div className="col-md-3">
-                    <label className="form-label">Total Area (in²)</label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      value="auto"
-                      disabled
-                    />
-                  </div>
-
-                  <div className="col-md-3">
-                    <label className="form-label">Total (₹)</label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      value={item.total}
-                      disabled
-                    />
-                  </div>
-
-                  <div className="col-md-2 d-flex align-items-end">
-                    <button
-                      className="btn btn-outline-danger w-100"
-                      onClick={() => removeItem(index)}
-                    >
-                      🗑 Remove
-                    </button>
-                  </div>
-                </div>
+              <div className="col-md-3">
+                <label className="form-label">Total (₹)</label>
+                <input
+                  className="form-control"
+                  type="text"
+                  value={item.total}
+                  disabled
+                />
+              </div>
+              <div className="col-md-2 d-flex align-items-end">
+                <button
+                  className="btn btn-outline-danger w-100"
+                  onClick={() => handleRemoveItem(index)}
+                >
+                  🗑 Remove
+                </button>
               </div>
             </div>
-          ))}
-
-          <button className="btn btn-outline-primary mb-4" onClick={addItem}>
-            + Add Item
-          </button>
-
-          {/* Totals */}
-          <div className="row mb-3">
-            <div className="col-md-3">
-              <label className="form-label">Subtotal</label>
-              <input type="text" className="form-control" />
-            </div>
-            <div className="col-md-3">
-              <label className="form-label">Discount %</label>
-              <input type="text" className="form-control" />
-            </div>
-            <div className="col-md-3">
-              <label className="form-label">Discount Amount</label>
-              <input type="text" className="form-control" />
-            </div>
-            <div className="col-md-3">
-              <label className="form-label">Final Amount</label>
-              <input type="text" className="form-control" />
-            </div>
-          </div>
-
-          <div className="text-end">
-            <button className="btn btn-success">Generate Bill</button>
           </div>
         </div>
-      )}
+      ))}
+
+      <button className="btn btn-outline-primary mb-4" onClick={handleAddItem}>
+        + Add Item
+      </button>
+
+      <div className="row mb-3">
+        <div className="col-md-3">
+          <label className="form-label">Subtotal</label>
+          <input
+            type="text"
+            className="form-control"
+            value={bill.subtotal}
+            disabled
+          />
+        </div>
+        <div className="col-md-3">
+          <label className="form-label">Discount %</label>
+          <input
+            type="number"
+            className="form-control"
+            value={bill.discountPercentage}
+            onChange={(e) =>
+              handleDiscountChange(
+                "discountPercentage",
+                parseFloat(e.target.value)
+              )
+            }
+          />
+        </div>
+        <div className="col-md-3">
+          <label className="form-label">Discount Amount</label>
+          <input
+            type="number"
+            className="form-control"
+            value={bill.discountAmount}
+            onChange={(e) =>
+              handleDiscountChange("discountAmount", parseFloat(e.target.value))
+            }
+          />
+        </div>
+        <div className="col-md-3">
+          <label className="form-label">Final Amount</label>
+          <input
+            type="text"
+            className="form-control"
+            value={bill.finalAmount}
+            disabled
+          />
+        </div>
+      </div>
+
+      <div className="text-end">
+        <button className="btn btn-success" onClick={generateBill}>
+          Generate Bill
+        </button>
+      </div>
     </div>
   );
 };
