@@ -1,0 +1,10 @@
+[
+  { "id": 1, "name": "Varnish (3 coats)", "cost": 94.53, "description": "" },
+  { "id": 2, "name": "Lamination", "cost": 127.0, "description": "" },
+  {
+    "id": 3,
+    "name": "MDF Router Cutting (8mm)",
+    "cost": 151.25,
+    "description": ""
+  }
+]

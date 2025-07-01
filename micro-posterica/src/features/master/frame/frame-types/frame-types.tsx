@@ -9,7 +9,9 @@ import { useSelector } from "react-redux";
 const FrameTypesMasterApp = () => {
   const [editFrameType, setEditFrameType] = useState(false);
 
-  const { frameTypes } = useSelector((state: AppState) => state?.master?.frameTypes);
+  const { frameTypes } = useSelector(
+    (state: AppState) => state?.master?.frameTypes
+  );
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -63,9 +65,10 @@ const FrameTypesMasterApp = () => {
           <br />
         </div>
       )}
+
       {frameTypes?.length === 0 && (
         <div className="alert alert-info" role="alert">
-          No frame types available. Please add a new frame type.
+          No data available. Please add a new one.
         </div>
       )}
 

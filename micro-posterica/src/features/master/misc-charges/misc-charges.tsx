@@ -1,15 +1,29 @@
-import { useState } from "react";
+import type { AppDispatch, AppState } from "../../../app/store";
+import { useDispatch, useSelector } from "react-redux";
+
+import { fetchMiscCharges } from "../../../app/features/master/misc-charges/misc-charges.thunk";
+import { useEffect } from "react";
 
 const MiscChargesMasterApp = () => {
-  const [charges] = useState([
-    { id: 1, name: "Varnish (3 coats)", cost: 94.53 },
-    { id: 2, name: "Lamination", cost: 127.0 },
-    { id: 3, name: "MDF Router Cutting (8mm)", cost: 151.25 },
-  ]);
+  const { miscCharges: charges } = useSelector(
+    (state: AppState) => state?.master?.miscCharges
+  );
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(fetchMiscCharges());
+  }, []);
 
   return (
     <div className="container my-4">
       <h3>Miscellaneous Charges Master</h3>
+
+      {charges?.length === 0 && (
+        <div className="alert alert-info" role="alert">
+          No data available. Please add a new one.
+        </div>
+      )}
+
       <div className="row">
         {charges.map((charge) => (
           <div key={charge.id} className="col-md-4 mb-3">
