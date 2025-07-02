@@ -78,6 +78,7 @@ const BillCalculationApp = () => {
     );
     const discountAmount = (subtotal * bill.discountPercentage) / 100;
     const finalAmount = subtotal - discountAmount;
+    const balanceAmount = finalAmount - bill.advancePayment;
 
     setBill({
       ...bill,
@@ -85,6 +86,7 @@ const BillCalculationApp = () => {
       subtotal,
       discountAmount,
       finalAmount,
+      balanceAmount,
     });
   };
 
@@ -148,12 +150,15 @@ const BillCalculationApp = () => {
     const discountAmount = (subtotal * bill.discountPercentage) / 100;
     const finalAmount = subtotal - discountAmount;
 
+    const balanceAmount = finalAmount - bill.advancePayment;
+
     setBill({
       ...bill,
       artDetails: updatedArtDetails,
       subtotal,
       discountAmount,
       finalAmount,
+      balanceAmount,
     });
   };
 
@@ -178,9 +183,7 @@ const BillCalculationApp = () => {
       <h3>Bill Calculation</h3>
       <p>Calculate the bill here.</p>
 
-      {}
-
-      <img id="qrcode" alt="QR Code" src={qrCode} />
+      {qrCode && <img id="qrcode" alt="QR Code" src={qrCode} />}
 
       {/* Customer Info */}
       <div className="row mb-3">
