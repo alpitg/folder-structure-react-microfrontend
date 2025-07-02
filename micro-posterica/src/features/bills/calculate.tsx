@@ -2,8 +2,10 @@ import type { AppDispatch, AppState } from "../../app/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
+import type { ITotalCalculationInput } from "../../interfaces/total-calculation.model";
 import { fetchFrameTypes } from "../../app/features/master/frame-types/frame-types.thunk";
 import { fetchGlassTypes } from "../../app/features/master/glass-types/glass-types.thunk";
+import { generateQRCode } from "../../utils/qrcode.util";
 
 const BillCalculationApp = () => {
   const {
@@ -13,9 +15,10 @@ const BillCalculationApp = () => {
   } = useSelector((state: AppState) => state?.master);
 
   const dispatch = useDispatch<AppDispatch>();
-  const [isTableView, setIsTableView] = useState(false);
+  // const [isTableView, setIsTableView] = useState(false);
+  const [qrCode, setQRCode] = useState("");
 
-  const [bill, setBill] = useState({
+  const [bill, setBill] = useState<ITotalCalculationInput>({
     customerName: "",
     likelyDateOfDelivery: "",
     expectedDeliveryDate: "",
@@ -157,6 +160,12 @@ const BillCalculationApp = () => {
   const generateBill = () => {
     // Logic to generate the bill, e.g., save to database or print
     console.log("Bill Generated:", bill);
+
+    generateQRCode(bill)?.then((qrCode) => {
+      if (qrCode) {
+        setQRCode(qrCode);
+      }
+    });
   };
 
   useEffect(() => {
@@ -168,6 +177,10 @@ const BillCalculationApp = () => {
     <div>
       <h3>Bill Calculation</h3>
       <p>Calculate the bill here.</p>
+
+      {}
+
+      <img id="qrcode" alt="QR Code" src={qrCode} />
 
       {/* Customer Info */}
       <div className="row mb-3">
