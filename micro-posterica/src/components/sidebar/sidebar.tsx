@@ -20,34 +20,14 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
       claims: [],
       route: [],
     },
-    // {
-    //   label: "Bill Calculation",
-    //   path: ROUTE_URL.BILL_CALCULATION,
-    //   icon: "bi bi-person-fill-gear",
-    //   claims: [],
-    //   route: [],
-    // },
-    // {
-    //   label: "Frame Types",
-    //   path: ROUTE_URL.MASTER.FRAME_TYPES.BASE,
-    //   icon: "bi bi-door-closed",
-    //   claims: [],
-    //   route: [],
-    // },
-    // {
-    //   label: "Glass Types",
-    //   path: ROUTE_URL.MASTER.GLASS_TYPES.BASE,
-    //   icon: "bi bi-sunglasses",
-    //   claims: [],
-    //   route: [],
-    // },
-    // {
-    //   label: "Miscellaneous charges",
-    //   path: ROUTE_URL.MASTER.MISC_CHARGES.BASE,
-    //   icon: "bi bi-currency-rupee",
-    //   claims: [],
-    //   route: [],
-    // },
+    {
+      label: "Bill Calculation",
+      path: ROUTE_URL.BILL_CALCULATION,
+      icon: "bi bi-person-fill-gear",
+      claims: [],
+      route: [],
+    },
+
     {
       label: "Masters",
       path: ROUTE_URL.CUSTOMERS,

@@ -43,6 +43,10 @@ const BillCalculationApp = () => {
     miscCharges: [],
     miscChargesAmount: 0,
     totalAmount: 0,
+    advancePayment: 0,
+    balanceAmount: 0,
+    paymentStatus: "Pending",
+    createdAt: new Date().toISOString(),
   });
 
   const handleInputChange = (
@@ -93,6 +97,18 @@ const BillCalculationApp = () => {
       discountPercentage,
       discountAmount,
       finalAmount,
+    });
+  };
+
+  const handleAdvancePaymentChange = (field: string, value: number) => {
+    const advancePayment =
+      field === "advancePayment" ? value : bill.advancePayment;
+    const balanceAmount = bill.finalAmount - advancePayment;
+
+    setBill({
+      ...bill,
+      [field]: advancePayment,
+      balanceAmount,
     });
   };
 
@@ -399,6 +415,32 @@ const BillCalculationApp = () => {
             type="text"
             className="form-control"
             value={bill.finalAmount}
+            disabled
+          />
+        </div>
+      </div>
+
+      <div className="row mb-3">
+        <div className="col-md-3">
+          <label className="form-label">Advance Payment</label>
+          <input
+            type="number"
+            className="form-control"
+            value={bill.advancePayment}
+            onChange={(e) =>
+              handleAdvancePaymentChange(
+                "advancePayment",
+                parseFloat(e.target.value)
+              )
+            }
+          />
+        </div>
+        <div className="col-md-3">
+          <label className="form-label">Balance Amount</label>
+          <input
+            type="text"
+            className="form-control"
+            value={bill.balanceAmount}
             disabled
           />
         </div>
