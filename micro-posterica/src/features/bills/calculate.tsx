@@ -17,7 +17,7 @@ const BillCalculationApp = () => {
 
   const [bill, setBill] = useState({
     customerName: "",
-    possibleDeliveryDate: "",
+    likelyDateOfDelivery: "",
     expectedDeliveryDate: "",
     artDetails: [
       {
@@ -166,13 +166,13 @@ const BillCalculationApp = () => {
           />
         </div>
         <div className="col-md-6">
-          <label className="form-label">Possible Delivery Date</label>
+          <label className="form-label">Likely date of delivery</label>
           <input
             type="date"
             className="form-control"
-            value={bill.possibleDeliveryDate}
+            value={bill.likelyDateOfDelivery}
             onChange={(e) =>
-              setBill({ ...bill, possibleDeliveryDate: e.target.value })
+              setBill({ ...bill, likelyDateOfDelivery: e.target.value })
             }
           />
         </div>

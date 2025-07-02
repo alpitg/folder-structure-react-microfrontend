@@ -1,6 +1,7 @@
 ## reference -
 - https://prium.github.io/phoenix/v1.22.0/modules/forms/advance/date-picker.html
 - https://coderthemes.com/hyper/layouts/index.html
+- https://preview.keenthemes.com/keen/demo1/index.html?mode=light (charts/graphs)
 
 # React + TypeScript + Vite
 
