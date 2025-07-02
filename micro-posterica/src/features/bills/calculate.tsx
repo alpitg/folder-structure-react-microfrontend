@@ -1,3 +1,5 @@
+import "./calculate.scss";
+
 import type { AppDispatch, AppState } from "../../app/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -179,34 +181,49 @@ const BillCalculationApp = () => {
   }, []);
 
   return (
-    <div>
+    <div className="bill-calculation-app">
       <h3>Bill Calculation</h3>
       <p>Calculate the bill here.</p>
-
-      {qrCode && <img id="qrcode" alt="QR Code" src={qrCode} />}
 
       {/* Customer Info */}
       <div className="row mb-3">
         <div className="col-md-6">
-          <label className="form-label">Customer</label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Enter customer name"
-            value={bill.customerName}
-            onChange={(e) => setBill({ ...bill, customerName: e.target.value })}
-          />
+          <div className="row mb-3 g-2">
+            <div className="col-md-12">
+              <label className="form-label">Customer</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Enter customer name"
+                value={bill.customerName}
+                onChange={(e) =>
+                  setBill({ ...bill, customerName: e.target.value })
+                }
+              />
+            </div>
+            <div className="col-md-12">
+              <label className="form-label">Likely date of delivery</label>
+              <input
+                type="date"
+                className="form-control"
+                value={bill.likelyDateOfDelivery}
+                onChange={(e) =>
+                  setBill({ ...bill, likelyDateOfDelivery: e.target.value })
+                }
+              />
+            </div>
+          </div>
         </div>
         <div className="col-md-6">
-          <label className="form-label">Likely date of delivery</label>
-          <input
-            type="date"
-            className="form-control"
-            value={bill.likelyDateOfDelivery}
-            onChange={(e) =>
-              setBill({ ...bill, likelyDateOfDelivery: e.target.value })
-            }
-          />
+          {qrCode && (
+            <div className="qrcode">
+              <div className="card mb-3">
+                <div className="card-body">
+                  <img id="qrcode" alt="QR Code" src={qrCode} />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
