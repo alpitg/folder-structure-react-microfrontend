@@ -27,12 +27,6 @@
   }
 
   .side-nav-item {
-    // .menu-arrow:before {
-    //   content: "\f0d7"; // Unicode for Bootstrap's down arrow
-    //   font-family: "Font Awesome 5 Free"; // Ensure the correct font is used
-    //   font-weight: 900; // Font weight for solid icons
-    // }
-
     .menu-arrow:before {
       content: "▼"; // Unicode character for a down arrow
       font-family: inherit; // Use the inherited font
@@ -92,33 +86,6 @@
         color: var(--sidebar-dark-primary);
       }
     }
-
-    // #sidebar-content-highlight {
-    //   position: absolute;
-    //   left: 16px;
-    //   top: calc(-54px - 16px);
-    //   width: calc(100% - 16px);
-    //   height: 54px;
-    //   background: var(--background);
-    //   background-attachment: fixed;
-    //   transition: top 0.2s;
-
-    //   &:before,
-    //   &:after {
-    //     content: "";
-    //     position: absolute;
-    //     right: 0;
-    //     bottom: 100%;
-    //     width: 32px;
-    //     height: 32px;
-    //     box-shadow: 16px 16px var(--background);
-    //   }
-
-    //   &:after {
-    //     top: 100%;
-    //     box-shadow: 16px -16px var(--background);
-    //   }
-    // }
   }
 
   #sidebar-footer {
