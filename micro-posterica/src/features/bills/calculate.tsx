@@ -30,6 +30,8 @@ const BillCalculationApp = () => {
         width: "",
         height: "",
         frameType: "",
+        frameColor: "",
+        frameWidth: 0,
         glassType: "",
         additional: {
           mounting: false,
@@ -129,6 +131,8 @@ const BillCalculationApp = () => {
           width: "",
           height: "",
           frameType: "",
+          frameColor: "",
+          frameWidth: 0,
           glassType: "",
           additional: {
             mounting: false,
@@ -265,101 +269,8 @@ const BillCalculationApp = () => {
                   }
                 />
               </div>
+
               <div className="col-md-4">
-                <label className="form-label">Frame Type</label>
-                <select
-                  className="form-select"
-                  value={item.frameType}
-                  onChange={(e) =>
-                    handleInputChange(index, "frameType", e.target.value)
-                  }
-                >
-                  <option value="">None</option>
-                  {frameTypes.map((frame) => (
-                    <option key={frame.id} value={frame.name}>
-                      {frame.name} {frame.category} - (₹ {frame.baseCost})
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="col-md-4">
-                <label className="form-label">Glass Type</label>
-                <select
-                  className="form-select"
-                  value={item.glassType}
-                  onChange={(e) =>
-                    handleInputChange(index, "glassType", e.target.value)
-                  }
-                >
-                  <option value="">None</option>
-                  {glassTypes.map((glass) => (
-                    <option key={glass.id} value={glass.name}>
-                      {glass.name} (₹{glass.rate} {glass.rateIn})
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="col-md-2">
-                <label className="form-label pe-2">Mounting</label>
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  checked={item?.additional?.mounting}
-                  onChange={(e) =>
-                    handleInputChange(index, "additional", {
-                      ...item.additional,
-                      mounting: e.target.checked,
-                    })
-                  }
-                />
-              </div>
-              <div className="col-md-2">
-                <label className="form-label pe-2">Varnish</label>
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  checked={item?.additional?.varnish}
-                  onChange={(e) =>
-                    handleInputChange(index, "additional", {
-                      ...item.additional,
-                      varnish: e.target.checked,
-                    })
-                  }
-                />
-              </div>
-
-              <div className="col-md-2">
-                <label className="form-label pe-2">Lamination</label>
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  checked={item?.additional?.lamination}
-                  onChange={(e) =>
-                    handleInputChange(index, "additional", {
-                      ...item.additional,
-                      lamination: e.target.checked,
-                    })
-                  }
-                />
-              </div>
-
-              <div className="col-md-2">
-                <label className="form-label pe-2">Router Cut</label>
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  checked={item?.additional?.routerCut}
-                  onChange={(e) =>
-                    handleInputChange(index, "additional", {
-                      ...item.additional,
-                      routerCut: e.target.checked,
-                    })
-                  }
-                />
-              </div>
-
-              <div className="col-md-2">
                 <label className="form-label">Quantity</label>
                 <input
                   className="form-control"
@@ -371,15 +282,127 @@ const BillCalculationApp = () => {
                 />
               </div>
 
-              {/* <div className="col-md-3">
-                <label className="form-label">Total Area (in²)</label>
-                <input
-                  className="form-control"
-                  type="text"
-                  value="auto"
-                  disabled
-                />
-              </div> */}
+              <div className="row g-2">
+                <div className="col-md-4">
+                  <label className="form-label">Frame Type</label>
+                  <select
+                    className="form-select"
+                    value={item.frameType}
+                    onChange={(e) =>
+                      handleInputChange(index, "frameType", e.target.value)
+                    }
+                  >
+                    <option value="">None</option>
+                    {frameTypes.map((frame) => (
+                      <option key={frame.id} value={frame.name}>
+                        {frame.name} {frame.category} - (₹ {frame.baseCost})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="col-md-4">
+                  <label className="form-label">Frame Color</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    value={item.frameColor}
+                    onChange={(e) =>
+                      handleInputChange(index, "frameColor", e.target.value)
+                    }
+                  />
+                </div>
+
+                <div className="col-md-2">
+                  <label className="form-label">Frame width (Inches)</label>
+                  <input
+                    className="form-control"
+                    type="number"
+                    value={item.frameWidth}
+                    onChange={(e) =>
+                      handleInputChange(index, "frameWidth", e.target.value)
+                    }
+                  />
+                </div>
+
+                <div className="col-md-4">
+                  <label className="form-label">Glass Type</label>
+                  <select
+                    className="form-select"
+                    value={item.glassType}
+                    onChange={(e) =>
+                      handleInputChange(index, "glassType", e.target.value)
+                    }
+                  >
+                    <option value="">None</option>
+                    {glassTypes.map((glass) => (
+                      <option key={glass.id} value={glass.name}>
+                        {glass.name} (₹{glass.rate} {glass.rateIn})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="row g-2">
+                <div className="col-md-2">
+                  <label className="form-label pe-2">Mounting</label>
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    checked={item?.additional?.mounting}
+                    onChange={(e) =>
+                      handleInputChange(index, "additional", {
+                        ...item.additional,
+                        mounting: e.target.checked,
+                      })
+                    }
+                  />
+                </div>
+                <div className="col-md-2">
+                  <label className="form-label pe-2">Varnish</label>
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    checked={item?.additional?.varnish}
+                    onChange={(e) =>
+                      handleInputChange(index, "additional", {
+                        ...item.additional,
+                        varnish: e.target.checked,
+                      })
+                    }
+                  />
+                </div>
+
+                <div className="col-md-2">
+                  <label className="form-label pe-2">Lamination</label>
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    checked={item?.additional?.lamination}
+                    onChange={(e) =>
+                      handleInputChange(index, "additional", {
+                        ...item.additional,
+                        lamination: e.target.checked,
+                      })
+                    }
+                  />
+                </div>
+
+                <div className="col-md-2">
+                  <label className="form-label pe-2">Router Cut</label>
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    checked={item?.additional?.routerCut}
+                    onChange={(e) =>
+                      handleInputChange(index, "additional", {
+                        ...item.additional,
+                        routerCut: e.target.checked,
+                      })
+                    }
+                  />
+                </div>
+              </div>
 
               <div className="col-md-3">
                 <label className="form-label">Total (₹)</label>

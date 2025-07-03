@@ -10,6 +10,8 @@ export interface IArtDetail {
   width: string;
   height: string;
   frameType: string;
+  frameColor: string;
+  frameWidth: number;
   glassType: string;
   additional: IAdditionalDetails;
   quantity: number;
