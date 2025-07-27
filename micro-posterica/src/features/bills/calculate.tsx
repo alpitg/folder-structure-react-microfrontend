@@ -1,10 +1,14 @@
 import "./calculate.scss";
 
 import type { AppDispatch, AppState } from "../../app/store";
+import type {
+  IArtDetail,
+  ITotalCalculationInput,
+} from "../../interfaces/total-calculation.model";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
-import type { ITotalCalculationInput } from "../../interfaces/total-calculation.model";
+import InvoiceApp from "./invoice/invoice";
 import { fetchFrameTypes } from "../../app/features/master/frame-types/frame-types.thunk";
 import { fetchGlassTypes } from "../../app/features/master/glass-types/glass-types.thunk";
 import { generateQRCode } from "../../utils/qrcode.util";
@@ -20,6 +24,72 @@ const BillCalculationApp = () => {
   // const [isTableView, setIsTableView] = useState(false);
   const [qrCode, setQRCode] = useState("");
 
+  const chargableWidth = (item: IArtDetail) => {
+    const width = parseFloat(item.width) || 0;
+    const mountingLeft = parseFloat(String(item?.mounting?.left)) || 0;
+    const mountingRight = parseFloat(String(item?.mounting?.right)) || 0;
+    return width + mountingLeft + mountingRight;
+  };
+
+  const chargableHeight = (item: IArtDetail) => {
+    const height = parseFloat(item.height) || 0;
+    const mountingTop = parseFloat(String(item?.mounting?.top)) || 0;
+    const mountingBottom = parseFloat(String(item?.mounting?.bottom)) || 0;
+    return height + mountingTop + mountingBottom;
+  };
+
+  const totalItemArea = (item: IArtDetail) => {
+    return item?.mounting?.isEnabled
+      ? chargableWidth(item) * chargableHeight(item)
+      : parseFloat(item.width) || 0 * parseFloat(item.height) || 0;
+  };
+
+  const totalItem = (item: IArtDetail): number => {
+    const quantity = parseInt(String(item.quantity)) || 1;
+
+    // Calculate area with mounting if enabled
+    const area = totalItemArea(item);
+
+    // const frame = item.frame.type
+    //   ? frameTypes.find((frame) => frame.name === item.frame.type)
+    //   : null;
+    // const frameWidth = chargableWidth(item);
+    // const frameHeight = chargableHeight(item);
+    // const frameRate = frame ? frame.baseCost || 0 : 0;
+    // const frameCostPerInch = frameRate / (frameWidth * frameHeight);
+
+    // Calculate frame cost per inch
+    const frameCostPerInch =
+      frameTypes.find((frame) => frame.name === item.frame.type)?.baseCost || 0;
+
+    // Calculate total frame cost based on area
+    const totalFrameCost = frameCostPerInch;
+
+    // Calculate glass cost if glass is enabled and type is selected
+    const glassCost = item?.glass?.isEnabled
+      ? glassTypes.find((glass) => glass.name === item?.glass?.type)?.rate || 0
+      : 0;
+
+    // Calculate additional costs
+    const additionalCosts = Object.values(item.additional).reduce(
+      (sum, value) => (value ? sum + 50 : sum), // Assuming each additional service costs ₹50
+      0
+    );
+
+    return (
+      parseFloat(
+        (
+          (area * glassCost + totalFrameCost + additionalCosts) *
+          quantity
+        ).toFixed(2)
+      ) || 0
+    );
+  };
+
+  const calculateTotalAmount = (): number => {
+    return bill.artDetails.reduce((total, item) => total + item.total, 0);
+  };
+
   const [bill, setBill] = useState<ITotalCalculationInput>({
     customerName: "",
     likelyDateOfDelivery: "",
@@ -29,12 +99,27 @@ const BillCalculationApp = () => {
         artName: "",
         width: "",
         height: "",
-        frameType: "",
-        frameColor: "",
-        frameWidth: 0,
-        glassType: "",
+        mounting: {
+          isEnabled: false,
+          top: 0,
+          right: 0,
+          bottom: 0,
+          left: 0,
+          width: undefined,
+          height: undefined,
+        },
+        frame: {
+          type: "",
+          width: 0,
+          height: 0,
+        },
+        glass: {
+          isEnabled: false,
+          type: "",
+          width: undefined,
+          height: undefined,
+        },
         additional: {
-          mounting: false,
           varnish: false,
           lamination: false,
           routerCut: false,
@@ -68,18 +153,11 @@ const BillCalculationApp = () => {
     };
 
     // Auto-calculate total for the item
-    if (field === "width" || field === "height" || field === "quantity") {
-      const width = parseFloat(updatedArtDetails[index].width) || 0;
-      const height = parseFloat(updatedArtDetails[index].height) || 0;
-      const quantity =
-        parseInt(updatedArtDetails[index].quantity.toString()) || 1;
-      updatedArtDetails[index].total = width * height * quantity;
-    }
+    parseInt(updatedArtDetails[index].quantity.toString()) || 1;
+    updatedArtDetails[index].total = totalItem(updatedArtDetails[index]);
 
-    const subtotal = updatedArtDetails.reduce(
-      (sum, item) => sum + item.total,
-      0
-    );
+    const subtotal = calculateTotalAmount();
+
     const discountAmount = (subtotal * bill.discountPercentage) / 100;
     const finalAmount = subtotal - discountAmount;
     const balanceAmount = finalAmount - bill.advancePayment;
@@ -130,12 +208,27 @@ const BillCalculationApp = () => {
           artName: "",
           width: "",
           height: "",
-          frameType: "",
-          frameColor: "",
-          frameWidth: 0,
-          glassType: "",
+          mounting: {
+            isEnabled: false,
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            width: undefined,
+            height: undefined,
+          },
+          frame: {
+            type: "",
+            width: 0,
+            height: 0,
+          },
+          glass: {
+            isEnabled: false,
+            type: "",
+            width: undefined,
+            height: undefined,
+          },
           additional: {
-            mounting: false,
             varnish: false,
             lamination: false,
             routerCut: false,
@@ -189,7 +282,6 @@ const BillCalculationApp = () => {
       <h3>Bill Calculation</h3>
       <p>Calculate the bill here.</p>
 
-      {/* Customer Info */}
       <div className="row mb-3">
         <div className="col-md-6">
           <div className="row mb-3 g-2">
@@ -231,212 +323,370 @@ const BillCalculationApp = () => {
         </div>
       </div>
 
-      {/* Line Item Cards */}
       {bill.artDetails.map((item, index) => (
-        <div className="card mb-3" key={index}>
-          <div className="card-body">
-            <div className="row g-2">
-              <div className="col-md-4">
-                <label className="form-label">Art Name</label>
-                <input
-                  className="form-control"
-                  type="text"
-                  value={item.artName}
-                  onChange={(e) =>
-                    handleInputChange(index, "artName", e.target.value)
-                  }
-                />
+        <div className="row mb-3">
+          <div className="col-md-8">
+            <div className="card mb-3" key={index}>
+              <div className="card-body">
+                <div className="row g-2">
+                  <div className="col-md-4">
+                    <label className="form-label">Art Name</label>
+                    <input
+                      className="form-control"
+                      type="text"
+                      value={item.artName}
+                      onChange={(e) =>
+                        handleInputChange(index, "artName", e.target.value)
+                      }
+                    />
+                  </div>
+                  <div className="col-md-2">
+                    <label className="form-label">Width (in)</label>
+                    <input
+                      className="form-control"
+                      type="number"
+                      value={item.width}
+                      onChange={(e) =>
+                        handleInputChange(index, "width", e.target.value)
+                      }
+                    />
+                  </div>
+                  <div className="col-md-2">
+                    <label className="form-label">Height (in)</label>
+                    <input
+                      className="form-control"
+                      type="number"
+                      value={item.height}
+                      onChange={(e) =>
+                        handleInputChange(index, "height", e.target.value)
+                      }
+                    />
+                  </div>
+
+                  <div className="col-md-4">
+                    <label className="form-label">Quantity</label>
+                    <input
+                      className="form-control"
+                      type="number"
+                      value={item.quantity}
+                      onChange={(e) =>
+                        handleInputChange(index, "quantity", e.target.value)
+                      }
+                    />
+                  </div>
+
+                  <div className="row g-2">
+                    <div className="col-md-2">
+                      <label className="form-label pe-2">Mounting</label>
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        checked={item?.mounting?.isEnabled}
+                        onChange={(e) =>
+                          handleInputChange(index, "mounting", {
+                            ...item.mounting,
+                            isEnabled: e.target.checked,
+                          })
+                        }
+                      />
+                    </div>
+
+                    {item?.mounting?.isEnabled && (
+                      <div style={{ marginTop: "20px" }}>
+                        <h3>Enter Dimensions (in square inches):</h3>
+                        <div>
+                          <label>
+                            Top:
+                            <input
+                              type="number"
+                              name="top"
+                              value={item?.mounting?.top ?? 0}
+                              onChange={(e) =>
+                                handleInputChange(index, "mounting", {
+                                  ...item.mounting,
+                                  top: e.target.value,
+                                })
+                              }
+                              placeholder="Top (sq in)"
+                            />
+                          </label>
+                        </div>
+                        <div>
+                          <label>
+                            Right:
+                            <input
+                              type="number"
+                              name="right"
+                              value={item?.mounting?.right ?? 0}
+                              onChange={(e) =>
+                                handleInputChange(index, "mounting", {
+                                  ...item.mounting,
+                                  right: e.target.value,
+                                })
+                              }
+                              placeholder="Right (sq in)"
+                            />
+                          </label>
+                        </div>
+                        <div>
+                          <label>
+                            Bottom:
+                            <input
+                              type="number"
+                              name="bottom"
+                              value={item?.mounting?.bottom ?? 0}
+                              onChange={(e) =>
+                                handleInputChange(index, "mounting", {
+                                  ...item.mounting,
+                                  bottom: e.target.value,
+                                })
+                              }
+                              placeholder="Bottom (sq in)"
+                            />
+                          </label>
+                        </div>
+                        <div>
+                          <label>
+                            Left:
+                            <input
+                              type="number"
+                              name="left"
+                              value={item?.mounting?.left ?? 0}
+                              onChange={(e) =>
+                                handleInputChange(index, "mounting", {
+                                  ...item.mounting,
+                                  left: e.target.value,
+                                })
+                              }
+                              placeholder="Left (sq in)"
+                            />
+                          </label>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="row g-2">
+                    <div className="col-md-2">
+                      <label className="form-label pe-2">Glass</label>
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        checked={item?.glass?.isEnabled}
+                        onChange={(e) =>
+                          handleInputChange(index, "glass", {
+                            ...item.glass,
+                            isEnabled: e.target.checked,
+                          })
+                        }
+                      />
+                    </div>
+
+                    {item?.glass?.isEnabled && (
+                      <div className="col-md-4">
+                        <label className="form-label">Glass Type</label>
+                        <select
+                          className="form-select"
+                          value={item?.glass?.type}
+                          onChange={(e) =>
+                            handleInputChange(index, "glass", {
+                              ...item.glass,
+                              type: e.target.value,
+                            })
+                          }
+                        >
+                          <option value="">None</option>
+                          {glassTypes.map((glass) => (
+                            <option key={glass.id} value={glass.name}>
+                              {glass.name} (₹{glass.rate} {glass.rateIn})
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="row g-2">
+                    <div className="col-md-4">
+                      <label className="form-label">Frame Type</label>
+                      <select
+                        className="form-select"
+                        value={item?.frame?.type}
+                        onChange={(e) =>
+                          handleInputChange(index, "frame", {
+                            ...item.frame,
+                            type: e.target.value,
+                          })
+                        }
+                      >
+                        <option value="">None</option>
+                        {frameTypes.map((frame) => (
+                          <option key={frame.id} value={frame.name}>
+                            {frame.name} {frame.category} - (₹ {frame.baseCost})
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="col-md-2">
+                      <label className="form-label">Frame Color</label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        value={item?.frame?.color}
+                        onChange={(e) =>
+                          handleInputChange(index, "frame", {
+                            ...item.frame,
+                            color: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+
+                    <div className="col-md-2">
+                      <label className="form-label">Frame width (Inches)</label>
+                      <input
+                        className="form-control"
+                        type="number"
+                        value={item?.frame?.width}
+                        onChange={(e) =>
+                          handleInputChange(index, "frame", {
+                            ...item.frame,
+                            width: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="col-md-2">
+                      <label className="form-label">
+                        Frame height (Inches)
+                      </label>
+                      <input
+                        className="form-control"
+                        type="number"
+                        value={item?.frame?.height}
+                        onChange={(e) =>
+                          handleInputChange(index, "frame", {
+                            ...item.frame,
+                            height: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  <div className="row g-2">
+                    <div className="col-md-2">
+                      <label className="form-label pe-2">Varnish</label>
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        checked={item?.additional?.varnish}
+                        onChange={(e) =>
+                          handleInputChange(index, "additional", {
+                            ...item.additional,
+                            varnish: e.target.checked,
+                          })
+                        }
+                      />
+                    </div>
+
+                    <div className="col-md-2">
+                      <label className="form-label pe-2">Lamination</label>
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        checked={item?.additional?.lamination}
+                        onChange={(e) =>
+                          handleInputChange(index, "additional", {
+                            ...item.additional,
+                            lamination: e.target.checked,
+                          })
+                        }
+                      />
+                    </div>
+
+                    <div className="col-md-2">
+                      <label className="form-label pe-2">Router Cut</label>
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        checked={item?.additional?.routerCut}
+                        onChange={(e) =>
+                          handleInputChange(index, "additional", {
+                            ...item.additional,
+                            routerCut: e.target.checked,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col-md-2 d-flex align-items-end">
+                    <button
+                      className="btn btn-outline-danger w-100"
+                      onClick={() => handleRemoveItem(index)}
+                    >
+                      🗑 Remove
+                    </button>
+                  </div>
+                </div>
               </div>
-              <div className="col-md-2">
-                <label className="form-label">Width (in)</label>
-                <input
-                  className="form-control"
-                  type="number"
-                  value={item.width}
-                  onChange={(e) =>
-                    handleInputChange(index, "width", e.target.value)
-                  }
-                />
-              </div>
-              <div className="col-md-2">
-                <label className="form-label">Height (in)</label>
-                <input
-                  className="form-control"
-                  type="number"
-                  value={item.height}
-                  onChange={(e) =>
-                    handleInputChange(index, "height", e.target.value)
-                  }
-                />
-              </div>
-
-              <div className="col-md-4">
-                <label className="form-label">Quantity</label>
-                <input
-                  className="form-control"
-                  type="number"
-                  value={item.quantity}
-                  onChange={(e) =>
-                    handleInputChange(index, "quantity", e.target.value)
-                  }
-                />
-              </div>
-
-              <div className="row g-2">
-                <div className="col-md-4">
-                  <label className="form-label">Frame Type</label>
-                  <select
-                    className="form-select"
-                    value={item.frameType}
-                    onChange={(e) =>
-                      handleInputChange(index, "frameType", e.target.value)
-                    }
-                  >
-                    <option value="">None</option>
-                    {frameTypes.map((frame) => (
-                      <option key={frame.id} value={frame.name}>
-                        {frame.name} {frame.category} - (₹ {frame.baseCost})
-                      </option>
-                    ))}
-                  </select>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="card mb-3">
+              <div className="card-body">
+                <br />
+                <span>
+                  Chargable width:
+                  <b>
+                    {Number(item.width) +
+                      (item?.mounting?.isEnabled
+                        ? Number(item?.mounting?.top || 0) +
+                          Number(item?.mounting?.bottom || 0)
+                        : 0)}
+                  </b>
+                  (in)
+                  <br />
+                </span>
+                <span>
+                  Chargable height:
+                  <b>
+                    {Number(item.height) +
+                      (item?.mounting?.isEnabled
+                        ? Number(item?.mounting?.left || 0) +
+                          Number(item?.mounting?.right || 0)
+                        : 0)}
+                  </b>
+                  (in)
+                </span>
+                <br />
+                <span>
+                  Total area:
+                  <b>{totalItemArea(item)}</b>
+                  square inches
+                </span>
+                <br />
+                <br />
+                <div className="col-md-6 d-flex">
+                  <label className="form-label">{"Total "} </label>
+                  <h4>₹{totalItem(item)}</h4>
                 </div>
-                <div className="col-md-4">
-                  <label className="form-label">Frame Color</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    value={item.frameColor}
-                    onChange={(e) =>
-                      handleInputChange(index, "frameColor", e.target.value)
-                    }
-                  />
-                </div>
-
-                <div className="col-md-2">
-                  <label className="form-label">Frame width (Inches)</label>
-                  <input
-                    className="form-control"
-                    type="number"
-                    value={item.frameWidth}
-                    onChange={(e) =>
-                      handleInputChange(index, "frameWidth", e.target.value)
-                    }
-                  />
-                </div>
-
-                <div className="col-md-4">
-                  <label className="form-label">Glass Type</label>
-                  <select
-                    className="form-select"
-                    value={item.glassType}
-                    onChange={(e) =>
-                      handleInputChange(index, "glassType", e.target.value)
-                    }
-                  >
-                    <option value="">None</option>
-                    {glassTypes.map((glass) => (
-                      <option key={glass.id} value={glass.name}>
-                        {glass.name} (₹{glass.rate} {glass.rateIn})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div className="row g-2">
-                <div className="col-md-2">
-                  <label className="form-label pe-2">Mounting</label>
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    checked={item?.additional?.mounting}
-                    onChange={(e) =>
-                      handleInputChange(index, "additional", {
-                        ...item.additional,
-                        mounting: e.target.checked,
-                      })
-                    }
-                  />
-                </div>
-                <div className="col-md-2">
-                  <label className="form-label pe-2">Varnish</label>
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    checked={item?.additional?.varnish}
-                    onChange={(e) =>
-                      handleInputChange(index, "additional", {
-                        ...item.additional,
-                        varnish: e.target.checked,
-                      })
-                    }
-                  />
-                </div>
-
-                <div className="col-md-2">
-                  <label className="form-label pe-2">Lamination</label>
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    checked={item?.additional?.lamination}
-                    onChange={(e) =>
-                      handleInputChange(index, "additional", {
-                        ...item.additional,
-                        lamination: e.target.checked,
-                      })
-                    }
-                  />
-                </div>
-
-                <div className="col-md-2">
-                  <label className="form-label pe-2">Router Cut</label>
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    checked={item?.additional?.routerCut}
-                    onChange={(e) =>
-                      handleInputChange(index, "additional", {
-                        ...item.additional,
-                        routerCut: e.target.checked,
-                      })
-                    }
-                  />
-                </div>
-              </div>
-
-              <div className="col-md-3">
-                <label className="form-label">Total (₹)</label>
-                <input
-                  className="form-control"
-                  type="text"
-                  value={item.total}
-                  disabled
-                />
-              </div>
-              <div className="col-md-2 d-flex align-items-end">
-                <button
-                  className="btn btn-outline-danger w-100"
-                  onClick={() => handleRemoveItem(index)}
-                >
-                  🗑 Remove
-                </button>
               </div>
             </div>
           </div>
         </div>
       ))}
-
       <button className="btn btn-outline-primary mb-4" onClick={handleAddItem}>
         + Add Item
       </button>
-
       <div className="row mb-3">
         <div className="col-md-3">
           <label className="form-label">Subtotal</label>
           <input
             type="text"
             className="form-control"
-            value={bill.subtotal}
+            value={calculateTotalAmount()}
             disabled
           />
         </div>
@@ -475,7 +725,6 @@ const BillCalculationApp = () => {
           />
         </div>
       </div>
-
       <div className="row mb-3">
         <div className="col-md-3">
           <label className="form-label">Advance Payment</label>
@@ -501,12 +750,13 @@ const BillCalculationApp = () => {
           />
         </div>
       </div>
-
       <div className="text-end">
         <button className="btn btn-success" onClick={generateBill}>
           Generate Bill
         </button>
       </div>
+      <br />
+      <InvoiceApp />
     </div>
   );
 };

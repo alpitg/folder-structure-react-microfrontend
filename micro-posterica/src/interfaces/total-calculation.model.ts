@@ -1,5 +1,4 @@
 export interface IAdditionalDetails {
-  mounting: boolean;
   varnish: boolean;
   lamination: boolean;
   routerCut: boolean;
@@ -9,10 +8,9 @@ export interface IArtDetail {
   artName: string;
   width: string;
   height: string;
-  frameType: string;
-  frameColor: string;
-  frameWidth: number;
-  glassType: string;
+  mounting: IMounting;
+  frame: IFrame;
+  glass: IGlass;
   additional: IAdditionalDetails;
   quantity: number;
   total: number;
@@ -34,4 +32,28 @@ export interface ITotalCalculationInput {
   balanceAmount: number;
   paymentStatus: string;
   createdAt: string;
+}
+
+export interface IMounting {
+  isEnabled: boolean;
+  top: number;
+  right: number;
+  bottom: number;
+  left: number;
+  width?: number;
+  height?: number;
+}
+
+export interface IFrame {
+  type: string;
+  color?: string;
+  width?: number;
+  height?: number;
+}
+
+export interface IGlass {
+  isEnabled: boolean;
+  type: string;
+  width?: number;
+  height?: number;
 }
