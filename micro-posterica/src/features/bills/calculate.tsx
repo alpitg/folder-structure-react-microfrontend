@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
 import InvoiceApp from "./invoice/invoice";
+import ViewInvoiceApp from "./invoice/view/view-invoice";
 import { fetchFrameTypes } from "../../app/features/master/frame-types/frame-types.thunk";
 import { fetchGlassTypes } from "../../app/features/master/glass-types/glass-types.thunk";
 import { generateQRCode } from "../../utils/qrcode.util";
@@ -92,8 +93,8 @@ const BillCalculationApp = () => {
 
   const [bill, setBill] = useState<ITotalCalculationInput>({
     customerName: "",
+    issueDate: new Date(),
     likelyDateOfDelivery: "",
-    expectedDeliveryDate: "",
     artDetails: [
       {
         artName: "",
@@ -134,9 +135,10 @@ const BillCalculationApp = () => {
     finalAmount: 0,
     miscCharges: [],
     miscChargesAmount: 0,
-    totalAmount: 0,
     advancePayment: 0,
     balanceAmount: 0,
+    handledBy: "Owner",
+    paymentMode: "Cash",
     paymentStatus: "Pending",
     createdAt: new Date().toISOString(),
   });
@@ -213,10 +215,7 @@ const BillCalculationApp = () => {
 
   const handleRemoveItem = (index: number) => {
     const updatedArtDetails = bill.artDetails.filter((_, i) => i !== index);
-    const cost = updatedArtDetails.reduce(
-      (sum, item) => sum + item.cost,
-      0
-    );
+    const cost = updatedArtDetails.reduce((sum, item) => sum + item.cost, 0);
     const discountAmount = (cost * bill.discountPercentage) / 100;
     const finalAmount = cost - discountAmount;
 
@@ -270,7 +269,10 @@ const BillCalculationApp = () => {
       <h3>Bill Calculation</h3>
       <p>Calculate the bill here.</p>
 
-      <div className="row mb-3">
+      <div
+        className="row mb-3"
+        key={bill?.artDetails?.length + bill?.createdAt}
+      >
         <div className="col-md-6">
           <div className="row mb-3 g-2">
             <div className="col-md-12">
@@ -312,7 +314,10 @@ const BillCalculationApp = () => {
       </div>
 
       {bill.artDetails.map((item, index) => (
-        <div className="row mb-3">
+        <div
+          className="row mb-3"
+          key={item?.artName + item?.width + item?.height + index}
+        >
           <div className="col-md-8">
             <div className="card mb-3" key={index}>
               <div className="card-body">
@@ -322,7 +327,7 @@ const BillCalculationApp = () => {
                     <input
                       className="form-control"
                       type="text"
-                      value={item.artName}
+                      value={item?.artName}
                       onChange={(e) =>
                         handleInputChange(index, "artName", e.target.value)
                       }
@@ -741,7 +746,7 @@ const BillCalculationApp = () => {
         </button>
       </div>
       <br />
-      <InvoiceApp bill={bill} />
+      <ViewInvoiceApp bill={bill} />
     </div>
   );
 };

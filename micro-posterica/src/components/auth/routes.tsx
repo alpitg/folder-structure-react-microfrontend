@@ -28,6 +28,14 @@ const MiscChargesApp = lazy(
   () => import("../../features/master/misc-charges/misc-charges")
 );
 
+const CreateInvoiceApp = lazy(
+  () => import("../../features/bills/invoice/create/create-invoice")
+);
+
+const ViewInvoiceApp = lazy(
+  () => import("../../features/bills/invoice/view/view-invoice")
+);
+
 const RoutesApp = () => {
   return (
     <Suspense fallback={<div>{<LoadingApp />}</div>}>
@@ -44,6 +52,15 @@ const RoutesApp = () => {
             <Route
               path={ROUTE_URL.BILL_CALCULATION}
               element={<BillCalculationApp />}
+            />
+
+            <Route
+              path={ROUTE_URL.INVOICE_MANAGER.CREATE}
+              element={<CreateInvoiceApp />}
+            />
+            <Route
+              path={ROUTE_URL.INVOICE_MANAGER.VIEW}
+              element={<ViewInvoiceApp />}
             />
 
             <Route path={ROUTE_URL.MASTER.BASE} element={<MasterApp />}>

@@ -17,14 +17,6 @@ const NavbarApp = () => {
         <div className="nav-left">
           <div className="d-flex align-items-center">
             <h2 className="me-5">Posterica</h2>
-            <div
-              className="toast show align-items-center text-bg-primary border-0 ms-5"
-              role="alert"
-              aria-live="assertive"
-              aria-atomic="false"
-            >
-              <div className="d-flex"></div>
-            </div>
           </div>
         </div>
         <div className="nav-right">

@@ -18,8 +18,8 @@ export interface IArtDetail {
 
 export interface ITotalCalculationInput {
   customerName: string;
+  issueDate: Date;
   likelyDateOfDelivery: string;
-  expectedDeliveryDate: string;
   artDetails: IArtDetail[];
 
   cost: number;
@@ -28,10 +28,11 @@ export interface ITotalCalculationInput {
   finalAmount: number;
   miscCharges: any[]; // Replace `any` with a specific type if available
   miscChargesAmount: number;
-  totalAmount: number;
   advancePayment: number;
   balanceAmount: number;
 
+  handledBy: string;
+  paymentMode: string;
   paymentStatus: string;
   createdAt: string;
 }

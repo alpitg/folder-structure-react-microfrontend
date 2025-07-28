@@ -25,7 +25,6 @@ import QRCode from "qrcode";
 //   customerName: "",
 //   discountAmount: 72,
 //   discountPercentage: 50,
-//   expectedDeliveryDate: "",
 //   finalAmount: 72,
 //   likelyDateOfDelivery: "",
 //   miscCharges: [],
