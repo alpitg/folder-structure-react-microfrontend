@@ -23,22 +23,12 @@ const NavbarApp = () => {
               aria-live="assertive"
               aria-atomic="false"
             >
-              <div className="d-flex">
-                <div className="toast-body">
-                  This application is in development mode..
-                </div>
-                <button
-                  type="button"
-                  className="btn-close btn-close-white me-2 m-auto"
-                  data-bs-dismiss="toast"
-                  aria-label="Close"
-                ></button>
-              </div>
+              <div className="d-flex"></div>
             </div>
           </div>
         </div>
         <div className="nav-right">
-          <div className="nav-right-breadcrumb me-4">
+          {/* <div className="nav-right-breadcrumb me-4">
             <nav aria-label="breadcrumb">
               <ol className="breadcrumb">
                 {pathParts.map((part, index) => {
@@ -55,7 +45,7 @@ const NavbarApp = () => {
                 })}
               </ol>
             </nav>
-          </div>
+          </div> */}
           <i className="bi bi-sun-fill ms-2" title="Light theme"></i>
           <div className="ms-2 form-check form-switch">
             <input
