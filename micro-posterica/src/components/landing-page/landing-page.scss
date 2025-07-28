@@ -1,11 +1,8 @@
 .landing-page-app {
   .landing-page-container {
-    display: flex;
-    height: 100vh; // Full height of the viewport
-    min-height: 100vh;
-
     .landing-page-content {
-      margin: calc(var(--app-navbar-top-height) + 2rem) 1.5rem 6.375rem;
+      margin-top: calc(var(--app-navbar-top-height) + 2rem);
+      padding: 0 2rem;
       overflow: auto; // Handle overflow if content is too large
       transition-duration: 0.2s;
     }
