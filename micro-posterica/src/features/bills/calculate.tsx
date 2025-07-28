@@ -172,29 +172,26 @@ const BillCalculationApp = () => {
     });
   };
 
-  const handleDiscountChange = (field: string, value: number) => {
+  const handlePaymentChange = (field: string, value: number) => {
+    const validValue = isNaN(value) ? 0 : value;
+
     const discountPercentage =
-      field === "discountPercentage" ? value : bill.discountPercentage;
+      field === "discountPercentage" ? validValue : bill.discountPercentage;
+
     const discountAmount =
-      field === "discountAmount" ? value : (bill.subtotal * value) / 100;
+      field === "discountAmount" ? validValue : (bill.subtotal * discountPercentage) / 100;
     const finalAmount = bill.subtotal - discountAmount;
+
+    const advancePayment =
+      field === "advancePayment" ? validValue : bill.advancePayment;
+    const balanceAmount = finalAmount - advancePayment;
 
     setBill({
       ...bill,
       discountPercentage,
       discountAmount,
       finalAmount,
-    });
-  };
-
-  const handleAdvancePaymentChange = (field: string, value: number) => {
-    const advancePayment =
-      field === "advancePayment" ? value : bill.advancePayment;
-    const balanceAmount = bill.finalAmount - advancePayment;
-
-    setBill({
-      ...bill,
-      [field]: advancePayment,
+      advancePayment,
       balanceAmount,
     });
   };
@@ -697,7 +694,7 @@ const BillCalculationApp = () => {
             className="form-control"
             value={bill.discountPercentage}
             onChange={(e) =>
-              handleDiscountChange(
+              handlePaymentChange(
                 "discountPercentage",
                 parseFloat(e.target.value)
               )
@@ -711,7 +708,7 @@ const BillCalculationApp = () => {
             className="form-control"
             value={bill.discountAmount}
             onChange={(e) =>
-              handleDiscountChange("discountAmount", parseFloat(e.target.value))
+              handlePaymentChange("discountAmount", parseFloat(e.target.value))
             }
           />
         </div>
@@ -733,10 +730,7 @@ const BillCalculationApp = () => {
             className="form-control"
             value={bill.advancePayment}
             onChange={(e) =>
-              handleAdvancePaymentChange(
-                "advancePayment",
-                parseFloat(e.target.value)
-              )
+              handlePaymentChange("advancePayment", parseFloat(e.target.value))
             }
           />
         </div>
