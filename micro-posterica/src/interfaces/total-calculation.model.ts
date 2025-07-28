@@ -6,6 +6,7 @@ export interface IAdditionalDetails {
 
 export interface IArtDetail {
   artName: string;
+  artDescription: string;
   width: string;
   height: string;
   mounting: IMounting;

@@ -5,8 +5,8 @@ import type {
   IArtDetail,
   ITotalCalculationInput,
 } from "../../interfaces/total-calculation.model";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
 
 import InvoiceApp from "./invoice/invoice";
 import ViewInvoiceApp from "./invoice/view/view-invoice";
@@ -98,6 +98,7 @@ const BillCalculationApp = () => {
     artDetails: [
       {
         artName: "",
+        artDescription: "",
         width: "",
         height: "",
         mounting: {
@@ -145,9 +146,11 @@ const BillCalculationApp = () => {
 
   const handleInputChange = (
     index: number,
-    field: string,
+    field: keyof IArtDetail | "mounting" | "glass" | "frame" | "additional",
     value: object | string | number
   ) => {
+    if (index < 0 || index >= bill.artDetails.length) return;
+
     const updatedArtDetails = [...bill.artDetails];
     updatedArtDetails[index] = {
       ...updatedArtDetails[index],
@@ -162,7 +165,6 @@ const BillCalculationApp = () => {
       artDetails: updatedArtDetails,
     });
   };
-
   const handlePaymentChange = (field: string, value: number) => {
     const validValue = isNaN(value) ? 0 : value;
 
@@ -179,6 +181,7 @@ const BillCalculationApp = () => {
         ...bill.artDetails,
         {
           artName: "",
+          artDescription: "",
           width: "",
           height: "",
           mounting: {
@@ -314,12 +317,9 @@ const BillCalculationApp = () => {
       </div>
 
       {bill.artDetails.map((item, index) => (
-        <div
-          className="row mb-3"
-          key={item?.artName + item?.width + item?.height + index}
-        >
+        <div className="row mb-3" key={"art" + index}>
           <div className="col-md-8">
-            <div className="card mb-3" key={index}>
+            <div className="card mb-3">
               <div className="card-body">
                 <div className="row g-2">
                   <div className="col-md-4">
@@ -327,9 +327,26 @@ const BillCalculationApp = () => {
                     <input
                       className="form-control"
                       type="text"
-                      value={item?.artName}
+                      name="artName"
+                      value={item.artName}
                       onChange={(e) =>
                         handleInputChange(index, "artName", e.target.value)
+                      }
+                    />
+                  </div>
+                  <div className="col-md-4">
+                    <label className="form-label">Art Description</label>
+                    <input
+                      className="form-control"
+                      type="text"
+                      name="artDescription"
+                      value={item.artDescription}
+                      onChange={(e) =>
+                        handleInputChange(
+                          index,
+                          "artDescription",
+                          e.target.value
+                        )
                       }
                     />
                   </div>
