@@ -741,7 +741,7 @@ const BillCalculationApp = () => {
         </button>
       </div>
       <br />
-      <InvoiceApp />
+      <InvoiceApp bill={bill} />
     </div>
   );
 };

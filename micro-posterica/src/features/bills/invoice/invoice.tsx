@@ -1,5 +1,18 @@
+import type { ITotalCalculationInput } from "../../../interfaces/total-calculation.model";
 
-const InvoiceApp = () => {
+interface InvoiceAppProps {
+  bill: ITotalCalculationInput;
+}
+
+const InvoiceApp = ({ bill }: InvoiceAppProps) => {
+  const dueDays = () => {
+    const today = new Date();
+    const dueDate = new Date(bill.likelyDateOfDelivery);
+    const timeDiff = dueDate.getTime() - today.getTime();
+    const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    return daysDiff > 0 ? daysDiff : 0;
+  };
+
   return (
     <div className="bill-calculation-app">
       <h3>Bill Calculation</h3>
@@ -22,14 +35,14 @@ const InvoiceApp = () => {
               <div className="row pb-5">
                 <div className="col-md-6 mb-5">
                   <small className="d-block mb-1">Issue Date:</small>
-                  <h5>01 January 2021</h5>
+                  <h5>{bill?.createdAt}</h5>
                 </div>
                 <div className="col-md-6 mb-5">
                   <small className="d-block mb-1">Due Date:</small>
                   <h5 className="text-dark">
-                    08 January 2021{" "}
+                    {bill?.likelyDateOfDelivery}
                     <small className="text-brand">
-                      <i className="bi bi-dot"></i>Due in 7 days
+                      <i className="bi bi-dot"></i>Due in {dueDays()} days
                     </small>
                   </h5>
                 </div>
