@@ -44,7 +44,7 @@ const BillCalculationApp = () => {
       : parseFloat(item.width) || 0 * parseFloat(item.height) || 0;
   };
 
-  const totalItem = (item: IArtDetail): number => {
+  const itemCost = (item: IArtDetail): number => {
     const quantity = parseInt(String(item.quantity)) || 1;
 
     // Calculate area with mounting if enabled
@@ -153,46 +153,22 @@ const BillCalculationApp = () => {
     };
 
     // Auto-calculate total for the item
-    parseInt(updatedArtDetails[index].quantity.toString()) || 1;
-    updatedArtDetails[index].total = totalItem(updatedArtDetails[index]);
+    // parseInt(updatedArtDetails[index].quantity.toString()) || 1;
 
-    const subtotal = calculateTotalAmount();
-
-    const discountAmount = (subtotal * bill.discountPercentage) / 100;
-    const finalAmount = subtotal - discountAmount;
-    const balanceAmount = finalAmount - bill.advancePayment;
+    updatedArtDetails[index].total = itemCost(updatedArtDetails[index]);
 
     setBill({
       ...bill,
       artDetails: updatedArtDetails,
-      subtotal,
-      discountAmount,
-      finalAmount,
-      balanceAmount,
     });
   };
 
   const handlePaymentChange = (field: string, value: number) => {
     const validValue = isNaN(value) ? 0 : value;
 
-    const discountPercentage =
-      field === "discountPercentage" ? validValue : bill.discountPercentage;
-
-    const discountAmount =
-      field === "discountAmount" ? validValue : (bill.subtotal * discountPercentage) / 100;
-    const finalAmount = bill.subtotal - discountAmount;
-
-    const advancePayment =
-      field === "advancePayment" ? validValue : bill.advancePayment;
-    const balanceAmount = finalAmount - advancePayment;
-
     setBill({
       ...bill,
-      discountPercentage,
-      discountAmount,
-      finalAmount,
-      advancePayment,
-      balanceAmount,
+      [field]: validValue,
     });
   };
 
@@ -273,6 +249,23 @@ const BillCalculationApp = () => {
     dispatch(fetchFrameTypes());
     dispatch(fetchGlassTypes());
   }, []);
+
+  useEffect(() => {
+    // Calculate totals when bill changes
+    const subtotal = calculateTotalAmount();
+    let discountAmount = (subtotal * bill.discountPercentage) / 100;
+
+    const finalAmount = subtotal - discountAmount;
+    const balanceAmount = finalAmount - bill.advancePayment;
+
+    setBill((prevBill) => ({
+      ...prevBill,
+      subtotal,
+      discountAmount,
+      finalAmount,
+      balanceAmount,
+    }));
+  }, [bill.artDetails, bill.discountPercentage, bill.advancePayment]);
 
   return (
     <div className="bill-calculation-app">
@@ -667,7 +660,7 @@ const BillCalculationApp = () => {
                 <br />
                 <div className="col-md-6 d-flex">
                   <label className="form-label">{"Total "} </label>
-                  <h4>₹{totalItem(item)}</h4>
+                  <h4>₹{item.total}</h4>
                 </div>
               </div>
             </div>
