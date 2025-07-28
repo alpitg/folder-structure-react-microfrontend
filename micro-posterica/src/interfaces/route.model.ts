@@ -1,7 +1,8 @@
 export interface IRoutes {
-  label: string;
+  id: string;
+  title: string;
   path: string;
   icon: string;
   claims: string[];
-  route?: IRoutes[];
+  subRoutes?: IRoutes[];
 }

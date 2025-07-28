@@ -5,23 +5,24 @@
     min-height: 100vh;
 
     .landing-page-content {
-      margin: calc(var(--app-navbar-top-height) + 2rem) 1.5rem 6.375rem
-        calc(var(--sidebar-width) + 1.5rem);
+      margin: calc(var(--app-navbar-top-height) + 2rem) 1.5rem 6.375rem;
       overflow: auto; // Handle overflow if content is too large
       transition-duration: 0.2s;
     }
+  }
 
-    .landing-page-content-collapsed {
-      margin: calc(var(--app-navbar-top-height) + 2rem) 1.5rem 6.375rem
-        calc(var(--sidebar-width-min) + 1.5rem);
-      overflow: auto; // Handle overflow if content is too large
-
-      transition-duration: 0.2s;
+  @media (min-width: 992px) {
+    .app-wrapper {
+      margin-left: calc(
+        var(--bs-app-sidebar-width) + var(--bs-app-sidebar-gap-start, 0px) +
+          var(--bs-app-sidebar-gap-end, 0px)
+      );
     }
+  }
 
-    .base-container{
-        width: 100%;
-        height: 100%;
+  @media (max-width: 991.98px) {
+    .app-wrapper {
+      transition: margin-left 0.3s ease, margin-right 0.3s ease;
     }
   }
 }

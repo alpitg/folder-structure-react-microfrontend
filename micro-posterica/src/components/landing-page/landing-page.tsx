@@ -17,7 +17,7 @@ const LandingPageApp = () => {
       <NavbarApp />
       <div className="landing-page-container">
         <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
-        <div className="base-container">
+        <div className="app-wrapper">
           <div
             className={
               !isOpen

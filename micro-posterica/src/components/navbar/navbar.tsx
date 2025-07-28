@@ -66,6 +66,15 @@ const NavbarApp = () => {
               checked={isDarkMode}
               onChange={() => {
                 setIsDarkMode(!isDarkMode);
+                localStorage.setItem("isDarkMode", (!isDarkMode).toString());
+                document.body.setAttribute(
+                  "data-bs-theme",
+                  !isDarkMode ? "dark" : "light"
+                );
+                document.body.setAttribute(
+                  "data-kt-app-layout",
+                  !isDarkMode ? "light-sidebar" : "light-sidebar"
+                );
               }}
             />
             <label
