@@ -153,8 +153,6 @@ const BillCalculationApp = () => {
     };
 
     // Auto-calculate total for the item
-    // parseInt(updatedArtDetails[index].quantity.toString()) || 1;
-
     updatedArtDetails[index].total = itemCost(updatedArtDetails[index]);
 
     setBill({
