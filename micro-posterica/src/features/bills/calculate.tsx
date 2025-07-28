@@ -87,7 +87,7 @@ const BillCalculationApp = () => {
   };
 
   const calculateTotalAmount = (): number => {
-    return bill.artDetails.reduce((total, item) => total + item.total, 0);
+    return bill.artDetails.reduce((cost, item) => cost + item.cost, 0);
   };
 
   const [bill, setBill] = useState<ITotalCalculationInput>({
@@ -125,10 +125,10 @@ const BillCalculationApp = () => {
           routerCut: false,
         },
         quantity: 1,
-        total: 0,
+        cost: 0,
       },
     ],
-    subtotal: 0,
+    cost: 0,
     discountPercentage: 0,
     discountAmount: 0,
     finalAmount: 0,
@@ -153,7 +153,7 @@ const BillCalculationApp = () => {
     };
 
     // Auto-calculate total for the item
-    updatedArtDetails[index].total = unitCost(updatedArtDetails[index]);
+    updatedArtDetails[index].cost = unitCost(updatedArtDetails[index]);
 
     setBill({
       ...bill,
@@ -205,7 +205,7 @@ const BillCalculationApp = () => {
             routerCut: false,
           },
           quantity: 1,
-          total: 0,
+          cost: 0,
         },
       ],
     });
@@ -213,19 +213,19 @@ const BillCalculationApp = () => {
 
   const handleRemoveItem = (index: number) => {
     const updatedArtDetails = bill.artDetails.filter((_, i) => i !== index);
-    const subtotal = updatedArtDetails.reduce(
-      (sum, item) => sum + item.total,
+    const cost = updatedArtDetails.reduce(
+      (sum, item) => sum + item.cost,
       0
     );
-    const discountAmount = (subtotal * bill.discountPercentage) / 100;
-    const finalAmount = subtotal - discountAmount;
+    const discountAmount = (cost * bill.discountPercentage) / 100;
+    const finalAmount = cost - discountAmount;
 
     const balanceAmount = finalAmount - bill.advancePayment;
 
     setBill({
       ...bill,
       artDetails: updatedArtDetails,
-      subtotal,
+      cost,
       discountAmount,
       finalAmount,
       balanceAmount,
@@ -250,15 +250,15 @@ const BillCalculationApp = () => {
 
   useEffect(() => {
     // Calculate totals when bill changes
-    const subtotal = calculateTotalAmount();
-    let discountAmount = (subtotal * bill.discountPercentage) / 100;
+    const cost = calculateTotalAmount();
+    let discountAmount = (cost * bill.discountPercentage) / 100;
 
-    const finalAmount = subtotal - discountAmount;
+    const finalAmount = cost - discountAmount;
     const balanceAmount = finalAmount - bill.advancePayment;
 
     setBill((prevBill) => ({
       ...prevBill,
-      subtotal,
+      cost,
       discountAmount,
       finalAmount,
       balanceAmount,
@@ -657,8 +657,8 @@ const BillCalculationApp = () => {
                 <br />
                 <br />
                 <div className="col-md-6 d-flex">
-                  <label className="form-label">{"Total "} </label>
-                  <h4>₹{item.total}</h4>
+                  <label className="form-label">Unit Cost: </label>
+                  <h4>₹{item.cost}</h4>
                 </div>
               </div>
             </div>
@@ -670,7 +670,7 @@ const BillCalculationApp = () => {
       </button>
       <div className="row mb-3">
         <div className="col-md-3">
-          <label className="form-label">Subtotal</label>
+          <label className="form-label">Cost</label>
           <input
             type="text"
             className="form-control"

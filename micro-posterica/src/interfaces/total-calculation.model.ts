@@ -13,7 +13,7 @@ export interface IArtDetail {
   glass: IGlass;
   additional: IAdditionalDetails;
   quantity: number;
-  total: number;
+  cost: number;
 }
 
 export interface ITotalCalculationInput {
@@ -21,7 +21,8 @@ export interface ITotalCalculationInput {
   likelyDateOfDelivery: string;
   expectedDeliveryDate: string;
   artDetails: IArtDetail[];
-  subtotal: number;
+
+  cost: number;
   discountPercentage: number;
   discountAmount: number;
   finalAmount: number;
@@ -30,6 +31,7 @@ export interface ITotalCalculationInput {
   totalAmount: number;
   advancePayment: number;
   balanceAmount: number;
+
   paymentStatus: string;
   createdAt: string;
 }
