@@ -44,7 +44,7 @@ const BillCalculationApp = () => {
       : parseFloat(item.width) || 0 * parseFloat(item.height) || 0;
   };
 
-  const itemCost = (item: IArtDetail): number => {
+  const unitCost = (item: IArtDetail): number => {
     const quantity = parseInt(String(item.quantity)) || 1;
 
     // Calculate area with mounting if enabled
@@ -153,7 +153,7 @@ const BillCalculationApp = () => {
     };
 
     // Auto-calculate total for the item
-    updatedArtDetails[index].total = itemCost(updatedArtDetails[index]);
+    updatedArtDetails[index].total = unitCost(updatedArtDetails[index]);
 
     setBill({
       ...bill,
