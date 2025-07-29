@@ -1,0 +1,66 @@
+.create-invoice-app {
+  .outer-frame {
+    width: 230px;
+    height: 280px;
+    border: 3px solid var(--bs-highlight-color);
+    .inner-frame {
+      position: relative;
+      margin-top: 50px;
+      left: 60px;
+      width: 100px;
+      height: 180px;
+      border: 3px solid var(--bs-highlight-color);
+
+      .side-input {
+        width: 50px;
+        margin-left: 5px;
+        padding: 2px 4px;
+        font-size: 14px;
+        border-radius: 4px;
+        font-size: small;
+      }
+
+      .label {
+        position: absolute;
+        padding: 4px 8px;
+        font-size: 10px;
+        font-weight: bold;
+      }
+
+      .top-label {
+        top: -45px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .right-label {
+        top: 50%;
+        right: -70px;
+        transform: translateY(-50%);
+      }
+
+      .bottom-label {
+        bottom: -45px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .left-label {
+        top: 50%;
+        left: -70px;
+        transform: translateY(-50%);
+      }
+
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      input[type="number"] {
+        text-align: center;
+        -moz-appearance: textfield;
+      }
+    }
+  }
+}

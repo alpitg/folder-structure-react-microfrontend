@@ -1,9 +1,11 @@
 import "./calculate.scss";
 
 import type { AppDispatch, AppState } from "../../app/store";
-import type {
-  IArtDetail,
-  ITotalCalculationInput,
+import {
+  ArtDetail,
+  TotalCalculationInput,
+  type IArtDetail,
+  type ITotalCalculationInput,
 } from "../../interfaces/total-calculation.model";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -119,70 +121,9 @@ const BillCalculationApp = () => {
     return bill.artDetails.reduce((cost, item) => cost + item.cost, 0);
   };
 
-  const [bill, setBill] = useState<ITotalCalculationInput>({
-    customerName: "",
-    likelyDateOfDelivery: "",
-    artDetails: [
-      {
-        artName: "",
-        artDescription: "",
-        width: "",
-        height: "",
-        mounting: {
-          isEnabled: false,
-          top: 0,
-          right: 0,
-          bottom: 0,
-          left: 0,
-          width: undefined,
-          height: undefined,
-        },
-        frame: {
-          type: "",
-          width: 0,
-          height: 0,
-        },
-        glass: {
-          isEnabled: false,
-          type: "",
-          width: undefined,
-          height: undefined,
-        },
-        additional: {
-          varnish: false,
-          lamination: false,
-          routerCut: false,
-        },
-        quantity: 1,
-        cost: 0,
-      },
-    ],
-    cost: 0,
-    discountPercentage: 0,
-    discountAmount: 0,
-    finalAmount: 0,
-    miscCharges: [],
-    miscChargesAmount: 0,
-    advancePayment: 0,
-    balanceAmount: 0,
-    paymentMode: "Cash",
-    paymentStatus: "Pending",
-    invoice: {
-      billDate: new Date(),
-      billFrom: {
-        name: "",
-        detail: "",
-        phone: "",
-      },
-      billTo: {
-        name: "",
-        detail: "",
-        phone: "",
-      },
-      handledBy: "Owner",
-    },
-    createdAt: new Date().toISOString(),
-  });
+  const [bill, setBill] = useState<ITotalCalculationInput>(
+    new TotalCalculationInput()
+  );
 
   const handleInputChange = (
     index: number,
@@ -217,42 +158,7 @@ const BillCalculationApp = () => {
   const handleAddItem = () => {
     setBill({
       ...bill,
-      artDetails: [
-        ...bill.artDetails,
-        {
-          artName: "",
-          artDescription: "",
-          width: "",
-          height: "",
-          mounting: {
-            isEnabled: false,
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0,
-            width: undefined,
-            height: undefined,
-          },
-          frame: {
-            type: "",
-            width: 0,
-            height: 0,
-          },
-          glass: {
-            isEnabled: false,
-            type: "",
-            width: undefined,
-            height: undefined,
-          },
-          additional: {
-            varnish: false,
-            lamination: false,
-            routerCut: false,
-          },
-          quantity: 1,
-          cost: 0,
-        },
-      ],
+      artDetails: [...bill.artDetails, new ArtDetail()],
     });
   };
 
@@ -286,6 +192,11 @@ const BillCalculationApp = () => {
   };
 
   useEffect(() => {
+    setBill((prevBill) => ({
+      ...prevBill,
+      artDetails: [new ArtDetail()],
+    }));
+
     dispatch(fetchFrameTypes());
     dispatch(fetchGlassTypes());
     dispatch(fetchMiscCharges());
@@ -458,18 +369,23 @@ const BillCalculationApp = () => {
 
                   <div className="row g-2">
                     <div className="col-md-2">
-                      <label className="form-label pe-2">Mounting</label>
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        checked={item?.mounting?.isEnabled}
-                        onChange={(e) =>
-                          handleInputChange(index, "mounting", {
-                            ...item.mounting,
-                            isEnabled: e.target.checked,
-                          })
-                        }
-                      />
+                      <div className="form-check form-check-sm">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          id="mounting"
+                          checked={item?.mounting?.isEnabled}
+                          onChange={(e) =>
+                            handleInputChange(index, "mounting", {
+                              ...item.mounting,
+                              isEnabled: e.target.checked,
+                            })
+                          }
+                        />
+                        <label className="form-check-label" htmlFor="mounting">
+                          Mounting
+                        </label>
+                      </div>
                     </div>
 
                     {item?.mounting?.isEnabled && (
@@ -549,18 +465,23 @@ const BillCalculationApp = () => {
 
                   <div className="row g-2">
                     <div className="col-md-2">
-                      <label className="form-label pe-2">Glass</label>
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        checked={item?.glass?.isEnabled}
-                        onChange={(e) =>
-                          handleInputChange(index, "glass", {
-                            ...item.glass,
-                            isEnabled: e.target.checked,
-                          })
-                        }
-                      />
+                      <div className="form-check form-check-sm">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          id="glass"
+                          checked={item?.glass?.isEnabled}
+                          onChange={(e) =>
+                            handleInputChange(index, "glass", {
+                              ...item.glass,
+                              isEnabled: e.target.checked,
+                            })
+                          }
+                        />
+                        <label className="form-check-label" htmlFor="glass">
+                          Glass
+                        </label>
+                      </div>
                     </div>
 
                     {item?.glass?.isEnabled && (
@@ -657,48 +578,65 @@ const BillCalculationApp = () => {
 
                   <div className="row g-2">
                     <div className="col-md-2">
-                      <label className="form-label pe-2">Varnish</label>
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        checked={item?.additional?.varnish}
-                        onChange={(e) =>
-                          handleInputChange(index, "additional", {
-                            ...item.additional,
-                            varnish: e.target.checked,
-                          })
-                        }
-                      />
+                      <div className="form-check form-check-sm">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          id="varnish"
+                          checked={item?.additional?.varnish}
+                          onChange={(e) =>
+                            handleInputChange(index, "additional", {
+                              ...item.additional,
+                              varnish: e.target.checked,
+                            })
+                          }
+                        />
+                        <label className="form-check-label" htmlFor="varnish">
+                          Varnish
+                        </label>
+                      </div>
+                    </div>
+                    <div className="col-md-2">
+                      <div className="form-check form-check-sm">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          id="Lamination"
+                          checked={item?.additional?.lamination}
+                          onChange={(e) =>
+                            handleInputChange(index, "additional", {
+                              ...item.additional,
+                              lamination: e.target.checked,
+                            })
+                          }
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="Lamination"
+                        >
+                          Lamination
+                        </label>
+                      </div>
                     </div>
 
                     <div className="col-md-2">
-                      <label className="form-label pe-2">Lamination</label>
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        checked={item?.additional?.lamination}
-                        onChange={(e) =>
-                          handleInputChange(index, "additional", {
-                            ...item.additional,
-                            lamination: e.target.checked,
-                          })
-                        }
-                      />
-                    </div>
-
-                    <div className="col-md-2">
-                      <label className="form-label pe-2">Router Cut</label>
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        checked={item?.additional?.routerCut}
-                        onChange={(e) =>
-                          handleInputChange(index, "additional", {
-                            ...item.additional,
-                            routerCut: e.target.checked,
-                          })
-                        }
-                      />
+                      <div className="form-check form-check-sm">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          id="routerCut"
+                          checked={item?.additional?.routerCut}
+                          onChange={(e) =>
+                            handleInputChange(index, "additional", {
+                              ...item.additional,
+                              routerCut: e.target.checked,
+                            })
+                          }
+                        />
+                        <label className="form-check-label" htmlFor="routerCut">
+                          Router Cut
+                        </label>
+                      </div>
                     </div>
                   </div>
 
