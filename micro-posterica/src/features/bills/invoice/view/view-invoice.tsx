@@ -169,7 +169,7 @@ const ViewInvoiceApp = ({ bill }: ViewInvoiceAppProps) => {
                         </div>
                         <div className="d-flex flex-stack mb-3">
                           <div className="fw-semibold pe-10 text-gray-600 fs-7">
-                            VAT 0%
+                            VAT 0%:
                           </div>
                           <div className="text-end fw-bold fs-6 text-gray-800">
                             0.00
@@ -177,7 +177,7 @@ const ViewInvoiceApp = ({ bill }: ViewInvoiceAppProps) => {
                         </div>
                         <div className="d-flex flex-stack mb-3">
                           <div className="fw-semibold pe-10 text-gray-600 fs-7">
-                            Subtotal + VAT
+                            Subtotal + VAT:
                           </div>
                           <div className="text-end fw-bold fs-6 text-gray-800">
                             $ {bill?.finalAmount?.toFixed(2)}
@@ -185,7 +185,7 @@ const ViewInvoiceApp = ({ bill }: ViewInvoiceAppProps) => {
                         </div>
                         <div className="d-flex flex-stack mb-3">
                           <div className="fw-semibold pe-10 text-gray-600 fs-7">
-                            Total
+                            Total:
                           </div>
                           <div className="text-end fw-bold fs-6 text-gray-800">
                             $ {bill?.finalAmount?.toFixed(2)}
@@ -193,7 +193,7 @@ const ViewInvoiceApp = ({ bill }: ViewInvoiceAppProps) => {
                         </div>
                         <div className="d-flex flex-stack mb-3">
                           <div className="fw-semibold pe-10 text-gray-600 fs-7">
-                            Advance Paid
+                            Advance Paid:
                           </div>
                           <div className="text-end fw-bold fs-6 text-gray-800">
                             $ {bill?.finalAmount?.toFixed(2)}
@@ -201,7 +201,7 @@ const ViewInvoiceApp = ({ bill }: ViewInvoiceAppProps) => {
                         </div>
                         <div className="d-flex flex-stack">
                           <div className="fw-semibold pe-10 text-gray-600 fs-7">
-                            Amount Due
+                            Amount Due:
                           </div>
                           <div className="text-end fw-bold fs-6 text-gray-800">
                             $ {bill?.finalAmount?.toFixed(2)}

@@ -3,6 +3,8 @@
   "name": "Micro Posterica",
   "description": "A microservice for managing posterica data",
   "author": "Posterica Team",
+  "website": "https://posterica.in",
+  "logo": "/static/media/img/logo.png",
   "api": {
     "baseUrl": "http://localhost:3000",
     "apiVersion": "v1",
