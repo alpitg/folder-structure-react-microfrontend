@@ -11,5 +11,8 @@ export const ApiEndpoint = () => {
       glassTypes: `${serviceEndpoint}/master/glass-types`,
       miscCharges: `${serviceEndpoint}/master/misc-charges`,
     },
+    profile: {
+      posterica: `${serviceEndpoint}/profile/frame-types`,
+    },
   };
 };

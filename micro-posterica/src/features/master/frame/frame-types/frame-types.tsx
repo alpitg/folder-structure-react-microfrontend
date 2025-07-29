@@ -74,7 +74,7 @@ const FrameTypesMasterApp = () => {
 
       <div className="row">
         {frameTypes?.map((frame) => (
-          <div key={frame.id} className="col-md-4 mb-3">
+          <div key={frame.id} className="col-md-4 g-3">
             <div className="card shadow-sm h-100">
               <div className="card-body">
                 <h5 className="card-title">{frame.name}</h5>

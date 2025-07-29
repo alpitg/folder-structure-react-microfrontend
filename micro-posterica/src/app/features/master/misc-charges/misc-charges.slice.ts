@@ -3,6 +3,7 @@ import { fetchMiscCharges } from "./misc-charges.thunk";
 
 export interface IMiscCharges {
   id: string;
+  code: string;
   name: string;
   cost: number;
   description: string;

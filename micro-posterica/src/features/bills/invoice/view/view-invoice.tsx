@@ -25,7 +25,7 @@ const ViewInvoiceApp = ({ bill }: ViewInvoiceAppProps) => {
 
   const daysCompleted = () => {
     const today = new Date();
-    const issueDate = new Date(bill?.issueDate);
+    const issueDate = new Date(bill?.invoice?.issueDate);
 
     // Strip time from both dates by resetting to midnight
     today.setHours(0, 0, 0, 0);
@@ -95,29 +95,40 @@ const ViewInvoiceApp = ({ bill }: ViewInvoiceAppProps) => {
                   <div className="row g-5 mb-12">
                     <div className="col-sm-6">
                       <div className="fw-semibold fs-7 text-gray-600 mb-1">
-                        Issue For:
+                        Bill From:
                       </div>
                       <div className="fw-bold fs-6 text-gray-800">
-                        KeenThemes Inc.
+                        {bill?.invoice?.billFrom?.name}
                       </div>
                       <div className="fw-semibold fs-7 text-gray-600">
-                        8692 Wild Rose Drive <br />
-                        Livonia, MI 48150
+                        {bill?.invoice?.billFrom?.detail}
+                      </div>
+                      <div className="fw-semibold fs-7 text-gray-600">
+                        {bill?.invoice?.billFrom?.phone
+                          ? `Phone: ${bill?.invoice?.billFrom?.phone}`
+                          : null}
                       </div>
                     </div>
 
                     <div className="col-sm-6">
-                      <div className="fw-semibold fs-7 text-gray-600 mb-1">
-                        Issued By:
-                      </div>
-                      <div className="fw-bold fs-6 text-gray-800">
-                        CodeLab Inc.
-                      </div>
-                      <div className="fw-semibold fs-7 text-gray-600">
-                        9858 South 53rd Ave.
-                        <br />
-                        Matthews, NC 28104
-                      </div>
+                      {bill?.invoice?.billTo?.name && (
+                        <>
+                          <div className="fw-semibold fs-7 text-gray-600 mb-1">
+                            Bill To:
+                          </div>
+                          <div className="fw-bold fs-6 text-gray-800">
+                            {bill?.invoice?.billTo?.name}
+                          </div>
+                          <div className="fw-semibold fs-7 text-gray-600">
+                            {bill?.invoice?.billTo?.detail}
+                          </div>
+                          <div className="fw-semibold fs-7 text-gray-600">
+                            {bill?.invoice?.billTo?.phone
+                              ? `Phone: ${bill?.invoice?.billTo?.phone}`
+                              : null}
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
 
@@ -274,7 +285,7 @@ const ViewInvoiceApp = ({ bill }: ViewInvoiceAppProps) => {
                     Handled By:
                   </div>
                   <div className="fw-bold text-gray-800 fs-6">
-                    {bill?.handledBy || "N/A"}
+                    {bill?.invoice?.handledBy || "N/A"}
                   </div>
                 </div>
 

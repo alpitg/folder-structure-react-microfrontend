@@ -5,21 +5,28 @@ import type {
   IArtDetail,
   ITotalCalculationInput,
 } from "../../interfaces/total-calculation.model";
-import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
-import InvoiceApp from "./invoice/invoice";
+import { ADDITIONAL_SERVICE_CODE } from "../../constants/global/global-key.const";
 import ViewInvoiceApp from "./invoice/view/view-invoice";
 import { fetchFrameTypes } from "../../app/features/master/frame-types/frame-types.thunk";
 import { fetchGlassTypes } from "../../app/features/master/glass-types/glass-types.thunk";
+import { fetchMiscCharges } from "../../app/features/master/misc-charges/misc-charges.thunk";
+import { fetchProfile } from "../../app/features/core/profile/profile-detail.thunk";
 import { generateQRCode } from "../../utils/qrcode.util";
 
 const BillCalculationApp = () => {
   const {
-    glassTypes: { glassTypes },
-    frameTypes: { frameTypes },
-    miscCharges: { miscCharges },
-  } = useSelector((state: AppState) => state?.master);
+    master: {
+      glassTypes: { glassTypes },
+      frameTypes: { frameTypes },
+      miscCharges: { miscCharges },
+    },
+    core: {
+      profile: { profile },
+    },
+  } = useSelector((state: AppState) => state);
 
   const dispatch = useDispatch<AppDispatch>();
   // const [isTableView, setIsTableView] = useState(false);
@@ -45,6 +52,11 @@ const BillCalculationApp = () => {
       : parseFloat(item.width) || 0 * parseFloat(item.height) || 0;
   };
 
+  /**
+   * Cost of one item calcuated here
+   * @param item
+   * @returns
+   */
   const unitCost = (item: IArtDetail): number => {
     const quantity = parseInt(String(item.quantity)) || 1;
 
@@ -66,16 +78,32 @@ const BillCalculationApp = () => {
     // Calculate total frame cost based on area
     const totalFrameCost = frameCostPerInch;
 
-    // Calculate glass cost if glass is enabled and type is selected
+    // Calculate glass cost
     const glassCost = item?.glass?.isEnabled
       ? glassTypes.find((glass) => glass.name === item?.glass?.type)?.rate || 0
       : 0;
 
+    // Calculate varnish cost
+    const varnishCost = item?.additional?.varnish
+      ? miscCharges.find((x) => x.code === ADDITIONAL_SERVICE_CODE.varnish)
+          ?.cost || 0
+      : 0;
+
+    // Calculate routerCut cost
+    const routerCutCost = item?.additional?.routerCut
+      ? miscCharges.find(
+          (x) => x.code === ADDITIONAL_SERVICE_CODE.mdf_router_cutting
+        )?.cost || 0
+      : 0;
+
+    // Calculate lamination cost
+    const laminationCost = item?.additional?.lamination
+      ? miscCharges.find((x) => x.code === ADDITIONAL_SERVICE_CODE.lamination)
+          ?.cost || 0
+      : 0;
+
     // Calculate additional costs
-    const additionalCosts = Object.values(item.additional).reduce(
-      (sum, value) => (value ? sum + 50 : sum), // Assuming each additional service costs ₹50
-      0
-    );
+    const additionalCosts = varnishCost + laminationCost + routerCutCost;
 
     return (
       parseFloat(
@@ -93,7 +121,6 @@ const BillCalculationApp = () => {
 
   const [bill, setBill] = useState<ITotalCalculationInput>({
     customerName: "",
-    issueDate: new Date(),
     likelyDateOfDelivery: "",
     artDetails: [
       {
@@ -138,9 +165,22 @@ const BillCalculationApp = () => {
     miscChargesAmount: 0,
     advancePayment: 0,
     balanceAmount: 0,
-    handledBy: "Owner",
     paymentMode: "Cash",
     paymentStatus: "Pending",
+    invoice: {
+      issueDate: new Date(),
+      billFrom: {
+        name: "",
+        detail: "",
+        phone: "",
+      },
+      billTo: {
+        name: "",
+        detail: "",
+        phone: "",
+      },
+      handledBy: "Owner",
+    },
     createdAt: new Date().toISOString(),
   });
 
@@ -248,6 +288,37 @@ const BillCalculationApp = () => {
   useEffect(() => {
     dispatch(fetchFrameTypes());
     dispatch(fetchGlassTypes());
+    dispatch(fetchMiscCharges());
+    dispatch(fetchProfile()).then((response) => {
+      setBill((prevBill) => ({
+        ...prevBill,
+        invoice: {
+          ...prevBill.invoice,
+          billFrom: {
+            name: response?.payload?.name,
+            detail: response?.payload?.address,
+            phone: response?.payload?.phone,
+          },
+        },
+      }));
+    });
+  }, []);
+
+  useEffect(() => {
+    // Calculate totals when bill changes
+    const cost = calculateTotalAmount();
+    let discountAmount = (cost * bill.discountPercentage) / 100;
+
+    const finalAmount = cost - discountAmount;
+    const balanceAmount = finalAmount - bill.advancePayment;
+
+    setBill((prevBill) => ({
+      ...prevBill,
+      cost,
+      discountAmount,
+      finalAmount,
+      balanceAmount,
+    }));
   }, []);
 
   useEffect(() => {

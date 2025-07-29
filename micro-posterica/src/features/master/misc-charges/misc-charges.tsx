@@ -26,7 +26,7 @@ const MiscChargesMasterApp = () => {
 
       <div className="row">
         {charges.map((charge) => (
-          <div key={charge.id} className="col-md-4 mb-3">
+          <div key={charge.id} className="col-sm-4 g-3">
             <div className="card shadow-sm h-100">
               <div className="card-body">
                 <h5 className="card-title">{charge.name}</h5>

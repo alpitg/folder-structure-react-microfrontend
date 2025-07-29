@@ -26,7 +26,7 @@ const GlassTypesMasterApp = () => {
 
       <div className="row">
         {glassTypes.map((glass) => (
-          <div key={glass.id} className="col-md-4 mb-3">
+          <div key={glass.id} className="col-md-4 g-3">
             <div className="card shadow-sm h-100">
               <div className="card-body">
                 <h5 className="card-title">{glass.name}</h5>

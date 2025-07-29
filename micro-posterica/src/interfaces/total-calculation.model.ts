@@ -19,7 +19,6 @@ export interface IArtDetail {
 
 export interface ITotalCalculationInput {
   customerName: string;
-  issueDate: Date;
   likelyDateOfDelivery: string;
   artDetails: IArtDetail[];
 
@@ -32,9 +31,9 @@ export interface ITotalCalculationInput {
   advancePayment: number;
   balanceAmount: number;
 
-  handledBy: string;
   paymentMode: string;
   paymentStatus: string;
+  invoice: IInvoiceDetail;
   createdAt: string;
 }
 
@@ -60,4 +59,17 @@ export interface IGlass {
   type: string;
   width?: number;
   height?: number;
+}
+
+export interface IInvoiceDetail {
+  issueDate: Date;
+  billFrom: IBillDetail;
+  billTo: IBillDetail;
+  handledBy: string;
+}
+
+export interface IBillDetail {
+  name: string;
+  detail: string;
+  phone: string;
 }
