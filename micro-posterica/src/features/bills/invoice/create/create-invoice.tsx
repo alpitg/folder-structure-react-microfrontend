@@ -33,7 +33,18 @@ const CreateInvoiceApp = () => {
     new TotalCalculationInput()
   );
 
+  const paymentModes = [
+    { name: "UPI", value: "upi" },
+    { name: "Cash", value: "cash" },
+    { name: "Card", value: "card" },
+  ];
+
   //#region methods
+
+  const calculateTotalAmount = (): number => {
+    return bill.artDetails.reduce((cost, item) => cost + item.cost, 0);
+  };
+
   const chargableWidth = (item: IArtDetail) => {
     const width = parseFloat(item.width) || 0;
     const mountingLeft = parseFloat(String(item?.mounting?.left)) || 0;
@@ -164,6 +175,15 @@ const CreateInvoiceApp = () => {
     });
   };
 
+  const handlePaymentChange = (field: string, value: number) => {
+    const validValue = isNaN(value) ? 0 : value;
+
+    setBill({
+      ...bill,
+      [field]: validValue,
+    });
+  };
+
   //#endregion
 
   useEffect(() => {
@@ -185,6 +205,23 @@ const CreateInvoiceApp = () => {
       }));
     });
   }, []);
+
+  useEffect(() => {
+    // Calculate totals when bill changes
+    const cost = calculateTotalAmount();
+    let discountAmount = (cost * bill.discountPercentage) / 100;
+
+    const finalAmount = cost - discountAmount;
+    const balanceAmount = finalAmount - bill.advancePayment;
+
+    setBill((prevBill) => ({
+      ...prevBill,
+      cost,
+      discountAmount,
+      finalAmount,
+      balanceAmount,
+    }));
+  }, [bill.artDetails, bill.discountPercentage, bill.advancePayment]);
 
   return (
     <div className="create-invoice-app">
@@ -677,26 +714,70 @@ const CreateInvoiceApp = () => {
               </div>
 
               <div className="mb-10">
-                <label className="form-label fw-bold fs-6 text-gray-700">
+                <label
+                  className="form-label fw-bold fs-6 text-gray-700"
+                  id="payment-mode"
+                >
                   Payment mode
                 </label>
                 <select
-                  name="currency"
-                  aria-label="Select a Timezone"
-                  className="form-select form-select-solid select2-hidden-accessible"
+                  className="form-select form-select-solid"
+                  value={bill?.invoice?.paymentMode}
+                  name="payment-mode"
+                  onChange={(e) =>
+                    handlePaymentChange(
+                      "invoice.paymentMode",
+                      parseFloat(e.target.value)
+                    )
+                  }
                 >
-                  <option value="">--</option>
-                  <option value="upi">
-                    <b>UPI</b> - Online
-                  </option>
-                  <option value="Cash">
-                    <b>Cash</b>
-                  </option>
-                  <option value="Card">
-                    <b>Credit/Debit card</b>
-                  </option>
+                  <option value="">Select Payment Mode</option>
+                  {paymentModes.map((mode) => (
+                    <option key={mode.name} value={mode.value}>
+                      {mode.name}
+                    </option>
+                  ))}
                 </select>
               </div>
+
+              <div className="d-flex justify-content-end">
+                <div className="mw-300px">
+                  <div className="d-flex flex-stack mb-3">
+                    <div className="fw-semibold pe-10 text-gray-600 fs-7">
+                      Subtotal:
+                    </div>
+                    <div className="text-end fw-bold fs-6 text-gray-800">
+                      ₹ {bill?.finalAmount?.toFixed(2)}
+                    </div>
+                  </div>
+
+                  <div className="d-flex flex-stack mb-3">
+                    <div className="fw-semibold pe-10 text-gray-600 fs-7">
+                      Total:
+                    </div>
+                    <div className="text-end fw-bold fs-6 text-gray-800">
+                      ₹ {bill?.finalAmount?.toFixed(2)}
+                    </div>
+                  </div>
+                  <div className="d-flex flex-stack mb-3">
+                    <div className="fw-semibold pe-10 text-gray-600 fs-7">
+                      Advance Paid:
+                    </div>
+                    <div className="text-end fw-bold fs-6 text-gray-800">
+                      ₹ {bill?.finalAmount?.toFixed(2)}
+                    </div>
+                  </div>
+                  <div className="d-flex flex-stack">
+                    <div className="fw-semibold pe-10 text-gray-600 fs-7">
+                      Amount Due:
+                    </div>
+                    <div className="text-end fw-bold fs-6 text-gray-800">
+                      ₹ {bill?.finalAmount?.toFixed(2)}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div className="separator separator-dashed mb-8"></div>
               <div className="mb-8">
                 <label className="form-check form-switch form-switch-sm form-check-custom form-check-solid flex-stack mb-5">

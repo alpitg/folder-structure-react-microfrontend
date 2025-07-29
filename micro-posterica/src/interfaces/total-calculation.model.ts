@@ -31,8 +31,6 @@ export interface ITotalCalculationInput {
   advancePayment: number;
   balanceAmount: number;
 
-  paymentMode: string;
-  paymentStatus: string;
   invoice: IInvoiceDetail;
   createdAt: string;
 }
@@ -65,6 +63,10 @@ export interface IInvoiceDetail {
   billDate: Date;
   billFrom: IBillDetail;
   billTo: IBillDetail;
+
+  paymentMode: string;
+  paymentStatus: string;
+
   handledBy: string;
 }
 
@@ -88,8 +90,6 @@ export class TotalCalculationInput implements ITotalCalculationInput {
   advancePayment: number;
   balanceAmount: number;
 
-  paymentMode: string;
-  paymentStatus: string;
   invoice: IInvoiceDetail;
   createdAt: string;
 
@@ -105,12 +105,12 @@ export class TotalCalculationInput implements ITotalCalculationInput {
     this.miscChargesAmount = 0;
     this.advancePayment = 0;
     this.balanceAmount = 0;
-    this.paymentMode = "";
-    this.paymentStatus = "";
     this.invoice = {
       billDate: new Date(),
       billFrom: { name: "", detail: "", phone: "" },
       billTo: { name: "", detail: "", phone: "" },
+      paymentMode: "",
+      paymentStatus: "",
       handledBy: "",
     };
     this.createdAt = new Date().toISOString();
@@ -207,12 +207,16 @@ export class InvoiceDetail implements IInvoiceDetail {
   billDate: Date;
   billFrom: IBillDetail;
   billTo: IBillDetail;
+  paymentMode: string;
+  paymentStatus: string;
   handledBy: string;
 
   constructor() {
     this.billDate = new Date();
     this.billFrom = { name: "", detail: "", phone: "" };
     this.billTo = { name: "", detail: "", phone: "" };
+    this.paymentMode = "";
+    this.paymentStatus = "";
     this.handledBy = "";
   }
 }
