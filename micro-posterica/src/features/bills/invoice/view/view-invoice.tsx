@@ -25,13 +25,13 @@ const ViewInvoiceApp = ({ bill }: ViewInvoiceAppProps) => {
 
   const daysCompleted = () => {
     const today = new Date();
-    const issueDate = new Date(bill?.invoice?.issueDate);
+    const billDate = new Date(bill?.invoice?.billDate);
 
     // Strip time from both dates by resetting to midnight
     today.setHours(0, 0, 0, 0);
-    issueDate.setHours(0, 0, 0, 0);
+    billDate.setHours(0, 0, 0, 0);
 
-    const timeDiff = today.getTime() - issueDate.getTime();
+    const timeDiff = today.getTime() - billDate.getTime();
     const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
     return daysDiff > 0 ? daysDiff : 0;
@@ -61,7 +61,7 @@ const ViewInvoiceApp = ({ bill }: ViewInvoiceAppProps) => {
                   <div className="row g-5 mb-11">
                     <div className="col-sm-6">
                       <div className="fw-semibold fs-7 text-gray-600 mb-1">
-                        Issue Date:
+                        Bill Date:
                       </div>
                       <div className="fw-bold fs-6 text-gray-800">
                         {new Date(bill.createdAt).toLocaleDateString("en-US", {
@@ -86,7 +86,7 @@ const ViewInvoiceApp = ({ bill }: ViewInvoiceAppProps) => {
                                 month: "long",
                                 day: "numeric",
                               })
-                            : "N/A"}
+                            : "--"}
                         </span>
                       </div>
                     </div>
@@ -154,13 +154,18 @@ const ViewInvoiceApp = ({ bill }: ViewInvoiceAppProps) => {
                               className="fw-bold text-gray-700 fs-5 text-end"
                             >
                               <td className="d-flex align-items-center pt-6">
-                                <i className="fa fa-genderless text-danger fs-2 me-2"></i>
+                                <i className="bi bi-circle text-danger fs-6 me-2"></i>
                                 {art?.artName}
                               </td>
                               <td className="pt-6">{art?.quantity}</td>
-                              <td className="pt-6">${art.cost.toFixed(2)}</td>
+                              <td className="pt-6">
+                                ₹
+                                {(
+                                  (art?.cost || 0) / art?.quantity || 0
+                                ).toFixed(2)}
+                              </td>
                               <td className="pt-6 text-gray-900 fw-bolder">
-                                ${(art.quantity * art.cost).toFixed(2)}
+                                ₹{art?.cost?.toFixed(2)}
                               </td>
                             </tr>
                           ))}
@@ -175,31 +180,16 @@ const ViewInvoiceApp = ({ bill }: ViewInvoiceAppProps) => {
                             Subtotal:
                           </div>
                           <div className="text-end fw-bold fs-6 text-gray-800">
-                            $ {bill?.finalAmount?.toFixed(2)}
+                            ₹ {bill?.finalAmount?.toFixed(2)}
                           </div>
                         </div>
-                        <div className="d-flex flex-stack mb-3">
-                          <div className="fw-semibold pe-10 text-gray-600 fs-7">
-                            VAT 0%:
-                          </div>
-                          <div className="text-end fw-bold fs-6 text-gray-800">
-                            0.00
-                          </div>
-                        </div>
-                        <div className="d-flex flex-stack mb-3">
-                          <div className="fw-semibold pe-10 text-gray-600 fs-7">
-                            Subtotal + VAT:
-                          </div>
-                          <div className="text-end fw-bold fs-6 text-gray-800">
-                            $ {bill?.finalAmount?.toFixed(2)}
-                          </div>
-                        </div>
+
                         <div className="d-flex flex-stack mb-3">
                           <div className="fw-semibold pe-10 text-gray-600 fs-7">
                             Total:
                           </div>
                           <div className="text-end fw-bold fs-6 text-gray-800">
-                            $ {bill?.finalAmount?.toFixed(2)}
+                            ₹ {bill?.finalAmount?.toFixed(2)}
                           </div>
                         </div>
                         <div className="d-flex flex-stack mb-3">
@@ -207,7 +197,7 @@ const ViewInvoiceApp = ({ bill }: ViewInvoiceAppProps) => {
                             Advance Paid:
                           </div>
                           <div className="text-end fw-bold fs-6 text-gray-800">
-                            $ {bill?.finalAmount?.toFixed(2)}
+                            ₹ {bill?.finalAmount?.toFixed(2)}
                           </div>
                         </div>
                         <div className="d-flex flex-stack">
@@ -215,10 +205,20 @@ const ViewInvoiceApp = ({ bill }: ViewInvoiceAppProps) => {
                             Amount Due:
                           </div>
                           <div className="text-end fw-bold fs-6 text-gray-800">
-                            $ {bill?.finalAmount?.toFixed(2)}
+                            ₹ {bill?.finalAmount?.toFixed(2)}
                           </div>
                         </div>
                       </div>
+                    </div>
+
+                    <div className="flex-grow-1 p-10">
+                      <p className="text-gray-600">Terms & Conditions:</p>
+                      <span className="text-gray-800">
+                        Goods once sold will not be taken back or exchanged.
+                        Please check all items and quantities before leaving the
+                        counter. No warranty on items damaged due to misuse or
+                        mishandling.
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -273,10 +273,10 @@ const ViewInvoiceApp = ({ bill }: ViewInvoiceAppProps) => {
                     Customer Name
                   </div>
                   <div className="fw-bold fs-6 text-gray-800">
-                    {bill?.customerName || "N/A"}
-                    <a href="#" className="link-primary ps-1">
+                    {bill?.customerName || "--"}
+                    {/* <a href="#" className="link-primary ps-1">
                       (View Detail)
-                    </a>
+                    </a> */}
                   </div>
                 </div>
 
@@ -285,7 +285,7 @@ const ViewInvoiceApp = ({ bill }: ViewInvoiceAppProps) => {
                     Handled By:
                   </div>
                   <div className="fw-bold text-gray-800 fs-6">
-                    {bill?.invoice?.handledBy || "N/A"}
+                    {bill?.invoice?.handledBy || "--"}
                   </div>
                 </div>
 

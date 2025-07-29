@@ -168,7 +168,7 @@ const BillCalculationApp = () => {
     paymentMode: "Cash",
     paymentStatus: "Pending",
     invoice: {
-      issueDate: new Date(),
+      billDate: new Date(),
       billFrom: {
         name: "",
         detail: "",

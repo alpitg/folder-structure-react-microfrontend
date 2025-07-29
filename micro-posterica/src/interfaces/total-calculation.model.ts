@@ -62,7 +62,7 @@ export interface IGlass {
 }
 
 export interface IInvoiceDetail {
-  issueDate: Date;
+  billDate: Date;
   billFrom: IBillDetail;
   billTo: IBillDetail;
   handledBy: string;
