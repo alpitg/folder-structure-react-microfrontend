@@ -60,7 +60,7 @@ export interface IGlass {
 }
 
 export interface IInvoiceDetail {
-  billDate: Date;
+  billDate: string;
   billFrom: IBillDetail;
   billTo: IBillDetail;
 

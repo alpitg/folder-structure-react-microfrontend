@@ -105,6 +105,13 @@ const CreateInvoiceApp = () => {
     });
   };
 
+  const handleDateChange = (field: string, value: string) => {
+    setBill({
+      ...bill,
+      [field]: value,
+    });
+  };
+
   const handleInvoiceChange = (
     field: keyof IInvoiceDetail,
     value: string | number | object
@@ -196,6 +203,10 @@ const CreateInvoiceApp = () => {
                         placeholder="Select date"
                         name="invoice_date"
                         type="date"
+                        value={bill?.invoice?.billDate || ""}
+                        onChange={(e) =>
+                          handleInvoiceChange("billDate", e.target.value)
+                        }
                       />
                       <i className="ki-duotone ki-down fs-4 position-absolute ms-4 end-0"></i>
                     </div>
@@ -210,6 +221,13 @@ const CreateInvoiceApp = () => {
                         placeholder="Select date"
                         name="invoice_due_date"
                         type="date"
+                        value={bill?.likelyDateOfDelivery || ""}
+                        onChange={(e) =>
+                          handleDateChange(
+                            "likelyDateOfDelivery",
+                            e.target.value
+                          )
+                        }
                       />
                       <i className="ki-duotone ki-down fs-4 position-absolute end-0 ms-4"></i>
                     </div>
