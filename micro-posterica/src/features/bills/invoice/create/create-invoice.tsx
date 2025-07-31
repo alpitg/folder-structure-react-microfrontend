@@ -239,13 +239,9 @@ const CreateInvoiceApp = () => {
             <div className="card-body p-12">
               <form action="">
                 <div className="d-flex flex-center ">
-                  <span className="fs-2 fw-bold text-gray-800">Invoice #</span>
-                  <input
-                    type="text"
-                    className="form-control form-control-flush fw-bold text-muted fs-3 w-125px"
-                    value="2021001"
-                    placeholder="..."
-                  />
+                  <span className="fs-2 fw-bold text-gray-800">
+                    Invoice #2021001
+                  </span>
                 </div>
 
                 <div className="d-flex flex-column align-items-start flex-xxl-row">
@@ -440,7 +436,7 @@ const CreateInvoiceApp = () => {
                           <br />
                           <div className="row g-3">
                             <div className="col-md-12">
-                              <div className="form-check form-check-sm">
+                              <label className="form-check form-switch form-check-custom form-check-solid">
                                 <input
                                   className="form-check-input"
                                   type="checkbox"
@@ -453,8 +449,10 @@ const CreateInvoiceApp = () => {
                                     })
                                   }
                                 />
-                                <label htmlFor="mounting">Mounting</label>
-                              </div>
+                                <span className="form-check-label">
+                                  Mounting
+                                </span>
+                              </label>
                             </div>
 
                             <div className="col-md-12 d-flex flex-center">
@@ -465,6 +463,7 @@ const CreateInvoiceApp = () => {
                                       <input
                                         type="number"
                                         min={0}
+                                        id="top-mounting"
                                         className="form-control form-control-solid side-input"
                                         placeholder="cm"
                                         value={item?.mounting?.top || ""}
@@ -480,6 +479,7 @@ const CreateInvoiceApp = () => {
                                       <input
                                         type="number"
                                         min={0}
+                                        id="right-mounting"
                                         className="form-control form-control-solid side-input"
                                         placeholder="cm"
                                         value={item?.mounting?.right || ""}
@@ -495,6 +495,7 @@ const CreateInvoiceApp = () => {
                                       <input
                                         type="number"
                                         min={0}
+                                        id="bottom-mounting"
                                         className="form-control form-control-solid side-input"
                                         placeholder="cm"
                                         value={item?.mounting?.bottom || ""}
@@ -510,6 +511,7 @@ const CreateInvoiceApp = () => {
                                       <input
                                         type="number"
                                         min={0}
+                                        id="left-mounting"
                                         className="form-control form-control-solid side-input"
                                         placeholder="cm"
                                         value={item?.mounting?.left || ""}
@@ -532,7 +534,7 @@ const CreateInvoiceApp = () => {
                           <br />
                           <div className="row g-3">
                             <div className="col-md-12">
-                              <div className="form-check form-check-sm">
+                              <label className="form-check form-switch form-check-custom form-check-solid">
                                 <input
                                   className="form-check-input"
                                   type="checkbox"
@@ -545,14 +547,15 @@ const CreateInvoiceApp = () => {
                                     })
                                   }
                                 />
-                                <label htmlFor="glass">Glass</label>
-                              </div>
+                                <span className="form-check-label">Glass</span>
+                              </label>
                             </div>
 
                             <div className="col-md-12">
                               {item?.glass?.isEnabled &&
                                 glassTypes.map((glass) => (
                                   <label
+                                    key={glass?.id}
                                     className={`btn btn-outline btn-outline-dashed btn-active-light-primary d-flex flex-stack text-start p-6 mb-5 g-3 ${
                                       glass?.name === item?.glass?.type
                                         ? " active"
@@ -609,7 +612,7 @@ const CreateInvoiceApp = () => {
                             <option value="">Select Frame Type</option>
                             {frameTypes.map((frame) => (
                               <option key={frame.id} value={frame.name}>
-                                {frame.name} {frame.category} - (₹{" "}
+                                {frame.name} {frame.category} - (₹
                                 {frame.baseCost})
                               </option>
                             ))}
@@ -632,13 +635,14 @@ const CreateInvoiceApp = () => {
                         </div>
                       </div>
 
-                      <div className="row g-3">
-                        <div className="col-sm-4 border border-gray-300 border-dashed rounded py-3 px-4">
-                          <div className="form-check form-check-sm">
+                      <div className="row g-5">
+                        <div className="col-sm-4">
+                          <label className="form-check form-switch form-check-custom form-check-solid">
                             <input
                               className="form-check-input"
                               type="checkbox"
                               id="varnish"
+                              value="1"
                               checked={item?.additional?.varnish}
                               onChange={(e) =>
                                 handleInputChange(index, "additional", {
@@ -647,16 +651,17 @@ const CreateInvoiceApp = () => {
                                 })
                               }
                             />
-                            <label htmlFor="varnish">Varnish</label>
-                          </div>
+                            <span className="form-check-label">Varnish</span>
+                          </label>
                         </div>
 
-                        <div className="col-sm-4 border border-gray-300 border-dashed rounded py-3 px-4">
-                          <div className="form-check form-check-sm">
+                        <div className="col-sm-4">
+                          <label className="form-check form-switch form-check-custom form-check-solid">
                             <input
                               className="form-check-input"
                               type="checkbox"
-                              id="Lamination"
+                              id="lamination"
+                              value="1"
                               checked={item?.additional?.lamination}
                               onChange={(e) =>
                                 handleInputChange(index, "additional", {
@@ -665,16 +670,17 @@ const CreateInvoiceApp = () => {
                                 })
                               }
                             />
-                            <label htmlFor="Lamination">Lamination</label>
-                          </div>
+                            <span className="form-check-label">Lamination</span>
+                          </label>
                         </div>
 
-                        <div className="col-sm-4 border border-gray-300 border-dashed rounded py-3 px-4">
-                          <div className="form-check form-check-sm">
+                        <div className="col-sm-4">
+                          <label className="form-check form-switch form-check-custom form-check-solid">
                             <input
                               className="form-check-input"
                               type="checkbox"
                               id="routerCut"
+                              value="1"
                               checked={item?.additional?.routerCut}
                               onChange={(e) =>
                                 handleInputChange(index, "additional", {
@@ -683,8 +689,8 @@ const CreateInvoiceApp = () => {
                                 })
                               }
                             />
-                            <label htmlFor="routerCut">Router Cut</label>
-                          </div>
+                            <span className="form-check-label">Router Cut</span>
+                          </label>
                         </div>
                       </div>
                       <div className="separator separator-dashed my-10"></div>
@@ -744,15 +750,6 @@ const CreateInvoiceApp = () => {
                 <div className="mw-300px">
                   <div className="d-flex flex-stack mb-3">
                     <div className="fw-semibold pe-10 text-gray-600 fs-7">
-                      Subtotal:
-                    </div>
-                    <div className="text-end fw-bold fs-6 text-gray-800">
-                      ₹ {bill?.finalAmount?.toFixed(2)}
-                    </div>
-                  </div>
-
-                  <div className="d-flex flex-stack mb-3">
-                    <div className="fw-semibold pe-10 text-gray-600 fs-7">
                       Total:
                     </div>
                     <div className="text-end fw-bold fs-6 text-gray-800">
@@ -764,7 +761,7 @@ const CreateInvoiceApp = () => {
                       Advance Paid:
                     </div>
                     <div className="text-end fw-bold fs-6 text-gray-800">
-                      ₹ {bill?.finalAmount?.toFixed(2)}
+                      ₹ {bill?.advancePayment?.toFixed(2)}
                     </div>
                   </div>
                   <div className="d-flex flex-stack">

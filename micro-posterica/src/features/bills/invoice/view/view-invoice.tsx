@@ -247,7 +247,7 @@ const ViewInvoiceApp = ({ bill }: ViewInvoiceAppProps) => {
                   <div className="fw-bold text-gray-800 fs-6">
                     <span className="fs-7 text-success d-flex align-items-center">
                       <span className="bullet bullet-dot bg-success mx-2"></span>
-                      {bill?.paymentMode ?? "Cash"}
+                      {bill?.invoice?.paymentMode ?? "Cash"}
                     </span>
                   </div>
                 </div>
