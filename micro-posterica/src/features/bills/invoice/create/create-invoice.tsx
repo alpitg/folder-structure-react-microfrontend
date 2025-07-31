@@ -292,7 +292,7 @@ const CreateInvoiceApp = () => {
                             type="text"
                             className="form-control form-control-solid fs-6 fw-bold"
                             placeholder="Art Name"
-                            name="artName"
+                            name={"artName" + index + item?.artName}
                             value={item?.artName || `Art ${index + 1}`}
                             onChange={(e) =>
                               handleInputChange(
@@ -479,7 +479,7 @@ const CreateInvoiceApp = () => {
                                 <input
                                   className="form-check-input"
                                   type="checkbox"
-                                  id="glass"
+                                  id={"glass-" + index}
                                   checked={item?.glass?.isEnabled}
                                   onChange={(e) =>
                                     handleInputChange(index, "glass", {
@@ -496,7 +496,7 @@ const CreateInvoiceApp = () => {
                               {item?.glass?.isEnabled &&
                                 glassTypes.map((glass) => (
                                   <label
-                                    key={glass?.id}
+                                    key={glass?.id + index}
                                     className={`btn btn-outline btn-outline-dashed btn-active-light-primary d-flex flex-stack text-start p-6 mb-5 g-3 ${
                                       glass?.name === item?.glass?.type
                                         ? " active"
@@ -511,7 +511,7 @@ const CreateInvoiceApp = () => {
                                           checked={
                                             glass?.name === item?.glass?.type
                                           }
-                                          name="glass"
+                                          name={glass?.name + index}
                                           value={glass?.name}
                                           onChange={(e) =>
                                             handleInputChange(index, "glass", {
@@ -552,7 +552,7 @@ const CreateInvoiceApp = () => {
                           >
                             <option value="">Select Frame Type</option>
                             {frameTypes.map((frame) => (
-                              <option key={frame.id} value={frame.name}>
+                              <option key={frame.id} value={frame.name + index}>
                                 {frame.name} {frame.category} - (₹
                                 {frame.baseCost})
                               </option>
