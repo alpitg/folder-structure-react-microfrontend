@@ -54,9 +54,9 @@ const CreateInvoiceApp = () => {
     const updatedArtDetails = bill.artDetails.filter((_, i) => i !== index);
     const cost = updatedArtDetails.reduce((sum, item) => sum + item.cost, 0);
     const discountAmount = (cost * bill.discountPercentage) / 100;
-    const finalAmount = cost - discountAmount;
+    const finalAmount = cost;
 
-    const balanceAmount = finalAmount - bill.advancePayment;
+    const balanceAmount = cost - discountAmount - bill.advancePayment;
 
     setBill({
       ...bill,
@@ -148,8 +148,8 @@ const CreateInvoiceApp = () => {
     const cost = calculateTotalAmount();
     // let discountAmount = (cost * bill.discountPercentage) / 100;
 
-    const finalAmount = cost - bill?.discountAmount;
-    const balanceAmount = finalAmount - bill?.advancePayment;
+    const finalAmount = cost;
+    const balanceAmount = cost - bill?.discountAmount - bill?.advancePayment;
 
     setBill((prevBill) => ({
       ...prevBill,
@@ -306,6 +306,7 @@ const CreateInvoiceApp = () => {
                         <div className="col-sm-2">
                           <input
                             type="number"
+                            min={0}
                             className="form-control form-control-solid"
                             placeholder="Quantity"
                             name="Quantity"
@@ -655,8 +656,21 @@ const CreateInvoiceApp = () => {
           <div className="card">
             <div className="card-body p-10">
               <div>
-                <h6 className="mb-8 fw-bolder text-gray-600 text-hover-primary">
+                <h6 className="d-flex align-items-center mb-8 fw-bolder text-gray-600 text-hover-primary justify-content-between">
                   PAYMENT DETAILS
+                  {bill?.balanceAmount > 0 && (
+                    <span className="badge badge-light-warning">
+                      Pending Payment
+                    </span>
+                  )}
+                  {bill?.balanceAmount < 0 && (
+                    <span className="badge badge-light-danger">Overpaid</span>
+                  )}
+                  {bill?.balanceAmount === 0 && (
+                    <span className="badge badge-light-success">
+                      No Payment Due
+                    </span>
+                  )}
                 </h6>
               </div>
 
@@ -684,7 +698,7 @@ const CreateInvoiceApp = () => {
                 </select>
               </div>
 
-              <div className="d-flex justify-content-end">
+              <div className="d-flex justify-content-end mb-8">
                 <div className="mw-300px">
                   <div className="d-flex flex-stack mb-3">
                     <div className="fw-semibold pe-10 text-gray-600 fs-7">
@@ -692,27 +706,6 @@ const CreateInvoiceApp = () => {
                     </div>
                     <div className="text-end fw-bold fs-6 text-gray-800">
                       ₹ {bill?.finalAmount?.toFixed(2)}
-                    </div>
-                  </div>
-                  <div className="d-flex flex-stack mb-3">
-                    <div className="fw-semibold pe-10 text-gray-600 fs-7">
-                      Advance Paid:
-                    </div>
-                    <div className="text-end fw-bold fs-6 text-gray-800">
-                      <input
-                        type="number"
-                        min={0}
-                        id="advancePayment"
-                        className="form-control form-control-solid hide-spin-button text-end"
-                        placeholder="Height (cm)"
-                        value={bill?.advancePayment}
-                        onChange={(e) =>
-                          handlePaymentChange(
-                            "advancePayment",
-                            parseFloat(e.target.value)
-                          )
-                        }
-                      />
                     </div>
                   </div>
                   <div className="d-flex flex-stack mb-3">
@@ -736,6 +729,28 @@ const CreateInvoiceApp = () => {
                       />
                     </div>
                   </div>
+                  <div className="d-flex flex-stack mb-3">
+                    <div className="fw-semibold pe-10 text-gray-600 fs-7">
+                      Advance Paid:
+                    </div>
+                    <div className="text-end fw-bold fs-6 text-gray-800">
+                      <input
+                        type="number"
+                        min={0}
+                        id="advancePayment"
+                        className="form-control form-control-solid hide-spin-button text-end"
+                        placeholder="Height (cm)"
+                        value={bill?.advancePayment}
+                        onChange={(e) =>
+                          handlePaymentChange(
+                            "advancePayment",
+                            parseFloat(e.target.value)
+                          )
+                        }
+                      />
+                    </div>
+                  </div>
+
                   <div className="d-flex flex-stack">
                     <div className="fw-semibold pe-10 text-gray-600 fs-7">
                       Amount Due:
@@ -747,7 +762,7 @@ const CreateInvoiceApp = () => {
                 </div>
               </div>
 
-              <div className="separator separator-dashed mb-8"></div>
+              {/*<div className="separator separator-dashed mb-8"></div>
               <div className="mb-8">
                 <label className="form-check form-switch form-switch-sm form-check-custom form-check-solid flex-stack mb-5">
                   <span className="form-check-label ms-0 fw-bold fs-6 text-gray-700">
@@ -771,11 +786,11 @@ const CreateInvoiceApp = () => {
                   </span>
                   <input className="form-check-input" type="checkbox" />
                 </label>
-              </div>
+              </div> */}
               <div className="separator separator-dashed mb-8"></div>
               <div className="mb-0">
                 <div className="row mb-5">
-                  <div className="col">
+                  {/* <div className="col">
                     <a
                       href="#"
                       className="btn btn-light btn-active-light-primary w-100"
@@ -790,7 +805,7 @@ const CreateInvoiceApp = () => {
                     >
                       Download
                     </a>
-                  </div>
+                  </div> */}
                 </div>
                 <button
                   type="submit"
