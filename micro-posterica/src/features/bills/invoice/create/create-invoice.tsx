@@ -8,12 +8,13 @@ import {
   ArtDetail,
   TotalCalculationInput,
   type IArtDetail,
+  type IInvoiceDetail,
   type ITotalCalculationInput,
 } from "../../../../interfaces/total-calculation.model";
 import { fetchFrameTypes } from "../../../../app/features/master/frame-types/frame-types.thunk";
 import { fetchGlassTypes } from "../../../../app/features/master/glass-types/glass-types.thunk";
 import { fetchMiscCharges } from "../../../../app/features/master/misc-charges/misc-charges.thunk";
-import { ADDITIONAL_SERVICE_CODE } from "../../../../constants/global/global-key.const";
+import { BillCalculation } from "../../utils/bill-calculation.util";
 
 const CreateInvoiceApp = () => {
   const {
@@ -21,9 +22,6 @@ const CreateInvoiceApp = () => {
       glassTypes: { glassTypes },
       frameTypes: { frameTypes },
       miscCharges: { miscCharges },
-    },
-    core: {
-      profile: { profile },
     },
   } = useSelector((state: AppState) => state);
 
@@ -43,89 +41,6 @@ const CreateInvoiceApp = () => {
 
   const calculateTotalAmount = (): number => {
     return bill.artDetails.reduce((cost, item) => cost + item.cost, 0);
-  };
-
-  const chargableWidth = (item: IArtDetail) => {
-    const width = parseFloat(item.width) || 0;
-    const mountingLeft = parseFloat(String(item?.mounting?.left)) || 0;
-    const mountingRight = parseFloat(String(item?.mounting?.right)) || 0;
-    return width + mountingLeft + mountingRight;
-  };
-
-  const chargableHeight = (item: IArtDetail) => {
-    const height = parseFloat(item.height) || 0;
-    const mountingTop = parseFloat(String(item?.mounting?.top)) || 0;
-    const mountingBottom = parseFloat(String(item?.mounting?.bottom)) || 0;
-    return height + mountingTop + mountingBottom;
-  };
-
-  const totalItemArea = (item: IArtDetail) => {
-    return item?.mounting?.isEnabled
-      ? chargableWidth(item) * chargableHeight(item)
-      : parseFloat(item.width) || 0 * parseFloat(item.height) || 0;
-  };
-
-  /**
-   * Cost of one item calcuated here
-   * @param item
-   * @returns
-   */
-  const unitCost = (item: IArtDetail): number => {
-    const quantity = parseInt(String(item.quantity)) || 1;
-
-    // Calculate area with mounting if enabled
-    const area = totalItemArea(item);
-
-    // const frame = item.frame.type
-    //   ? frameTypes.find((frame) => frame.name === item.frame.type)
-    //   : null;
-    // const frameWidth = chargableWidth(item);
-    // const frameHeight = chargableHeight(item);
-    // const frameRate = frame ? frame.baseCost || 0 : 0;
-    // const frameCostPerInch = frameRate / (frameWidth * frameHeight);
-
-    // Calculate frame cost per inch
-    const frameCostPerInch =
-      frameTypes.find((frame) => frame.name === item.frame.type)?.baseCost || 0;
-
-    // Calculate total frame cost based on area
-    const totalFrameCost = frameCostPerInch;
-
-    // Calculate glass cost
-    const glassCost = item?.glass?.isEnabled
-      ? glassTypes.find((glass) => glass.name === item?.glass?.type)?.rate || 0
-      : 0;
-
-    // Calculate varnish cost
-    const varnishCost = item?.additional?.varnish
-      ? miscCharges.find((x) => x.code === ADDITIONAL_SERVICE_CODE.varnish)
-          ?.cost || 0
-      : 0;
-
-    // Calculate routerCut cost
-    const routerCutCost = item?.additional?.routerCut
-      ? miscCharges.find(
-          (x) => x.code === ADDITIONAL_SERVICE_CODE.mdf_router_cutting
-        )?.cost || 0
-      : 0;
-
-    // Calculate lamination cost
-    const laminationCost = item?.additional?.lamination
-      ? miscCharges.find((x) => x.code === ADDITIONAL_SERVICE_CODE.lamination)
-          ?.cost || 0
-      : 0;
-
-    // Calculate additional costs
-    const additionalCosts = varnishCost + laminationCost + routerCutCost;
-
-    return (
-      parseFloat(
-        (
-          (area * glassCost + totalFrameCost + additionalCosts) *
-          quantity
-        ).toFixed(2)
-      ) || 0
-    );
   };
 
   const handleAddItem = () => {
@@ -166,8 +81,14 @@ const CreateInvoiceApp = () => {
       [field]: value,
     };
 
+    const unitCost = new BillCalculation(
+      frameTypes,
+      glassTypes,
+      miscCharges
+    ).unitCost(updatedArtDetails[index]);
+
     // Auto-calculate total for the item
-    updatedArtDetails[index].cost = unitCost(updatedArtDetails[index]);
+    updatedArtDetails[index].cost = unitCost;
 
     setBill({
       ...bill,
@@ -182,6 +103,22 @@ const CreateInvoiceApp = () => {
       ...bill,
       [field]: validValue,
     });
+  };
+
+  const handleInvoiceChange = (
+    field: keyof IInvoiceDetail,
+    value: string | number | object
+  ) => {
+    setBill({
+      ...bill,
+      invoice: {
+        ...bill.invoice,
+        [field]: value,
+      },
+    });
+  };
+  const handleInvoice = () => {
+    console.log(bill);
   };
 
   //#endregion
@@ -209,19 +146,23 @@ const CreateInvoiceApp = () => {
   useEffect(() => {
     // Calculate totals when bill changes
     const cost = calculateTotalAmount();
-    let discountAmount = (cost * bill.discountPercentage) / 100;
+    // let discountAmount = (cost * bill.discountPercentage) / 100;
 
-    const finalAmount = cost - discountAmount;
-    const balanceAmount = finalAmount - bill.advancePayment;
+    const finalAmount = cost - bill?.discountAmount;
+    const balanceAmount = finalAmount - bill?.advancePayment;
 
     setBill((prevBill) => ({
       ...prevBill,
       cost,
-      discountAmount,
       finalAmount,
       balanceAmount,
     }));
-  }, [bill.artDetails, bill.discountPercentage, bill.advancePayment]);
+  }, [
+    bill?.artDetails,
+    bill?.discountAmount,
+    bill?.discountPercentage,
+    bill?.advancePayment,
+  ]);
 
   return (
     <div className="create-invoice-app">
@@ -731,10 +672,7 @@ const CreateInvoiceApp = () => {
                   value={bill?.invoice?.paymentMode}
                   name="payment-mode"
                   onChange={(e) =>
-                    handlePaymentChange(
-                      "invoice.paymentMode",
-                      parseFloat(e.target.value)
-                    )
+                    handleInvoiceChange("paymentMode", e.target.value)
                   }
                 >
                   <option value="">Select Payment Mode</option>
@@ -761,7 +699,41 @@ const CreateInvoiceApp = () => {
                       Advance Paid:
                     </div>
                     <div className="text-end fw-bold fs-6 text-gray-800">
-                      ₹ {bill?.advancePayment?.toFixed(2)}
+                      <input
+                        type="number"
+                        min={0}
+                        id="advancePayment"
+                        className="form-control form-control-solid hide-spin-button text-end"
+                        placeholder="Height (cm)"
+                        value={bill?.advancePayment}
+                        onChange={(e) =>
+                          handlePaymentChange(
+                            "advancePayment",
+                            parseFloat(e.target.value)
+                          )
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="d-flex flex-stack mb-3">
+                    <div className="fw-semibold pe-10 text-gray-600 fs-7">
+                      Discount:
+                    </div>
+                    <div className="text-end fw-bold fs-6 text-gray-800">
+                      <input
+                        type="number"
+                        min={0}
+                        id="discountAmount"
+                        className="form-control form-control-solid hide-spin-button text-end"
+                        placeholder="Height (cm)"
+                        value={bill?.discountAmount}
+                        onChange={(e) =>
+                          handlePaymentChange(
+                            "discountAmount",
+                            parseFloat(e.target.value)
+                          )
+                        }
+                      />
                     </div>
                   </div>
                   <div className="d-flex flex-stack">
@@ -769,7 +741,7 @@ const CreateInvoiceApp = () => {
                       Amount Due:
                     </div>
                     <div className="text-end fw-bold fs-6 text-gray-800">
-                      ₹ {bill?.finalAmount?.toFixed(2)}
+                      ₹ {bill?.balanceAmount?.toFixed(2)}
                     </div>
                   </div>
                 </div>
@@ -824,6 +796,7 @@ const CreateInvoiceApp = () => {
                   type="submit"
                   className="btn btn-primary w-100"
                   id="kt_invoice_submit_button"
+                  onClick={handleInvoice}
                 >
                   <i className="ki-duotone ki-triangle fs-3"></i> Send Invoice
                 </button>
