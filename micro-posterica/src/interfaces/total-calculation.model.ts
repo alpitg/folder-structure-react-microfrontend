@@ -106,7 +106,7 @@ export class TotalCalculationInput implements ITotalCalculationInput {
     this.advancePayment = 0;
     this.balanceAmount = 0;
     this.invoice = {
-      billDate: new Date(),
+      billDate: new Date().toDateString(),
       billFrom: { name: "", detail: "", phone: "" },
       billTo: { name: "", detail: "", phone: "" },
       paymentMode: "",
@@ -204,7 +204,7 @@ export class Glass implements IGlass {
 }
 
 export class InvoiceDetail implements IInvoiceDetail {
-  billDate: Date;
+  billDate: string;
   billFrom: IBillDetail;
   billTo: IBillDetail;
   paymentMode: string;
@@ -212,7 +212,7 @@ export class InvoiceDetail implements IInvoiceDetail {
   handledBy: string;
 
   constructor() {
-    this.billDate = new Date();
+    this.billDate = new Date()?.toDateString() || "";
     this.billFrom = { name: "", detail: "", phone: "" };
     this.billTo = { name: "", detail: "", phone: "" };
     this.paymentMode = "";
