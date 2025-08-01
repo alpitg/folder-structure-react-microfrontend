@@ -826,31 +826,14 @@ const CreateInvoiceApp = () => {
               </div> */}
               <div className="separator separator-dashed mb-8"></div>
               <div className="mb-0">
-                <div className="row mb-5">
-                  {/* <div className="col">
-                    <a
-                      href="#"
-                      className="btn btn-light btn-active-light-primary w-100"
-                    >
-                      Preview
-                    </a>
-                  </div>
-                  <div className="col">
-                    <a
-                      href="#"
-                      className="btn btn-light btn-active-light-primary w-100"
-                    >
-                      Download
-                    </a>
-                  </div> */}
-                </div>
                 <button
                   type="submit"
                   className="btn btn-primary w-100"
                   id="kt_invoice_submit_button"
                   onClick={handleInvoice}
                 >
-                  <i className="ki-duotone ki-triangle fs-3"></i> Send Invoice
+                  <i className="ki-duotone ki-triangle fs-3"></i> Create Bill
+                  Entry
                 </button>
               </div>
             </div>

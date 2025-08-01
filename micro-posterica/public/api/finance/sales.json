@@ -1,0 +1,77 @@
+{
+  "totalCount": 10,
+  "data": [
+    {
+      "advancePayment": 2000,
+      "artDetails": [
+        {
+          "artName": "Sunset Over the Hills",
+          "artDescription": "A vibrant acrylic painting capturing the golden hues of sunset.",
+          "width": "60",
+          "height": "45",
+          "quantity": 1,
+          "cost": 4500,
+          "frame": {
+            "type": "Wooden Box Frame",
+            "color": "Walnut Brown",
+            "width": 65,
+            "height": 50
+          },
+          "glass": {
+            "isEnabled": true,
+            "type": "Non-Reflective",
+            "width": 65,
+            "height": 50
+          },
+          "mounting": {
+            "isEnabled": true,
+            "top": 2,
+            "right": 2,
+            "bottom": 2,
+            "left": 2
+          },
+          "additional": {
+            "varnish": true,
+            "lamination": false,
+            "routerCut": false
+          }
+        }
+      ],
+      "balanceAmount": 1500,
+      "cost": 4500,
+      "createdAt": "2025-08-01T19:23:24.429Z",
+      "customerName": "Rohit Sharma",
+      "discountAmount": 500,
+      "discountPercentage": 10,
+      "finalAmount": 4000,
+      "invoice": {
+        "billDate": "Sat Aug 02 2025",
+        "billFrom": {
+          "name": "Posterica Wall Krafts",
+          "detail": "Shop number 12, R K Lifespaces Shopping Complex, Green Dr Rd, Wakad, Pune, Maharashtra 411057",
+          "phone": "093703 19247"
+        },
+        "billTo": {
+          "name": "Rohit Sharma",
+          "detail": "Flat 204, Silver Crest Residency, Baner, Pune",
+          "phone": "9876543210"
+        }
+      },
+      "handledBy": "Sneha Patil",
+      "paymentMode": "UPI",
+      "paymentStatus": "Partially Paid",
+      "likelyDateOfDelivery": "2025-08-10",
+      "miscCharges": [
+        {
+          "label": "Delivery",
+          "amount": 200
+        },
+        {
+          "label": "Packaging",
+          "amount": 100
+        }
+      ],
+      "miscChargesAmount": 300
+    }
+  ]
+}

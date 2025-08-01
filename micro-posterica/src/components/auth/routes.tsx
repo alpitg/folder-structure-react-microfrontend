@@ -36,6 +36,11 @@ const ViewInvoiceApp = lazy(
   () => import("../../features/bills/invoice/view/view-invoice")
 );
 
+const SalesApp = lazy(() => import("../../features/finance/sales/sales"));
+const OrderEditApp = lazy(
+  () => import("../../features/finance/sales/order/edit/order-edit")
+);
+
 const RoutesApp = () => {
   return (
     <Suspense fallback={<div>{<LoadingApp />}</div>}>
@@ -49,11 +54,17 @@ const RoutesApp = () => {
               element={<AdministrationApp />}
             />
             <Route path={ROUTE_URL.APP_SETTINGS} element={<SettingsApp />} />
+
+            <Route path={ROUTE_URL.FINANCE.SALES.BASE} element={<SalesApp />} />
+            <Route
+              path={ROUTE_URL.FINANCE.SALES.EDIT}
+              element={<OrderEditApp />}
+            />
+
             <Route
               path={ROUTE_URL.BILL_CALCULATION}
               element={<BillCalculationApp />}
             />
-
             <Route
               path={ROUTE_URL.INVOICE_MANAGER.CREATE}
               element={<CreateInvoiceApp />}
@@ -62,7 +73,6 @@ const RoutesApp = () => {
               path={ROUTE_URL.INVOICE_MANAGER.VIEW}
               element={<ViewInvoiceApp />}
             />
-
             <Route path={ROUTE_URL.MASTER.BASE} element={<MasterApp />}>
               <Route
                 path={ROUTE_URL.MASTER.FRAME_TYPES.BASE}

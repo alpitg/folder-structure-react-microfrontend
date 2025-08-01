@@ -10,6 +10,18 @@ export const ROUTE_URL = {
   SOCIAL_MEDIA_MANAGEMENT: "/social-media",
   BILL_CALCULATION: "/bill-calculation",
   CUSTOMERS: "/customers",
+  FINANCE: {
+    BASE: "/finance",
+    SALES: {
+      BASE: "/finance/sales/order",
+      ADD: "/finance/sales/order/add",
+      EDIT: "/finance/sales/order/edit/:orderId",
+    },
+    PURCHASE: "/finance/purchase",
+    EXPENSES: "/finance/expenses",
+    PAYMENTS: "/finance/payments",
+    RECEIPTS: "/finance/receipts",
+  },
   INVOICE_MANAGER: {
     BASE: "/invoice",
     CREATE: "/invoice/create",

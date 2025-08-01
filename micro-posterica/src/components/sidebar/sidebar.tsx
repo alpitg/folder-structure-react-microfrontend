@@ -32,6 +32,23 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
       subRoutes: [],
     },
     {
+      id: "finance",
+      title: "Finance",
+      path: ROUTE_URL.FINANCE.BASE,
+      icon: "bi bi-journal-bookmark",
+      claims: [],
+      subRoutes: [
+        {
+          id: "sales",
+          title: "Sales",
+          path: ROUTE_URL.FINANCE.SALES.BASE,
+          icon: "bi bi-person-fill-gear",
+          claims: [],
+          subRoutes: [],
+        },
+      ],
+    },
+    {
       id: "invoice-manager",
       title: "Invoice Manager",
       path: ROUTE_URL.INVOICE_MANAGER.BASE,
