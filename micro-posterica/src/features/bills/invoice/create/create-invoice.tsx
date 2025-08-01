@@ -128,6 +128,22 @@ const CreateInvoiceApp = () => {
     console.log(bill);
   };
 
+  const chargableArea = (item: IArtDetail) => {
+    const billDetails = new BillCalculation(
+      frameTypes,
+      glassTypes,
+      miscCharges
+    );
+
+    const width = billDetails?.chargableWidth(item);
+    const height = billDetails?.chargableHeight(item);
+
+    const area = width * height;
+    return `Chargable Area: width ${width} * height ${height} = ${area.toFixed(
+      2
+    )} cm²`;
+  };
+
   //#endregion
 
   useEffect(() => {
@@ -305,6 +321,9 @@ const CreateInvoiceApp = () => {
                   {bill?.artDetails?.map((item, index) => (
                     <div key={index}>
                       <div className="row g-3 d-flex mb-3">
+                        <span className="text-gray-500 mt-1 text-end fw-semibold fs-6">
+                          {chargableArea(item)}
+                        </span>
                         <div className="col-sm-8">
                           <input
                             type="text"
