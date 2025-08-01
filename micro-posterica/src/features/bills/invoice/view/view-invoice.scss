@@ -2,47 +2,46 @@
   img {
     height: 50px;
   }
-}
 
+  .frame-container {
+    position: relative;
+    width: 300px;
+    height: 400px;
+    border: 3px solid #333;
+    background-color: #fff;
+  }
 
-.frame-container {
-  position: relative;
-  width: 300px;
-  height: 400px;
-  border: 3px solid #333;
-  background-color: #fff;
-}
+  .label {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 4px 8px;
+    font-size: 14px;
+    font-weight: bold;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+  }
 
-.label {
-  position: absolute;
-  background-color: rgba(255, 255, 255, 0.85);
-  padding: 4px 8px;
-  font-size: 14px;
-  font-weight: bold;
-  border: 1px solid #aaa;
-  border-radius: 4px;
-}
+  .top-label {
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 
-.top-label {
-  top: -25px;
-  left: 50%;
-  transform: translateX(-50%);
-}
+  .right-label {
+    top: 50%;
+    right: -70px;
+    transform: translateY(-50%);
+  }
 
-.right-label {
-  top: 50%;
-  right: -70px;
-  transform: translateY(-50%);
-}
+  .bottom-label {
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 
-.bottom-label {
-  bottom: -25px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.left-label {
-  top: 50%;
-  left: -70px;
-  transform: translateY(-50%);
+  .left-label {
+    top: 50%;
+    left: -70px;
+    transform: translateY(-50%);
+  }
 }
