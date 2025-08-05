@@ -24,14 +24,6 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
       subRoutes: [],
     },
     {
-      id: "bill-calculation",
-      title: "Bill Calculation",
-      path: ROUTE_URL.BILL_CALCULATION,
-      icon: "bi bi-person-fill-gear",
-      claims: [],
-      subRoutes: [],
-    },
-    {
       id: "finance",
       title: "Finance",
       path: ROUTE_URL.FINANCE.BASE,

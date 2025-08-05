@@ -7,7 +7,10 @@ const LoadingApp = () => {
         <div className="loading-spinner">
           <div className="spinner"></div>
         </div>
-        <div className="loading-text">Loading...</div>
+        <div className="loading-text">
+          <span className="spinner-border spinner-border-sm align-middle me-2"></span>
+          Loading...
+        </div>
       </div>
     </div>
   );

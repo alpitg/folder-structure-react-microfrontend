@@ -1,0 +1,65 @@
+{
+  "totalCount": 10,
+  "data": [
+    {
+      "id": 1,
+      "code": "cancelled",
+      "name": "Cancelled",
+      "description": "Payment has been cancelled."
+    },
+    {
+      "id": 2,
+      "code": "pending",
+      "name": "Pending",
+      "description": "Payment is pending."
+    },
+    {
+      "id": 3,
+      "code": "completed",
+      "name": "Completed",
+      "description": "Order completed successfully."
+    },
+    {
+      "id": 4,
+      "code": "failed",
+      "name": "Failed",
+      "description": "Payment has failed or Payment method expired."
+    },
+    {
+      "id": 5,
+      "code": "refunded",
+      "name": "Refunded",
+      "description": "Payment has been refunded."
+    },
+    {
+      "id": 6,
+      "code": "denied",
+      "name": "Denied",
+      "description": "Payment denied."
+    },
+    {
+      "id": 7,
+      "code": "processing",
+      "name": "Processing",
+      "description": "Payment received."
+    },
+    {
+      "id": 8,
+      "code": "refunded",
+      "name": "Refunded",
+      "description": "Payment has been refunded."
+    },
+    {
+      "id": 9,
+      "code": "delivered",
+      "name": "Delivered",
+      "description": "Order received by customer"
+    },
+    {
+      "id": 10,
+      "code": "delivering",
+      "name": "Delivering",
+      "description": "Order shipped from warehouse."
+    }
+  ]
+}

@@ -13,8 +13,6 @@ const AdministrationApp = lazy(
 
 const UIApp = lazy(() => import("../../components/ui/ui"));
 
-const BillCalculationApp = lazy(() => import("../../features/bills/calculate"));
-
 const MasterApp = lazy(() => import("../../features/master/master"));
 const FrameTypesApp = lazy(
   () => import("../../features/master/frame/frame-types/frame-types")
@@ -61,10 +59,6 @@ const RoutesApp = () => {
               element={<OrderEditApp />}
             />
 
-            <Route
-              path={ROUTE_URL.BILL_CALCULATION}
-              element={<BillCalculationApp />}
-            />
             <Route
               path={ROUTE_URL.INVOICE_MANAGER.CREATE}
               element={<CreateInvoiceApp />}
