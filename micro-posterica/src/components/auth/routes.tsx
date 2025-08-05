@@ -35,8 +35,14 @@ const ViewInvoiceApp = lazy(
 );
 
 const SalesApp = lazy(() => import("../../features/finance/sales/sales"));
+const OrderListApp = lazy(
+  () => import("../../features/finance/sales/order/list/order-list")
+);
 const OrderEditApp = lazy(
   () => import("../../features/finance/sales/order/edit/order-edit")
+);
+const OrderAddApp = lazy(
+  () => import("../../features/finance/sales/order/add/order-add")
 );
 
 const RoutesApp = () => {
@@ -53,11 +59,20 @@ const RoutesApp = () => {
             />
             <Route path={ROUTE_URL.APP_SETTINGS} element={<SettingsApp />} />
 
-            <Route path={ROUTE_URL.FINANCE.SALES.BASE} element={<SalesApp />} />
-            <Route
-              path={ROUTE_URL.FINANCE.SALES.EDIT}
-              element={<OrderEditApp />}
-            />
+            <Route path={ROUTE_URL.FINANCE.SALES.BASE} element={<SalesApp />}>
+              <Route
+                path={ROUTE_URL.FINANCE.SALES.BASE}
+                element={<OrderListApp />}
+              />
+              <Route
+                path={ROUTE_URL.FINANCE.SALES.ADD}
+                element={<OrderAddApp />}
+              />
+              <Route
+                path={ROUTE_URL.FINANCE.SALES.EDIT}
+                element={<OrderEditApp />}
+              />
+            </Route>
 
             <Route
               path={ROUTE_URL.INVOICE_MANAGER.CREATE}

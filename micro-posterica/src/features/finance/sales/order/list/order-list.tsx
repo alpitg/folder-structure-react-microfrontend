@@ -1,12 +1,19 @@
 import { NavLink } from "react-router";
+import OrderHeaderApp from "../header/order-header";
 import { ROUTE_URL } from "../../../../../components/auth/constants/routes.const";
 
 const OrderListApp = () => {
   return (
     <div className="order-list-app">
-      <h1>Order Management</h1>
-      <p>Manage your orders here.</p>
-      {/* Add components and functionality related to sales management */}
+      <OrderHeaderApp header="Order listing" description="Order listing page">
+        <NavLink
+          to={ROUTE_URL.FINANCE.SALES.ADD}
+          className="btn btn-primary btn-sm d-flex align-items-center mb-3 ms-2"
+        >
+          <i className="bi bi-plus"></i>
+          Add New Order
+        </NavLink>
+      </OrderHeaderApp>
 
       {/* itemSolid
   billName
@@ -57,7 +64,17 @@ const OrderListApp = () => {
                   <td>$320,800</td>
                 </tr>
                 <tr>
-                  <td>Garrett Winters</td>
+                  <td>
+                    <NavLink
+                      to={ROUTE_URL.FINANCE.SALES.EDIT.replace(
+                        ":orderId",
+                        "O-1227611"
+                      )}
+                      className="btn btn-sm bg-body"
+                    >
+                      O-1227611
+                    </NavLink>
+                  </td>
                   <td>Accountant</td>
                   <td>Tokyo</td>
                   <td>63</td>

@@ -1,9 +1,9 @@
-import OrderListApp from "./order/list/order-list";
+import { Outlet } from "react-router";
 
 const SalesApp = () => {
   return (
-    <div>
-      <OrderListApp />
+    <div className="sales-app">
+      <Outlet />
     </div>
   );
 };
