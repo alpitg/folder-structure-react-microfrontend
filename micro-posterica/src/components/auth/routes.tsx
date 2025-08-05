@@ -12,6 +12,7 @@ const AdministrationApp = lazy(
 );
 
 const UIApp = lazy(() => import("../../components/ui/ui"));
+const LoginApp = lazy(() => import("../../components/auth/login/login"));
 
 const MasterApp = lazy(() => import("../../features/master/master"));
 const FrameTypesApp = lazy(
@@ -97,6 +98,8 @@ const RoutesApp = () => {
               />
             </Route>
           </Route>
+
+          <Route path={ROUTE_URL.LOGIN} element={<LoginApp />} />
 
           {/* PAGES */}
           {/* <Route>
