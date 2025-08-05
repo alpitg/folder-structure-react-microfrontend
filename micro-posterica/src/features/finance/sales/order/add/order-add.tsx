@@ -5,8 +5,8 @@ const OrderAddApp = () => {
     <div className="order-list-app">
       <OrderHeaderApp
         back={true}
-        header="Order listing"
-        description="Order listing page"
+        header="Order Details"
+        description="Order Details page"
       ></OrderHeaderApp>
 
       <div className="form d-flex flex-column flex-lg-row fv-plugins-bootstrap5 fv-plugins-framework">
