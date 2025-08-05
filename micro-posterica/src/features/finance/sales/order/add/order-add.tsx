@@ -108,7 +108,7 @@ const OrderAddApp = () => {
                 <div className="separator" />
 
                 <div className="d-flex align-items-center position-relative mb-n7">
-                  <i className="ki-duotone ki-magnifier fs-3 position-absolute ms-4">
+                  <i className="bi bi-search fs-3 position-absolute ms-4">
                     <span className="path1" />
                     <span className="path2" />
                   </i>
