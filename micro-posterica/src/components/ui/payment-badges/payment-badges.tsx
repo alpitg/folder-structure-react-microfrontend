@@ -8,7 +8,8 @@ const badgeColors: Record<PaymentStatus, string> = {
 };
 
 const PaymentBadge = ({ status = "pending" }: { status?: PaymentStatus }) => (
-  <span className={`badge ${badgeColors[status]}`}>{status}</span>
+  <span className={`badge ${badgeColors[status]}`}>{status?.charAt(0)?.toUpperCase() + status?.slice(1)}</span>
+  
 );
 
 export default PaymentBadge;
