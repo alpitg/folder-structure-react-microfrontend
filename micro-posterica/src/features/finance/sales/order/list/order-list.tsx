@@ -1,8 +1,14 @@
 import { NavLink } from "react-router";
 import OrderHeaderApp from "../header/order-header";
+import PaymentBadge, {
+  type PaymentStatus,
+} from "../../../../../components/ui/payment-badges/payment-badges";
 import { ROUTE_URL } from "../../../../../components/auth/constants/routes.const";
+import { useGetOrdersQuery } from "../../../../../app/features/sales/order/order.api";
 
 const OrderListApp = () => {
+  const { data } = useGetOrdersQuery();
+
   return (
     <div className="order-list-app">
       <OrderHeaderApp header="Order listing" description="Order listing page">
@@ -15,20 +21,6 @@ const OrderListApp = () => {
         </NavLink>
       </OrderHeaderApp>
 
-      {/* itemSolid
-  billName
-  billId
-  transactionType
-  salesBy
-  quantity
-  unitPrice
-  totalPrice
-  paymentReceived
-  saleType
-  paymentMode
-  pendingAmount
-  remarks */}
-
       <div className="card">
         <div className="card-body">
           <div className="table-responsive">
@@ -37,50 +29,41 @@ const OrderListApp = () => {
                 <tr className="fw-bold fs-6 text-gray-800">
                   <th>ORDER ID</th>
                   <th>CUSTOMER</th>
-                  <th>STATUS</th>
+                  <th>DATE</th>
+                  <th>ITEMS</th>
+                  <th>PAYMENT STATUS</th>
                   <th>TOTAL</th>
-                  <th>DATE ADDED</th>
-                  <th>DATE MODIFIED</th>
+                  <th>ORDER STATUS</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>
-                    <NavLink
-                      to={ROUTE_URL.FINANCE.SALES.EDIT.replace(
-                        ":orderId",
-                        "O-12231"
-                      )}
-                      className="btn btn-sm bg-body"
-                    >
-                      O-12231
-                    </NavLink>
-                  </td>
-
-                  <td>System Architect</td>
-                  <td>Edinburgh</td>
-                  <td>61</td>
-                  <td>2011/04/25</td>
-                  <td>$320,800</td>
-                </tr>
-                <tr>
-                  <td>
-                    <NavLink
-                      to={ROUTE_URL.FINANCE.SALES.EDIT.replace(
-                        ":orderId",
-                        "O-1227611"
-                      )}
-                      className="btn btn-sm bg-body"
-                    >
-                      O-1227611
-                    </NavLink>
-                  </td>
-                  <td>Accountant</td>
-                  <td>Tokyo</td>
-                  <td>63</td>
-                  <td>2011/07/25</td>
-                  <td>$170,750</td>
-                </tr>
+                {data?.map((order) => (
+                  <tr key={order?.orderId}>
+                    <td>
+                      <NavLink
+                        to={ROUTE_URL.FINANCE.SALES.EDIT.replace(
+                          ":orderId",
+                          order?.orderId
+                        )}
+                        className="btn btn-sm bg-body"
+                      >
+                        {order?.orderId}
+                      </NavLink>
+                    </td>
+                    <td>{order?.customerName}</td>
+                    <td>{new Date(order?.createdAt).toLocaleDateString()}</td>
+                    <td>{order?.itemCount}</td>
+                    <td>
+                      {
+                        <PaymentBadge
+                          status={order.paymentStatus as PaymentStatus}
+                        />
+                      }
+                    </td>
+                    <td>{order?.total.toFixed(2)}</td>
+                    <td>{order?.orderStatus}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

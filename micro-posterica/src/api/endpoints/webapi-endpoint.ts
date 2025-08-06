@@ -1,10 +1,15 @@
+import { GetEnvConfig } from "../../app.config";
+
+/**
+ * @deprecated This is depricated and will be removed in future versions.
+ * Use the `GetEnvConfig` function to get the API base URL and construct endpoints as needed.
+ * @returns 
+ */
 export const ApiEndpoint = () => {
-  const baseApiUrl = "http://localhost:3000/api"; // Default to local if not set
-  // const serviceEndpoint = GetEnvConfig().microserviceUrl;
-  const serviceEndpoint = "http://localhost:3000/api"; // Replace with actual service endpoint
+  const serviceEndpoint = GetEnvConfig().api.baseUrl;
 
   return {
-    baseApiUrl: baseApiUrl,
+    baseApiUrl: serviceEndpoint,
     serviceEndpoint: serviceEndpoint,
     master: {
       frameTypes: `${serviceEndpoint}/master/frame-types`,
@@ -13,6 +18,9 @@ export const ApiEndpoint = () => {
     },
     profile: {
       posterica: `${serviceEndpoint}/profile/frame-types`,
+    },
+    order: {
+      list: `${serviceEndpoint}/orders`,
     },
   };
 };
