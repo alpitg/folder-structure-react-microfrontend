@@ -493,7 +493,7 @@ const OrderAddApp = () => {
                 <div className="py-0" data-kt-customer-payment-method="row">
                   <div className="py-3 d-flex flex-stack flex-wrap">
                     <a
-                      className="d-flex align-items-center collapsible rotate collapsed"
+                      className="d-flex align-items-center collapsible rotate collapsed w-75"
                       data-bs-toggle="collapse"
                       href={`#${"art-0" + index}`}
                       role="button"
@@ -504,11 +504,12 @@ const OrderAddApp = () => {
                         <i className="bi-chevron-right fs-3"></i>
                       </div>
 
-                      <img
-                        src="/keen/demo1/assets/media/svg/card-logos/mastercard.svg"
-                        className="w-40px me-3"
-                        alt=""
-                      />
+                      <span
+                        className="symbol symbol-50px me-3"
+                        aria-label="no-image"
+                      >
+                        <span className="symbol-label"></span>
+                      </span>
 
                       <div className="me-3">
                         <div className="d-flex align-items-center">
@@ -525,17 +526,14 @@ const OrderAddApp = () => {
                     </a>
 
                     <div className="d-flex my-3 ms-9">
-                      <a
-                        href="#"
-                        className="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
-                        data-bs-toggle="tooltip"
-                        data-kt-customer-payment-method="delete"
+                      <button
+                        className="btn btn-icon btn-active-light-danger w-30px h-30px me-3"
                         aria-label="Delete"
-                        data-bs-original-title="Delete"
                         data-kt-initialized="1"
+                        onClick={() => handleRemoveItem(index)}
                       >
                         <i className="bi bi-trash3 fs-3"></i>
-                      </a>
+                      </button>
                       <div
                         className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold w-150px py-3"
                         data-kt-menu="true"
