@@ -518,7 +518,10 @@ const OrderAddApp = () => {
                           </div>
 
                           <div className="badge badge-light-primary ms-5">
-                            {item?.cost?.toFixed(2)}
+                            {`Quantity: ` + item?.quantity}
+                          </div>
+                          <div className="badge badge-light-primary ms-5">
+                            {`Cost: ` + item?.cost?.toFixed(2)}
                           </div>
                         </div>
                         <div className="text-muted">{item?.artDescription}</div>
