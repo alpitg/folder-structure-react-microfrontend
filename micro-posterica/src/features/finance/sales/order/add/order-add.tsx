@@ -594,15 +594,6 @@ const OrderAddApp = () => {
                               }
                             />
                           </div>
-                          <div className="col-sm-2">
-                            <a
-                              className="btn btn-s btn-flex flex-center btn-light-danger"
-                              onClick={() => handleRemoveItem(index)}
-                            >
-                              <i className="bi bi-x-lg fs-3"></i>
-                              Delete
-                            </a>
-                          </div>
                         </div>
                         <div className="row g-3">
                           <div className="col-md-4 mb-5">
