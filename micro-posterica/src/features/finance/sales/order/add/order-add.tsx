@@ -378,17 +378,186 @@ const OrderAddApp = () => {
                       className="btn btn-light-primary"
                       onClick={handleAddItem}
                     >
-                      <i className="bi bi-plus-lg fs-3"></i> Add Customized
-                      Product
+                      <i className="bi bi-plus-lg fs-3"></i> Add Product
                     </button>
                   </div>
                 </div>
 
-                <div className="row">
-                  <div className="separator separator-dashed"></div>
+                {/* <div className="dt-container dt-bootstrap5 dt-empty-footer">
+                  <div className="table-responsive">
+                    <div className="dt-scroll">
+                      <div
+                        className="dt-scroll-body"
+                        style={{
+                          overflow: "auto",
+                          maxHeight: 400,
+                          position: "relative",
+                        }}
+                      >
+                        <table
+                          className="table align-middle table-row-dashed fs-6 gy-5 dataTable"
+                          style={{ width: "100%" }}
+                        >
+                          <colgroup>
+                            <col style={{ width: "29.89px" }} />
+                            <col style={{ width: "442.203px" }} />
+                            <col style={{ width: "278.906px" }} />
+                          </colgroup>
+                          <thead>
+                            <tr
+                              className="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0"
+                              role="row"
+                            >
+                              <th />
+                              <th>Product</th>
+                              <th className="text-end pe-5">Qty Remaining</th>
+                            </tr>
+                          </thead>
+                          <tbody className="fw-semibold text-gray-600">
+                            <tr>
+                              <td>
+                                <div className="form-check form-check-sm form-check-custom form-check-solid">
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    value="1"
+                                  />
+                                </div>
+                              </td>
+                              <td>
+                                <div className="d-flex align-items-center">
+                                  <a
+                                    href="/sales/products"
+                                    className="symbol symbol-50px"
+                                  >
+                                    <span className="symbol-label"></span>
+                                  </a>
 
-                  <div>
-                    {bill?.artDetails?.map((item, index) => (
+                                  <div className="ms-5">
+                                    <a
+                                      href="/sales/products"
+                                      className="text-gray-800 text-hover-primary fs-5 fw-bold"
+                                    >
+                                      Product 1
+                                    </a>
+
+                                    <div className="fw-semibold fs-7">
+                                      Price: $<span>172.00</span>
+                                    </div>
+
+                                    <div className="text-muted fs-7">
+                                      SKU: 02981006
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td
+                                className="text-end pe-5 dt-type-numeric"
+                                data-order="36"
+                              >
+                                <span className="fw-bold ms-3">36</span>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start dt-toolbar" />
+                    <div className="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end" />
+                  </div>
+                </div> */}
+              </div>
+            </div>
+          </div>
+
+          <div className="card pt-4 mb-6 mb-xl-9">
+            <div className="card-header border-0">
+              <div className="card-title">
+                <h2 className="fw-bold mb-0">Customized Product</h2>
+              </div>
+
+              <div className="card-toolbar">
+                <button
+                  className="btn btn-sm btn-flex btn-light-primary"
+                  onClick={handleAddItem}
+                >
+                  <i className="bi bi-plus fs-3"></i> Add Customized Product
+                </button>
+              </div>
+            </div>
+
+            {bill?.artDetails?.map((item, index) => (
+              <div key={`'custom' + ${index}`} className="card-body pt-0">
+                <div className="py-0" data-kt-customer-payment-method="row">
+                  <div className="py-3 d-flex flex-stack flex-wrap">
+                    <a
+                      className="d-flex align-items-center collapsible rotate collapsed"
+                      data-bs-toggle="collapse"
+                      href={`#${"art-0" + index}`}
+                      role="button"
+                      aria-expanded="false"
+                      aria-controls={`${"art-0" + index}`}
+                    >
+                      <div className="me-3 rotate-90">
+                        <i className="bi-chevron-right fs-3"></i>
+                      </div>
+
+                      <img
+                        src="/keen/demo1/assets/media/svg/card-logos/mastercard.svg"
+                        className="w-40px me-3"
+                        alt=""
+                      />
+
+                      <div className="me-3">
+                        <div className="d-flex align-items-center">
+                          <div className="text-gray-800 fw-bold">
+                            {item?.artName || `Art ${index + 1}`}
+                          </div>
+
+                          <div className="badge badge-light-primary ms-5">
+                            {item?.cost?.toFixed(2)}
+                          </div>
+                        </div>
+                        <div className="text-muted">{item?.artDescription}</div>
+                      </div>
+                    </a>
+
+                    <div className="d-flex my-3 ms-9">
+                      <a
+                        href="#"
+                        className="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
+                        data-bs-toggle="tooltip"
+                        data-kt-customer-payment-method="delete"
+                        aria-label="Delete"
+                        data-bs-original-title="Delete"
+                        data-kt-initialized="1"
+                      >
+                        <i className="bi bi-trash3 fs-3"></i>
+                      </a>
+                      <div
+                        className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold w-150px py-3"
+                        data-kt-menu="true"
+                      >
+                        <div className="menu-item px-3">
+                          <a
+                            href="#"
+                            className="menu-link px-3"
+                            data-kt-payment-mehtod-action="set_as_primary"
+                          >
+                            Set as Primary
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    id={`${"art-0" + index}`}
+                    className="fs-6 ps-10 collapse"
+                  >
+                    <div className="d-flex flex-wrap py-5">
                       <div key={index}>
                         <div className="row g-3 d-flex mb-3 mt-5">
                           <span className="text-gray-500 text-end fw-semibold fs-6">
@@ -514,87 +683,89 @@ const OrderAddApp = () => {
 
                               <div className="col-md-12 d-flex flex-center">
                                 {item?.mounting?.isEnabled && (
-                                  <div className="outer-frame">
-                                    <div className="inner-frame">
-                                      <div className="label top-label">
-                                        <input
-                                          type="number"
-                                          min={0}
-                                          id="top-mounting"
-                                          className="form-control form-control-solid side-input"
-                                          placeholder="cm"
-                                          value={item?.mounting?.top || ""}
-                                          onChange={(e) =>
-                                            handleInputChange(
-                                              index,
-                                              "mounting",
-                                              {
-                                                ...item.mounting,
-                                                top: e.target.value,
-                                              }
-                                            )
-                                          }
-                                        />
-                                      </div>
-                                      <div className="label right-label">
-                                        <input
-                                          type="number"
-                                          min={0}
-                                          id="right-mounting"
-                                          className="form-control form-control-solid side-input"
-                                          placeholder="cm"
-                                          value={item?.mounting?.right || ""}
-                                          onChange={(e) =>
-                                            handleInputChange(
-                                              index,
-                                              "mounting",
-                                              {
-                                                ...item.mounting,
-                                                right: e.target.value,
-                                              }
-                                            )
-                                          }
-                                        />
-                                      </div>
-                                      <div className="label bottom-label">
-                                        <input
-                                          type="number"
-                                          min={0}
-                                          id="bottom-mounting"
-                                          className="form-control form-control-solid side-input"
-                                          placeholder="cm"
-                                          value={item?.mounting?.bottom || ""}
-                                          onChange={(e) =>
-                                            handleInputChange(
-                                              index,
-                                              "mounting",
-                                              {
-                                                ...item.mounting,
-                                                bottom: e.target.value,
-                                              }
-                                            )
-                                          }
-                                        />
-                                      </div>
-                                      <div className="label left-label">
-                                        <input
-                                          type="number"
-                                          min={0}
-                                          id="left-mounting"
-                                          className="form-control form-control-solid side-input"
-                                          placeholder="cm"
-                                          value={item?.mounting?.left || ""}
-                                          onChange={(e) =>
-                                            handleInputChange(
-                                              index,
-                                              "mounting",
-                                              {
-                                                ...item.mounting,
-                                                left: e.target.value,
-                                              }
-                                            )
-                                          }
-                                        />
+                                  <div className="mounting-component">
+                                    <div className="outer-frame">
+                                      <div className="inner-frame">
+                                        <div className="label top-label">
+                                          <input
+                                            type="number"
+                                            min={0}
+                                            id="top-mounting"
+                                            className="form-control form-control-solid side-input"
+                                            placeholder="cm"
+                                            value={item?.mounting?.top || ""}
+                                            onChange={(e) =>
+                                              handleInputChange(
+                                                index,
+                                                "mounting",
+                                                {
+                                                  ...item.mounting,
+                                                  top: e.target.value,
+                                                }
+                                              )
+                                            }
+                                          />
+                                        </div>
+                                        <div className="label right-label">
+                                          <input
+                                            type="number"
+                                            min={0}
+                                            id="right-mounting"
+                                            className="form-control form-control-solid side-input"
+                                            placeholder="cm"
+                                            value={item?.mounting?.right || ""}
+                                            onChange={(e) =>
+                                              handleInputChange(
+                                                index,
+                                                "mounting",
+                                                {
+                                                  ...item.mounting,
+                                                  right: e.target.value,
+                                                }
+                                              )
+                                            }
+                                          />
+                                        </div>
+                                        <div className="label bottom-label">
+                                          <input
+                                            type="number"
+                                            min={0}
+                                            id="bottom-mounting"
+                                            className="form-control form-control-solid side-input"
+                                            placeholder="cm"
+                                            value={item?.mounting?.bottom || ""}
+                                            onChange={(e) =>
+                                              handleInputChange(
+                                                index,
+                                                "mounting",
+                                                {
+                                                  ...item.mounting,
+                                                  bottom: e.target.value,
+                                                }
+                                              )
+                                            }
+                                          />
+                                        </div>
+                                        <div className="label left-label">
+                                          <input
+                                            type="number"
+                                            min={0}
+                                            id="left-mounting"
+                                            className="form-control form-control-solid side-input"
+                                            placeholder="cm"
+                                            value={item?.mounting?.left || ""}
+                                            onChange={(e) =>
+                                              handleInputChange(
+                                                index,
+                                                "mounting",
+                                                {
+                                                  ...item.mounting,
+                                                  left: e.target.value,
+                                                }
+                                              )
+                                            }
+                                          />
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
@@ -779,99 +950,15 @@ const OrderAddApp = () => {
                             </label>
                           </div>
                         </div>
-                        <div className="separator separator-dashed my-10"></div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* <div className="dt-container dt-bootstrap5 dt-empty-footer">
-                  <div className="table-responsive">
-                    <div className="dt-scroll">
-                      <div
-                        className="dt-scroll-body"
-                        style={{
-                          overflow: "auto",
-                          maxHeight: 400,
-                          position: "relative",
-                        }}
-                      >
-                        <table
-                          className="table align-middle table-row-dashed fs-6 gy-5 dataTable"
-                          style={{ width: "100%" }}
-                        >
-                          <colgroup>
-                            <col style={{ width: "29.89px" }} />
-                            <col style={{ width: "442.203px" }} />
-                            <col style={{ width: "278.906px" }} />
-                          </colgroup>
-                          <thead>
-                            <tr
-                              className="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0"
-                              role="row"
-                            >
-                              <th />
-                              <th>Product</th>
-                              <th className="text-end pe-5">Qty Remaining</th>
-                            </tr>
-                          </thead>
-                          <tbody className="fw-semibold text-gray-600">
-                            <tr>
-                              <td>
-                                <div className="form-check form-check-sm form-check-custom form-check-solid">
-                                  <input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    value="1"
-                                  />
-                                </div>
-                              </td>
-                              <td>
-                                <div className="d-flex align-items-center">
-                                  <a
-                                    href="/sales/products"
-                                    className="symbol symbol-50px"
-                                  >
-                                    <span className="symbol-label"></span>
-                                  </a>
-
-                                  <div className="ms-5">
-                                    <a
-                                      href="/sales/products"
-                                      className="text-gray-800 text-hover-primary fs-5 fw-bold"
-                                    >
-                                      Product 1
-                                    </a>
-
-                                    <div className="fw-semibold fs-7">
-                                      Price: $<span>172.00</span>
-                                    </div>
-
-                                    <div className="text-muted fs-7">
-                                      SKU: 02981006
-                                    </div>
-                                  </div>
-                                </div>
-                              </td>
-                              <td
-                                className="text-end pe-5 dt-type-numeric"
-                                data-order="36"
-                              >
-                                <span className="fw-bold ms-3">36</span>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
                       </div>
                     </div>
                   </div>
-                  <div className="row">
-                    <div className="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start dt-toolbar" />
-                    <div className="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end" />
-                  </div>
-                </div> */}
+                  {index !== bill.artDetails.length - 1 && (
+                    <div className="separator separator-dashed"></div>
+                  )}
+                </div>
               </div>
-            </div>
+            ))}
           </div>
 
           <div className="card card-flush py-4">
