@@ -30,7 +30,6 @@ export interface ITotalCalculationInput {
   artDetails: IArtDetail[];
 
   cost: number;
-  discountPercentage: number;
   discountAmount: number;
   finalAmount: number;
   miscCharges: any[]; // Replace `any` with a specific type if available
@@ -100,7 +99,6 @@ export class TotalCalculationInput implements ITotalCalculationInput {
   artDetails: IArtDetail[];
 
   cost: number;
-  discountPercentage: number;
   discountAmount: number;
   finalAmount: number;
   miscCharges: any[];
@@ -116,7 +114,6 @@ export class TotalCalculationInput implements ITotalCalculationInput {
     this.likelyDateOfDelivery = "";
     this.artDetails = [];
     this.cost = 0;
-    this.discountPercentage = 0;
     this.discountAmount = 0;
     this.finalAmount = 0;
     this.miscCharges = [];

@@ -52,7 +52,6 @@ Order -> Invoice (discount/advance) -> Generate payment -> update accounting rec
 
       discountedQuantity: Number?,       // items that got discount
       discountAmount: Number,            // total discount value on this line
-      discountPercentage: Number,        // discount percent applied
 
       cancelledQty: Number,              // if partially cancelled
       netQuantity: Number,               // billable qty = quantity - cancelledQty
@@ -86,7 +85,6 @@ Order -> Invoice (discount/advance) -> Generate payment -> update accounting rec
       unitPrice: Number,
 
       discountAmount: Number,
-      discountPercentage: Number,
 
       amountBeforeDiscount: Number,
       amountAfterDiscount: Number

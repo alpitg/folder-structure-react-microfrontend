@@ -40,7 +40,7 @@ const CreateInvoiceApp = () => {
   //#region methods
 
   const calculateTotalAmount = (): number => {
-    return bill.artDetails.reduce((cost, item) => cost + item.cost, 0);
+    return bill.artDetails.reduce((cost, item) => cost + item.unitPrice, 0);
   };
 
   const handleAddItem = () => {
@@ -52,19 +52,10 @@ const CreateInvoiceApp = () => {
 
   const handleRemoveItem = (index: number) => {
     const updatedArtDetails = bill.artDetails.filter((_, i) => i !== index);
-    const cost = updatedArtDetails.reduce((sum, item) => sum + item.cost, 0);
-    const discountAmount = (cost * bill.discountPercentage) / 100;
-    const finalAmount = cost;
-
-    const balanceAmount = cost - discountAmount - bill.advancePayment;
 
     setBill({
       ...bill,
       artDetails: updatedArtDetails,
-      cost,
-      discountAmount,
-      finalAmount,
-      balanceAmount,
     });
   };
 
@@ -88,7 +79,7 @@ const CreateInvoiceApp = () => {
     ).unitCost(updatedArtDetails[index]);
 
     // Auto-calculate total for the item
-    updatedArtDetails[index].cost = unitCost;
+    updatedArtDetails[index].unitPrice = unitCost;
 
     setBill({
       ...bill,
@@ -169,7 +160,6 @@ const CreateInvoiceApp = () => {
   useEffect(() => {
     // Calculate totals when bill changes
     const cost = calculateTotalAmount();
-    // let discountAmount = (cost * bill.discountPercentage) / 100;
 
     const finalAmount = cost;
     const balanceAmount = cost - bill?.discountAmount - bill?.advancePayment;
@@ -180,12 +170,7 @@ const CreateInvoiceApp = () => {
       finalAmount,
       balanceAmount,
     }));
-  }, [
-    bill?.artDetails,
-    bill?.discountAmount,
-    bill?.discountPercentage,
-    bill?.advancePayment,
-  ]);
+  }, [bill?.artDetails, bill?.discountAmount, bill?.advancePayment]);
 
   return (
     <div className="create-invoice-app">

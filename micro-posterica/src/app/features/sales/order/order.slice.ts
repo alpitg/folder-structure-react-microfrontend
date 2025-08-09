@@ -7,7 +7,6 @@ export interface IOrderItem {
   unitPrice: number;
   discountedQuantity?: number;
   discountAmount: number;
-  discountPercentage: number;
   cancelledQty: number;
   netQuantity: number;
   amountBeforeDiscount: number;

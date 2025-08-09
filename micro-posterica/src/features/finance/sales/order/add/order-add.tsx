@@ -185,7 +185,6 @@ const OrderAddApp = () => {
   useEffect(() => {
     // Calculate totals when bill changes
     const cost = calculateTotalAmount();
-    // let discountAmount = (cost * bill.discountPercentage) / 100;
 
     const finalAmount = cost;
     const balanceAmount = cost - bill?.discountAmount - bill?.advancePayment;
@@ -199,7 +198,6 @@ const OrderAddApp = () => {
   }, [
     bill?.artDetails,
     bill?.discountAmount,
-    bill?.discountPercentage,
     bill?.advancePayment,
   ]);
   //#endregion

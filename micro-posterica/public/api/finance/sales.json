@@ -42,7 +42,6 @@
       "createdAt": "2025-08-01T19:23:24.429Z",
       "customerName": "Rohit Sharma",
       "discountAmount": 500,
-      "discountPercentage": 10,
       "finalAmount": 4000,
       "invoice": {
         "billDate": "Sat Aug 02 2025",
