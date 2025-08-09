@@ -1,5 +1,11 @@
+import type {
+  IArtDetail,
+  IPlaceOrderPayload,
+  ITotalCalculationInput,
+  OrderItemIn,
+} from "../../../interfaces/total-calculation.model";
+
 import { ADDITIONAL_SERVICE_CODE } from "../../../constants/global/global-key.const";
-import type { IArtDetail } from "../../../interfaces/total-calculation.model";
 import type { IFrameType } from "../../../app/features/master/frame-types/frame-types.slice";
 import type { IGlassType } from "../../../app/features/master/glass-types/glass-types.slice";
 import type { IMiscCharges } from "../../../app/features/master/misc-charges/misc-charges.slice";
@@ -20,23 +26,23 @@ export class BillCalculation {
   }
 
   chargableWidth = (item: IArtDetail) => {
-    const width = parseFloat(item.width) || 0;
-    const mountingLeft = parseFloat(String(item?.mounting?.left)) || 0;
-    const mountingRight = parseFloat(String(item?.mounting?.right)) || 0;
+    const width = item?.width || 0;
+    const mountingLeft = item?.mounting?.left || 0;
+    const mountingRight = item?.mounting?.right || 0;
     return width + mountingLeft + mountingRight;
   };
 
   chargableHeight = (item: IArtDetail) => {
-    const height = parseFloat(item.height) || 0;
-    const mountingTop = parseFloat(String(item?.mounting?.top)) || 0;
-    const mountingBottom = parseFloat(String(item?.mounting?.bottom)) || 0;
+    const height = item?.height || 0;
+    const mountingTop = item?.mounting?.top || 0;
+    const mountingBottom = item?.mounting?.bottom || 0;
     return height + mountingTop + mountingBottom;
   };
 
   totalItemArea = (item: IArtDetail) => {
     return item?.mounting?.isEnabled
       ? this.chargableWidth(item) * this.chargableHeight(item)
-      : (parseFloat(item.width) || 0) * (parseFloat(item.height) || 0);
+      : (item.width || 0) * item.height || 0;
   };
 
   /**
@@ -105,3 +111,67 @@ export class BillCalculation {
     );
   };
 }
+
+export const mapOrderForApi = (
+  item: ITotalCalculationInput
+): IPlaceOrderPayload | null => {
+  if (!item || !item?.artDetails || item?.artDetails?.length === 0) {
+    return null;
+  }
+
+  let order: IPlaceOrderPayload = {
+    order: {
+      customerName: item?.customerName,
+      customerId: item?.customerName,
+      advancePayment: item?.advancePayment,
+      miscCharges: item?.miscCharges,
+      paymentMode: item?.invoice?.paymentMode,
+      paymentStatus: item?.invoice?.paymentStatus,
+      handledBy: item?.invoice?.handledBy,
+      createdAt: item?.createdAt,
+      likelyDateOfDelivery: item?.likelyDateOfDelivery,
+      note: "Fresh order",
+      items: item?.artDetails?.map(
+        (art, idX) =>
+          ({
+            // productId: ,
+            quantity: art?.quantity || 1,
+            unitPrice: art?.cost || 0, // TODO: calculate unit price later
+            discountedQuantity: 0, // NOTE: Look for thie later
+            discountAmount: item?.discountAmount || 0,
+            customizedDetails: {
+              name: art?.artName || `"Art ${idX + 1}"}`,
+              description: art?.artDescription || "",
+              width: art?.width || 0,
+              height: art?.height || 0,
+              frame: {
+                type: art?.frame?.type || "",
+                color: art?.frame?.color || "",
+                width: art?.frame?.width || 0,
+                height: art?.frame?.height || 0,
+              },
+              glass: {
+                type: art?.glass?.type || "",
+                isEnabled: art?.glass?.isEnabled || false,
+              },
+              additional: {
+                varnish: art?.additional?.varnish || false,
+                lamination: art?.additional?.lamination || false,
+                routerCut: art?.additional?.routerCut || false,
+              },
+              mounting: {
+                isEnabled: art?.mounting?.isEnabled || false,
+                top: art?.mounting?.top || 0,
+                right: art?.mounting?.right || 0,
+                bottom: art?.mounting?.bottom || 0,
+                left: art?.mounting?.left || 0,
+              },
+            },
+          } as OrderItemIn)
+      ),
+      // invoiceId: null
+    },
+  };
+
+  return order;
+};

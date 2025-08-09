@@ -1,18 +1,23 @@
-export interface IAdditionalDetails {
+export interface IAdditionalServices {
   varnish: boolean;
   lamination: boolean;
   routerCut: boolean;
 }
 
+export interface MiscCharge {
+  label: string;
+  amount: number;
+}
+
 export interface IArtDetail {
   artName: string;
   artDescription: string;
-  width: string;
-  height: string;
+  width: number;
+  height: number;
   mounting: IMounting;
   frame: IFrame;
   glass: IGlass;
-  additional: IAdditionalDetails;
+  additional: IAdditionalServices;
   quantity: number;
   cost: number;
 }
@@ -33,6 +38,17 @@ export interface ITotalCalculationInput {
 
   invoice: IInvoiceDetail;
   createdAt: string;
+}
+
+export interface CustomizedDetails {
+  name: string;
+  description: string;
+  width: number;
+  height: number;
+  frame?: IFrame;
+  glass?: IGlass;
+  mounting?: IMounting;
+  additional?: AdditionalServices;
 }
 
 export interface IMounting {
@@ -120,30 +136,30 @@ export class TotalCalculationInput implements ITotalCalculationInput {
 export class ArtDetail implements IArtDetail {
   artName: string;
   artDescription: string;
-  width: string;
-  height: string;
+  width: number;
+  height: number;
   mounting: IMounting;
   frame: IFrame;
   glass: IGlass;
-  additional: IAdditionalDetails;
+  additional: IAdditionalServices;
   quantity: number;
   cost: number;
 
   constructor() {
     this.artName = "";
     this.artDescription = "";
-    this.width = "";
-    this.height = "";
+    this.width = 0;
+    this.height = 0;
     this.mounting = new Mounting();
     this.frame = new Frame();
     this.glass = new Glass();
-    this.additional = new AdditionalDetails();
+    this.additional = new AdditionalServices();
     this.quantity = 1;
     this.cost = 0;
   }
 }
 
-export class AdditionalDetails implements IAdditionalDetails {
+export class AdditionalServices implements IAdditionalServices {
   varnish: boolean;
   lamination: boolean;
   routerCut: boolean;
@@ -232,3 +248,49 @@ export class BillDetail implements IBillDetail {
     this.phone = "";
   }
 }
+
+//#region request / response model
+
+export interface OrderItemIn {
+  productId: string;
+  quantity: number;
+  unitPrice: number;
+  discountedQuantity?: number;
+  discountAmount?: number;
+  cancelledQty?: number;
+  customizedDetails?: CustomizedDetails;
+}
+
+export interface InvoiceIn {
+  billDate: string;
+  billFrom: Record<string, string>;
+  billTo: Record<string, string>;
+  paymentMode: string;
+  paymentStatus?: string;
+}
+
+export interface OrderIn {
+  customerName: string;
+  customerId?: string;
+  items: OrderItemIn[];
+  advancePayment?: number;
+  miscCharges?: MiscCharge[];
+  paymentMode?: string;
+  paymentStatus?: string;
+  invoiceId?: string;
+  handledBy?: string;
+  createdAt?: string; // ISO string (will be converted to Date in backend)
+  likelyDateOfDelivery?: string;
+  note?: string;
+}
+
+export interface IPlaceOrderPayload {
+  order: OrderIn;
+  invoice?: InvoiceIn;
+}
+
+export interface IOrderResponse {
+  orderId: string;
+}
+
+//#endregion

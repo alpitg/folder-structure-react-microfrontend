@@ -8,13 +8,18 @@ import {
 } from "../../../../../interfaces/total-calculation.model";
 import OrderHeaderApp from "../header/order-header";
 import { paymentModes } from "../../../../../constants/app.const";
-import { BillCalculation } from "../../../../bills/utils/bill-calculation.util";
+import {
+  BillCalculation,
+  mapOrderForApi,
+} from "../../../../bills/utils/bill-calculation.util";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, AppState } from "../../../../../app/store";
 import { fetchProfile } from "../../../../../app/features/core/profile/profile-detail.thunk";
 import { fetchFrameTypes } from "../../../../../app/features/master/frame-types/frame-types.thunk";
 import { fetchGlassTypes } from "../../../../../app/features/master/glass-types/glass-types.thunk";
 import { fetchMiscCharges } from "../../../../../app/features/master/misc-charges/misc-charges.thunk";
+import { useGetcustomersQuery } from "../../../../../app/features/customer/list/customer.api";
+import { usePlaceOrderMutation } from "../../../../../app/features/sales/order/order.api";
 
 const OrderAddApp = () => {
   const {
@@ -24,6 +29,15 @@ const OrderAddApp = () => {
       miscCharges: { miscCharges },
     },
   } = useSelector((state: AppState) => state);
+  const { data: customers } = useGetcustomersQuery();
+  const [
+    placeOrder,
+    {
+      isLoading: isOrderPlacingInProgress,
+      // isSuccess: isOrderPlaced,
+      // error: errorInOrderPlace,
+    },
+  ] = usePlaceOrderMutation();
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -118,8 +132,20 @@ const OrderAddApp = () => {
       },
     });
   };
-  const handleInvoice = () => {
-    console.log(bill);
+
+  const handlePlaceOrder = async () => {
+    const payload = mapOrderForApi(bill);
+    if (!payload) {
+      return;
+    }
+    console.log(payload);
+
+    try {
+      const response = await placeOrder(payload).unwrap();
+      console.log("Order placed:", response);
+    } catch (err) {
+      console.error("Failed to place order:", err);
+    }
   };
 
   const chargableArea = (item: IArtDetail) => {
@@ -317,13 +343,23 @@ const OrderAddApp = () => {
                 </div>
 
                 <div className="separator separator-dashed"></div>
+
                 <button
                   type="submit"
                   className="btn btn-primary w-100"
-                  id="kt_invoice_submit_button"
-                  onClick={handleInvoice}
+                  onClick={handlePlaceOrder}
+                  disabled={isOrderPlacingInProgress}
                 >
-                  <i className="ki-duotone ki-triangle fs-3"></i> Save Order
+                  {isOrderPlacingInProgress ? (
+                    <span className="spinner-border spinner-border-sm align-middle me-2"></span>
+                  ) : (
+                    <i className="bi bi-save fs-3 me-2"></i>
+                  )}
+                  Place Order
+                </button>
+
+                <button className="btn btn-light w-100">
+                  <i className="bi bi-x-lg fs-3"></i> Cancel
                 </button>
               </div>
             </div>
@@ -331,7 +367,39 @@ const OrderAddApp = () => {
         </div>
 
         <div className="d-flex flex-column flex-lg-row-fluid gap-7 gap-lg-10">
-          <div className="card card-flush">
+          <div className="card card-flush py-4">
+            <div className="card-body">
+              <div className="d-flex flex-column flex-md-row gap-5">
+                <div className="fv-row flex-row-fluid fv-plugins-icon-container">
+                  <div className="position-relative">
+                    <div className="required position-absolute top-0"></div>
+                    <input
+                      type="text"
+                      className="form-control form-control-flush fs-3"
+                      placeholder="Customer Name"
+                      list="list-customer"
+                      id="input-datalist-customer"
+                      onChange={(e) =>
+                        setBill((prev) => ({
+                          ...prev,
+                          customerName: e.target.value,
+                        }))
+                      }
+                    />
+                    <datalist id="list-customer">
+                      {customers?.map((customer) => (
+                        <option key={customer?.id} value={customer?.name}>
+                          {customer?.name}
+                        </option>
+                      ))}
+                    </datalist>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="card card-flush" style={{ display: "none" }}>
             <div className="ribbon ribbon-top ribbon-vertical">
               <div className="ribbon-label bg-success">
                 <i className="bi bi-receipt text-inverse-success fs-1"></i>
@@ -358,7 +426,7 @@ const OrderAddApp = () => {
                   </div>
 
                   <div className="fw-bold fs-4">
-                    Total Cost: $<span>0.00</span>
+                    Total Cost: ₹<span> {bill?.finalAmount?.toFixed(2)}</span>
                   </div>
                 </div>
 
@@ -472,7 +540,7 @@ const OrderAddApp = () => {
             </div>
           </div>
 
-          <div className="card pt-4 mb-6 mb-xl-9">
+          <div className="card py-4">
             <div className="card-header border-0">
               <div className="card-title">
                 <h2 className="fw-bold mb-0">Customized Product</h2>
@@ -487,10 +555,12 @@ const OrderAddApp = () => {
                 </button>
               </div>
             </div>
-
-            {bill?.artDetails?.map((item, index) => (
-              <div key={`'custom' + ${index}`} className="card-body pt-0">
-                <div className="py-0" data-kt-customer-payment-method="row">
+            <div
+              className="card-body py-0"
+              style={{ overflowY: "auto", maxHeight: "600px" }}
+            >
+              {bill?.artDetails?.map((item, index) => (
+                <div key={`'custom' + ${index}`}>
                   <div className="py-3 d-flex flex-stack flex-wrap">
                     <a
                       className="d-flex align-items-center collapsible rotate collapsed w-75"
@@ -556,392 +626,353 @@ const OrderAddApp = () => {
 
                   <div
                     id={`${"art-0" + index}`}
-                    className="fs-6 ps-10 collapse"
+                    className="fs-6 ps-10 py-4 collapse"
                   >
-                    <div className="d-flex flex-wrap py-5">
-                      <div key={index}>
-                        <div className="row g-3 d-flex mb-3 mt-5">
-                          <span className="text-gray-500 text-end fw-semibold fs-6">
-                            {chargableArea(item)}
-                          </span>
-                          <div className="col-sm-8">
-                            <input
-                              type="text"
-                              className="form-control form-control-solid fs-6 fw-bold"
-                              placeholder="Art Name"
-                              name={"artName" + index + item?.artName}
-                              value={item?.artName || `Art ${index + 1}`}
-                              onChange={(e) =>
-                                handleInputChange(
-                                  index,
-                                  "artName",
-                                  e.target.value
-                                )
-                              }
-                            />
-                          </div>
-                          <div className="col-sm-2">
-                            <input
-                              type="number"
-                              min={0}
-                              className="form-control form-control-solid"
-                              placeholder="Quantity"
-                              name="Quantity"
-                              value={item.quantity}
-                              onChange={(e) =>
-                                handleInputChange(
-                                  index,
-                                  "quantity",
-                                  e.target.value
-                                )
-                              }
-                            />
-                          </div>
-                        </div>
+                    <div className="row g-3 d-flex mb-3">
+                      <span className="text-gray-500 text-end fw-semibold fs-6">
+                        {chargableArea(item)}
+                      </span>
+                      <div className="col-sm-8">
+                        <input
+                          type="text"
+                          className="form-control form-control-solid fs-6 fw-bold"
+                          placeholder="Art Name"
+                          name={"artName" + index + item?.artName}
+                          value={item?.artName || `Art ${index + 1}`}
+                          onChange={(e) =>
+                            handleInputChange(index, "artName", e.target.value)
+                          }
+                        />
+                      </div>
+                      <div className="col-sm-2">
+                        <input
+                          type="number"
+                          min={0}
+                          className="form-control form-control-solid"
+                          placeholder="Quantity"
+                          name="Quantity"
+                          value={item.quantity}
+                          onChange={(e) =>
+                            handleInputChange(index, "quantity", e.target.value)
+                          }
+                        />
+                      </div>
+                    </div>
+                    <div className="row g-3">
+                      <div className="col-md-4 mb-5">
+                        <input
+                          type="text"
+                          className="form-control form-control-solid"
+                          placeholder="Art Description"
+                          name="artDescription"
+                          value={item?.artDescription || ""}
+                          onChange={(e) =>
+                            handleInputChange(
+                              index,
+                              "artDescription",
+                              e.target.value
+                            )
+                          }
+                        />
+                      </div>
+                      <div className="col-md-4 mb-5">
+                        <input
+                          type="number"
+                          min={0}
+                          className="form-control form-control-solid"
+                          placeholder="Width (cm)"
+                          value={item.width}
+                          onChange={(e) =>
+                            handleInputChange(
+                              index,
+                              "width",
+                              parseFloat(e.target.value) || 0
+                            )
+                          }
+                        />
+                      </div>
+                      <div className="col-md-4 mb-5">
+                        <input
+                          type="number"
+                          min={0}
+                          className="form-control form-control-solid"
+                          placeholder="Height (cm)"
+                          value={item?.height}
+                          onChange={(e) =>
+                            handleInputChange(
+                              index,
+                              "height",
+                              parseFloat(e.target.value) || 0
+                            )
+                          }
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex d-flex flex-column flex-md-row mb-5">
+                      <div className="col-md-6 mb-5 border border-gray-300 border-dashed rounded py-3 px-4 me-1">
+                        <br />
                         <div className="row g-3">
-                          <div className="col-md-4 mb-5">
-                            <input
-                              type="text"
-                              className="form-control form-control-solid"
-                              placeholder="Art Description"
-                              name="artDescription"
-                              value={item?.artDescription || ""}
-                              onChange={(e) =>
-                                handleInputChange(
-                                  index,
-                                  "artDescription",
-                                  e.target.value
-                                )
-                              }
-                            />
+                          <div className="col-md-12">
+                            <label className="form-check form-switch form-check-custom form-check-solid">
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                id="mounting"
+                                checked={item?.mounting?.isEnabled}
+                                onChange={(e) =>
+                                  handleInputChange(index, "mounting", {
+                                    ...item.mounting,
+                                    isEnabled: e.target.checked,
+                                  })
+                                }
+                              />
+                              <span className="form-check-label">Mounting</span>
+                            </label>
                           </div>
-                          <div className="col-md-4 mb-5">
-                            <input
-                              type="number"
-                              min={0}
-                              className="form-control form-control-solid"
-                              placeholder="Width (cm)"
-                              value={item.width}
-                              onChange={(e) =>
-                                handleInputChange(
-                                  index,
-                                  "width",
-                                  e.target.value
-                                )
-                              }
-                            />
-                          </div>
-                          <div className="col-md-4 mb-5">
-                            <input
-                              type="number"
-                              min={0}
-                              className="form-control form-control-solid"
-                              placeholder="Height (cm)"
-                              value={item?.height}
-                              onChange={(e) =>
-                                handleInputChange(
-                                  index,
-                                  "height",
-                                  e.target.value
-                                )
-                              }
-                            />
+
+                          <div className="col-md-12 d-flex flex-center">
+                            {item?.mounting?.isEnabled && (
+                              <div className="mounting-component">
+                                <div className="outer-frame">
+                                  <div className="inner-frame">
+                                    <div className="label top-label">
+                                      <input
+                                        type="number"
+                                        min={0}
+                                        id="top-mounting"
+                                        className="form-control form-control-solid side-input"
+                                        placeholder="cm"
+                                        value={item?.mounting?.top || ""}
+                                        onChange={(e) =>
+                                          handleInputChange(index, "mounting", {
+                                            ...item.mounting,
+                                            top:
+                                              parseFloat(e.target.value) || 0,
+                                          })
+                                        }
+                                      />
+                                    </div>
+                                    <div className="label right-label">
+                                      <input
+                                        type="number"
+                                        min={0}
+                                        id="right-mounting"
+                                        className="form-control form-control-solid side-input"
+                                        placeholder="cm"
+                                        value={item?.mounting?.right || ""}
+                                        onChange={(e) =>
+                                          handleInputChange(index, "mounting", {
+                                            ...item.mounting,
+                                            right:
+                                              parseFloat(e.target.value) || 0,
+                                          })
+                                        }
+                                      />
+                                    </div>
+                                    <div className="label bottom-label">
+                                      <input
+                                        type="number"
+                                        min={0}
+                                        id="bottom-mounting"
+                                        className="form-control form-control-solid side-input"
+                                        placeholder="cm"
+                                        value={item?.mounting?.bottom || ""}
+                                        onChange={(e) =>
+                                          handleInputChange(index, "mounting", {
+                                            ...item.mounting,
+                                            bottom:
+                                              parseFloat(e.target.value) || 0,
+                                          })
+                                        }
+                                      />
+                                    </div>
+                                    <div className="label left-label">
+                                      <input
+                                        type="number"
+                                        min={0}
+                                        id="left-mounting"
+                                        className="form-control form-control-solid side-input"
+                                        placeholder="cm"
+                                        value={item?.mounting?.left || ""}
+                                        onChange={(e) =>
+                                          handleInputChange(index, "mounting", {
+                                            ...item.mounting,
+                                            left:
+                                              parseFloat(e.target.value) || 0,
+                                          })
+                                        }
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
                           </div>
                         </div>
+                      </div>
 
-                        <div className="flex d-flex flex-column flex-md-row mb-5">
-                          <div className="col-md-6 mb-5 border border-gray-300 border-dashed rounded py-3 px-4 me-1">
-                            <br />
-                            <div className="row g-3">
-                              <div className="col-md-12">
-                                <label className="form-check form-switch form-check-custom form-check-solid">
-                                  <input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    id="mounting"
-                                    checked={item?.mounting?.isEnabled}
-                                    onChange={(e) =>
-                                      handleInputChange(index, "mounting", {
-                                        ...item.mounting,
-                                        isEnabled: e.target.checked,
-                                      })
-                                    }
-                                  />
-                                  <span className="form-check-label">
-                                    Mounting
-                                  </span>
-                                </label>
-                              </div>
+                      <div className="col-md-6 mb-5 border border-gray-300 border-dashed rounded py-3 px-4 ms-1">
+                        <br />
+                        <div className="row g-3">
+                          <div className="col-md-12">
+                            <label className="form-check form-switch form-check-custom form-check-solid">
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                id={"glass-" + index}
+                                checked={item?.glass?.isEnabled}
+                                onChange={(e) =>
+                                  handleInputChange(index, "glass", {
+                                    ...item.glass,
+                                    isEnabled: e.target.checked,
+                                  })
+                                }
+                              />
+                              <span className="form-check-label">Glass</span>
+                            </label>
+                          </div>
 
-                              <div className="col-md-12 d-flex flex-center">
-                                {item?.mounting?.isEnabled && (
-                                  <div className="mounting-component">
-                                    <div className="outer-frame">
-                                      <div className="inner-frame">
-                                        <div className="label top-label">
-                                          <input
-                                            type="number"
-                                            min={0}
-                                            id="top-mounting"
-                                            className="form-control form-control-solid side-input"
-                                            placeholder="cm"
-                                            value={item?.mounting?.top || ""}
-                                            onChange={(e) =>
-                                              handleInputChange(
-                                                index,
-                                                "mounting",
-                                                {
-                                                  ...item.mounting,
-                                                  top: e.target.value,
-                                                }
-                                              )
-                                            }
-                                          />
-                                        </div>
-                                        <div className="label right-label">
-                                          <input
-                                            type="number"
-                                            min={0}
-                                            id="right-mounting"
-                                            className="form-control form-control-solid side-input"
-                                            placeholder="cm"
-                                            value={item?.mounting?.right || ""}
-                                            onChange={(e) =>
-                                              handleInputChange(
-                                                index,
-                                                "mounting",
-                                                {
-                                                  ...item.mounting,
-                                                  right: e.target.value,
-                                                }
-                                              )
-                                            }
-                                          />
-                                        </div>
-                                        <div className="label bottom-label">
-                                          <input
-                                            type="number"
-                                            min={0}
-                                            id="bottom-mounting"
-                                            className="form-control form-control-solid side-input"
-                                            placeholder="cm"
-                                            value={item?.mounting?.bottom || ""}
-                                            onChange={(e) =>
-                                              handleInputChange(
-                                                index,
-                                                "mounting",
-                                                {
-                                                  ...item.mounting,
-                                                  bottom: e.target.value,
-                                                }
-                                              )
-                                            }
-                                          />
-                                        </div>
-                                        <div className="label left-label">
-                                          <input
-                                            type="number"
-                                            min={0}
-                                            id="left-mounting"
-                                            className="form-control form-control-solid side-input"
-                                            placeholder="cm"
-                                            value={item?.mounting?.left || ""}
-                                            onChange={(e) =>
-                                              handleInputChange(
-                                                index,
-                                                "mounting",
-                                                {
-                                                  ...item.mounting,
-                                                  left: e.target.value,
-                                                }
-                                              )
-                                            }
-                                          />
-                                        </div>
+                          <div className="col-md-12">
+                            {item?.glass?.isEnabled &&
+                              glassTypes.map((glass) => (
+                                <label
+                                  key={glass?.id + index}
+                                  className={`btn btn-outline btn-outline-dashed btn-active-light-primary d-flex flex-stack text-start p-6 mb-5 g-3 ${
+                                    glass?.name === item?.glass?.type
+                                      ? " active"
+                                      : ""
+                                  }`}
+                                >
+                                  <div className="d-flex align-items-center me-2">
+                                    <div className="form-check form-check-custom form-check-solid form-check-primary me-6">
+                                      <input
+                                        className="form-check-input"
+                                        type="radio"
+                                        checked={
+                                          glass?.name === item?.glass?.type
+                                        }
+                                        name={glass?.name + index}
+                                        value={glass?.name}
+                                        onChange={(e) =>
+                                          handleInputChange(index, "glass", {
+                                            ...item.glass,
+                                            type: e.target.value,
+                                          })
+                                        }
+                                      />
+                                    </div>
+
+                                    <div className="flex-grow-1">
+                                      <h2 className="d-flex align-items-center fs-3 fw-bold flex-wrap">
+                                        {glass?.name}
+                                      </h2>
+                                      <div className="fw-semibold opacity-50">
+                                        ₹ {glass?.rate}/ {glass.rateIn}
                                       </div>
                                     </div>
                                   </div>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="col-md-6 mb-5 border border-gray-300 border-dashed rounded py-3 px-4 ms-1">
-                            <br />
-                            <div className="row g-3">
-                              <div className="col-md-12">
-                                <label className="form-check form-switch form-check-custom form-check-solid">
-                                  <input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    id={"glass-" + index}
-                                    checked={item?.glass?.isEnabled}
-                                    onChange={(e) =>
-                                      handleInputChange(index, "glass", {
-                                        ...item.glass,
-                                        isEnabled: e.target.checked,
-                                      })
-                                    }
-                                  />
-                                  <span className="form-check-label">
-                                    Glass
-                                  </span>
                                 </label>
-                              </div>
-
-                              <div className="col-md-12">
-                                {item?.glass?.isEnabled &&
-                                  glassTypes.map((glass) => (
-                                    <label
-                                      key={glass?.id + index}
-                                      className={`btn btn-outline btn-outline-dashed btn-active-light-primary d-flex flex-stack text-start p-6 mb-5 g-3 ${
-                                        glass?.name === item?.glass?.type
-                                          ? " active"
-                                          : ""
-                                      }`}
-                                    >
-                                      <div className="d-flex align-items-center me-2">
-                                        <div className="form-check form-check-custom form-check-solid form-check-primary me-6">
-                                          <input
-                                            className="form-check-input"
-                                            type="radio"
-                                            checked={
-                                              glass?.name === item?.glass?.type
-                                            }
-                                            name={glass?.name + index}
-                                            value={glass?.name}
-                                            onChange={(e) =>
-                                              handleInputChange(
-                                                index,
-                                                "glass",
-                                                {
-                                                  ...item.glass,
-                                                  type: e.target.value,
-                                                }
-                                              )
-                                            }
-                                          />
-                                        </div>
-
-                                        <div className="flex-grow-1">
-                                          <h2 className="d-flex align-items-center fs-3 fw-bold flex-wrap">
-                                            {glass?.name}
-                                          </h2>
-                                          <div className="fw-semibold opacity-50">
-                                            ₹ {glass?.rate}/ {glass.rateIn}
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </label>
-                                  ))}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="row g-2 mb-5">
-                          <div className="col-md-4">
-                            <select
-                              className="form-select form-select-solid"
-                              value={item?.frame?.type}
-                              onChange={(e) =>
-                                handleInputChange(index, "frame", {
-                                  ...item.frame,
-                                  type: e.target.value,
-                                })
-                              }
-                            >
-                              <option value="">Select Frame Type</option>
-                              {frameTypes.map((frame) => (
-                                <option
-                                  key={frame.id}
-                                  value={frame.name + index}
-                                >
-                                  {frame.name} {frame.category} - (₹
-                                  {frame.baseCost})
-                                </option>
                               ))}
-                            </select>
-                          </div>
-                          <div className="col-md-4">
-                            <input
-                              type="text"
-                              className="form-control form-control-solid"
-                              placeholder="Frame Color"
-                              name="frameColor"
-                              value={item?.frame?.color}
-                              onChange={(e) =>
-                                handleInputChange(index, "frame", {
-                                  ...item.frame,
-                                  color: e.target.value,
-                                })
-                              }
-                            />
                           </div>
                         </div>
+                      </div>
+                    </div>
 
-                        <div className="row g-5">
-                          <div className="col-sm-4">
-                            <label className="form-check form-switch form-check-custom form-check-solid">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                id="varnish"
-                                value="1"
-                                checked={item?.additional?.varnish}
-                                onChange={(e) =>
-                                  handleInputChange(index, "additional", {
-                                    ...item.additional,
-                                    varnish: e.target.checked,
-                                  })
-                                }
-                              />
-                              <span className="form-check-label">Varnish</span>
-                            </label>
-                          </div>
+                    <div className="row g-2 mb-5">
+                      <div className="col-md-4">
+                        <select
+                          className="form-select form-select-solid"
+                          value={item?.frame?.type}
+                          onChange={(e) =>
+                            handleInputChange(index, "frame", {
+                              ...item.frame,
+                              type: e.target.value,
+                            })
+                          }
+                        >
+                          <option value="">Select Frame Type</option>
+                          {frameTypes.map((frame) => (
+                            <option key={frame.id} value={frame.name + index}>
+                              {frame.name} {frame.category} - (₹
+                              {frame.baseCost})
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="col-md-4">
+                        <input
+                          type="text"
+                          className="form-control form-control-solid"
+                          placeholder="Frame Color"
+                          name="frameColor"
+                          value={item?.frame?.color}
+                          onChange={(e) =>
+                            handleInputChange(index, "frame", {
+                              ...item.frame,
+                              color: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
 
-                          <div className="col-sm-4">
-                            <label className="form-check form-switch form-check-custom form-check-solid">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                id="lamination"
-                                value="1"
-                                checked={item?.additional?.lamination}
-                                onChange={(e) =>
-                                  handleInputChange(index, "additional", {
-                                    ...item.additional,
-                                    lamination: e.target.checked,
-                                  })
-                                }
-                              />
-                              <span className="form-check-label">
-                                Lamination
-                              </span>
-                            </label>
-                          </div>
+                    <div className="row g-5">
+                      <div className="col-sm-4">
+                        <label className="form-check form-switch form-check-custom form-check-solid">
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            id="varnish"
+                            value="1"
+                            checked={item?.additional?.varnish}
+                            onChange={(e) =>
+                              handleInputChange(index, "additional", {
+                                ...item.additional,
+                                varnish: e.target.checked,
+                              })
+                            }
+                          />
+                          <span className="form-check-label">Varnish</span>
+                        </label>
+                      </div>
 
-                          <div className="col-sm-4">
-                            <label className="form-check form-switch form-check-custom form-check-solid">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                id="routerCut"
-                                value="1"
-                                checked={item?.additional?.routerCut}
-                                onChange={(e) =>
-                                  handleInputChange(index, "additional", {
-                                    ...item.additional,
-                                    routerCut: e.target.checked,
-                                  })
-                                }
-                              />
-                              <span className="form-check-label">
-                                Router Cut
-                              </span>
-                            </label>
-                          </div>
-                        </div>
+                      <div className="col-sm-4">
+                        <label className="form-check form-switch form-check-custom form-check-solid">
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            id="lamination"
+                            value="1"
+                            checked={item?.additional?.lamination}
+                            onChange={(e) =>
+                              handleInputChange(index, "additional", {
+                                ...item.additional,
+                                lamination: e.target.checked,
+                              })
+                            }
+                          />
+                          <span className="form-check-label">Lamination</span>
+                        </label>
+                      </div>
+
+                      <div className="col-sm-4">
+                        <label className="form-check form-switch form-check-custom form-check-solid">
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            id="routerCut"
+                            value="1"
+                            checked={item?.additional?.routerCut}
+                            onChange={(e) =>
+                              handleInputChange(index, "additional", {
+                                ...item.additional,
+                                routerCut: e.target.checked,
+                              })
+                            }
+                          />
+                          <span className="form-check-label">Router Cut</span>
+                        </label>
                       </div>
                     </div>
                   </div>
@@ -949,8 +980,8 @@ const OrderAddApp = () => {
                     <div className="separator separator-dashed"></div>
                   )}
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
           <div className="card card-flush py-4">

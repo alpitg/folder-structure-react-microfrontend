@@ -14,9 +14,9 @@ const OrderListApp = () => {
       <OrderHeaderApp header="Order listing" description="Order listing page">
         <NavLink
           to={ROUTE_URL.FINANCE.SALES.ADD}
-          className="btn btn-primary btn-sm d-flex align-items-center mb-3 ms-2"
+          className="btn btn-primary btn-sm"
         >
-          <i className="bi bi-plus"></i>
+          <i className="bi bi-plus-lg fs-3"></i>
           Add New Order
         </NavLink>
       </OrderHeaderApp>

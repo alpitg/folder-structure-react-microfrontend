@@ -5,7 +5,7 @@
   "author": "Posterica Team",
   "logo": "/static/media/img/logo.png",
   "api": {
-    "baseUrl": "http://127.0.0.1:8000",
+    "baseUrl": "http://localhost:8000",
     "apiVersion": "v1",
     "profile": {
       "posterica": "/api/profile/frame-types"
@@ -16,7 +16,14 @@
       "miscCharges": "/api/master/misc-charges"
     },
     "order": {
-      "list": "/api/orders"
+      "list": "/api/orders",
+      "placeOrder": "/api/orders/place-order"
+    },
+    "customer": {
+      "list": "/api/customer",
+      "create": "/api/customers/create",
+      "update": "/api/customers/update",
+      "delete": "/api/customers/delete"
     }
   }
 }
