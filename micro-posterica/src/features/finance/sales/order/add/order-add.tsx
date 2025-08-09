@@ -63,22 +63,10 @@ const OrderAddApp = () => {
 
   const handleRemoveItem = (index: number) => {
     const updatedArtDetails = bill.artDetails.filter((_, i) => i !== index);
-    const cost = updatedArtDetails.reduce(
-      (sum, item) => sum + item?.unitPrice,
-      0
-    );
-    const discountAmount = (cost * bill.discountPercentage) / 100;
-    const finalAmount = cost;
-
-    const balanceAmount = cost - discountAmount - bill.advancePayment;
 
     setBill({
       ...bill,
       artDetails: updatedArtDetails,
-      cost,
-      discountAmount,
-      finalAmount,
-      balanceAmount,
     });
   };
 
