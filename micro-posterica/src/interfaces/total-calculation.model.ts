@@ -1,3 +1,5 @@
+export type PaymentStatusType = "pending" | "paid" | "failed" | "refunded";
+
 export interface IAdditionalServices {
   varnish: boolean;
   lamination: boolean;
@@ -19,7 +21,7 @@ export interface IArtDetail {
   glass: IGlass;
   additional: IAdditionalServices;
   quantity: number;
-  cost: number;
+  unitPrice: number;
 }
 
 export interface ITotalCalculationInput {
@@ -81,7 +83,7 @@ export interface IInvoiceDetail {
   billTo: IBillDetail;
 
   paymentMode: string;
-  paymentStatus: string;
+  paymentStatus: PaymentStatusType;
 
   handledBy: string;
 }
@@ -126,7 +128,7 @@ export class TotalCalculationInput implements ITotalCalculationInput {
       billFrom: { name: "", detail: "", phone: "" },
       billTo: { name: "", detail: "", phone: "" },
       paymentMode: "",
-      paymentStatus: "",
+      paymentStatus: "pending",
       handledBy: "",
     };
     this.createdAt = new Date().toISOString();
@@ -143,7 +145,7 @@ export class ArtDetail implements IArtDetail {
   glass: IGlass;
   additional: IAdditionalServices;
   quantity: number;
-  cost: number;
+  unitPrice: number;
 
   constructor() {
     this.artName = "";
@@ -155,7 +157,7 @@ export class ArtDetail implements IArtDetail {
     this.glass = new Glass();
     this.additional = new AdditionalServices();
     this.quantity = 1;
-    this.cost = 0;
+    this.unitPrice = 0;
   }
 }
 
@@ -224,7 +226,7 @@ export class InvoiceDetail implements IInvoiceDetail {
   billFrom: IBillDetail;
   billTo: IBillDetail;
   paymentMode: string;
-  paymentStatus: string;
+  paymentStatus: PaymentStatusType;
   handledBy: string;
 
   constructor() {
@@ -232,7 +234,7 @@ export class InvoiceDetail implements IInvoiceDetail {
     this.billFrom = { name: "", detail: "", phone: "" };
     this.billTo = { name: "", detail: "", phone: "" };
     this.paymentMode = "";
-    this.paymentStatus = "";
+    this.paymentStatus = "pending"
     this.handledBy = "";
   }
 }
@@ -262,11 +264,12 @@ export interface OrderItemIn {
 }
 
 export interface InvoiceIn {
-  billDate: string;
-  billFrom: Record<string, string>;
-  billTo: Record<string, string>;
-  paymentMode: string;
-  paymentStatus?: string;
+  generateInvoice: boolean;
+  billDate?: string;
+  billFrom?: Record<string, any>;
+  billTo?: Record<string, any>;
+  paymentMode?: string;
+  paymentStatus?: "pending" | "paid" | "failed" | "refunded";
 }
 
 export interface OrderIn {

@@ -48,7 +48,10 @@ const OrderAddApp = () => {
   //#region methods
 
   const calculateTotalAmount = (): number => {
-    return bill.artDetails.reduce((cost, item) => cost + item.cost, 0);
+    return bill.artDetails.reduce(
+      (cost, item) => cost + item?.unitPrice * item?.quantity,
+      0
+    );
   };
 
   const handleAddItem = () => {
@@ -60,7 +63,10 @@ const OrderAddApp = () => {
 
   const handleRemoveItem = (index: number) => {
     const updatedArtDetails = bill.artDetails.filter((_, i) => i !== index);
-    const cost = updatedArtDetails.reduce((sum, item) => sum + item.cost, 0);
+    const cost = updatedArtDetails.reduce(
+      (sum, item) => sum + item?.unitPrice,
+      0
+    );
     const discountAmount = (cost * bill.discountPercentage) / 100;
     const finalAmount = cost;
 
@@ -96,7 +102,7 @@ const OrderAddApp = () => {
     ).unitCost(updatedArtDetails[index]);
 
     // Auto-calculate total for the item
-    updatedArtDetails[index].cost = unitCost;
+    updatedArtDetails[index].unitPrice = unitCost;
 
     setBill({
       ...bill,
@@ -309,7 +315,24 @@ const OrderAddApp = () => {
                         />
                       </div>
                     </div>
-                    <div className="d-flex flex-stack mb-3">
+
+                    <div className="separator separator-dashed"></div>
+
+                    <div className="d-flex flex-stack py-4">
+                      <div className="fw-semibold pe-10 text-gray-600 fs-7">
+                        Discount Amount :
+                      </div>
+                      <div className="text-end fw-bold fs-2 text-gray-800">
+                        ₹
+                        {(
+                          bill?.finalAmount - bill?.discountAmount || 0
+                        )?.toFixed(2)}
+                      </div>
+                    </div>
+
+                    <div className="separator separator-dashed"></div>
+
+                    <div className="d-flex flex-stack py-4">
                       <div className="fw-semibold pe-10 text-gray-600 fs-7">
                         Paid:
                       </div>
@@ -341,8 +364,6 @@ const OrderAddApp = () => {
                     </div>
                   </div>
                 </div>
-
-                <div className="separator separator-dashed"></div>
 
                 <button
                   type="submit"
@@ -591,7 +612,7 @@ const OrderAddApp = () => {
                             {`Quantity: ` + item?.quantity}
                           </div>
                           <div className="badge badge-light-primary ms-5">
-                            {`Cost: ` + item?.cost?.toFixed(2)}
+                            {`Cost: ` + item?.unitPrice?.toFixed(2)}
                           </div>
                         </div>
                         <div className="text-muted">{item?.artDescription}</div>
@@ -893,7 +914,7 @@ const OrderAddApp = () => {
                         >
                           <option value="">Select Frame Type</option>
                           {frameTypes.map((frame) => (
-                            <option key={frame.id} value={frame.name + index}>
+                            <option key={frame.id} value={frame.name}>
                               {frame.name} {frame.category} - (₹
                               {frame.baseCost})
                             </option>

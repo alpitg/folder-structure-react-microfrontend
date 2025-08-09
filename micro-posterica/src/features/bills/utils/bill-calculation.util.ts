@@ -51,8 +51,6 @@ export class BillCalculation {
    * @returns
    */
   unitCost = (item: IArtDetail): number => {
-    const quantity = parseInt(String(item.quantity)) || 1;
-
     // Calculate area with mounting if enabled
     const area = this.totalItemArea(item);
 
@@ -66,7 +64,7 @@ export class BillCalculation {
 
     // Calculate frame cost per inch
     const frameCostPerInch =
-      this.frameTypes.find((frame) => frame.name === item.frame.type)
+      this.frameTypes.find((frame) => frame?.name === item?.frame?.type)
         ?.baseCost || 0;
 
     // Calculate total frame cost based on area
@@ -103,10 +101,7 @@ export class BillCalculation {
 
     return (
       parseFloat(
-        (
-          (area * glassCost + totalFrameCost + additionalCosts) *
-          quantity
-        ).toFixed(2)
+        (area * glassCost + totalFrameCost + additionalCosts).toFixed(2)
       ) || 0
     );
   };
@@ -115,7 +110,12 @@ export class BillCalculation {
 export const mapOrderForApi = (
   item: ITotalCalculationInput
 ): IPlaceOrderPayload | null => {
-  if (!item || !item?.artDetails || item?.artDetails?.length === 0) {
+  if (
+    !item ||
+    !item?.customerName ||
+    !item?.artDetails ||
+    item?.artDetails?.length === 0
+  ) {
     return null;
   }
 
@@ -136,7 +136,7 @@ export const mapOrderForApi = (
           ({
             // productId: ,
             quantity: art?.quantity || 1,
-            unitPrice: art?.cost || 0, // TODO: calculate unit price later
+            unitPrice: art?.unitPrice || 0, // TODO: calculate unit price later
             discountedQuantity: 0, // NOTE: Look for thie later
             discountAmount: item?.discountAmount || 0,
             customizedDetails: {
@@ -170,6 +170,14 @@ export const mapOrderForApi = (
           } as OrderItemIn)
       ),
       // invoiceId: null
+    },
+    invoice: {
+      generateInvoice: true,
+      billDate: item?.invoice?.billDate,
+      billFrom: item?.invoice?.billFrom,
+      billTo: item?.invoice?.billTo,
+      paymentMode: item?.invoice?.paymentMode,
+      paymentStatus: item?.invoice?.paymentStatus,
     },
   };
 
