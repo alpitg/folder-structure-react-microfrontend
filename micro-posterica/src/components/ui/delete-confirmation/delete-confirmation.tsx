@@ -1,3 +1,5 @@
+const deleteIcon = "/static/media/img/svg/delete-1.svg";
+
 interface DeleteConfirmationAppProps {
   show: boolean;
   handleConfirm: () => void;
@@ -23,9 +25,11 @@ const DeleteConfirmationApp: React.FC<DeleteConfirmationAppProps> = ({
               <div className="modal-body text-center py-10">
                 <div className="py-10">
                   <div className="mb-10">
-                    <i className="bi bi-exclamation-circle fs-1"></i>
+                    <img src={deleteIcon} style={{ maxHeight: "200px" }} />
                   </div>
-                  Are you sure you want to discard the change ?
+                  <p className="fs-5 mb-0">
+                    Are you sure you want to discard the change ?
+                  </p>
                 </div>
 
                 <div className="d-flex justify-content-center gap-4">
