@@ -7,10 +7,10 @@ import { fetchProfile } from "../../../../app/features/core/profile/profile-deta
 import {
   ArtDetail,
   TotalCalculationInput,
-  type IArtDetail,
+  type ICustomizedDetails,
   type IInvoiceDetail,
   type ITotalCalculationInput,
-} from "../../../../interfaces/total-calculation.model";
+} from "../../../../interfaces/order/order.model";
 import { fetchFrameTypes } from "../../../../app/features/master/frame-types/frame-types.thunk";
 import { fetchGlassTypes } from "../../../../app/features/master/glass-types/glass-types.thunk";
 import { fetchMiscCharges } from "../../../../app/features/master/misc-charges/misc-charges.thunk";
@@ -61,7 +61,7 @@ const CreateInvoiceApp = () => {
 
   const handleInputChange = (
     index: number,
-    field: keyof IArtDetail | "mounting" | "glass" | "frame" | "additional",
+    field: keyof ICustomizedDetails | "mounting" | "glass" | "frame" | "additional",
     value: object | string | number
   ) => {
     if (index < 0 || index >= bill.artDetails.length) return;
@@ -119,7 +119,7 @@ const CreateInvoiceApp = () => {
     console.log(bill);
   };
 
-  const chargableArea = (item: IArtDetail) => {
+  const chargableArea = (item: ICustomizedDetails) => {
     const billDetails = new BillCalculation(
       frameTypes,
       glassTypes,

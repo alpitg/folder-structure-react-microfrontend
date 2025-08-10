@@ -1,16 +1,9 @@
+import type { IMiscCharge } from "../../../../interfaces/order/order.model";
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchMiscCharges } from "./misc-charges.thunk";
 
-export interface IMiscCharges {
-  id: string;
-  code: string;
-  name: string;
-  cost: number;
-  description: string;
-}
-
 export interface IMiscChargesState {
-  miscCharges: IMiscCharges[];
+  miscCharges: IMiscCharge[];
 }
 
 const initialState: IMiscChargesState = {

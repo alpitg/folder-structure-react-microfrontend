@@ -1,6 +1,6 @@
 import "./invoice.scss";
 
-import type { ITotalCalculationInput } from "../../../interfaces/total-calculation.model";
+import type { ITotalCalculationInput } from "../../../interfaces/order/order.model";
 
 interface InvoiceAppProps {
   bill: ITotalCalculationInput;

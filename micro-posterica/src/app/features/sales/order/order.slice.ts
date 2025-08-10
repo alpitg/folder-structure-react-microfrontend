@@ -1,29 +1,5 @@
+import type { IOrder } from "../../../../interfaces/order/order.model";
 import { createSlice } from "@reduxjs/toolkit";
-
-export interface IOrderItem {
-  productId: string;
-  description: string;
-  quantity: number;
-  unitPrice: number;
-  discountedQuantity?: number;
-  discountAmount: number;
-  cancelledQty: number;
-  netQuantity: number;
-  amountBeforeDiscount: number;
-  amountAfterDiscount: number;
-}
-
-export interface IOrder {
-  id: string;
-  customerName: string;
-  createdAt?: string;
-  itemCount: number;
-  paymentStatus: string;
-  total: number;
-  orderStatus: string;
-  note?: string;
-  items?: IOrderItem[];
-}
 
 export interface IOrdersState {
   orders: IOrder[];

@@ -1,15 +1,18 @@
 import { NavLink, useParams } from "react-router";
 
+import ErrorPage from "../../../../../components/ui/error/error-page";
+import NoRecordApp from "../list/no-record/no-record";
 import OrderHeaderApp from "../header/order-header";
 import { ROUTE_URL } from "../../../../../components/auth/constants/routes.const";
 import { useGetDetailQuery } from "../../../../../app/features/sales/order/order.api";
 
 const OrderViewApp = () => {
   const { orderId } = useParams(); //
-  const { data: order, isLoading, error } = useGetDetailQuery(orderId || "");
+  const { data, isLoading, error } = useGetDetailQuery(orderId || "");
 
   if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error fetching order.</p>;
+  if (error) return <ErrorPage />;
+  if (!data) return <NoRecordApp />;
 
   return (
     <div className="order-header-app flex flex-col gap-4 mb-3">
@@ -43,49 +46,42 @@ const OrderViewApp = () => {
 
             <div className="card-body pt-0">
               <div className="d-flex flex-column gap-6">
-                {/* Order ID */}
                 <div className="d-flex justify-content-between align-items-start flex-wrap">
                   <div className="d-flex align-items-center text-muted">
                     <i className="bi bi-hash fs-4 me-2"></i>
                     Order ID
                   </div>
                   <div className="fw-bold text-gray-600 text-end">
-                    #{order?.id || "N/A"}
+                    #{data?.order?.id || "N/A"}
                   </div>
                 </div>
-
-                {/* Added Date */}
                 <div className="d-flex justify-content-between align-items-start flex-wrap">
                   <div className="d-flex align-items-center text-muted">
                     <i className="bi bi-calendar-event fs-4 me-2"></i>
                     Added Date
                   </div>
                   <div className="fw-bold text-gray-600 text-end">
-                    {order?.createdAt
-                      ? new Date(order.createdAt).toLocaleDateString()
+                    {data?.order?.createdAt
+                      ? new Date(data?.order.createdAt).toLocaleDateString()
                       : "N/A"}
                   </div>
                 </div>
-
-                {/* Payment Method */}
                 <div className="d-flex justify-content-between align-items-start flex-wrap">
                   <div className="d-flex align-items-center text-muted">
                     <i className="bi bi-credit-card fs-4 me-2"></i>
                     Payment Method
                   </div>
                   <div className="fw-bold text-gray-600 text-end">
-                    {order?.orderStatus || "Online"}
+                    {data?.invoice?.paymentMode || "Online"}
                   </div>
                 </div>
-
-                {/* Order Status */}
                 <div className="d-flex justify-content-between align-items-start flex-wrap">
                   <div className="d-flex align-items-center text-muted">
                     <i className="bi bi-box-seam fs-4 me-2"></i>
                     Order Status
                   </div>
                   <div className="fw-bold text-gray-600 text-end">
-                    {order?.orderStatus || "Delivered"}
+                    {data?.order?.orderStatus || "Delivered"}
                   </div>
                 </div>
               </div>
@@ -107,7 +103,7 @@ const OrderViewApp = () => {
                     Customer
                   </div>
                   <div className="fw-bold text-gray-600 text-end d-flex align-items-center">
-                    <span>{order?.customerName || "N/A"}</span>
+                    <span>{data?.order?.customerName || "N/A"}</span>
                   </div>
                 </div>
 
@@ -117,16 +113,7 @@ const OrderViewApp = () => {
                     Email
                   </div>
                   <div className="fw-bold text-gray-600 text-end">
-                    {order?.customerName ? (
-                      <a
-                        href={`mailto:${order?.customerName}`}
-                        className="text-hover-primary"
-                      >
-                        {order?.customerName}
-                      </a>
-                    ) : (
-                      "N/A"
-                    )}
+                    {data?.invoice?.billTo?.detail}
                   </div>
                 </div>
 
@@ -136,7 +123,7 @@ const OrderViewApp = () => {
                     Phone
                   </div>
                   <div className="fw-bold text-gray-600 text-end">
-                    {order?.customerName || "N/A"}
+                    {data?.invoice?.billTo?.phone || "N/A"}
                   </div>
                 </div>
               </div>
@@ -162,7 +149,7 @@ const OrderViewApp = () => {
                       href="/keen/demo1/apps/invoices/view/invoice-3.html"
                       className="text-hover-primary"
                     >
-                      #INV-000414
+                      # {data?.invoice?.id}
                     </a>
                   </div>
                 </div>
@@ -184,7 +171,7 @@ const OrderViewApp = () => {
                     <i className="bi bi-gift fs-4 me-2"></i>
                     Reward Points
                   </div>
-                  <div className="fw-bold text-gray-600 text-end">600</div>
+                  <div className="fw-bold text-gray-600 text-end">0</div>
                 </div>
               </div>
             </div>

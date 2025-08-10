@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import {
-  ArtDetail,
-  type IArtDetail,
-  type IInvoiceDetail,
-  type ITotalCalculationInput,
-  TotalCalculationInput,
-} from "../../../../../interfaces/total-calculation.model";
+  InitializeOrderInvoice,
+  InitializeOrderItem,
+  type ICustomizedDetails,
+  type IInvoice,
+  type IOrderInvoiceData,
+  type IOrderItem,
+} from "../../../../../interfaces/order/order.model";
 import OrderHeaderApp from "../header/order-header";
 import { paymentModes } from "../../../../../constants/app.const";
 import {
@@ -44,45 +45,62 @@ const OrderAddApp = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  const [bill, setBill] = useState<ITotalCalculationInput>(
-    new TotalCalculationInput()
+  const [bill, setBill] = useState<IOrderInvoiceData>(
+    new InitializeOrderInvoice()
   );
 
   //#region methods
 
   const calculateTotalAmount = (): number => {
-    return bill.artDetails.reduce(
-      (cost, item) => cost + item?.unitPrice * item?.quantity,
-      0
+    return (
+      bill?.order?.items?.reduce(
+        (cost, item) => cost + item?.unitPrice * item?.quantity,
+        0
+      ) || 0
     );
   };
 
   const handleAddItem = () => {
-    setBill({
-      ...bill,
-      artDetails: [...bill.artDetails, new ArtDetail()],
+    setBill((prev) => {
+      const existingItems = prev?.order?.items ?? [];
+      return {
+        ...prev,
+        order: {
+          ...prev?.order,
+          items: [...existingItems, new InitializeOrderItem()],
+        },
+      };
     });
   };
 
   const handleRemoveItem = (index: number) => {
-    const updatedArtDetails = bill.artDetails.filter((_, i) => i !== index);
+    const items = bill?.order?.items?.filter((_, i) => i !== index);
 
     setBill({
       ...bill,
-      artDetails: updatedArtDetails,
+      // artDetails: updatedArtDetails,
+      order: {
+        ...bill?.order,
+        items,
+      },
     });
   };
 
   const handleInputChange = (
     index: number,
-    field: keyof IArtDetail | "mounting" | "glass" | "frame" | "additional",
+    field:
+      | keyof ICustomizedDetails
+      | "mounting"
+      | "glass"
+      | "frame"
+      | "additional",
     value: object | string | number
   ) => {
-    if (index < 0 || index >= bill.artDetails.length) return;
+    if (index < 0 || index >= (bill?.order?.items?.length || 0)) return;
 
-    const updatedArtDetails = [...bill.artDetails];
-    updatedArtDetails[index] = {
-      ...updatedArtDetails[index],
+    const items = [...(bill?.order?.items || [])];
+    items[index] = {
+      ...items[index],
       [field]: value,
     };
 
@@ -90,35 +108,39 @@ const OrderAddApp = () => {
       frameTypes,
       glassTypes,
       miscCharges
-    ).unitCost(updatedArtDetails[index]);
+    ).unitCost(items[index]);
 
     // Auto-calculate total for the item
-    updatedArtDetails[index].unitPrice = unitCost;
+    items[index].unitPrice = unitCost;
 
     setBill({
       ...bill,
-      artDetails: updatedArtDetails,
+      order: {
+        ...bill?.order,
+        items,
+      },
     });
   };
 
-  const handlePaymentChange = (field: string, value: number) => {
-    const validValue = isNaN(value) ? 0 : value;
-
-    setBill({
-      ...bill,
-      [field]: validValue,
-    });
-  };
-
-  const handleDateChange = (field: string, value: string) => {
-    setBill({
-      ...bill,
+  const handleItemChange = (
+    index: number,
+    field: keyof IOrderItem,
+    value: object | string | number
+  ) => {
+    const items = [...(bill?.order?.items || [])];
+    items[index] = {
+      ...items[index],
       [field]: value,
+    };
+
+    setBill({
+      ...bill,
+      order: { ...bill?.order, items },
     });
   };
 
   const handleInvoiceChange = (
-    field: keyof IInvoiceDetail,
+    field: keyof IInvoice,
     value: string | number | object
   ) => {
     setBill({
@@ -145,7 +167,7 @@ const OrderAddApp = () => {
     }
   };
 
-  const chargableArea = (item: IArtDetail) => {
+  const chargableArea = (item: ICustomizedDetails) => {
     const billDetails = new BillCalculation(
       frameTypes,
       glassTypes,
@@ -195,8 +217,11 @@ const OrderAddApp = () => {
     // Calculate totals when bill changes
     const cost = calculateTotalAmount();
 
-    const finalAmount = cost;
-    const balanceAmount = cost - bill?.discountAmount - bill?.advancePayment;
+    const finalAmount = cost || 0;
+    const balanceAmount =
+      cost -
+      (bill?.order?.discountAmount || 0) -
+      (bill?.invoice?.advancePaid || 0);
 
     setBill((prevBill) => ({
       ...prevBill,
@@ -204,7 +229,13 @@ const OrderAddApp = () => {
       finalAmount,
       balanceAmount,
     }));
-  }, [bill?.artDetails, bill?.discountAmount, bill?.advancePayment]);
+  }, [
+    bill?.order,
+    bill?.invoice,
+    bill?.order?.items,
+    bill?.order?.discountAmount,
+    bill?.invoice?.advancePaid,
+  ]);
   //#endregion
 
   return (
@@ -240,17 +271,17 @@ const OrderAddApp = () => {
                   <div>
                     <h6 className="d-flex align-items-center text-gray-600 text-hover-primary justify-content-between">
                       PAYMENT DETAILS
-                      {bill?.balanceAmount > 0 && (
+                      {(bill?.invoice?.balanceAmount || 0) > 0 && (
                         <span className="badge badge-light-warning">
                           Pending Payment
                         </span>
                       )}
-                      {bill?.balanceAmount < 0 && (
+                      {(bill?.invoice?.balanceAmount || 0) < 0 && (
                         <span className="badge badge-light-danger">
                           Overpaid
                         </span>
                       )}
-                      {bill?.balanceAmount === 0 && (
+                      {(bill?.invoice?.balanceAmount || 0) === 0 && (
                         <span className="badge badge-light-success">
                           No Payment Due
                         </span>
@@ -288,7 +319,7 @@ const OrderAddApp = () => {
                         Total:
                       </div>
                       <div className="text-end fw-bold fs-6 text-gray-800">
-                        ₹ {bill?.finalAmount?.toFixed(2)}
+                        ₹ {bill?.invoice?.totalAmount?.toFixed(2)}
                       </div>
                     </div>
                     <div className="d-flex flex-stack mb-3">
@@ -302,12 +333,20 @@ const OrderAddApp = () => {
                           id="discountAmount"
                           className="form-control form-control-solid hide-spin-button text-end"
                           placeholder="Height (cm)"
-                          value={bill?.discountAmount}
+                          value={bill?.order?.discountAmount}
                           onChange={(e) =>
-                            handlePaymentChange(
-                              "discountAmount",
-                              parseFloat(e.target.value)
-                            )
+                            // handlePaymentChange(
+                            //   "discountAmount",
+                            //   parseFloat(e.target.value)
+                            // )
+
+                            setBill((prev) => ({
+                              ...prev,
+                              order: {
+                                ...prev?.order,
+                                discountAmount: parseFloat(e.target.value) || 0,
+                              },
+                            }))
                           }
                         />
                       </div>
@@ -322,7 +361,8 @@ const OrderAddApp = () => {
                       <div className="text-end fw-bold fs-2 text-gray-800">
                         ₹
                         {(
-                          bill?.finalAmount - bill?.discountAmount || 0
+                          (bill?.invoice?.totalAmount || 0) -
+                            bill?.order?.discountAmount || 0
                         )?.toFixed(2)}
                       </div>
                     </div>
@@ -337,15 +377,18 @@ const OrderAddApp = () => {
                         <input
                           type="number"
                           min={0}
-                          id="advancePayment"
+                          id="advancePaid"
                           className="form-control form-control-solid hide-spin-button text-end"
                           placeholder="Height (cm)"
-                          value={bill?.advancePayment}
+                          value={bill?.invoice?.advancePaid}
                           onChange={(e) =>
-                            handlePaymentChange(
-                              "advancePayment",
-                              parseFloat(e.target.value)
-                            )
+                            setBill((prev) => ({
+                              ...prev,
+                              invoice: {
+                                ...prev?.invoice,
+                                advancePaid: parseFloat(e.target.value) || 0,
+                              },
+                            }))
                           }
                         />
                       </div>
@@ -356,7 +399,7 @@ const OrderAddApp = () => {
                         Amount Due:
                       </div>
                       <div className="text-end fw-bold fs-6 text-gray-800">
-                        ₹ {bill?.balanceAmount?.toFixed(2)}
+                        ₹ {bill?.invoice?.balanceAmount?.toFixed(2)}
                       </div>
                     </div>
                   </div>
@@ -422,7 +465,10 @@ const OrderAddApp = () => {
                       onChange={(e) =>
                         setBill((prev) => ({
                           ...prev,
-                          customerName: e.target.value,
+                          order: {
+                            ...prev?.order,
+                            customerName: e.target.value,
+                          },
                         }))
                       }
                     />
@@ -466,7 +512,8 @@ const OrderAddApp = () => {
                   </div>
 
                   <div className="fw-bold fs-4">
-                    Total Cost: ₹<span> {bill?.finalAmount?.toFixed(2)}</span>
+                    Total Cost: ₹
+                    <span> {bill?.invoice?.totalAmount?.toFixed(2)}</span>
                   </div>
                 </div>
 
@@ -599,7 +646,7 @@ const OrderAddApp = () => {
               className="card-body py-0"
               style={{ overflowY: "auto", maxHeight: "600px" }}
             >
-              {bill?.artDetails?.map((item, index) => (
+              {bill?.order?.items?.map((item, index) => (
                 <div key={`'custom' + ${index}`}>
                   <div className="py-3 d-flex flex-stack flex-wrap">
                     <a
@@ -624,7 +671,8 @@ const OrderAddApp = () => {
                       <div className="me-3">
                         <div className="d-flex align-items-center">
                           <div className="text-gray-800 fw-bold">
-                            {item?.artName || `Art ${index + 1}`}
+                            {item?.customizedDetails?.name ||
+                              `Art ${index + 1}`}
                           </div>
 
                           <div className="badge badge-light-primary ms-5">
@@ -634,7 +682,9 @@ const OrderAddApp = () => {
                             {`Cost: ` + item?.unitPrice?.toFixed(2)}
                           </div>
                         </div>
-                        <div className="text-muted">{item?.artDescription}</div>
+                        <div className="text-muted">
+                          {item?.customizedDetails?.description}
+                        </div>
                       </div>
                     </a>
 
@@ -670,17 +720,33 @@ const OrderAddApp = () => {
                   >
                     <div className="row g-3 d-flex mb-3">
                       <span className="text-gray-500 text-end fw-semibold fs-6">
-                        {chargableArea(item)}
+                        {chargableArea(item?.customizedDetails)}
                       </span>
                       <div className="col-sm-8">
                         <input
                           type="text"
                           className="form-control form-control-solid fs-6 fw-bold"
                           placeholder="Art Name"
-                          name={"artName" + index + item?.artName}
-                          value={item?.artName || `Art ${index + 1}`}
+                          name="customizedDetails.name"
+                          value={item?.customizedDetails?.name}
                           onChange={(e) =>
-                            handleInputChange(index, "artName", e.target.value)
+                            setBill((prev) => ({
+                              ...prev,
+                              order: {
+                                ...prev.order,
+                                items: prev?.order?.items?.map((item, i) =>
+                                  i === index
+                                    ? {
+                                        ...item,
+                                        customizedDetails: {
+                                          ...item.customizedDetails,
+                                          name: e.target.value,
+                                        },
+                                      }
+                                    : item
+                                ),
+                              },
+                            }))
                           }
                         />
                       </div>
@@ -691,9 +757,13 @@ const OrderAddApp = () => {
                           className="form-control form-control-solid"
                           placeholder="Quantity"
                           name="Quantity"
-                          value={item.quantity}
+                          value={item?.quantity}
                           onChange={(e) =>
-                            handleInputChange(index, "quantity", e.target.value)
+                            handleItemChange(
+                              index,
+                              "quantity",
+                              parseFloat(e.target.value) || 0
+                            )
                           }
                         />
                       </div>
@@ -705,13 +775,25 @@ const OrderAddApp = () => {
                           className="form-control form-control-solid"
                           placeholder="Art Description"
                           name="artDescription"
-                          value={item?.artDescription || ""}
+                          value={item?.customizedDetails?.description || ""}
                           onChange={(e) =>
-                            handleInputChange(
-                              index,
-                              "artDescription",
-                              e.target.value
-                            )
+                            setBill((prev) => ({
+                              ...prev,
+                              order: {
+                                ...prev.order,
+                                items: prev?.order?.items?.map((item, i) =>
+                                  i === index
+                                    ? {
+                                        ...item,
+                                        customizedDetails: {
+                                          ...item.customizedDetails,
+                                          description: e.target.value,
+                                        },
+                                      }
+                                    : item
+                                ),
+                              },
+                            }))
                           }
                         />
                       </div>
@@ -721,13 +803,26 @@ const OrderAddApp = () => {
                           min={0}
                           className="form-control form-control-solid"
                           placeholder="Width (cm)"
-                          value={item.width}
+                          value={item?.customizedDetails?.width}
                           onChange={(e) =>
-                            handleInputChange(
-                              index,
-                              "width",
-                              parseFloat(e.target.value) || 0
-                            )
+                            setBill((prev) => ({
+                              ...prev,
+                              order: {
+                                ...prev.order,
+                                items: prev?.order?.items?.map((item, i) =>
+                                  i === index
+                                    ? {
+                                        ...item,
+                                        customizedDetails: {
+                                          ...item.customizedDetails,
+                                          width:
+                                            parseFloat(e.target.value) || 0,
+                                        },
+                                      }
+                                    : item
+                                ),
+                              },
+                            }))
                           }
                         />
                       </div>
@@ -737,13 +832,26 @@ const OrderAddApp = () => {
                           min={0}
                           className="form-control form-control-solid"
                           placeholder="Height (cm)"
-                          value={item?.height}
+                          value={item?.customizedDetails?.height}
                           onChange={(e) =>
-                            handleInputChange(
-                              index,
-                              "height",
-                              parseFloat(e.target.value) || 0
-                            )
+                            setBill((prev) => ({
+                              ...prev,
+                              order: {
+                                ...prev.order,
+                                items: prev?.order?.items?.map((item, i) =>
+                                  i === index
+                                    ? {
+                                        ...item,
+                                        customizedDetails: {
+                                          ...item.customizedDetails,
+                                          height:
+                                            parseFloat(e.target.value) || 0,
+                                        },
+                                      }
+                                    : item
+                                ),
+                              },
+                            }))
                           }
                         />
                       </div>
@@ -759,12 +867,38 @@ const OrderAddApp = () => {
                                 className="form-check-input"
                                 type="checkbox"
                                 id="mounting"
-                                checked={item?.mounting?.isEnabled}
+                                checked={
+                                  item?.customizedDetails?.mounting?.isEnabled
+                                }
+                                // onChange={(e) =>
+                                //   handleInputChange(index, "mounting", {
+                                //     ...item?.customizedDetails?.mounting,
+                                //     isEnabled: e.target.checked,
+                                //   })
+                                // }
                                 onChange={(e) =>
-                                  handleInputChange(index, "mounting", {
-                                    ...item.mounting,
-                                    isEnabled: e.target.checked,
-                                  })
+                                  setBill((prev) => ({
+                                    ...prev,
+                                    order: {
+                                      ...prev.order,
+                                      items: prev?.order?.items?.map(
+                                        (item, i) =>
+                                          i === index
+                                            ? {
+                                                ...item,
+                                                customizedDetails: {
+                                                  ...item?.customizedDetails,
+                                                  mounting: {
+                                                    ...item?.customizedDetails
+                                                      ?.mounting,
+                                                    isEnabled: e.target.checked,
+                                                  },
+                                                },
+                                              }
+                                            : item
+                                      ),
+                                    },
+                                  }))
                                 }
                               />
                               <span className="form-check-label">Mounting</span>
@@ -772,7 +906,7 @@ const OrderAddApp = () => {
                           </div>
 
                           <div className="col-md-12 d-flex flex-center">
-                            {item?.mounting?.isEnabled && (
+                            {item?.customizedDetails?.mounting?.isEnabled && (
                               <div className="mounting-component">
                                 <div className="outer-frame">
                                   <div className="inner-frame">
@@ -783,13 +917,45 @@ const OrderAddApp = () => {
                                         id="top-mounting"
                                         className="form-control form-control-solid side-input"
                                         placeholder="cm"
-                                        value={item?.mounting?.top || ""}
+                                        value={
+                                          item?.customizedDetails?.mounting
+                                            ?.top || ""
+                                        }
+                                        // onChange={(e) =>
+                                        //   handleInputChange(index, "mounting", {
+                                        //     ...item?.customizedDetails
+                                        //       ?.mounting,
+                                        //     top:
+                                        //       parseFloat(e.target.value) || 0,
+                                        //   })
+                                        // }
                                         onChange={(e) =>
-                                          handleInputChange(index, "mounting", {
-                                            ...item.mounting,
-                                            top:
-                                              parseFloat(e.target.value) || 0,
-                                          })
+                                          setBill((prev) => ({
+                                            ...prev,
+                                            order: {
+                                              ...prev.order,
+                                              items: prev?.order?.items?.map(
+                                                (item, i) =>
+                                                  i === index
+                                                    ? {
+                                                        ...item,
+                                                        customizedDetails: {
+                                                          ...item?.customizedDetails,
+                                                          mounting: {
+                                                            ...item
+                                                              ?.customizedDetails
+                                                              ?.mounting,
+                                                            top:
+                                                              parseFloat(
+                                                                e.target.value
+                                                              ) || 0,
+                                                          },
+                                                        },
+                                                      }
+                                                    : item
+                                              ),
+                                            },
+                                          }))
                                         }
                                       />
                                     </div>
@@ -800,13 +966,45 @@ const OrderAddApp = () => {
                                         id="right-mounting"
                                         className="form-control form-control-solid side-input"
                                         placeholder="cm"
-                                        value={item?.mounting?.right || ""}
+                                        value={
+                                          item?.customizedDetails?.mounting
+                                            ?.right || ""
+                                        }
+                                        // onChange={(e) =>
+                                        //   handleInputChange(index, "mounting", {
+                                        //     ...item?.customizedDetails
+                                        //       ?.mounting,
+                                        //     right:
+                                        //       parseFloat(e.target.value) || 0,
+                                        //   })
+                                        // }
                                         onChange={(e) =>
-                                          handleInputChange(index, "mounting", {
-                                            ...item.mounting,
-                                            right:
-                                              parseFloat(e.target.value) || 0,
-                                          })
+                                          setBill((prev) => ({
+                                            ...prev,
+                                            order: {
+                                              ...prev.order,
+                                              items: prev?.order?.items?.map(
+                                                (item, i) =>
+                                                  i === index
+                                                    ? {
+                                                        ...item,
+                                                        customizedDetails: {
+                                                          ...item?.customizedDetails,
+                                                          mounting: {
+                                                            ...item
+                                                              ?.customizedDetails
+                                                              ?.mounting,
+                                                            right:
+                                                              parseFloat(
+                                                                e.target.value
+                                                              ) || 0,
+                                                          },
+                                                        },
+                                                      }
+                                                    : item
+                                              ),
+                                            },
+                                          }))
                                         }
                                       />
                                     </div>
@@ -817,13 +1015,45 @@ const OrderAddApp = () => {
                                         id="bottom-mounting"
                                         className="form-control form-control-solid side-input"
                                         placeholder="cm"
-                                        value={item?.mounting?.bottom || ""}
+                                        value={
+                                          item?.customizedDetails?.mounting
+                                            ?.bottom || ""
+                                        }
+                                        // onChange={(e) =>
+                                        //   handleInputChange(index, "mounting", {
+                                        //     ...item?.customizedDetails
+                                        //       ?.mounting,
+                                        //     bottom:
+                                        //       parseFloat(e.target.value) || 0,
+                                        //   })
+                                        // }
                                         onChange={(e) =>
-                                          handleInputChange(index, "mounting", {
-                                            ...item.mounting,
-                                            bottom:
-                                              parseFloat(e.target.value) || 0,
-                                          })
+                                          setBill((prev) => ({
+                                            ...prev,
+                                            order: {
+                                              ...prev.order,
+                                              items: prev?.order?.items?.map(
+                                                (item, i) =>
+                                                  i === index
+                                                    ? {
+                                                        ...item,
+                                                        customizedDetails: {
+                                                          ...item?.customizedDetails,
+                                                          mounting: {
+                                                            ...item
+                                                              ?.customizedDetails
+                                                              ?.mounting,
+                                                            bottom:
+                                                              parseFloat(
+                                                                e.target.value
+                                                              ) || 0,
+                                                          },
+                                                        },
+                                                      }
+                                                    : item
+                                              ),
+                                            },
+                                          }))
                                         }
                                       />
                                     </div>
@@ -834,13 +1064,45 @@ const OrderAddApp = () => {
                                         id="left-mounting"
                                         className="form-control form-control-solid side-input"
                                         placeholder="cm"
-                                        value={item?.mounting?.left || ""}
+                                        value={
+                                          item?.customizedDetails?.mounting
+                                            ?.left || ""
+                                        }
+                                        // onChange={(e) =>
+                                        //   handleInputChange(index, "mounting", {
+                                        //     ...item?.customizedDetails
+                                        //       ?.mounting,
+                                        //     left:
+                                        //       parseFloat(e.target.value) || 0,
+                                        //   })
+                                        // }
                                         onChange={(e) =>
-                                          handleInputChange(index, "mounting", {
-                                            ...item.mounting,
-                                            left:
-                                              parseFloat(e.target.value) || 0,
-                                          })
+                                          setBill((prev) => ({
+                                            ...prev,
+                                            order: {
+                                              ...prev.order,
+                                              items: prev?.order?.items?.map(
+                                                (item, i) =>
+                                                  i === index
+                                                    ? {
+                                                        ...item,
+                                                        customizedDetails: {
+                                                          ...item?.customizedDetails,
+                                                          mounting: {
+                                                            ...item
+                                                              ?.customizedDetails
+                                                              ?.mounting,
+                                                            left:
+                                                              parseFloat(
+                                                                e.target.value
+                                                              ) || 0,
+                                                          },
+                                                        },
+                                                      }
+                                                    : item
+                                              ),
+                                            },
+                                          }))
                                         }
                                       />
                                     </div>
@@ -861,12 +1123,38 @@ const OrderAddApp = () => {
                                 className="form-check-input"
                                 type="checkbox"
                                 id={"glass-" + index}
-                                checked={item?.glass?.isEnabled}
+                                checked={
+                                  item?.customizedDetails?.glass?.isEnabled
+                                }
+                                // onChange={(e) =>
+                                //   handleInputChange(index, "glass", {
+                                //     ...item?.customizedDetails?.glass,
+                                //     isEnabled: e.target.checked,
+                                //   })
+                                // }
                                 onChange={(e) =>
-                                  handleInputChange(index, "glass", {
-                                    ...item.glass,
-                                    isEnabled: e.target.checked,
-                                  })
+                                  setBill((prev) => ({
+                                    ...prev,
+                                    order: {
+                                      ...prev.order,
+                                      items: prev?.order?.items?.map(
+                                        (item, i) =>
+                                          i === index
+                                            ? {
+                                                ...item,
+                                                customizedDetails: {
+                                                  ...item?.customizedDetails,
+                                                  glass: {
+                                                    ...item?.customizedDetails
+                                                      ?.glass,
+                                                    isEnabled: e.target.checked,
+                                                  },
+                                                },
+                                              }
+                                            : item
+                                      ),
+                                    },
+                                  }))
                                 }
                               />
                               <span className="form-check-label">Glass</span>
@@ -874,12 +1162,13 @@ const OrderAddApp = () => {
                           </div>
 
                           <div className="col-md-12">
-                            {item?.glass?.isEnabled &&
+                            {item?.customizedDetails?.glass?.isEnabled &&
                               glassTypes.map((glass) => (
                                 <label
                                   key={glass?.id + index}
                                   className={`btn btn-outline btn-outline-dashed btn-active-light-primary d-flex flex-stack text-start p-6 mb-5 g-3 ${
-                                    glass?.name === item?.glass?.type
+                                    glass?.name ===
+                                    item?.customizedDetails?.glass?.type
                                       ? " active"
                                       : ""
                                   }`}
@@ -890,15 +1179,42 @@ const OrderAddApp = () => {
                                         className="form-check-input"
                                         type="radio"
                                         checked={
-                                          glass?.name === item?.glass?.type
+                                          glass?.name ===
+                                          item?.customizedDetails?.glass?.type
                                         }
                                         name={glass?.name + index}
                                         value={glass?.name}
+                                        // onChange={(e) =>
+                                        //   handleInputChange(index, "glass", {
+                                        //     ...item?.customizedDetails?.glass,
+                                        //     type: e.target.value,
+                                        //   })
+                                        // }
                                         onChange={(e) =>
-                                          handleInputChange(index, "glass", {
-                                            ...item.glass,
-                                            type: e.target.value,
-                                          })
+                                          setBill((prev) => ({
+                                            ...prev,
+                                            order: {
+                                              ...prev.order,
+                                              items: prev?.order?.items?.map(
+                                                (item, i) =>
+                                                  i === index
+                                                    ? {
+                                                        ...item,
+                                                        customizedDetails: {
+                                                          ...item?.customizedDetails,
+                                                          glass: {
+                                                            ...item
+                                                              ?.customizedDetails
+                                                              ?.glass,
+                                                            type: e.target
+                                                              .value,
+                                                          },
+                                                        },
+                                                      }
+                                                    : item
+                                              ),
+                                            },
+                                          }))
                                         }
                                       />
                                     </div>
@@ -923,12 +1239,35 @@ const OrderAddApp = () => {
                       <div className="col-md-4">
                         <select
                           className="form-select form-select-solid"
-                          value={item?.frame?.type}
+                          value={item?.customizedDetails?.frame?.type}
+                          // onChange={(e) =>
+                          //   handleInputChange(index, "frame", {
+                          //     ...item?.customizedDetails?.frame,
+                          //     type: e.target.value,
+                          //   })
+                          // }
+
                           onChange={(e) =>
-                            handleInputChange(index, "frame", {
-                              ...item.frame,
-                              type: e.target.value,
-                            })
+                            setBill((prev) => ({
+                              ...prev,
+                              order: {
+                                ...prev.order,
+                                items: prev?.order?.items?.map((item, i) =>
+                                  i === index
+                                    ? {
+                                        ...item,
+                                        customizedDetails: {
+                                          ...item?.customizedDetails,
+                                          frame: {
+                                            ...item?.customizedDetails?.frame,
+                                            type: e.target.value,
+                                          },
+                                        },
+                                      }
+                                    : item
+                                ),
+                              },
+                            }))
                           }
                         >
                           <option value="">Select Frame Type</option>
@@ -946,12 +1285,34 @@ const OrderAddApp = () => {
                           className="form-control form-control-solid"
                           placeholder="Frame Color"
                           name="frameColor"
-                          value={item?.frame?.color}
+                          value={item?.customizedDetails?.frame?.color}
+                          // onChange={(e) =>
+                          //   handleInputChange(index, "frame", {
+                          //     ...item?.customizedDetails?.frame,
+                          //     color: e.target.value,
+                          //   })
+                          // }
                           onChange={(e) =>
-                            handleInputChange(index, "frame", {
-                              ...item.frame,
-                              color: e.target.value,
-                            })
+                            setBill((prev) => ({
+                              ...prev,
+                              order: {
+                                ...prev.order,
+                                items: prev?.order?.items?.map((item, i) =>
+                                  i === index
+                                    ? {
+                                        ...item,
+                                        customizedDetails: {
+                                          ...item?.customizedDetails,
+                                          frame: {
+                                            ...item?.customizedDetails?.frame,
+                                            color: e.target.value,
+                                          },
+                                        },
+                                      }
+                                    : item
+                                ),
+                              },
+                            }))
                           }
                         />
                       </div>
@@ -965,12 +1326,37 @@ const OrderAddApp = () => {
                             type="checkbox"
                             id="varnish"
                             value="1"
-                            checked={item?.additional?.varnish}
+                            checked={
+                              item?.customizedDetails?.additional?.varnish
+                            }
+                            // onChange={(e) =>
+                            //   handleInputChange(index, "additional", {
+                            //     ...item?.customizedDetails?.additional,
+                            //     varnish: e.target.checked,
+                            //   })
+                            // }
                             onChange={(e) =>
-                              handleInputChange(index, "additional", {
-                                ...item.additional,
-                                varnish: e.target.checked,
-                              })
+                              setBill((prev) => ({
+                                ...prev,
+                                order: {
+                                  ...prev.order,
+                                  items: prev?.order?.items?.map((item, i) =>
+                                    i === index
+                                      ? {
+                                          ...item,
+                                          customizedDetails: {
+                                            ...item?.customizedDetails,
+                                            additional: {
+                                              ...item?.customizedDetails
+                                                ?.additional,
+                                              varnish: e.target.checked,
+                                            },
+                                          },
+                                        }
+                                      : item
+                                  ),
+                                },
+                              }))
                             }
                           />
                           <span className="form-check-label">Varnish</span>
@@ -984,12 +1370,37 @@ const OrderAddApp = () => {
                             type="checkbox"
                             id="lamination"
                             value="1"
-                            checked={item?.additional?.lamination}
+                            checked={
+                              item?.customizedDetails?.additional?.lamination
+                            }
+                            // onChange={(e) =>
+                            //   handleInputChange(index, "additional", {
+                            //     ...item?.customizedDetails?.additional,
+                            //     lamination: e.target.checked,
+                            //   })
+                            // }
                             onChange={(e) =>
-                              handleInputChange(index, "additional", {
-                                ...item.additional,
-                                lamination: e.target.checked,
-                              })
+                              setBill((prev) => ({
+                                ...prev,
+                                order: {
+                                  ...prev.order,
+                                  items: prev?.order?.items?.map((item, i) =>
+                                    i === index
+                                      ? {
+                                          ...item,
+                                          customizedDetails: {
+                                            ...item?.customizedDetails,
+                                            additional: {
+                                              ...item?.customizedDetails
+                                                ?.additional,
+                                              lamination: e.target.checked,
+                                            },
+                                          },
+                                        }
+                                      : item
+                                  ),
+                                },
+                              }))
                             }
                           />
                           <span className="form-check-label">Lamination</span>
@@ -1003,12 +1414,37 @@ const OrderAddApp = () => {
                             type="checkbox"
                             id="routerCut"
                             value="1"
-                            checked={item?.additional?.routerCut}
+                            checked={
+                              item?.customizedDetails?.additional?.routerCut
+                            }
+                            // onChange={(e) =>
+                            //   handleInputChange(index, "additional", {
+                            //     ...item?.customizedDetails?.additional,
+                            //     routerCut: e.target.checked,
+                            //   })
+                            // }
                             onChange={(e) =>
-                              handleInputChange(index, "additional", {
-                                ...item.additional,
-                                routerCut: e.target.checked,
-                              })
+                              setBill((prev) => ({
+                                ...prev,
+                                order: {
+                                  ...prev.order,
+                                  items: prev?.order?.items?.map((item, i) =>
+                                    i === index
+                                      ? {
+                                          ...item,
+                                          customizedDetails: {
+                                            ...item?.customizedDetails,
+                                            additional: {
+                                              ...item?.customizedDetails
+                                                ?.additional,
+                                              routerCut: e.target.checked,
+                                            },
+                                          },
+                                        }
+                                      : item
+                                  ),
+                                },
+                              }))
                             }
                           />
                           <span className="form-check-label">Router Cut</span>
@@ -1016,7 +1452,7 @@ const OrderAddApp = () => {
                       </div>
                     </div>
                   </div>
-                  {index !== bill.artDetails.length - 1 && (
+                  {index !== (bill?.order?.items?.length || 0) - 1 && (
                     <div className="separator separator-dashed"></div>
                   )}
                 </div>

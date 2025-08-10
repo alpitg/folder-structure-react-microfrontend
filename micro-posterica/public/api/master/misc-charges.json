@@ -1,30 +1,30 @@
 [
   {
-    "id": 1,
+    "id": "1",
     "code": "mounting",
-    "name": "Mounting Board (5mm)",
-    "cost": 10.0,
+    "label": "Mounting Board (5mm)",
+    "amount": 10.0,
     "description": ""
   },
   {
-    "id": 2,
+    "id": "2",
     "code": "varnish",
-    "name": "Varnish (3 coats)",
-    "cost": 94.53,
+    "label": "Varnish (3 coats)",
+    "amount": 94.53,
     "description": ""
   },
   {
-    "id": 3,
+    "id": "3",
     "code": "lamination",
-    "name": "Lamination",
-    "cost": 127.0,
+    "label": "Lamination",
+    "amount": 127.0,
     "description": ""
   },
   {
-    "id": 4,
+    "id": "4",
     "code": "mdf_router_cutting",
-    "name": "MDF Router Cutting (8mm)",
-    "cost": 151.25,
+    "label": "MDF Router Cutting (8mm)",
+    "amount": 151.25,
     "description": ""
   }
 ]

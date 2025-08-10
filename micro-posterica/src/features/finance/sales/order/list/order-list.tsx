@@ -69,7 +69,7 @@ const OrderListApp = () => {
                     <td>
                       {
                         <PaymentBadge
-                          status={order.paymentStatus as PaymentStatus}
+                          status={order?.paymentStatus as PaymentStatus}
                         />
                       }
                     </td>
