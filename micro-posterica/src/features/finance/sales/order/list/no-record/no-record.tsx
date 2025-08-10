@@ -1,6 +1,6 @@
 import { NavLink } from "react-router";
 import { ROUTE_URL } from "../../../../../../components/auth/constants/routes.const";
-import noRecordImage from "/static/media/img/no-record-1.png";
+import noRecordImage from "/static/media/img/svg/add-new-1.svg";
 
 const NoRecordApp = () => {
   return (
@@ -32,7 +32,7 @@ const NoRecordApp = () => {
               <img
                 src={noRecordImage}
                 alt=""
-                className="mw-100 h-200px h-sm-325px"
+                className="mw-100 h-150px h-sm-325px"
               />
             </div>
           </div>

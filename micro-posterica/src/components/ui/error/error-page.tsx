@@ -1,4 +1,4 @@
-import errorImage from "/static/media/img/error-404.png";
+import errorImage from "/static/media/img/svg/error-404.svg";
 
 const ErrorPage = () => {
   return (
@@ -10,7 +10,7 @@ const ErrorPage = () => {
         flexDirection: "column",
         textAlign: "center",
         padding: "20px",
-        paddingTop: "10rem"
+        paddingTop: "10rem",
       }}
     >
       <h1 style={{ fontSize: "2rem", marginBottom: "10px" }}>
