@@ -23,6 +23,7 @@ import { useGetcustomersQuery } from "../../../../../app/features/customer/list/
 import { usePlaceOrderMutation } from "../../../../../app/features/sales/order/order.api";
 import { NavLink, useNavigate } from "react-router";
 import { ROUTE_URL } from "../../../../../components/auth/constants/routes.const";
+import DeleteConfirmationApp from "../../../../../components/ui/delete-confirmation/delete-confirmation";
 
 const OrderAddApp = () => {
   const {
@@ -48,6 +49,7 @@ const OrderAddApp = () => {
   const [bill, setBill] = useState<IOrderInvoiceData>(
     new InitializeOrderInvoice()
   );
+  const [isDiscard, setIsDiscard] = useState<boolean>(false);
 
   //#region methods
 
@@ -58,6 +60,25 @@ const OrderAddApp = () => {
         0
       ) || 0
     );
+  };
+
+  const calculateUnitCost = () => {
+    if (!bill?.order?.items) return;
+
+    setBill((prev) => ({
+      ...prev,
+      order: {
+        ...prev?.order,
+        items: prev?.order?.items?.map((x) => ({
+          ...x,
+          unitPrice: new BillCalculation(
+            frameTypes,
+            glassTypes,
+            miscCharges
+          ).unitCost(x),
+        })),
+      },
+    }));
   };
 
   const handleAddItem = () => {
@@ -84,6 +105,10 @@ const OrderAddApp = () => {
         items,
       },
     });
+  };
+
+  const handleOnDiscard = () => {
+    navigate(ROUTE_URL.FINANCE.SALES.BASE);
   };
 
   const handleInputChange = (
@@ -214,28 +239,23 @@ const OrderAddApp = () => {
   }, [isOrderPlaced]);
 
   useEffect(() => {
-    // Calculate totals when bill changes
     const cost = calculateTotalAmount();
-
-    const finalAmount = cost || 0;
+    const totalAmount = cost || 0;
     const balanceAmount =
       cost -
       (bill?.order?.discountAmount || 0) -
       (bill?.invoice?.advancePaid || 0);
 
-    setBill((prevBill) => ({
-      ...prevBill,
+    setBill((prev) => ({
+      ...prev,
       cost,
-      finalAmount,
-      balanceAmount,
+      invoice: {
+        ...prev.invoice,
+        balanceAmount,
+        totalAmount,
+      },
     }));
-  }, [
-    bill?.order,
-    bill?.invoice,
-    bill?.order?.items,
-    bill?.order?.discountAmount,
-    bill?.invoice?.advancePaid,
-  ]);
+  }, [bill?.order?.discountAmount, bill?.invoice?.advancePaid]);
   //#endregion
 
   return (
@@ -421,29 +441,18 @@ const OrderAddApp = () => {
 
                 <button
                   className="btn btn-light w-100"
-                  data-bs-toggle="modal"
-                  data-bs-target="#cancel-order-model"
+                  onClick={() => setIsDiscard(!isDiscard)}
                 >
                   <i className="bi bi-x-lg fs-3"></i> Cancel
                 </button>
 
-                <div className="modal" id="cancel-order-model" tabIndex={-1}>
-                  <div className="modal-dialog modal-dialog-centered">
-                    <div className="modal-content">
-                      {/* <div className="modal-header">
-                        <h5 className="modal-title">Are you sure ?</h5>
-                        <button
-                          type="button"
-                          className="btn-close"
-                          data-bs-dismiss="modal"
-                        ></button>
-                      </div> */}
-                      <div className="modal-body">
-                        This modal is vertically centered!
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                {isDiscard && (
+                  <DeleteConfirmationApp
+                    show={isDiscard}
+                    handleConfirm={() => handleOnDiscard()}
+                    handleCancel={() => setIsDiscard(!isDiscard)}
+                  />
+                )}
               </div>
             </div>
           </div>
@@ -513,7 +522,7 @@ const OrderAddApp = () => {
 
                   <div className="fw-bold fs-4">
                     Total Cost: ₹
-                    <span> {bill?.invoice?.totalAmount?.toFixed(2)}</span>
+                    <span> {calculateTotalAmount()?.toFixed(2)}</span>
                   </div>
                 </div>
 
@@ -758,13 +767,14 @@ const OrderAddApp = () => {
                           placeholder="Quantity"
                           name="Quantity"
                           value={item?.quantity}
-                          onChange={(e) =>
+                          onChange={(e) => {
                             handleItemChange(
                               index,
                               "quantity",
                               parseFloat(e.target.value) || 0
-                            )
-                          }
+                            );
+                            calculateUnitCost();
+                          }}
                         />
                       </div>
                     </div>
@@ -776,7 +786,7 @@ const OrderAddApp = () => {
                           placeholder="Art Description"
                           name="artDescription"
                           value={item?.customizedDetails?.description || ""}
-                          onChange={(e) =>
+                          onChange={(e) => {
                             setBill((prev) => ({
                               ...prev,
                               order: {
@@ -793,8 +803,8 @@ const OrderAddApp = () => {
                                     : item
                                 ),
                               },
-                            }))
-                          }
+                            }));
+                          }}
                         />
                       </div>
                       <div className="col-md-4 mb-5">
@@ -804,7 +814,7 @@ const OrderAddApp = () => {
                           className="form-control form-control-solid"
                           placeholder="Width (cm)"
                           value={item?.customizedDetails?.width}
-                          onChange={(e) =>
+                          onChange={(e) => {
                             setBill((prev) => ({
                               ...prev,
                               order: {
@@ -822,8 +832,9 @@ const OrderAddApp = () => {
                                     : item
                                 ),
                               },
-                            }))
-                          }
+                            }));
+                            calculateUnitCost();
+                          }}
                         />
                       </div>
                       <div className="col-md-4 mb-5">
@@ -1132,7 +1143,7 @@ const OrderAddApp = () => {
                                 //     isEnabled: e.target.checked,
                                 //   })
                                 // }
-                                onChange={(e) =>
+                                onChange={(e) => {
                                   setBill((prev) => ({
                                     ...prev,
                                     order: {
@@ -1154,8 +1165,9 @@ const OrderAddApp = () => {
                                             : item
                                       ),
                                     },
-                                  }))
-                                }
+                                  }));
+                                  calculateUnitCost();
+                                }}
                               />
                               <span className="form-check-label">Glass</span>
                             </label>
