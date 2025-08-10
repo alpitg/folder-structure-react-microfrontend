@@ -14,9 +14,9 @@ export interface IOrderItem {
 }
 
 export interface IOrder {
-  orderId: string;
+  id: string;
   customerName: string;
-  createdAt: string;
+  createdAt?: string;
   itemCount: number;
   paymentStatus: string;
   total: number;

@@ -17,6 +17,7 @@
     },
     "order": {
       "list": "/api/orders",
+      "detail": "/api/orders/{orderId}",
       "placeOrder": "/api/orders/place-order"
     },
     "customer": {

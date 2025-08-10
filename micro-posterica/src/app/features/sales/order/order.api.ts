@@ -17,6 +17,12 @@ export const ordersApi = createApi({
         GetEnvConfig()?.api?.baseUrl + GetEnvConfig()?.api?.order?.list, // Adjust path if needed
     }),
 
+    getDetail: builder.query<IOrder, string>({
+      query: (orderId) =>
+        GetEnvConfig()?.api?.baseUrl +
+        GetEnvConfig()?.api?.order?.detail?.replace("{orderId}", orderId),
+    }),
+
     // POST /api/orders
     placeOrder: builder.mutation<IOrderResponse, IPlaceOrderPayload>({
       query: (body) => ({
@@ -29,4 +35,4 @@ export const ordersApi = createApi({
   }),
 });
 
-export const { useGetOrdersQuery, usePlaceOrderMutation } = ordersApi;
+export const { useGetOrdersQuery, useGetDetailQuery, usePlaceOrderMutation } = ordersApi;

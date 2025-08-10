@@ -5,9 +5,14 @@ import PaymentBadge, {
 } from "../../../../../components/ui/payment-badges/payment-badges";
 import { ROUTE_URL } from "../../../../../components/auth/constants/routes.const";
 import { useGetOrdersQuery } from "../../../../../app/features/sales/order/order.api";
+import ErrorPage from "../../../../../components/ui/error/error-page";
+import NoRecordApp from "./no-record/no-record";
 
 const OrderListApp = () => {
-  const { data } = useGetOrdersQuery();
+  const { data: orderDetail, isLoading, error } = useGetOrdersQuery();
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <ErrorPage />;
+  if (!orderDetail) return <NoRecordApp />;
 
   return (
     <div className="order-list-app">
@@ -37,17 +42,17 @@ const OrderListApp = () => {
                 </tr>
               </thead>
               <tbody className="fw-semibold text-gray-600">
-                {data?.map((order) => (
-                  <tr key={order?.orderId}>
+                {orderDetail?.map((order) => (
+                  <tr key={order?.id}>
                     <td>
                       <NavLink
                         to={ROUTE_URL.FINANCE.SALES.VIEW.replace(
                           ":orderId",
-                          order?.orderId
+                          order?.id
                         )}
                         className="btn btn-sm"
                       >
-                        {order?.orderId}
+                        {order?.id}
                       </NavLink>
                     </td>
                     <td>
@@ -55,7 +60,11 @@ const OrderListApp = () => {
                         {order?.customerName}
                       </span>
                     </td>
-                    <td>{new Date(order?.createdAt).toLocaleDateString()}</td>
+                    <td>
+                      {order?.createdAt
+                        ? new Date(order?.createdAt)?.toLocaleDateString()
+                        : null}
+                    </td>
                     <td>{order?.itemCount}</td>
                     <td>
                       {

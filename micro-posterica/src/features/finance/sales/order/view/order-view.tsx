@@ -1,9 +1,15 @@
-import { NavLink } from "react-router";
+import { NavLink, useParams } from "react-router";
+
 import OrderHeaderApp from "../header/order-header";
 import { ROUTE_URL } from "../../../../../components/auth/constants/routes.const";
+import { useGetDetailQuery } from "../../../../../app/features/sales/order/order.api";
 
-const OrderViewApp = ({}: {}) => {
-  //   const navigate = useNavigate();
+const OrderViewApp = () => {
+  const { orderId } = useParams(); //
+  const { data: order, isLoading, error } = useGetDetailQuery(orderId || "");
+
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>Error fetching order.</p>;
 
   return (
     <div className="order-header-app flex flex-col gap-4 mb-3">
@@ -31,45 +37,61 @@ const OrderViewApp = ({}: {}) => {
           <div className="card card-flush py-4 flex-row-fluid">
             <div className="card-header">
               <div className="card-title">
-                <h2>Order Details (#14534)</h2>
+                <h2>Order Details</h2>
               </div>
             </div>
+
             <div className="card-body pt-0">
-              <div className="table-responsive">
-                <table className="table align-middle table-row-bordered mb-0 fs-6 gy-5 min-w-300px">
-                  <tbody className="fw-semibold text-gray-600">
-                    <tr>
-                      <td className="text-muted">
-                        <div className="d-flex align-items-center">
-                          <i className="bi bi-calendar-event fs-4 me-2"></i>
-                          Date Added
-                        </div>
-                      </td>
-                      <td className="fw-bold text-end">10/08/2025</td>
-                    </tr>
-                    <tr>
-                      <td className="text-muted">
-                        <div className="d-flex align-items-center">
-                          <i className="bi bi-credit-card fs-4 me-2"></i>
-                          Payment Method
-                        </div>
-                      </td>
-                      <td className="fw-bold text-end">Online</td>
-                    </tr>
-                    <tr>
-                      <td className="text-muted">
-                        <div className="d-flex align-items-center">
-                          <i className="bi bi-truck fs-4 me-2"></i>
-                          Shipping Method
-                        </div>
-                      </td>
-                      <td className="fw-bold text-end">Flat Shipping Rate</td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div className="d-flex flex-column gap-6">
+                {/* Order ID */}
+                <div className="d-flex justify-content-between align-items-start flex-wrap">
+                  <div className="d-flex align-items-center text-muted">
+                    <i className="bi bi-hash fs-4 me-2"></i>
+                    Order ID
+                  </div>
+                  <div className="fw-bold text-gray-600 text-end">
+                    #{order?.id || "N/A"}
+                  </div>
+                </div>
+
+                {/* Added Date */}
+                <div className="d-flex justify-content-between align-items-start flex-wrap">
+                  <div className="d-flex align-items-center text-muted">
+                    <i className="bi bi-calendar-event fs-4 me-2"></i>
+                    Added Date
+                  </div>
+                  <div className="fw-bold text-gray-600 text-end">
+                    {order?.createdAt
+                      ? new Date(order.createdAt).toLocaleDateString()
+                      : "N/A"}
+                  </div>
+                </div>
+
+                {/* Payment Method */}
+                <div className="d-flex justify-content-between align-items-start flex-wrap">
+                  <div className="d-flex align-items-center text-muted">
+                    <i className="bi bi-credit-card fs-4 me-2"></i>
+                    Payment Method
+                  </div>
+                  <div className="fw-bold text-gray-600 text-end">
+                    {order?.orderStatus || "Online"}
+                  </div>
+                </div>
+
+                {/* Order Status */}
+                <div className="d-flex justify-content-between align-items-start flex-wrap">
+                  <div className="d-flex align-items-center text-muted">
+                    <i className="bi bi-box-seam fs-4 me-2"></i>
+                    Order Status
+                  </div>
+                  <div className="fw-bold text-gray-600 text-end">
+                    {order?.orderStatus || "Delivered"}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+
           <div className="card card-flush py-4 flex-row-fluid">
             <div className="card-header">
               <div className="card-title">
@@ -78,53 +100,45 @@ const OrderViewApp = ({}: {}) => {
             </div>
 
             <div className="card-body pt-0">
-              <div className="table-responsive">
-                <table className="table align-middle table-row-bordered mb-0 fs-6 gy-5 min-w-300px">
-                  <tbody className="fw-semibold text-gray-600">
-                    <tr>
-                      <td className="text-muted">
-                        <div className="d-flex align-items-center">
-                          <i className="bi bi-person-circle fs-4 me-2"></i>
-                          Customer
-                        </div>
-                      </td>
-                      <td className="fw-bold text-end">
-                        <div className="d-flex align-items-center justify-content-end">
-                          <div className="symbol symbol-circle symbol-25px overflow-hidden me-3">
-                            <a>
-                              <div className="symbol-label"></div>
-                            </a>
-                          </div>
-                          <a className="text-gray-600 text-hover-primary">
-                            Dan Wilson
-                          </a>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="text-muted">
-                        <div className="d-flex align-items-center">
-                          <i className="bi bi-envelope fs-4 me-2"></i>
-                          Email
-                        </div>
-                      </td>
-                      <td className="fw-bold text-end">
-                        <a className="text-gray-600 text-hover-primary">
-                          dam@consilting.com
-                        </a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="text-muted">
-                        <div className="d-flex align-items-center">
-                          <i className="bi bi-telephone fs-4 me-2"></i>
-                          Phone
-                        </div>
-                      </td>
-                      <td className="fw-bold text-end">+6141 234 567</td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div className="d-flex flex-column gap-6">
+                <div className="d-flex justify-content-between align-items-start flex-wrap">
+                  <div className="d-flex align-items-center text-muted">
+                    <i className="bi bi-person-circle fs-4 me-2"></i>
+                    Customer
+                  </div>
+                  <div className="fw-bold text-gray-600 text-end d-flex align-items-center">
+                    <span>{order?.customerName || "N/A"}</span>
+                  </div>
+                </div>
+
+                <div className="d-flex justify-content-between align-items-start flex-wrap">
+                  <div className="d-flex align-items-center text-muted">
+                    <i className="bi bi-envelope fs-4 me-2"></i>
+                    Email
+                  </div>
+                  <div className="fw-bold text-gray-600 text-end">
+                    {order?.customerName ? (
+                      <a
+                        href={`mailto:${order?.customerName}`}
+                        className="text-hover-primary"
+                      >
+                        {order?.customerName}
+                      </a>
+                    ) : (
+                      "N/A"
+                    )}
+                  </div>
+                </div>
+
+                <div className="d-flex justify-content-between align-items-start flex-wrap">
+                  <div className="d-flex align-items-center text-muted">
+                    <i className="bi bi-telephone fs-4 me-2"></i>
+                    Phone
+                  </div>
+                  <div className="fw-bold text-gray-600 text-end">
+                    {order?.customerName || "N/A"}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -137,80 +151,46 @@ const OrderViewApp = ({}: {}) => {
             </div>
 
             <div className="card-body pt-0">
-              <div className="table-responsive">
-                <table className="table align-middle table-row-bordered mb-0 fs-6 gy-5 min-w-300px">
-                  <tbody className="fw-semibold text-gray-600">
-                    <tr>
-                      <td className="text-muted">
-                        <div className="d-flex align-items-center">
-                          <i className="bi bi-receipt fs-4 me-2"></i>
-                          Invoice
-                          <span
-                            className="ms-1"
-                            data-bs-toggle="tooltip"
-                            aria-label="View the invoice generated by this order."
-                            data-bs-original-title="View the invoice generated by this order."
-                          >
-                            <i className="bi bi-info-circle text-gray-500 fs-6"></i>
-                          </span>
-                        </div>
-                      </td>
-                      <td className="fw-bold text-end">
-                        <a
-                          href="/keen/demo1/apps/invoices/view/invoice-3.html"
-                          className="text-gray-600 text-hover-primary"
-                        >
-                          #INV-000414
-                        </a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="text-muted">
-                        <div className="d-flex align-items-center">
-                          <i className="bi bi-truck fs-4 me-2"></i>
-                          Shipping
-                          <span
-                            className="ms-1"
-                            data-bs-toggle="tooltip"
-                            aria-label="View the shipping manifest generated by this order."
-                            data-bs-original-title="View the shipping manifest generated by this order."
-                          >
-                            <i className="bi bi-info-circle text-gray-500 fs-6"></i>
-                          </span>
-                        </div>
-                      </td>
-                      <td className="fw-bold text-end">
-                        <a
-                          href="#"
-                          className="text-gray-600 text-hover-primary"
-                        >
-                          #SHP-0025410
-                        </a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="text-muted">
-                        <div className="d-flex align-items-center">
-                          <i className="bi bi-gift fs-4 me-2"></i>
-                          Reward Points
-                          <span
-                            className="ms-1"
-                            data-bs-toggle="tooltip"
-                            aria-label="Reward value earned by customer when purchasing this order"
-                            data-bs-original-title="Reward value earned by customer when purchasing this order"
-                          >
-                            <i className="bi bi-info-circle text-gray-500 fs-6"></i>
-                          </span>
-                        </div>
-                      </td>
-                      <td className="fw-bold text-end">600</td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div className="d-flex flex-column gap-6">
+                <div className="d-flex justify-content-between align-items-start flex-wrap">
+                  <div className="d-flex align-items-center text-muted">
+                    <i className="bi bi-receipt fs-4 me-2"></i>
+                    Invoice
+                  </div>
+                  <div className="fw-bold text-gray-600 text-end">
+                    <a
+                      href="/keen/demo1/apps/invoices/view/invoice-3.html"
+                      className="text-hover-primary"
+                    >
+                      #INV-000414
+                    </a>
+                  </div>
+                </div>
+
+                <div className="d-flex justify-content-between align-items-start flex-wrap">
+                  <div className="d-flex align-items-center text-muted">
+                    <i className="bi bi-truck fs-4 me-2"></i>
+                    Shipping
+                  </div>
+                  <div className="fw-bold text-gray-600 text-end">
+                    <a href="#" className="text-hover-primary">
+                      #SHP-0025410
+                    </a>
+                  </div>
+                </div>
+
+                <div className="d-flex justify-content-between align-items-start flex-wrap">
+                  <div className="d-flex align-items-center text-muted">
+                    <i className="bi bi-gift fs-4 me-2"></i>
+                    Reward Points
+                  </div>
+                  <div className="fw-bold text-gray-600 text-end">600</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
+
         <div className="d-flex flex-column gap-7 gap-lg-10">
           <div className="d-flex flex-column flex-xl-row gap-7 gap-lg-10">
             <div className="card card-flush py-4 flex-row-fluid position-relative">

@@ -19,6 +19,7 @@ let environment = {
     },
     order: {
       list: "",
+      detail: "",
       placeOrder: "",
     },
     customer: {

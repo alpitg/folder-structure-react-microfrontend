@@ -1,10 +1,9 @@
 .landing-page-app {
   .landing-page-container {
     .landing-page-content {
-      margin-top: calc(var(--app-navbar-top-height) + 2rem);
-      padding: 0 2rem;
+      margin-top: var(--bs-app-header-height);
+      padding: 2rem 2rem;
       width: 100%;
-      overflow: auto; // Handle overflow if content is too large
       transition-duration: 0.2s;
     }
   }
