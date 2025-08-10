@@ -20,6 +20,8 @@ import { fetchGlassTypes } from "../../../../../app/features/master/glass-types/
 import { fetchMiscCharges } from "../../../../../app/features/master/misc-charges/misc-charges.thunk";
 import { useGetcustomersQuery } from "../../../../../app/features/customer/list/customer.api";
 import { usePlaceOrderMutation } from "../../../../../app/features/sales/order/order.api";
+import { NavLink, useNavigate } from "react-router";
+import { ROUTE_URL } from "../../../../../components/auth/constants/routes.const";
 
 const OrderAddApp = () => {
   const {
@@ -34,12 +36,13 @@ const OrderAddApp = () => {
     placeOrder,
     {
       isLoading: isOrderPlacingInProgress,
-      // isSuccess: isOrderPlaced,
+      isSuccess: isOrderPlaced,
       // error: errorInOrderPlace,
     },
   ] = usePlaceOrderMutation();
 
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   const [bill, setBill] = useState<ITotalCalculationInput>(
     new TotalCalculationInput()
@@ -183,6 +186,12 @@ const OrderAddApp = () => {
   }, []);
 
   useEffect(() => {
+    if (isOrderPlaced) {
+      navigate(ROUTE_URL?.FINANCE?.SALES?.BASE);
+    }
+  }, [isOrderPlaced]);
+
+  useEffect(() => {
     // Calculate totals when bill changes
     const cost = calculateTotalAmount();
 
@@ -195,20 +204,22 @@ const OrderAddApp = () => {
       finalAmount,
       balanceAmount,
     }));
-  }, [
-    bill?.artDetails,
-    bill?.discountAmount,
-    bill?.advancePayment,
-  ]);
+  }, [bill?.artDetails, bill?.discountAmount, bill?.advancePayment]);
   //#endregion
 
   return (
     <div className="order-list-app">
       <OrderHeaderApp
-        back={true}
         header="Order Details"
-        description="Order Details page"
-      ></OrderHeaderApp>
+        description="Order details are here."
+      >
+        <NavLink to={ROUTE_URL.FINANCE.SALES.BASE}>
+          <span className="btn btn-light btn-active-secondary btn-sm me-5">
+            <i className="bi bi-chevron-left fs-5"></i>
+            Back to Order List
+          </span>
+        </NavLink>
+      </OrderHeaderApp>
 
       <div className="form d-flex flex-column flex-lg-row fv-plugins-bootstrap5 fv-plugins-framework">
         <div className="w-100 flex-lg-row-auto w-lg-300px mb-7 me-7 me-lg-10">
@@ -365,9 +376,31 @@ const OrderAddApp = () => {
                   Place Order
                 </button>
 
-                <button className="btn btn-light w-100">
+                <button
+                  className="btn btn-light w-100"
+                  data-bs-toggle="modal"
+                  data-bs-target="#cancel-order-model"
+                >
                   <i className="bi bi-x-lg fs-3"></i> Cancel
                 </button>
+
+                <div className="modal" id="cancel-order-model" tabIndex={-1}>
+                  <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-content">
+                      {/* <div className="modal-header">
+                        <h5 className="modal-title">Are you sure ?</h5>
+                        <button
+                          type="button"
+                          className="btn-close"
+                          data-bs-dismiss="modal"
+                        ></button>
+                      </div> */}
+                      <div className="modal-body">
+                        This modal is vertically centered!
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -1159,29 +1192,34 @@ const OrderAddApp = () => {
               </div>
             </div>
           </div>
-
-          <div className="d-flex justify-content-end">
-            <a
-              href="/keen/demo1/apps/ecommerce/catalog/products.html"
-              id="kt_ecommerce_edit_order_cancel"
-              className="btn btn-light me-5"
-            >
-              Cancel
-            </a>
-            <button
-              type="submit"
-              id="kt_ecommerce_edit_order_submit"
-              className="btn btn-primary"
-            >
-              <span className="indicator-label">Save Changes</span>
-              <span className="indicator-progress">
-                Please wait...{" "}
-                <span className="spinner-border spinner-border-sm align-middle ms-2" />
-              </span>
-            </button>
-          </div>
         </div>
       </div>
+
+      <>
+        {isOrderPlaced && (
+          <div className="toast-container">
+            <div
+              className={
+                "toast align-items-center position-fixed top-0 end-0 p-3 border-0" +
+                `${isOrderPlaced && " show"}`
+              }
+              role="alert"
+              aria-live="assertive"
+              aria-atomic="true"
+            >
+              <div className="d-flex">
+                <div className="toast-body">Order placed!</div>
+                <button
+                  type="button"
+                  className="btn-close me-2 m-auto"
+                  data-bs-dismiss="toast"
+                  aria-label="Close"
+                ></button>
+              </div>
+            </div>
+          </div>
+        )}
+      </>
     </div>
   );
 };

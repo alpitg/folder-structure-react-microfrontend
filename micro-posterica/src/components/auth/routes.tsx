@@ -45,6 +45,9 @@ const OrderEditApp = lazy(
 const OrderAddApp = lazy(
   () => import("../../features/finance/sales/order/add/order-add")
 );
+const OrderViewApp = lazy(
+  () => import("../../features/finance/sales/order/view/order-view")
+);
 
 const RoutesApp = () => {
   return (
@@ -68,6 +71,10 @@ const RoutesApp = () => {
               <Route
                 path={ROUTE_URL.FINANCE.SALES.ADD}
                 element={<OrderAddApp />}
+              />
+              <Route
+                path={ROUTE_URL.FINANCE.SALES.VIEW}
+                element={<OrderViewApp />}
               />
               <Route
                 path={ROUTE_URL.FINANCE.SALES.EDIT}

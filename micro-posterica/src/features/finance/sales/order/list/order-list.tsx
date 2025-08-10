@@ -11,7 +11,7 @@ const OrderListApp = () => {
 
   return (
     <div className="order-list-app">
-      <OrderHeaderApp header="Order listing" description="Order listing page">
+      <OrderHeaderApp header="Order listing" description="All orders are here.">
         <NavLink
           to={ROUTE_URL.FINANCE.SALES.ADD}
           className="btn btn-primary btn-sm"
@@ -36,21 +36,25 @@ const OrderListApp = () => {
                   <th>ORDER STATUS</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="fw-semibold text-gray-600">
                 {data?.map((order) => (
                   <tr key={order?.orderId}>
                     <td>
                       <NavLink
-                        to={ROUTE_URL.FINANCE.SALES.EDIT.replace(
+                        to={ROUTE_URL.FINANCE.SALES.VIEW.replace(
                           ":orderId",
                           order?.orderId
                         )}
-                        className="btn btn-sm bg-body"
+                        className="btn btn-sm"
                       >
                         {order?.orderId}
                       </NavLink>
                     </td>
-                    <td>{order?.customerName}</td>
+                    <td>
+                      <span className="text-gray-800 text-hover-primary fs-5 fw-bold">
+                        {order?.customerName}
+                      </span>
+                    </td>
                     <td>{new Date(order?.createdAt).toLocaleDateString()}</td>
                     <td>{order?.itemCount}</td>
                     <td>

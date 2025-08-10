@@ -13,6 +13,7 @@ export const ROUTE_URL = {
     BASE: "/finance",
     SALES: {
       BASE: "/finance/sales/order",
+      VIEW: "/finance/sales/order/view",
       ADD: "/finance/sales/order/add",
       EDIT: "/finance/sales/order/edit/:orderId",
     },
