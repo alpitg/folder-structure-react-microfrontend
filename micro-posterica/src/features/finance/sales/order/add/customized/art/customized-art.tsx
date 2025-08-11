@@ -1,0 +1,282 @@
+import {
+  useFormContext,
+  type FieldArrayWithId,
+  type UseFieldArrayRemove,
+} from "react-hook-form";
+import MountingSection from "../../mounting/mounting";
+import GlassSection from "../../glass/glass";
+import type {
+  IInvoice,
+  IMiscCharge,
+  IOrder,
+  IOrderInvoiceData,
+} from "../../../../../../../interfaces/order/order.model";
+import type { IGlassType } from "../../../../../../../app/features/master/glass-types/glass-types.slice";
+import type { IFrameType } from "../../../../../../../app/features/master/frame-types/frame-types.slice";
+import { BillCalculation } from "../../../../../../bills/utils/bill-calculation.util";
+import { useEffect } from "react";
+
+type CustomizedArtAppProps = {
+  item: FieldArrayWithId<IOrderInvoiceData, "order.items", "id">;
+  index: number;
+  glassTypes: IGlassType[];
+  frameTypes: IFrameType[];
+  miscCharges: IMiscCharge[];
+  removeItem: UseFieldArrayRemove;
+};
+
+const CustomizedArtApp: React.FC<CustomizedArtAppProps> = ({
+  item,
+  index,
+  glassTypes,
+  frameTypes,
+  miscCharges,
+  removeItem,
+}) => {
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext<IOrderInvoiceData>();
+  const { watch, setValue } = useFormContext();
+  const [order, invoice] = watch(["order", "invoice"]) as [IOrder, IInvoice];
+
+  useEffect(() => {
+    if (!order?.items || !order.items[index]) return;
+
+    const { items } = order as IOrder;
+
+    const unitPrice = new BillCalculation(
+      frameTypes,
+      glassTypes,
+      miscCharges
+    )?.unitPrice(items[index]);
+
+    // Set the calculated unit cost back into the form
+    setValue(`order.items.${index}.unitPrice`, unitPrice);
+  }, [order?.items, index, frameTypes, glassTypes, miscCharges, setValue]);
+
+  // const chargableArea = (item: ICustomizedDetails) => {
+  //   const billDetails = new BillCalculation(
+  //     frameTypes,
+  //     glassTypes,
+  //     miscCharges
+  //   );
+
+  //   const width = billDetails?.chargableWidth(item);
+  //   const height = billDetails?.chargableHeight(item);
+
+  //   const area = width * height;
+  //   return `Chargable Area: width ${width} * height ${height} = ${area.toFixed(
+  //     2
+  //   )} cm²`;
+  // };
+
+  return (
+    <>
+      <div className="py-3 d-flex flex-stack flex-wrap">
+        <a
+          className="d-flex align-items-center collapsible rotate collapsed w-75"
+          data-bs-toggle="collapse"
+          href={`#art-${index}`}
+          role="button"
+          aria-expanded="false"
+          aria-controls={`art-${index}`}
+        >
+          <div className="me-3 rotate-90">
+            <i className="bi-chevron-right fs-3"></i>
+          </div>
+
+          <span className="symbol symbol-50px me-3" aria-label="no-image">
+            <span className="symbol-label"></span>
+          </span>
+
+          <div className="me-3">
+            <div className="d-flex align-items-center">
+              <div className="text-gray-800 fw-bold">
+                {watch(`order.items.${index}.customizedDetails.name`) ||
+                  `Art ${index + 1}`}
+              </div>
+              <div className="badge badge-light-primary ms-5">
+                {`Quantity: `}
+                {watch(`order.items.${index}.quantity`) || 0}
+              </div>
+              <div className="badge badge-light-primary ms-5">
+                {`Unit Price: `}
+                {watch(`order.items.${index}.unitPrice`)}
+              </div>
+            </div>
+            <div className="text-muted">
+              {item?.customizedDetails?.description}
+            </div>
+          </div>
+        </a>
+
+        <div className="d-flex my-3 ms-9">
+          <button
+            type="button"
+            className="btn btn-icon btn-active-light-danger w-30px h-30px me-3"
+            aria-label="Delete"
+            onClick={() => removeItem(index)}
+          >
+            <i className="bi bi-trash3 fs-3"></i>
+          </button>
+        </div>
+      </div>
+
+      <div id={`art-${index}`} className="fs-6 ps-10 py-4 collapse">
+        <div className="row g-3 d-flex mb-3">
+          <div className="col-sm-8">
+            <input
+              type="text"
+              placeholder="Name"
+              className={`form-control form-control-solid fs-6 fw-bold ${
+                errors.order?.items?.[index]?.customizedDetails?.name
+                  ? "is-invalid"
+                  : ""
+              }`}
+              {...register(
+                `order.items.${index}.customizedDetails.name` as const,
+                { required: "Art name is required" }
+              )}
+            />
+            <div className="invalid-feedback">
+              {errors.order?.items?.[index]?.customizedDetails?.name?.message}
+            </div>
+          </div>
+
+          <div className="col-sm-2">
+            <input
+              type="number"
+              min={0}
+              placeholder="Quantity"
+              className={`form-control form-control-solid ${
+                errors.order?.items?.[index]?.quantity ? "is-invalid" : ""
+              }`}
+              {...register(`order.items.${index}.quantity` as const, {
+                required: "Product quantity required",
+                valueAsNumber: true,
+              })}
+            />
+          </div>
+        </div>
+
+        <div className="row g-3">
+          <div className="col-md-4 mb-5">
+            <input
+              type="text"
+              placeholder="Art Description"
+              className="form-control form-control-solid"
+              {...register(
+                `order.items.${index}.customizedDetails.description` as const
+              )}
+            />
+          </div>
+          <div className="col-md-4 mb-5">
+            <input
+              type="number"
+              min={0}
+              placeholder="Width (cm)"
+              className="form-control form-control-solid"
+              {...register(
+                `order.items.${index}.customizedDetails.width` as const,
+                { valueAsNumber: true }
+              )}
+            />
+          </div>
+          <div className="col-md-4 mb-5">
+            <input
+              type="number"
+              min={0}
+              placeholder="Height (cm)"
+              className="form-control form-control-solid"
+              {...register(
+                `order.items.${index}.customizedDetails.height` as const,
+                { valueAsNumber: true }
+              )}
+            />
+          </div>
+        </div>
+
+        <div className="flex d-flex flex-column flex-md-row mb-5">
+          <MountingSection index={index} />
+          <GlassSection index={index} glassTypes={glassTypes} />
+        </div>
+
+        <div className="row g-2 mb-5">
+          <div className="col-md-4">
+            <select
+              className="form-select form-select-solid"
+              {...register(
+                `order.items.${index}.customizedDetails.frame.type` as const
+              )}
+            >
+              <option value="">Select Frame Type</option>
+              {frameTypes?.map((frame) => (
+                <option key={frame.id} value={frame.name}>
+                  {frame.name} {frame.category} - (₹{frame.baseCost})
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="col-md-4">
+            <input
+              type="text"
+              placeholder="Frame Color"
+              className="form-control form-control-solid"
+              {...register(
+                `order.items.${index}.customizedDetails.frame.color` as const
+              )}
+            />
+          </div>
+        </div>
+
+        <div className="row g-5">
+          <div className="col-sm-4">
+            <label className="form-check form-switch form-check-custom form-check-solid">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id={`varnish-${index}`}
+                {...register(
+                  `order.items.${index}.customizedDetails.additional.varnish` as const
+                )}
+              />
+              <span className="form-check-label">Varnish</span>
+            </label>
+          </div>
+
+          <div className="col-sm-4">
+            <label className="form-check form-switch form-check-custom form-check-solid">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id={`lamination-${index}`}
+                {...register(
+                  `order.items.${index}.customizedDetails.additional.lamination` as const
+                )}
+              />
+              <span className="form-check-label">Lamination</span>
+            </label>
+          </div>
+
+          <div className="col-sm-4">
+            <label className="form-check form-switch form-check-custom form-check-solid">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id={`routerCut-${index}`}
+                {...register(
+                  `order.items.${index}.customizedDetails.additional.routerCut` as const
+                )}
+              />
+              <span className="form-check-label">Router Cut</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default CustomizedArtApp;

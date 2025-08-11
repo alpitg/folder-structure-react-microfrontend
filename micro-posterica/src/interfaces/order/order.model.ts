@@ -64,7 +64,7 @@ export interface IAdditionalServices {
 }
 
 export interface ICustomizedDetails {
-  name?: string;
+  name: string;
   description?: string;
   width: number;
   height: number;
@@ -75,7 +75,7 @@ export interface ICustomizedDetails {
 }
 
 export interface IOrderItem {
-  productId: string | null;
+  productId?: string;
   quantity: number;
   unitPrice: number;
   /**
@@ -99,7 +99,7 @@ export interface IOrderItem {
  */
 export interface IOrder {
   id?: string;
-  customerName?: string;
+  customerName: string;
   customerId?: string | null;
   createdAt?: string;
   note?: string;
@@ -115,7 +115,7 @@ export interface IOrder {
   discountAmount: number;
 
   invoiceId?: string | null;
-  items?: IOrderItem[];
+  items: IOrderItem[];
 }
 
 export interface IBillParty {
@@ -222,8 +222,8 @@ export class BillParty implements IBillParty {
 }
 
 export class InitializeCustomizedDetails implements ICustomizedDetails {
-  name?: string | undefined;
-  description?: string | undefined;
+  name: string;
+  description?: string;
   width: number;
   height: number;
   frame: IFrame;
@@ -248,7 +248,7 @@ export class InitializeCustomizedDetails implements ICustomizedDetails {
  * @description When we add an item/product in order then while initiating the item we can use this.
  */
 export class InitializeOrderItem implements IOrderItem {
-  productId: string | null;
+  productId?: string;
   quantity: number;
   unitPrice: number;
   discountedQuantity: number;
@@ -257,7 +257,7 @@ export class InitializeOrderItem implements IOrderItem {
   customizedDetails: ICustomizedDetails;
 
   constructor() {
-    this.productId = null;
+    this.productId = "";
     this.quantity = 0;
     this.unitPrice = 0;
     this.discountedQuantity = 0;
@@ -265,23 +265,6 @@ export class InitializeOrderItem implements IOrderItem {
     this.cancelledQty = 0;
     this.customizedDetails = new InitializeCustomizedDetails();
   }
-}
-
-export interface IOrderItem {
-  productId: string | null;
-  quantity: number;
-  unitPrice: number;
-  /**
-   * @ignore This for future implementation.
-   * @description We can provide offers like - buy one get one.
-   */
-  discountedQuantity: number;
-  /**
-   * Discount per item - Discount is provided per item here.
-   */
-  discountAmount: number;
-  cancelledQty: number;
-  customizedDetails: ICustomizedDetails;
 }
 
 export class InitializeOrderInvoice implements IOrderInvoiceData {

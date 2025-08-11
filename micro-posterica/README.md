@@ -31,6 +31,32 @@ src/
 
 
 
+```js
+  <div className="col-sm-8">
+    <input
+      type="text"
+      placeholder="Name"
+      className={`form-control form-control-solid fs-6 fw-bold ${
+        errors.order?.items?.[index]?.customizedDetails
+          ?.name
+          ? "is-invalid"
+          : ""
+      }`}
+      {...register(
+        `order.items.${index}.customizedDetails.name` as const,
+        {
+          required: "Art name is required",
+        }
+      )}
+    />
+    <div className="invalid-feedback">
+      {
+        errors.order?.items?.[index]?.customizedDetails
+          ?.name?.message
+      }
+    </div>
+  </div>
+```
 
 
 

@@ -1,6 +1,7 @@
 import type {
   ICustomizedDetails,
   IMiscCharge,
+  IOrder,
   IOrderInvoiceData,
   IOrderItem,
   PaymentStatusType,
@@ -42,7 +43,7 @@ export class BillCalculation {
   totalItemArea = (item: ICustomizedDetails) => {
     return item?.mounting?.isEnabled
       ? this.chargableWidth(item) * this.chargableHeight(item)
-      : (item.width || 0) * item.height || 0;
+      : (item?.width || 0) * item?.height || 0;
   };
 
   /**
@@ -50,7 +51,7 @@ export class BillCalculation {
    * @param item
    * @returns
    */
-  unitCost = (item: IOrderItem): number => {
+  unitPrice = (item: IOrderItem): number => {
     // Calculate area with mounting if enabled
     const area = this.totalItemArea(item?.customizedDetails);
 
@@ -108,6 +109,17 @@ export class BillCalculation {
     );
   };
 }
+
+export const calculateTotalAmount = (order: IOrder): number => {
+  if (!order) 0;
+
+  return (
+    order?.items?.reduce(
+      (cost, item) => cost + item?.unitPrice * item?.quantity,
+      0
+    ) || 0
+  );
+};
 
 export const mapOrderForApi = (
   item: IOrderInvoiceData
