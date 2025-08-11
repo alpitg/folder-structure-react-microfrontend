@@ -1,5 +1,6 @@
 import {
   useFormContext,
+  useWatch,
   type FieldArrayWithId,
   type UseFieldArrayRemove,
 } from "react-hook-form";
@@ -37,23 +38,27 @@ const CustomizedArtApp: React.FC<CustomizedArtAppProps> = ({
     register,
     formState: { errors },
   } = useFormContext<IOrderInvoiceData>();
-  const { watch, setValue } = useFormContext();
-  const [order, invoice] = watch(["order", "invoice"]) as [IOrder, IInvoice];
+  const { watch, setValue, getValues } = useFormContext();
+
+  const watchedItem = useWatch({
+    name: `order.items.${index}`,
+  }) as IOrder["items"][number];
 
   useEffect(() => {
-    if (!order?.items || !order.items[index]) return;
+    if (!watchedItem) return;
 
-    const { items } = order as IOrder;
-
-    const unitPrice = new BillCalculation(
+    const newUnitPrice = new BillCalculation(
       frameTypes,
       glassTypes,
       miscCharges
-    )?.unitPrice(items[index]);
+    ).unitPrice(watchedItem);
 
-    // Set the calculated unit cost back into the form
-    setValue(`order.items.${index}.unitPrice`, unitPrice);
-  }, [order?.items, index, frameTypes, glassTypes, miscCharges, setValue]);
+    const currentUnitPrice = getValues(`order.items.${index}.unitPrice`);
+
+    if (newUnitPrice !== currentUnitPrice) {
+      setValue(`order.items.${index}.unitPrice`, newUnitPrice);
+    }
+  }, [watchedItem, frameTypes, glassTypes, miscCharges, index]);
 
   // const chargableArea = (item: ICustomizedDetails) => {
   //   const billDetails = new BillCalculation(

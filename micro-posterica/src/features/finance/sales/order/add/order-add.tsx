@@ -2,17 +2,9 @@ import { useEffect, useState } from "react";
 import {
   InitializeOrderInvoice,
   InitializeOrderItem,
-  type ICustomizedDetails,
-  type IInvoice,
   type IOrderInvoiceData,
-  type IOrderItem,
 } from "../../../../../interfaces/order/order.model";
 import OrderHeaderApp from "../header/order-header";
-import { paymentModes } from "../../../../../constants/app.const";
-import {
-  BillCalculation,
-  mapOrderForApi,
-} from "../../../../bills/utils/bill-calculation.util";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, AppState } from "../../../../../app/store";
 import { fetchProfile } from "../../../../../app/features/core/profile/profile-detail.thunk";
@@ -23,7 +15,6 @@ import { useGetcustomersQuery } from "../../../../../app/features/customer/list/
 import { usePlaceOrderMutation } from "../../../../../app/features/sales/order/order.api";
 import { NavLink, useNavigate } from "react-router";
 import { ROUTE_URL } from "../../../../../components/auth/constants/routes.const";
-import DeleteConfirmationApp from "../../../../../components/ui/delete-confirmation/delete-confirmation";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import CustomizedArtApp from "./customized/art/customized-art";
 import OrderSummaryApp from "./order-summary/order-summary";
@@ -87,153 +78,6 @@ const OrderAddApp = () => {
   const [bill, setBill] = useState<IOrderInvoiceData>(
     new InitializeOrderInvoice()
   );
-  const [isDiscard, setIsDiscard] = useState<boolean>(false);
-
-  //#region methods
-
-  const calculateUnitCost = () => {
-    if (!bill?.order?.items) return;
-
-    setBill((prev) => ({
-      ...prev,
-      order: {
-        ...prev?.order,
-        items: prev?.order?.items?.map((x) => ({
-          ...x,
-          unitPrice: new BillCalculation(
-            frameTypes,
-            glassTypes,
-            miscCharges
-          ).unitCost(x),
-        })),
-      },
-    }));
-  };
-
-  const handleAddItem = () => {
-    setBill((prev) => {
-      const existingItems = prev?.order?.items ?? [];
-      return {
-        ...prev,
-        order: {
-          ...prev?.order,
-          items: [...existingItems, new InitializeOrderItem()],
-        },
-      };
-    });
-  };
-
-  const handleRemoveItem = (index: number) => {
-    const items = bill?.order?.items?.filter((_, i) => i !== index);
-
-    setBill({
-      ...bill,
-      // artDetails: updatedArtDetails,
-      order: {
-        ...bill?.order,
-        items,
-      },
-    });
-  };
-
-  const handleInputChange = (
-    index: number,
-    field:
-      | keyof ICustomizedDetails
-      | "mounting"
-      | "glass"
-      | "frame"
-      | "additional",
-    value: object | string | number
-  ) => {
-    if (index < 0 || index >= (bill?.order?.items?.length || 0)) return;
-
-    const items = [...(bill?.order?.items || [])];
-    items[index] = {
-      ...items[index],
-      [field]: value,
-    };
-
-    const unitCost = new BillCalculation(
-      frameTypes,
-      glassTypes,
-      miscCharges
-    ).unitCost(items[index]);
-
-    // Auto-calculate total for the item
-    items[index].unitPrice = unitCost;
-
-    setBill({
-      ...bill,
-      order: {
-        ...bill?.order,
-        items,
-      },
-    });
-  };
-
-  const handleItemChange = (
-    index: number,
-    field: keyof IOrderItem,
-    value: object | string | number
-  ) => {
-    const items = [...(bill?.order?.items || [])];
-    items[index] = {
-      ...items[index],
-      [field]: value,
-    };
-
-    setBill({
-      ...bill,
-      order: { ...bill?.order, items },
-    });
-  };
-
-  const handleInvoiceChange = (
-    field: keyof IInvoice,
-    value: string | number | object
-  ) => {
-    setBill({
-      ...bill,
-      invoice: {
-        ...bill.invoice,
-        [field]: value,
-      },
-    });
-  };
-
-  const handlePlaceOrder = async () => {
-    const payload = mapOrderForApi(bill);
-    if (!payload) {
-      return;
-    }
-    console.log(payload);
-
-    try {
-      const response = await placeOrder(payload).unwrap();
-      console.log("Order placed:", response);
-    } catch (err) {
-      console.error("Failed to place order:", err);
-    }
-  };
-
-  const chargableArea = (item: ICustomizedDetails) => {
-    const billDetails = new BillCalculation(
-      frameTypes,
-      glassTypes,
-      miscCharges
-    );
-
-    const width = billDetails?.chargableWidth(item);
-    const height = billDetails?.chargableHeight(item);
-
-    const area = width * height;
-    return `Chargable Area: width ${width} * height ${height} = ${area.toFixed(
-      2
-    )} cm²`;
-  };
-
-  //#endregion
 
   //#region useEffect
 
@@ -262,7 +106,7 @@ const OrderAddApp = () => {
       navigate(ROUTE_URL?.FINANCE?.SALES?.BASE);
     }
   }, [isOrderPlaced]);
-  
+
   //#endregion
 
   return (
