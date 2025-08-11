@@ -17,7 +17,7 @@ const ErrorPage = () => {
         Oops! Something went wrong.
       </h1>
       <p style={{ color: "#6c757d" }}>
-        We're sorry, the page you’re looking for cannot be found.
+        We're sorry, the page you're looking for cannot be found.
       </p>
 
       <img

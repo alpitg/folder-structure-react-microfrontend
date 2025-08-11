@@ -10,10 +10,10 @@ import NoRecordApp from "./no-record/no-record";
 
 const OrderListApp = () => {
   const { data: orderDetail, isLoading, error } = useGetOrdersQuery();
-  // if (isLoading) return <p>Loading...</p>;
-  // if (error) return <ErrorPage />;
-  // if (!orderDetail) return <NoRecordApp />;
-return <NoRecordApp />;
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <ErrorPage />;
+  if (!orderDetail) return <NoRecordApp />;
+
   return (
     <div className="order-list-app">
       <OrderHeaderApp header="Order listing" description="All orders are here.">
