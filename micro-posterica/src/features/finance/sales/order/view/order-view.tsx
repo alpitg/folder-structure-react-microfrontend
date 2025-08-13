@@ -14,6 +14,16 @@ const OrderViewApp = () => {
   if (error) return <ErrorPage />;
   if (!data) return <NoRecordApp />;
 
+  const getSubTotal = () => {
+    return data?.order?.items?.reduce((total, item) => {
+      const quantity = item?.quantity || 0;
+      const unitPrice = item?.unitPrice || 0;
+      return total + quantity * unitPrice;
+    }, 0);
+  };
+
+  const getGrandTotal = () => getSubTotal();
+
   return (
     <div className="order-header-app flex flex-col gap-4 mb-3">
       <OrderHeaderApp
@@ -245,100 +255,74 @@ const OrderViewApp = () => {
                 <thead>
                   <tr className="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
                     <th className="min-w-175px">Product</th>
-                    <th className="min-w-100px text-end">SKU</th>
+                    <th className="min-w-100px text-end">Customized</th>
                     <th className="min-w-70px text-end">Qty</th>
                     <th className="min-w-100px text-end">Unit Price</th>
                     <th className="min-w-100px text-end">Total</th>
                   </tr>
                 </thead>
                 <tbody className="fw-semibold text-gray-600">
-                  <tr>
-                    <td>
-                      <div className="d-flex align-items-center">
-                        <a
-                          href="/keen/demo1/apps/ecommerce/catalog/edit-product.html"
-                          className="symbol symbol-50px"
-                        >
-                          <span
-                            className="symbol-label"
-                            style={{
-                              backgroundImage:
-                                "url(/keen/demo1/assets/media//stock/ecommerce/1.png)",
-                            }}
-                          ></span>
-                        </a>
-                        <div className="ms-5">
-                          <a
-                            href="/keen/demo1/apps/ecommerce/catalog/edit-product.html"
-                            className="fw-bold text-gray-600 text-hover-primary"
-                          >
-                            Product 1
-                          </a>
-                          <div className="fs-7 text-muted">
-                            Delivery Date: 10/08/2025
+                  {data?.order?.items?.map((item) => {
+                    return (
+                      <tr>
+                        <td>
+                          <div className="d-flex align-items-center">
+                            <a
+                              href="/keen/demo1/apps/ecommerce/catalog/edit-product.html"
+                              className="symbol symbol-50px"
+                            >
+                              <span
+                                className="symbol-label"
+                                style={{
+                                  backgroundImage:
+                                    "url(/keen/demo1/assets/media//stock/ecommerce/1.png)",
+                                }}
+                              ></span>
+                            </a>
+                            <div className="ms-5">
+                              <a
+                                href="/keen/demo1/apps/ecommerce/catalog/edit-product.html"
+                                className="fw-bold text-gray-600 text-hover-primary"
+                              >
+                                {item?.customizedDetails?.name}
+                              </a>
+                              <div className="fs-7 text-muted">
+                                {item?.customizedDetails?.description}
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="text-end">01651007</td>
-                    <td className="text-end">2</td>
-                    <td className="text-end">$120.00</td>
-                    <td className="text-end">$240.00</td>
-                  </tr>
-
-                  <tr>
-                    <td>
-                      <div className="d-flex align-items-center">
-                        <a
-                          href="/keen/demo1/apps/ecommerce/catalog/edit-product.html"
-                          className="symbol symbol-50px"
-                        >
-                          <span
-                            className="symbol-label"
-                            style={{
-                              backgroundImage:
-                                "url(/keen/demo1/assets/media//stock/ecommerce/100.png)",
-                            }}
-                          ></span>
-                        </a>
-                        <div className="ms-5">
-                          <a
-                            href="/keen/demo1/apps/ecommerce/catalog/edit-product.html"
-                            className="fw-bold text-gray-600 text-hover-primary"
-                          >
-                            Footwear
-                          </a>
-                          <div className="fs-7 text-muted">
-                            Delivery Date: 10/08/2025
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="text-end">02893007</td>
-                    <td className="text-end">1</td>
-                    <td className="text-end">$24.00</td>
-                    <td className="text-end">$24.00</td>
-                  </tr>
+                        </td>
+                        <td className="text-end">
+                          {item?.customizedDetails && "Customized"}
+                        </td>
+                        <td className="text-end">{item?.quantity}</td>
+                        <td className="text-end">{item?.unitPrice}</td>
+                        <td className="text-end">
+                          {(item?.quantity || 0) * (item?.unitPrice || 0)}
+                        </td>
+                      </tr>
+                    );
+                  })}
 
                   <tr>
                     <td colSpan={4} className="text-end">
                       Subtotal
                     </td>
-                    <td className="text-end">$264.00</td>
+                    <td className="text-end">{getSubTotal()}</td>
                   </tr>
 
                   <tr>
                     <td colSpan={4} className="text-end">
                       VAT (0%)
                     </td>
-                    <td className="text-end">$0.00</td>
+                    <td className="text-end">0.00</td>
                   </tr>
 
                   <tr>
                     <td colSpan={4} className="text-end">
                       Shipping Rate
                     </td>
-                    <td className="text-end">$5.00</td>
+                    <td className="text-end">0.00</td>
                   </tr>
 
                   <tr>
@@ -346,7 +330,7 @@ const OrderViewApp = () => {
                       Grand Total
                     </td>
                     <td className="text-gray-900 fs-3 fw-bolder text-end">
-                      $269.00
+                      {getGrandTotal()}
                     </td>
                   </tr>
                 </tbody>
