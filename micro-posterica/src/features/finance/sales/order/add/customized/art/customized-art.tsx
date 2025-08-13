@@ -2,12 +2,10 @@ import {
   useFormContext,
   useWatch,
   type FieldArrayWithId,
-  type UseFieldArrayRemove,
 } from "react-hook-form";
 import MountingSection from "../../mounting/mounting";
 import GlassSection from "../../glass/glass";
 import type {
-  IInvoice,
   IMiscCharge,
   IOrder,
   IOrderInvoiceData,
@@ -23,7 +21,7 @@ type CustomizedArtAppProps = {
   glassTypes: IGlassType[];
   frameTypes: IFrameType[];
   miscCharges: IMiscCharge[];
-  removeItem: UseFieldArrayRemove;
+  removeItem: (index: number) => void;
 };
 
 const CustomizedArtApp: React.FC<CustomizedArtAppProps> = ({
@@ -35,14 +33,36 @@ const CustomizedArtApp: React.FC<CustomizedArtAppProps> = ({
   removeItem,
 }) => {
   const {
+    watch,
+    setValue,
+    getValues,
+    // control,
     register,
     formState: { errors },
   } = useFormContext<IOrderInvoiceData>();
-  const { watch, setValue, getValues } = useFormContext();
 
+  /**
+   * Watch only give values which are touched or default value has been set.
+   */
   const watchedItem = useWatch({
     name: `order.items.${index}`,
   }) as IOrder["items"][number];
+
+  const itemValue = getValues(`order.items.${index}`);
+
+  const removeItemByIndex = (_id: string) => {
+    console.log(_id);
+    // Step 1: Get the current array
+    const currentItems = getValues("order.items");
+
+    // Step 2: Filter out the item you want to remove
+    const updatedItems = currentItems.filter((item) => item._id !== _id);
+
+    // Step 3: Set the updated array back to the form
+    setValue("order.items", updatedItems);
+
+    removeItem(index);
+  };
 
   useEffect(() => {
     if (!watchedItem) return;
@@ -77,15 +97,21 @@ const CustomizedArtApp: React.FC<CustomizedArtAppProps> = ({
   // };
 
   return (
-    <>
+    <div key={`'custom' + ${itemValue?._id}`}>
       <div className="py-3 d-flex flex-stack flex-wrap">
+        <input
+          type="hidden"
+          {...register(`order.items.${index}._id`)}
+          value={item._id}
+        />
+
         <a
           className="d-flex align-items-center collapsible rotate collapsed w-75"
           data-bs-toggle="collapse"
-          href={`#art-${index}`}
+          href={`#art-${itemValue?._id}`}
           role="button"
           aria-expanded="false"
-          aria-controls={`art-${index}`}
+          aria-controls={`art-${itemValue?._id}`}
         >
           <div className="me-3 rotate-90">
             <i className="bi-chevron-right fs-3"></i>
@@ -121,14 +147,14 @@ const CustomizedArtApp: React.FC<CustomizedArtAppProps> = ({
             type="button"
             className="btn btn-icon btn-active-light-danger w-30px h-30px me-3"
             aria-label="Delete"
-            onClick={() => removeItem(index)}
+            onClick={() => removeItemByIndex(itemValue?._id)}
           >
             <i className="bi bi-trash3 fs-3"></i>
           </button>
         </div>
       </div>
 
-      <div id={`art-${index}`} className="fs-6 ps-10 py-4 collapse">
+      <div id={`art-${itemValue?._id}`} className="fs-6 ps-10 py-4 collapse">
         <div className="row g-3 d-flex mb-3">
           <div className="col-sm-8">
             <input
@@ -217,7 +243,10 @@ const CustomizedArtApp: React.FC<CustomizedArtAppProps> = ({
             >
               <option value="">Select Frame Type</option>
               {frameTypes?.map((frame) => (
-                <option key={frame.id} value={frame.name}>
+                <option
+                  key={`${itemValue?._id}-${frame.id}`}
+                  value={frame.name}
+                >
                   {frame.name} {frame.category} - (₹{frame.baseCost})
                 </option>
               ))}
@@ -242,7 +271,7 @@ const CustomizedArtApp: React.FC<CustomizedArtAppProps> = ({
               <input
                 className="form-check-input"
                 type="checkbox"
-                id={`varnish-${index}`}
+                id={`varnish-${itemValue?._id}`}
                 {...register(
                   `order.items.${index}.customizedDetails.additional.varnish` as const
                 )}
@@ -256,7 +285,7 @@ const CustomizedArtApp: React.FC<CustomizedArtAppProps> = ({
               <input
                 className="form-check-input"
                 type="checkbox"
-                id={`lamination-${index}`}
+                id={`lamination-${itemValue?._id}`}
                 {...register(
                   `order.items.${index}.customizedDetails.additional.lamination` as const
                 )}
@@ -270,7 +299,7 @@ const CustomizedArtApp: React.FC<CustomizedArtAppProps> = ({
               <input
                 className="form-check-input"
                 type="checkbox"
-                id={`routerCut-${index}`}
+                id={`routerCut-${itemValue?._id}`}
                 {...register(
                   `order.items.${index}.customizedDetails.additional.routerCut` as const
                 )}
@@ -280,7 +309,7 @@ const CustomizedArtApp: React.FC<CustomizedArtAppProps> = ({
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

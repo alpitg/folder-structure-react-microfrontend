@@ -75,6 +75,10 @@ export interface ICustomizedDetails {
 }
 
 export interface IOrderItem {
+  /**
+   * NOTE: Only for frontend to maintain dynamic id.
+   */
+  _id: string;
   productId?: string;
   quantity: number;
   unitPrice: number;
@@ -248,6 +252,7 @@ export class InitializeCustomizedDetails implements ICustomizedDetails {
  * @description When we add an item/product in order then while initiating the item we can use this.
  */
 export class InitializeOrderItem implements IOrderItem {
+  _id: string;
   productId?: string;
   quantity: number;
   unitPrice: number;
@@ -257,6 +262,7 @@ export class InitializeOrderItem implements IOrderItem {
   customizedDetails: ICustomizedDetails;
 
   constructor() {
+    this._id = crypto.randomUUID();
     this.productId = "";
     this.quantity = 0;
     this.unitPrice = 0;

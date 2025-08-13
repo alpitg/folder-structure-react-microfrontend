@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
-  InitializeOrderInvoice,
   InitializeOrderItem,
   type IOrderInvoiceData,
 } from "../../../../../interfaces/order/order.model";
@@ -18,6 +17,7 @@ import { ROUTE_URL } from "../../../../../components/auth/constants/routes.const
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import CustomizedArtApp from "./customized/art/customized-art";
 import OrderSummaryApp from "./order-summary/order-summary";
+import { mapOrderForApi } from "../../../../bills/utils/bill-calculation.util";
 
 const OrderAddApp = () => {
   const methods = useForm();
@@ -25,6 +25,7 @@ const OrderAddApp = () => {
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors },
     control,
   } = useForm<IOrderInvoiceData>({
@@ -44,16 +45,12 @@ const OrderAddApp = () => {
 
   const {
     fields: itemFields,
-    append: appendItem,
     remove: removeItem,
+    append: appendItem,
   } = useFieldArray({
     control,
     name: "order.items",
   });
-
-  const onSubmit = (data: any) => {
-    console.log("Submitted data:", data);
-  };
 
   const {
     master: {
@@ -75,9 +72,13 @@ const OrderAddApp = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  const [bill, setBill] = useState<IOrderInvoiceData>(
-    new InitializeOrderInvoice()
-  );
+  const onSubmit = (data: any) => {
+    console.log("Submitted data:", data);
+
+    const request = mapOrderForApi(data);
+
+    request && placeOrder(request);
+  };
 
   //#region useEffect
 
@@ -85,20 +86,7 @@ const OrderAddApp = () => {
     dispatch(fetchFrameTypes());
     dispatch(fetchGlassTypes());
     dispatch(fetchMiscCharges());
-    dispatch(fetchProfile()).then((response) => {
-      setBill((prevBill) => ({
-        ...prevBill,
-        artDetails: [], // Initialize with one art detail
-        invoice: {
-          ...prevBill.invoice,
-          billFrom: {
-            name: response?.payload?.name,
-            detail: response?.payload?.address,
-            phone: response?.payload?.phone,
-          },
-        },
-      }));
-    });
+    dispatch(fetchProfile());
   }, []);
 
   useEffect(() => {
@@ -204,8 +192,7 @@ const OrderAddApp = () => {
                 </div>
                 <div className="card-body py-0">
                   {itemFields?.map((item, index) => (
-                    <div key={`'custom' + ${index}`}>
-                      <div className="separator" />
+                    <div key={item?.id}>
                       <CustomizedArtApp
                         item={item}
                         index={index}

@@ -20,7 +20,7 @@ const MountingSection: React.FC<MountingSectionProps> = ({ index }) => {
             <input
               className="form-check-input"
               type="checkbox"
-              id="mounting"
+              id={"mounting" + index}
               {...register(
                 `order.items.${index}.customizedDetails.mounting.isEnabled` as const
               )}
