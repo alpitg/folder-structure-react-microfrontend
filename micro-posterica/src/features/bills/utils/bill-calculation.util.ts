@@ -137,6 +137,7 @@ export const mapOrderForApi = (
 
   let order: IOrderInvoiceData = {
     order: {
+      orderCode: "",
       customerName: item?.order?.customerName,
       customerId: item?.order?.customerName,
       handledBy: item?.order?.handledBy,

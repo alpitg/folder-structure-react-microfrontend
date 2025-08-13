@@ -62,7 +62,7 @@ const OrderViewApp = () => {
                     Order ID
                   </div>
                   <div className="fw-bold text-gray-600 text-end">
-                    #{data?.order?.id || "N/A"}
+                    #{data?.order?.orderCode || "N/A"}
                   </div>
                 </div>
                 <div className="d-flex justify-content-between align-items-start flex-wrap">
@@ -188,64 +188,60 @@ const OrderViewApp = () => {
           </div>
         </div>
 
-        <div className="d-flex flex-column gap-7 gap-lg-10">
-          <div className="d-flex flex-column flex-xl-row gap-7 gap-lg-10">
-            <div className="card card-flush py-4 flex-row-fluid position-relative">
-              <div className="position-absolute top-0 end-0 bottom-0 opacity-10 d-flex align-items-center me-5">
-                <i
-                  className="bi bi-credit-card-fill"
-                  style={{ fontSize: "14em" }}
-                ></i>
-              </div>
+        {data?.invoice?.billTo && (
+          <div className="d-flex flex-column gap-7 gap-lg-10">
+            <div className="d-flex flex-column flex-xl-row gap-7 gap-lg-10">
+              <div className="card card-flush py-4 flex-row-fluid position-relative">
+                <div className="position-absolute top-0 end-0 bottom-0 opacity-10 d-flex align-items-center me-5">
+                  <i
+                    className="bi bi-credit-card-fill"
+                    style={{ fontSize: "14em" }}
+                  ></i>
+                </div>
 
-              <div className="card-header">
-                <div className="card-title">
-                  <h2>Billing Address</h2>
+                <div className="card-header">
+                  <div className="card-title">
+                    <h2>Billing Address</h2>
+                  </div>
+                </div>
+
+                <div className="card-body pt-0">
+                  {data?.invoice?.billTo?.name}
+                  <br />
+                  {data?.invoice?.billTo?.phone}
+                  <br /> {data?.invoice?.billTo?.detail}
                 </div>
               </div>
 
-              <div className="card-body pt-0">
-                Unit 1/23 Hastings Road,
-                <br />
-                Melbourne 3000,
-                <br />
-                Victoria,
-                <br />
-                Australia.
-              </div>
-            </div>
-
-            <div className="card card-flush py-4 flex-row-fluid position-relative">
-              <div className="position-absolute top-0 end-0 bottom-0 opacity-10 d-flex align-items-center me-5">
-                <i
-                  className="bi bi-truck-flatbed"
-                  style={{ fontSize: "13em" }}
-                ></i>
-              </div>
-
-              <div className="card-header">
-                <div className="card-title">
-                  <h2>Shipping Address</h2>
+              <div className="card card-flush py-4 flex-row-fluid position-relative">
+                <div className="position-absolute top-0 end-0 bottom-0 opacity-10 d-flex align-items-center me-5">
+                  <i
+                    className="bi bi-truck-flatbed"
+                    style={{ fontSize: "13em" }}
+                  ></i>
                 </div>
-              </div>
 
-              <div className="card-body pt-0">
-                Unit 1/23 Hastings Road,
-                <br />
-                Melbourne 3000,
-                <br />
-                Victoria,
-                <br />
-                Australia.
+                <div className="card-header">
+                  <div className="card-title">
+                    <h2>Shipping Address</h2>
+                  </div>
+                </div>
+
+                <div className="card-body pt-0">
+                  {data?.invoice?.billTo?.name}
+                  <br />
+                  {data?.invoice?.billTo?.phone}
+                  <br /> {data?.invoice?.billTo?.detail}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
         <div className="card card-flush py-4 flex-row-fluid overflow-hidden">
           <div className="card-header">
             <div className="card-title">
-              <h2>Order #14534</h2>
+              <h2>Order #{data?.order?.orderCode}</h2>
             </div>
           </div>
 

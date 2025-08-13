@@ -103,6 +103,7 @@ export interface IOrderItem {
  */
 export interface IOrder {
   id?: string;
+  orderCode: string;
   customerName: string;
   customerId?: string | null;
   createdAt?: string;
@@ -280,6 +281,7 @@ export class InitializeOrderInvoice implements IOrderInvoiceData {
   constructor() {
     this.order = {
       id: "",
+      orderCode: "",
       customerName: "",
       createdAt: new Date().toISOString(),
       itemCount: 0,
