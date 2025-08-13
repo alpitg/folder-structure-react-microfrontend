@@ -59,9 +59,11 @@ const CustomizedArtApp: React.FC<CustomizedArtAppProps> = ({
     const updatedItems = currentItems.filter((item) => item._id !== _id);
 
     // Step 3: Set the updated array back to the form
-    setValue("order.items", updatedItems);
+    setValue("order.items", updatedItems, {
+      shouldDirty: true,
+    });
 
-    removeItem(index);
+    // removeItem(index);
   };
 
   useEffect(() => {
@@ -76,7 +78,9 @@ const CustomizedArtApp: React.FC<CustomizedArtAppProps> = ({
     const currentUnitPrice = getValues(`order.items.${index}.unitPrice`);
 
     if (newUnitPrice !== currentUnitPrice) {
-      setValue(`order.items.${index}.unitPrice`, newUnitPrice);
+      setValue(`order.items.${index}.unitPrice`, newUnitPrice, {
+        shouldDirty: true,
+      });
     }
   }, [watchedItem, frameTypes, glassTypes, miscCharges, index]);
 

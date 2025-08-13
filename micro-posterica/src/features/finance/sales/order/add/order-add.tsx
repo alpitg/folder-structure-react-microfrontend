@@ -20,16 +20,29 @@ import OrderSummaryApp from "./order-summary/order-summary";
 import { mapOrderForApi } from "../../../../bills/utils/bill-calculation.util";
 
 const OrderAddApp = () => {
-  const methods = useForm();
-
   const {
-    register,
-    handleSubmit,
-    getValues,
-    formState: { errors },
-    control,
-  } = useForm<IOrderInvoiceData>({
-    mode: "onSubmit", // validation triggers on submit
+    master: {
+      glassTypes: { glassTypes },
+      frameTypes: { frameTypes },
+      miscCharges: { miscCharges },
+    },
+  } = useSelector((state: AppState) => state);
+  const { data: customers } = useGetcustomersQuery();
+
+  const [
+    placeOrder,
+    {
+      isLoading: isOrderPlacingInProgress,
+      isSuccess: isOrderPlaced,
+      // error: errorInOrderPlace,
+    },
+  ] = usePlaceOrderMutation();
+
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+
+  const methods = useForm<IOrderInvoiceData>({
+    mode: "onSubmit",
     defaultValues: {
       order: {
         customerName: "",
@@ -44,6 +57,13 @@ const OrderAddApp = () => {
   });
 
   const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = methods;
+
+  const {
     fields: itemFields,
     remove: removeItem,
     append: appendItem,
@@ -52,30 +72,11 @@ const OrderAddApp = () => {
     name: "order.items",
   });
 
-  const {
-    master: {
-      glassTypes: { glassTypes },
-      frameTypes: { frameTypes },
-      miscCharges: { miscCharges },
-    },
-  } = useSelector((state: AppState) => state);
-  const { data: customers } = useGetcustomersQuery();
-  const [
-    placeOrder,
-    {
-      isLoading: isOrderPlacingInProgress,
-      isSuccess: isOrderPlaced,
-      // error: errorInOrderPlace,
-    },
-  ] = usePlaceOrderMutation();
-
-  const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
-
   const onSubmit = (data: any) => {
     console.log("Submitted data:", data);
 
     const request = mapOrderForApi(data);
+    console.log("Submitted request:", request);
 
     request && placeOrder(request);
   };
@@ -113,7 +114,7 @@ const OrderAddApp = () => {
 
       <FormProvider {...methods}>
         <form
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={methods.handleSubmit(onSubmit)}
           noValidate
           className="container mt-4"
         >
