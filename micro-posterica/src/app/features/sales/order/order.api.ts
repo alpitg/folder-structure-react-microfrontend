@@ -1,17 +1,22 @@
+import type {
+  GetOrdersParams,
+  PaginatedOrders,
+} from "../../../../features/finance/sales/order/list/order-list.model";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { GetEnvConfig } from "../../../../app.config";
 import type { IOrderInvoiceData } from "../../../../interfaces/order/order.model";
-import type { IOrderList } from "../../../../features/finance/sales/order/list/order-list.model";
 
 export const ordersApi = createApi({
   reducerPath: "ordersApi",
   baseQuery: fetchBaseQuery({ baseUrl: "" }), // Adjust base URL
   endpoints: (builder) => ({
-    // GET /api/orders
-    getOrders: builder.query<IOrderList[], void>({
-      query: () =>
-        GetEnvConfig()?.api?.baseUrl + GetEnvConfig()?.api?.order?.list, // Adjust path if needed
+    getOrders: builder.query<PaginatedOrders, GetOrdersParams>({
+      query: (params) => ({
+        url: GetEnvConfig()?.api?.baseUrl + GetEnvConfig()?.api?.order?.list,
+        method: "POST", // your backend search is POST
+        body: params,
+      }),
     }),
 
     getDetail: builder.query<IOrderInvoiceData, string>({

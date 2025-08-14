@@ -4,9 +4,25 @@ export interface IOrderList {
   id: string;
   orderCode: string;
   customerName: string;
+  createdAt?: string; // ISO datetime string from backend
   itemCount: number;
+  paymentStatus?: PaymentStatusType; // "pending" | "paid" | "failed" | "refunded";
   total: number;
-  orderStatus: string; // "placed" | "shipped" | "delivered" | "cancelled"; // extend as needed
-  paymentStatus: PaymentStatusType; // extend as needed
-  createdAt: string; // ISO date string (e.g., "2025-08-14T17:39:40.061000")
+  orderStatus?: string; // "pending" | "fulfilled" | "partial" | "cancelled";
+}
+
+export interface PaginatedOrders {
+  total: number; // total number of matching records
+  page: number; // current page number
+  pageSize: number; // number of items per page
+  pages: number; // total pages
+  items: IOrderList[];
+}
+
+export interface GetOrdersParams {
+  page?: number;
+  pageSize?: number;
+  customerName?: string;
+  orderCode?: string;
+  sort?: string;
 }

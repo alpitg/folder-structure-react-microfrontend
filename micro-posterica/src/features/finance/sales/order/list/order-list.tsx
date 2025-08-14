@@ -4,15 +4,37 @@ import PaymentBadge, {
   type PaymentStatus,
 } from "../../../../../components/ui/payment-badges/payment-badges";
 import { ROUTE_URL } from "../../../../../components/auth/constants/routes.const";
-import { useGetOrdersQuery } from "../../../../../app/features/sales/order/order.api";
+import { useState } from "react";
 import ErrorPage from "../../../../../components/ui/error/error-page";
-import NoRecordApp from "./no-record/no-record";
+import OrderFilterApp from "./filter/order-filter";
+import { useGetOrdersQuery } from "../../../../../app/features/sales/order/order.api";
 
 const OrderListApp = () => {
-  const { data: orderDetail, isLoading, error } = useGetOrdersQuery();
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [sort, setSort] = useState<"newest" | "oldest">("newest");
+
+  const {
+    data: orderData,
+    isLoading,
+    error,
+    refetch,
+  } = useGetOrdersQuery({
+    page,
+    pageSize: 10,
+    customerName: search || undefined,
+    orderCode: search || undefined,
+    sort, // <-- send sort to API
+  });
+
+  const handleSortChange = (newSort: "newest" | "oldest") => {
+    setSort(newSort);
+    setPage(1);
+    refetch();
+  };
+
   if (isLoading) return <p>Loading...</p>;
   if (error) return <ErrorPage />;
-  if (!orderDetail) return <NoRecordApp />;
 
   return (
     <div className="order-list-app">
@@ -28,6 +50,22 @@ const OrderListApp = () => {
 
       <div className="card">
         <div className="card-body">
+          <OrderFilterApp
+            page={page}
+            setPage={setPage}
+            search={search}
+            setSearch={setSearch}
+            pages={orderData?.pages || 1}
+            onSearch={() => {
+              setPage(1);
+              refetch();
+            }}
+            pageSize={orderData?.pageSize || 0}
+            total={orderData?.total || 0}
+            sort={sort}
+            setSort={handleSortChange} // updated
+          />
+
           <div className="table-responsive">
             <table className="table table-row-dashed table-row-gray-300 gy-7">
               <thead>
@@ -42,13 +80,13 @@ const OrderListApp = () => {
                 </tr>
               </thead>
               <tbody className="fw-semibold text-gray-600">
-                {orderDetail?.map((order) => (
+                {orderData?.items?.map((order) => (
                   <tr key={order?.id}>
                     <td>
                       <NavLink
                         to={ROUTE_URL.SALES.ORDER.VIEW.replace(
                           ":orderId",
-                          order?.id ?? ""
+                          order?.id
                         )}
                         className="btn btn-sm"
                       >
@@ -62,16 +100,14 @@ const OrderListApp = () => {
                     </td>
                     <td>
                       {order?.createdAt
-                        ? new Date(order?.createdAt)?.toLocaleDateString()
+                        ? new Date(order?.createdAt).toLocaleDateString()
                         : null}
                     </td>
                     <td>{order?.itemCount}</td>
                     <td>
-                      {
-                        <PaymentBadge
-                          status={order?.paymentStatus as PaymentStatus}
-                        />
-                      }
+                      <PaymentBadge
+                        status={order?.paymentStatus as PaymentStatus}
+                      />
                     </td>
                     <td>{order?.total.toFixed(2)}</td>
                     <td>{order?.orderStatus}</td>

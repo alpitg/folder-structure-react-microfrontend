@@ -16,7 +16,7 @@
       "miscCharges": "/api/master/misc-charges"
     },
     "order": {
-      "list": "/api/orders",
+      "list": "/api/orders/search",
       "detail": "/api/orders/{orderId}",
       "placeOrder": "/api/orders/place-order"
     },
