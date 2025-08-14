@@ -13,7 +13,7 @@ const OrderSummaryApp = ({
 }) => {
   const { register, watch } = useFormContext();
 
-  const [order, invoice] = watch(["order", "invoice"]) || [];
+  const [order] = watch(["order", "invoice"]) || [];
 
   const total = calculateTotalAmount(order);
   const discount = watch("order.discountAmount") || 0;
@@ -24,15 +24,15 @@ const OrderSummaryApp = ({
 
   const [isDiscard, setIsDiscard] = useState<boolean>(false);
   const handleOnDiscard = () => {
-    navigate(ROUTE_URL.FINANCE.SALES.BASE);
+    navigate(ROUTE_URL.SALES.ORDER.BASE);
   };
 
   return (
     <div className="card-body pt-0">
       <div className="d-flex flex-column gap-5">
         <div className="fv-row d-flex align-items-center">
-          <label className="pe-2">Order ID</label>
-          <div className="fw-bold fs-3">#13860</div>
+          {/* <label className="pe-2">Order ID</label>
+          <div className="fw-bold fs-3">#13860</div> */}
         </div>
 
         <div className="fv-row">

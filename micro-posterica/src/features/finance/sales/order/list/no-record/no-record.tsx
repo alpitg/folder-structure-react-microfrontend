@@ -20,7 +20,7 @@ const NoRecordApp = () => {
               </p>
 
               <NavLink
-                to={ROUTE_URL.FINANCE.SALES.ADD}
+                to={ROUTE_URL.SALES.ORDER.ADD}
                 className="btn btn-primary btn-sm"
               >
                 <i className="bi bi-plus-lg fs-3"></i>

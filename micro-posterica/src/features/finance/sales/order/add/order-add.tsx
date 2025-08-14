@@ -91,7 +91,7 @@ const OrderAddApp = () => {
 
   useEffect(() => {
     if (isOrderPlaced) {
-      navigate(ROUTE_URL?.FINANCE?.SALES?.BASE);
+      navigate(ROUTE_URL.SALES.ORDER.BASE);
     }
   }, [isOrderPlaced]);
 
@@ -103,7 +103,7 @@ const OrderAddApp = () => {
         header="Order Details"
         description="Order details are here."
       >
-        <NavLink to={ROUTE_URL.FINANCE.SALES.BASE}>
+        <NavLink to={ROUTE_URL.SALES.ORDER.BASE}>
           <span className="btn btn-light btn-active-secondary btn-sm me-5">
             <i className="bi bi-chevron-left fs-5"></i>
             Back to Order List
@@ -143,8 +143,9 @@ const OrderAddApp = () => {
                   <div className="d-flex flex-column flex-md-row gap-5 mb-10">
                     <div className="fv-row w-100">
                       <label
-                      htmlFor="order-customer-name"
-                      className="required form-label">
+                        htmlFor="order-customer-name"
+                        className="required form-label"
+                      >
                         Customer Name
                       </label>
                       <input

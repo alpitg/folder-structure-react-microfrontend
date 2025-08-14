@@ -24,41 +24,24 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
       subRoutes: [],
     },
     {
-      id: "finance",
-      title: "Finance",
-      path: ROUTE_URL.FINANCE.BASE,
+      id: "sales",
+      title: "Sales",
+      path: ROUTE_URL.SALES.BASE,
       icon: "bi bi-journal-bookmark",
       claims: [],
       subRoutes: [
         {
-          id: "sales",
-          title: "Sales",
-          path: ROUTE_URL.FINANCE.SALES.BASE,
-          icon: "bi bi-person-fill-gear",
-          claims: [],
-          subRoutes: [],
-        },
-      ],
-    },
-    {
-      id: "invoice-manager",
-      title: "Invoice Manager",
-      path: ROUTE_URL.INVOICE_MANAGER.BASE,
-      icon: "bi bi-person-fill-gear",
-      claims: [],
-      subRoutes: [
-        {
-          id: "create-invoice",
-          title: "Create Invoice",
-          path: ROUTE_URL.INVOICE_MANAGER.CREATE,
-          icon: "bi bi-person-fill-gear",
+          id: "order-list",
+          title: "Order Listing",
+          path: ROUTE_URL.SALES.ORDER.BASE,
+          icon: "bi bi-person-fill-gea",
           claims: [],
           subRoutes: [],
         },
         {
-          id: "view-invoice",
-          title: "View Invoice",
-          path: ROUTE_URL.INVOICE_MANAGER.VIEW,
+          id: "order-add",
+          title: "Add Order",
+          path: ROUTE_URL.SALES.ORDER.ADD,
           icon: "bi bi-person-fill-gear",
           claims: [],
           subRoutes: [],
@@ -98,6 +81,31 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
         },
       ],
     },
+    // {
+    //   id: "invoice-manager",
+    //   title: "Invoice Manager",
+    //   path: ROUTE_URL.INVOICE_MANAGER.BASE,
+    //   icon: "bi bi-person-fill-gear",
+    //   claims: [],
+    //   subRoutes: [
+    //     {
+    //       id: "create-invoice",
+    //       title: "Create Invoice",
+    //       path: ROUTE_URL.INVOICE_MANAGER.CREATE,
+    //       icon: "bi bi-person-fill-gear",
+    //       claims: [],
+    //       subRoutes: [],
+    //     },
+    //     {
+    //       id: "view-invoice",
+    //       title: "View Invoice",
+    //       path: ROUTE_URL.INVOICE_MANAGER.VIEW,
+    //       icon: "bi bi-person-fill-gear",
+    //       claims: [],
+    //       subRoutes: [],
+    //     },
+    //   ],
+    // },
     // {
     //   id: "customers",
     //   title: "Customers",
@@ -139,35 +147,19 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
   };
 
   return (
-    <div
-      className="app-sidebar flex-column"
-      data-kt-drawer="true"
-      data-kt-drawer-name="app-sidebar"
-      data-kt-drawer-activate="{default: true, lg: false}"
-      data-kt-drawer-overlay="true"
-      data-kt-drawer-width="225px"
-      data-kt-drawer-direction="start"
-      data-kt-drawer-toggle="#kt_app_sidebar_mobile_toggle"
-    >
+    <div className="app-sidebar flex-column">
       <div className="app-sidebar-menu overflow-hidden flex-column-fluid">
         <div id="kt_app_sidebar_menu_wrapper" className="app-sidebar-wrapper">
           <div
             id="kt_app_sidebar_menu_scroll"
             className="hover-scroll-y my-5 mx-3"
-            data-kt-scroll="true"
-            data-kt-scroll-activate="true"
-            data-kt-scroll-height="auto"
-            data-kt-scroll-dependencies="#kt_app_sidebar_logo, #kt_app_sidebar_footer"
-            data-kt-scroll-wrappers="#kt_app_sidebar_menu"
-            data-kt-scroll-offset="5px"
-            data-kt-scroll-save-state="true"
           >
             <div className="menu menu-column menu-rounded menu-sub-indention fw-semibold">
               {routes.map((route) => (
                 <div
                   key={route.id}
                   className={`menu-item menu-accordion ${
-                    activeMenu === route.id ? "show" : ""
+                    activeMenu === route?.id ? "show" : ""
                   }`}
                   onClick={() => handleMenuClick(route.id)}
                 >
@@ -181,14 +173,12 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
                         <span className="menu-arrow"></span>
                       </span>
                     ) : (
-                      <span className="menu-link">
+                      <NavLink className="menu-link" to={route.path}>
                         <span className="menu-icon">
                           <i className={route.icon}></i>
                         </span>
-                        <NavLink className="menu-link" to={route.path}>
-                          <span className="menu-title">{route.title}</span>
-                        </NavLink>
-                      </span>
+                        <span className="menu-title">{route.title}</span>
+                      </NavLink>
                     )}
                   </>
 
@@ -202,17 +192,20 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
                         : "collapse"
                     }`}
                   >
-                    {route?.subRoutes?.map((subRoute, index) => (
+                    {route?.subRoutes?.map((subRoute) => (
                       <div
-                        className="menu-item"
-                        key={index}
-                        onClick={() => handleMenuClick(subRoute.id)} // Pass `true` for subRoutes
+                        className={"menu-item " + subRoute?.id}
+                        key={subRoute?.id}
+                        onClick={(e) => {
+                          e.stopPropagation(); // Stop the event from bubbling
+                          handleMenuClick(subRoute?.id);
+                        }}
                       >
-                        <NavLink className="menu-link" to={subRoute.path}>
+                        <NavLink className="menu-link" to={subRoute?.path}>
                           <span className="menu-bullet">
                             <span className="bullet bullet-dot"></span>
                           </span>
-                          <span className="menu-title">{subRoute.title}</span>
+                          <span className="menu-title">{subRoute?.title}</span>
                         </NavLink>
                       </div>
                     ))}

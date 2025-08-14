@@ -63,21 +63,18 @@ const RoutesApp = () => {
             />
             <Route path={ROUTE_URL.APP_SETTINGS} element={<SettingsApp />} />
 
-            <Route path={ROUTE_URL.FINANCE.SALES.BASE} element={<SalesApp />}>
+            <Route path={ROUTE_URL.SALES.BASE} element={<SalesApp />}>
+              <Route path={ROUTE_URL.SALES.ORDER.BASE} element={<OrderListApp />} />
               <Route
-                path={ROUTE_URL.FINANCE.SALES.BASE}
-                element={<OrderListApp />}
-              />
-              <Route
-                path={ROUTE_URL.FINANCE.SALES.ADD}
+                path={ROUTE_URL.SALES.ORDER.ADD}
                 element={<OrderAddApp />}
               />
               <Route
-                path={ROUTE_URL.FINANCE.SALES.VIEW}
+                path={ROUTE_URL.SALES.ORDER.VIEW}
                 element={<OrderViewApp />}
               />
               <Route
-                path={ROUTE_URL.FINANCE.SALES.EDIT}
+                path={ROUTE_URL.SALES.ORDER.EDIT}
                 element={<OrderEditApp />}
               />
             </Route>

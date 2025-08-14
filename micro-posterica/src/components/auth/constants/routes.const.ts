@@ -9,18 +9,14 @@ export const ROUTE_URL = {
   NOT_ALLOWED: "/not-allowed",
   SOCIAL_MEDIA_MANAGEMENT: "/social-media",
   CUSTOMERS: "/customers",
-  FINANCE: {
-    BASE: "/finance",
-    SALES: {
-      BASE: "/finance/sales/order",
-      VIEW: "/finance/sales/order/:orderId",
-      ADD: "/finance/sales/order/add",
-      EDIT: "/finance/sales/order/edit/:orderId",
+  SALES: {
+    BASE: "/sales",
+    ORDER: {
+      BASE: "/sales/order/list",
+      VIEW: "/sales/order/:orderId",
+      ADD: "/sales/order/add",
+      EDIT: "/sales/order/edit/:orderId",
     },
-    PURCHASE: "/finance/purchase",
-    EXPENSES: "/finance/expenses",
-    PAYMENTS: "/finance/payments",
-    RECEIPTS: "/finance/receipts",
   },
   INVOICE_MANAGER: {
     BASE: "/invoice",
