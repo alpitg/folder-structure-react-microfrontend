@@ -7,7 +7,6 @@ import MountingSection from "./mounting/mounting";
 import GlassSection from "./glass/glass";
 import type {
   IMiscCharge,
-  IOrder,
   IOrderInvoiceData,
 } from "../../../../../../interfaces/order/order.model";
 import type { IGlassType } from "../../../../../../app/features/master/glass-types/glass-types.slice";
@@ -30,13 +29,11 @@ const CustomizedArtApp: React.FC<CustomizedArtAppProps> = ({
   glassTypes,
   frameTypes,
   miscCharges,
-  removeItem,
 }) => {
   const {
     watch,
     setValue,
     getValues,
-    // control,
     register,
     formState: { errors },
   } = useFormContext<IOrderInvoiceData>();

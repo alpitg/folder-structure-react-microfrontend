@@ -51,7 +51,7 @@ const OrderSummaryApp = ({
         </div>
 
         <div className="fv-row">
-          <label className="required form-label">Payment Method</label>
+          <label className="form-label">Payment Method</label>
           <select
             className="form-select form-select-solid"
             {...register("invoice.paymentMode")}

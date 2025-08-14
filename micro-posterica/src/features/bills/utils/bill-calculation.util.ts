@@ -43,7 +43,7 @@ export class BillCalculation {
   totalItemArea = (item: ICustomizedDetails) => {
     return item?.mounting?.isEnabled
       ? this.chargableWidth(item) * this.chargableHeight(item)
-      : (item?.width || 0) * item?.height || 0;
+      : (item?.width || 0) * (item?.height || 0);
   };
 
   /**

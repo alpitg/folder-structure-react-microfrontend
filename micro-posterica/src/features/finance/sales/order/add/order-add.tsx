@@ -140,34 +140,67 @@ const OrderAddApp = () => {
             <div className="d-flex flex-column flex-lg-row-fluid gap-7 gap-lg-10">
               <div className="card card-flush py-4">
                 <div className="card-body">
-                  <div className="d-flex flex-column flex-md-row gap-5">
-                    <div className="fv-row flex-row-fluid fv-plugins-icon-container">
-                      <div className="position-relative">
-                        <div className="required position-absolute top-0"></div>
-                        <input
-                          type="text"
-                          className={`form-control form-control-solid fs-3 ${
-                            errors.order?.customerName ? "is-invalid" : ""
-                          }`}
-                          placeholder="Customer Name"
-                          list="list-customer"
-                          id="input-datalist-customer"
-                          {...register("order.customerName", {
-                            required: "Customer Name is required",
-                          })}
-                        />
+                  <div className="d-flex flex-column flex-md-row gap-5 mb-10">
+                    <div className="fv-row w-100">
+                      <label
+                      htmlFor="order-customer-name"
+                      className="required form-label">
+                        Customer Name
+                      </label>
+                      <input
+                        type="text"
+                        className={`form-control form-control-solid ${
+                          errors.order?.customerName ? "is-invalid" : ""
+                        }`}
+                        placeholder="Customer Name"
+                        list="list-customer"
+                        id="order-customer-name"
+                        {...register("order.customerName", {
+                          required: "Customer Name is required",
+                        })}
+                      />
+                      <datalist id="list-customer">
+                        {customers?.map((customer) => (
+                          <option key={customer?.id} value={customer?.name}>
+                            {customer?.name}
+                          </option>
+                        ))}
+                      </datalist>
+                      {errors.order?.customerName?.message && (
                         <div className="invalid-feedback">
                           {errors.order?.customerName?.message}
                         </div>
-                        <datalist id="list-customer">
-                          {customers?.map((customer) => (
-                            <option key={customer?.id} value={customer?.name}>
-                              {customer?.name}
-                            </option>
-                          ))}
-                        </datalist>
-                      </div>
+                      )}
                     </div>
+
+                    <div className="fv-row w-100">
+                      <label
+                        htmlFor="order-customer-phone"
+                        className="form-label"
+                      >
+                        Phone
+                      </label>
+                      <input
+                        type="number"
+                        id="order-customer-phone"
+                        className="form-control form-control-solid"
+                        placeholder="Phone Number"
+                        {...register("invoice.billTo.phone")}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="fv-row">
+                    <label htmlFor="order-more-details" className="form-label">
+                      Detail
+                    </label>
+                    <textarea
+                      id="order-more-details"
+                      className="form-control form-control-solid"
+                      placeholder="Additional details about the order"
+                      rows={3}
+                      {...register("invoice.billTo.detail")}
+                    />
                   </div>
                 </div>
               </div>

@@ -66,8 +66,8 @@ export interface IAdditionalServices {
 export interface ICustomizedDetails {
   name: string;
   description?: string;
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
   frame: IFrame;
   glass: IGlass;
   mounting: IMounting;
@@ -229,8 +229,8 @@ export class BillParty implements IBillParty {
 export class InitializeCustomizedDetails implements ICustomizedDetails {
   name: string;
   description?: string;
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
   frame: IFrame;
   glass: IGlass;
   mounting: IMounting;
@@ -239,8 +239,8 @@ export class InitializeCustomizedDetails implements ICustomizedDetails {
   constructor() {
     this.name = "";
     this.description = "";
-    this.width = 0;
-    this.height = 0;
+    // this.width = 0;
+    // this.height = 0;
     this.mounting = new Mounting();
     this.frame = new Frame();
     this.glass = new Glass();
