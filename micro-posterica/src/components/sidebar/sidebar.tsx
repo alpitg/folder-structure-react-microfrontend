@@ -196,8 +196,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
                       <div
                         className={"menu-item " + subRoute?.id}
                         key={subRoute?.id}
-                        onClick={(e) => {
-                          e.stopPropagation(); // Stop the event from bubbling
+                        onClick={() => {
                           handleMenuClick(subRoute?.id);
                         }}
                       >
