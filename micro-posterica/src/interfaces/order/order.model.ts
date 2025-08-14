@@ -265,7 +265,7 @@ export class InitializeOrderItem implements IOrderItem {
   constructor() {
     this._id = crypto.randomUUID();
     this.productId = "";
-    this.quantity = 0;
+    this.quantity = 1;
     this.unitPrice = 0;
     this.discountedQuantity = 0;
     this.discountAmount = 0;

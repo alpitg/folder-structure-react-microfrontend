@@ -22,7 +22,8 @@ const OrderViewApp = () => {
     }, 0);
   };
 
-  const getGrandTotal = () => getSubTotal();
+  const getGrandTotal = () =>
+    getSubTotal() - (data?.order?.discountAmount || 0);
 
   return (
     <div className="order-header-app flex flex-col gap-4 mb-3">
@@ -260,7 +261,7 @@ const OrderViewApp = () => {
                 <tbody className="fw-semibold text-gray-600">
                   {data?.order?.items?.map((item) => {
                     return (
-                      <tr>
+                      <tr key={item._id}>
                         <td>
                           <div className="d-flex align-items-center">
                             <a
@@ -305,6 +306,15 @@ const OrderViewApp = () => {
                       Subtotal
                     </td>
                     <td className="text-end">{getSubTotal()}</td>
+                  </tr>
+
+                  <tr>
+                    <td colSpan={4} className="text-end text-danger">
+                      Discount
+                    </td>
+                    <td className="text-end text-danger">
+                      {data?.order?.discountAmount || 0}
+                    </td>
                   </tr>
 
                   <tr>

@@ -15,7 +15,7 @@ import { usePlaceOrderMutation } from "../../../../../app/features/sales/order/o
 import { NavLink, useNavigate } from "react-router";
 import { ROUTE_URL } from "../../../../../components/auth/constants/routes.const";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
-import CustomizedArtApp from "./customized/art/customized-art";
+import CustomizedArtApp from "./customized/customized-art";
 import OrderSummaryApp from "./order-summary/order-summary";
 import { mapOrderForApi } from "../../../../bills/utils/bill-calculation.util";
 
@@ -58,7 +58,6 @@ const OrderAddApp = () => {
 
   const {
     register,
-    handleSubmit,
     formState: { errors },
     control,
   } = methods;

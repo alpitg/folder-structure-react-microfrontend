@@ -48,11 +48,11 @@ const OrderListApp = () => {
                       <NavLink
                         to={ROUTE_URL.FINANCE.SALES.VIEW.replace(
                           ":orderId",
-                          order?.id
+                          order?.id ?? ""
                         )}
                         className="btn btn-sm"
                       >
-                        {order?.id}
+                        {order?.orderCode}
                       </NavLink>
                     </td>
                     <td>

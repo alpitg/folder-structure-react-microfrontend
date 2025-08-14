@@ -3,16 +3,16 @@ import {
   useWatch,
   type FieldArrayWithId,
 } from "react-hook-form";
-import MountingSection from "../../mounting/mounting";
-import GlassSection from "../../glass/glass";
+import MountingSection from "./mounting/mounting";
+import GlassSection from "./glass/glass";
 import type {
   IMiscCharge,
   IOrder,
   IOrderInvoiceData,
-} from "../../../../../../../interfaces/order/order.model";
-import type { IGlassType } from "../../../../../../../app/features/master/glass-types/glass-types.slice";
-import type { IFrameType } from "../../../../../../../app/features/master/frame-types/frame-types.slice";
-import { BillCalculation } from "../../../../../../bills/utils/bill-calculation.util";
+} from "../../../../../../interfaces/order/order.model";
+import type { IGlassType } from "../../../../../../app/features/master/glass-types/glass-types.slice";
+import type { IFrameType } from "../../../../../../app/features/master/frame-types/frame-types.slice";
+import { BillCalculation } from "../../../../../bills/utils/bill-calculation.util";
 import { useEffect } from "react";
 
 type CustomizedArtAppProps = {
@@ -42,11 +42,15 @@ const CustomizedArtApp: React.FC<CustomizedArtAppProps> = ({
   } = useFormContext<IOrderInvoiceData>();
 
   /**
-   * Watch only give values which are touched or default value has been set.
+   * To track mounting changes in real time
    */
-  const watchedItem = useWatch({
-    name: `order.items.${index}`,
-  }) as IOrder["items"][number];
+  const watchedMounting = useWatch({
+    name: `order.items.${index}.customizedDetails.mounting`,
+  });
+
+  const watchedUnitPrice = useWatch({
+    name: `order.items.${index}.unitPrice`,
+  });
 
   const itemValue = getValues(`order.items.${index}`);
 
@@ -67,22 +71,43 @@ const CustomizedArtApp: React.FC<CustomizedArtAppProps> = ({
   };
 
   useEffect(() => {
-    if (!watchedItem) return;
+    const item = getValues(`order.items.${index}`);
 
     const newUnitPrice = new BillCalculation(
       frameTypes,
       glassTypes,
       miscCharges
-    ).unitPrice(watchedItem);
+    ).unitPrice(item);
 
-    const currentUnitPrice = getValues(`order.items.${index}.unitPrice`);
+    const currentUnitPrice = getValues(`order.items.${index}.unitPrice`) || 0;
 
-    if (newUnitPrice !== currentUnitPrice) {
+    if (
+      Number(newUnitPrice.toFixed(2)) !== Number(currentUnitPrice.toFixed(2))
+    ) {
       setValue(`order.items.${index}.unitPrice`, newUnitPrice, {
         shouldDirty: true,
+        shouldValidate: true,
       });
     }
-  }, [watchedItem, frameTypes, glassTypes, miscCharges, index]);
+  }, [
+    frameTypes,
+    glassTypes,
+    miscCharges,
+    itemValue?.customizedDetails?.width,
+    itemValue?.customizedDetails?.height,
+    watchedMounting?.isEnabled,
+    watchedMounting?.top,
+    watchedMounting?.right,
+    watchedMounting?.bottom,
+    watchedMounting?.left,
+    itemValue?.customizedDetails?.glass?.isEnabled,
+    itemValue?.customizedDetails?.glass?.type,
+    itemValue?.customizedDetails?.frame?.type,
+    itemValue?.customizedDetails?.height,
+    itemValue?.customizedDetails?.additional?.varnish,
+    itemValue?.customizedDetails?.additional?.lamination,
+    itemValue?.customizedDetails?.additional?.routerCut,
+  ]);
 
   // const chargableArea = (item: ICustomizedDetails) => {
   //   const billDetails = new BillCalculation(
@@ -137,7 +162,7 @@ const CustomizedArtApp: React.FC<CustomizedArtAppProps> = ({
               </div>
               <div className="badge badge-light-primary ms-5">
                 {`Unit Price: `}
-                {watch(`order.items.${index}.unitPrice`)}
+                {watchedUnitPrice || 0}
               </div>
             </div>
             <div className="text-muted">
