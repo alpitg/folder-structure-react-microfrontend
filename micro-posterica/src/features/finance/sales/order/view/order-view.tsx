@@ -84,8 +84,8 @@ const OrderViewApp = () => {
         </NavLink>
       </OrderHeaderApp>
 
-      <div className="d-flex flex-column gap-7 gap-lg-10">
-        <div className="d-flex flex-column flex-xl-row gap-7 gap-lg-10">
+      <div className="d-flex flex-column gap-7 gap-lg-5">
+        <div className="d-flex flex-column flex-xl-row gap-7 gap-lg-5">
           <div className="card card-flush py-4 flex-row-fluid">
             <div className="card-header">
               <div className="card-title">
@@ -227,56 +227,6 @@ const OrderViewApp = () => {
           </div>
         </div>
 
-        {data?.invoice?.billTo && (
-          <div className="d-flex flex-column gap-7 gap-lg-10">
-            <div className="d-flex flex-column flex-xl-row gap-7 gap-lg-10">
-              <div className="card card-flush py-4 flex-row-fluid position-relative">
-                <div className="position-absolute top-0 end-0 bottom-0 opacity-10 d-flex align-items-center me-5">
-                  <i
-                    className="bi bi-credit-card-fill"
-                    style={{ fontSize: "14em" }}
-                  ></i>
-                </div>
-
-                <div className="card-header">
-                  <div className="card-title">
-                    <h2>Billing Address</h2>
-                  </div>
-                </div>
-
-                <div className="card-body pt-0">
-                  {data?.invoice?.billTo?.name}
-                  <br />
-                  {data?.invoice?.billTo?.phone}
-                  <br /> {data?.invoice?.billTo?.detail}
-                </div>
-              </div>
-
-              <div className="card card-flush py-4 flex-row-fluid position-relative">
-                <div className="position-absolute top-0 end-0 bottom-0 opacity-10 d-flex align-items-center me-5">
-                  <i
-                    className="bi bi-truck-flatbed"
-                    style={{ fontSize: "13em" }}
-                  ></i>
-                </div>
-
-                <div className="card-header">
-                  <div className="card-title">
-                    <h2>Shipping Address</h2>
-                  </div>
-                </div>
-
-                <div className="card-body pt-0">
-                  {data?.invoice?.billTo?.name}
-                  <br />
-                  {data?.invoice?.billTo?.phone}
-                  <br /> {data?.invoice?.billTo?.detail}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
         <div className="card card-flush py-4 flex-row-fluid overflow-hidden">
           <div className="card-header">
             <div className="card-title">
@@ -374,8 +324,58 @@ const OrderViewApp = () => {
           </div>
         </div>
 
-        <div className="d-flex flex-column gap-7 gap-lg-10">
-          <div className="d-flex flex-column flex-xl-row gap-7 gap-lg-10 w-xl-50">
+        {data?.invoice?.billTo && (
+          <div className="d-flex flex-column gap-7 gap-lg-5">
+            <div className="d-flex flex-column flex-xl-row gap-7 gap-lg-5">
+              <div className="card card-flush py-4 flex-row-fluid position-relative">
+                <div className="position-absolute top-0 end-0 bottom-0 opacity-10 d-flex align-items-center me-5">
+                  <i
+                    className="bi bi-credit-card-fill"
+                    style={{ fontSize: "14em" }}
+                  ></i>
+                </div>
+
+                <div className="card-header">
+                  <div className="card-title">
+                    <h2>Billing Address</h2>
+                  </div>
+                </div>
+
+                <div className="card-body pt-0">
+                  {data?.invoice?.billTo?.name}
+                  <br />
+                  {data?.invoice?.billTo?.phone}
+                  <br /> {data?.invoice?.billTo?.detail}
+                </div>
+              </div>
+
+              <div className="card card-flush py-4 flex-row-fluid position-relative">
+                <div className="position-absolute top-0 end-0 bottom-0 opacity-10 d-flex align-items-center me-5">
+                  <i
+                    className="bi bi-truck-flatbed"
+                    style={{ fontSize: "13em" }}
+                  ></i>
+                </div>
+
+                <div className="card-header">
+                  <div className="card-title">
+                    <h2>Shipping Address</h2>
+                  </div>
+                </div>
+
+                <div className="card-body pt-0">
+                  {data?.invoice?.billTo?.name}
+                  <br />
+                  {data?.invoice?.billTo?.phone}
+                  <br /> {data?.invoice?.billTo?.detail}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="d-flex flex-column gap-7 gap-lg-5">
+          <div className="d-flex flex-column flex-xl-row gap-7 gap-lg-5 w-xl-50">
             <div className="card card-flush py-4 flex-row-fluid position-relative">
               <div className="card-header py-7">
                 <h3 className="card-title align-items-start flex-column">
