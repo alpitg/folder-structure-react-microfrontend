@@ -129,6 +129,7 @@ const OrderAddApp = () => {
             orderDetail.order?.items?.length > 0
               ? orderDetail.order.items
               : [new InitializeOrderItem()],
+              orderCode: orderDetail?.order?.orderCode
         },
         invoice: {
           advancePaid: orderDetail.invoice?.advancePaid || 0,

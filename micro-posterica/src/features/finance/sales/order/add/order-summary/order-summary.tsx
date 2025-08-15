@@ -1,9 +1,10 @@
+import { useNavigate, useParams } from "react-router";
+
 import DeleteConfirmationApp from "../../../../../../components/ui/delete-confirmation/delete-confirmation";
 import { ROUTE_URL } from "../../../../../../components/auth/constants/routes.const";
 import { calculateTotalAmount } from "../../../../../bills/utils/bill-calculation.util";
 import { paymentModes } from "../../../../../../constants/app.const";
 import { useFormContext } from "react-hook-form";
-import { useNavigate } from "react-router";
 import { useState } from "react";
 
 const OrderSummaryApp = ({
@@ -13,11 +14,14 @@ const OrderSummaryApp = ({
   isOrderPlacingInProgress: boolean;
   isEditMode: boolean;
 }) => {
+  const { orderId } = useParams<{ orderId?: string }>();
   const { register, watch } = useFormContext();
 
   const [order] = watch(["order", "invoice"]) || [];
 
   const total = calculateTotalAmount(order);
+
+  const orderCode = watch("order.orderCode");
   const discount = watch("order.discountAmount") || 0;
   const paid = watch("invoice.advancePaid") || 0;
   const balance = total - discount - paid;
@@ -32,11 +36,12 @@ const OrderSummaryApp = ({
   return (
     <div className="card-body pt-0">
       <div className="d-flex flex-column gap-5">
-        <div className="fv-row d-flex align-items-center">
-          {watch("order.id") && (
+        <div className="fv-row align-items-center">
+          {orderId && (
             <>
               <label className="pe-2">Order ID</label>
-              <div className="fw-bold fs-3">#{watch("order.id")}</div>
+              <br />
+              <div className="fw-bold fs-3">#{orderCode}</div>
             </>
           )}
         </div>
