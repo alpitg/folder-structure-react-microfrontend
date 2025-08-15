@@ -84,8 +84,8 @@ const OrderViewApp = () => {
         </NavLink>
       </OrderHeaderApp>
 
-      <div className="d-flex flex-column gap-7 gap-lg-5">
-        <div className="d-flex flex-column flex-xl-row gap-7 gap-lg-5">
+      <div className="d-flex flex-column gap-7 gap-lg-10">
+        <div className="d-flex flex-column flex-xl-row gap-7 gap-lg-10">
           <div className="card card-flush py-4 flex-row-fluid">
             <div className="card-header">
               <div className="card-title">
@@ -325,8 +325,8 @@ const OrderViewApp = () => {
         </div>
 
         {data?.invoice?.billTo && (
-          <div className="d-flex flex-column gap-7 gap-lg-5">
-            <div className="d-flex flex-column flex-xl-row gap-7 gap-lg-5">
+          <div className="d-flex flex-column gap-7 gap-lg-10">
+            <div className="d-flex flex-column flex-xl-row gap-7 gap-lg-10">
               <div className="card card-flush py-4 flex-row-fluid position-relative">
                 <div className="position-absolute top-0 end-0 bottom-0 opacity-10 d-flex align-items-center me-5">
                   <i
@@ -374,8 +374,8 @@ const OrderViewApp = () => {
           </div>
         )}
 
-        <div className="d-flex flex-column gap-7 gap-lg-5">
-          <div className="d-flex flex-column flex-xl-row gap-7 gap-lg-5 w-xl-50">
+        <div className="d-flex flex-column gap-7 gap-lg-10">
+          <div className="d-flex flex-column flex-xl-row gap-7 gap-lg-10 w-xl-50">
             <div className="card card-flush py-4 flex-row-fluid position-relative">
               <div className="card-header py-7">
                 <h3 className="card-title align-items-start flex-column">

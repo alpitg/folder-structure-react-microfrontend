@@ -32,7 +32,6 @@ const OrderFilterApp = ({
   return (
     <div className="order-filter-app">
       <div className="card-header align-items-center px-0 gap-2 gap-md-5 flex-wrap">
-        {/* Search Box */}
         <div className="card-title flex-grow-1">
           <div
             className="d-flex align-items-center position-relative my-1 w-100"
@@ -42,7 +41,7 @@ const OrderFilterApp = ({
             <input
               type="text"
               className="form-control form-control-solid ps-12"
-              placeholder="Search by customer/order code"
+              placeholder="Search by customer / order code"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && onSearch()}
