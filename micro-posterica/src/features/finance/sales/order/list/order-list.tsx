@@ -1,19 +1,24 @@
-import { NavLink } from "react-router";
+import { NavLink, useLocation } from "react-router";
+import { useEffect, useState } from "react";
+
 import OrderHeaderApp from "../header/order-header";
 import PaymentBadge, {
   type PaymentStatus,
 } from "../../../../../components/ui/payment-badges/payment-badges";
 import { ROUTE_URL } from "../../../../../components/auth/constants/routes.const";
-import { useState } from "react";
 import ErrorPage from "../../../../../components/ui/error/error-page";
 import OrderFilterApp from "./filter/order-filter";
 import { useGetOrdersQuery } from "../../../../../app/features/sales/order/order.api";
 
+type sortType = "newest" | "oldest";
+
 const OrderListApp = () => {
+  const location = useLocation();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState<"newest" | "oldest">("newest");
+  const [sort, setSort] = useState<sortType>("newest");
 
+  // Main query hook — always called in the same order
   const {
     data: orderData,
     isLoading,
@@ -24,14 +29,21 @@ const OrderListApp = () => {
     pageSize: 10,
     customerName: search || undefined,
     orderCode: search || undefined,
-    sort, // <-- send sort to API
+    sort,
   });
 
-  const handleSortChange = (newSort: "newest" | "oldest") => {
+  // Sort change handler — triggers re-fetch automatically via query args
+  const handleSortChange = (newSort: sortType) => {
     setSort(newSort);
     setPage(1);
-    refetch();
   };
+
+  // Manual refresh trigger when navigated with a state flag
+  useEffect(() => {
+    if (location?.state?.refresh) {
+      refetch();
+    }
+  }, [location.state, refetch]);
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <ErrorPage />;
@@ -56,14 +68,11 @@ const OrderListApp = () => {
             search={search}
             setSearch={setSearch}
             pages={orderData?.pages || 1}
-            onSearch={() => {
-              setPage(1);
-              refetch();
-            }}
+            onSearch={() => setPage(1)}
             pageSize={orderData?.pageSize || 0}
             total={orderData?.total || 0}
             sort={sort}
-            setSort={handleSortChange} // updated
+            setSort={handleSortChange}
           />
 
           <div className="table-responsive">
@@ -109,7 +118,7 @@ const OrderListApp = () => {
                         status={order?.paymentStatus as PaymentStatus}
                       />
                     </td>
-                    <td>{order?.total.toFixed(2)}</td>
+                    <td>{order?.total?.toFixed(2)}</td>
                     <td>{order?.orderStatus}</td>
                   </tr>
                 ))}

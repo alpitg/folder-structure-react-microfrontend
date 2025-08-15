@@ -96,6 +96,11 @@ const OrderAddApp = () => {
 
     if (isEditMode) {
       updateOrder({ orderId: orderId!, data: request });
+      // .unwrap()
+      // .then(() => {
+      //   // Go back to list and tell it to refresh
+      //   navigate(ROUTE_URL.SALES.ORDER.LIST, { state: { refresh: true } });
+      // });
     } else {
       placeOrder(request);
     }
@@ -114,7 +119,8 @@ const OrderAddApp = () => {
   // Navigate after add or update
   useEffect(() => {
     if (isOrderPlaced || isOrderUpdated) {
-      navigate(ROUTE_URL.SALES.ORDER.BASE);
+      // Go back to list and tell it to refresh
+      navigate(ROUTE_URL.SALES.ORDER.BASE, { state: { refresh: true } });
     }
   }, [isOrderPlaced, isOrderUpdated, navigate]);
 

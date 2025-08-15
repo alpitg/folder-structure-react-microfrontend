@@ -1,27 +1,26 @@
 import { NavLink, useParams } from "react-router";
+import { useEffect, useRef } from "react";
 
 import ErrorPage from "../../../../../components/ui/error/error-page";
 import NoRecordApp from "../list/no-record/no-record";
 import OrderHeaderApp from "../header/order-header";
 import { ROUTE_URL } from "../../../../../components/auth/constants/routes.const";
 import { useGetDetailQuery } from "../../../../../app/features/sales/order/order.api";
-import { useRef } from "react";
 
 const OrderViewApp = () => {
   const { orderId } = useParams(); //
-  const { data, isLoading, error } = useGetDetailQuery(orderId || "");
   const printRef = useRef<HTMLDivElement>(null);
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <ErrorPage />;
-  if (!data) return <NoRecordApp />;
+  const { data, isLoading, error, refetch } = useGetDetailQuery(orderId || "");
 
   const getSubTotal = () => {
-    return data?.order?.items?.reduce((total, item) => {
-      const quantity = item?.quantity || 0;
-      const unitPrice = item?.unitPrice || 0;
-      return total + quantity * unitPrice;
-    }, 0);
+    return (
+      data?.order?.items?.reduce((total, item) => {
+        const quantity = item?.quantity || 0;
+        const unitPrice = item?.unitPrice || 0;
+        return total + quantity * unitPrice;
+      }, 0) ?? 0
+    );
   };
 
   const getGrandTotal = () =>
@@ -62,6 +61,17 @@ const OrderViewApp = () => {
       printWindow.close();
     }
   };
+
+  // Manual refresh trigger when navigated with a state flag
+  useEffect(() => {
+    if (orderId) {
+      refetch();
+    }
+  }, [orderId, refetch]);
+
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <ErrorPage />;
+  if (!data) return <NoRecordApp />;
 
   return (
     <div className="order-header-app flex flex-col gap-4 mb-3">
