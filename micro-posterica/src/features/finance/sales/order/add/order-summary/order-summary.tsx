@@ -8,8 +8,10 @@ import { useState } from "react";
 
 const OrderSummaryApp = ({
   isOrderPlacingInProgress,
+  isEditMode,
 }: {
   isOrderPlacingInProgress: boolean;
+  isEditMode: boolean;
 }) => {
   const { register, watch } = useFormContext();
 
@@ -31,8 +33,12 @@ const OrderSummaryApp = ({
     <div className="card-body pt-0">
       <div className="d-flex flex-column gap-5">
         <div className="fv-row d-flex align-items-center">
-          {/* <label className="pe-2">Order ID</label>
-          <div className="fw-bold fs-3">#13860</div> */}
+          {watch("order.id") && (
+            <>
+              <label className="pe-2">Order ID</label>
+              <div className="fw-bold fs-3">#{watch("order.id")}</div>
+            </>
+          )}
         </div>
 
         <div className="fv-row">
@@ -137,10 +143,11 @@ const OrderSummaryApp = ({
           ) : (
             <i className="bi bi-save fs-3 me-2"></i>
           )}
-          Place Order
+          {isEditMode ? "Save changes" : "Place Order"}
         </button>
 
         <button
+          type="button"
           className="btn btn-light w-100"
           onClick={() => setIsDiscard(!isDiscard)}
         >

@@ -15,7 +15,7 @@ export const ROUTE_URL = {
       BASE: "/sales/order/list",
       VIEW: "/sales/order/:orderId",
       ADD: "/sales/order/add",
-      EDIT: "/sales/order/edit/:orderId",
+      EDIT: "/sales/order/:orderId/edit",
     },
   },
   INVOICE_MANAGER: {

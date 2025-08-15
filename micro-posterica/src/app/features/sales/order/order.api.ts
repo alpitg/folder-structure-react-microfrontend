@@ -25,7 +25,6 @@ export const ordersApi = createApi({
         GetEnvConfig()?.api?.order?.detail?.replace("{orderId}", orderId),
     }),
 
-    // POST /api/orders
     placeOrder: builder.mutation<IOrderInvoiceData, IOrderInvoiceData>({
       query: (body) => ({
         url:
@@ -34,8 +33,28 @@ export const ordersApi = createApi({
         body,
       }),
     }),
+
+    updateOrder: builder.mutation<
+      IOrderInvoiceData,
+      { orderId: string; data: IOrderInvoiceData }
+    >({
+      query: ({ orderId, data }) => ({
+        url:
+          GetEnvConfig()?.api?.baseUrl +
+          GetEnvConfig()?.api?.order?.updateOrder?.replace(
+            "{orderId}",
+            orderId
+          ),
+        method: "PUT",
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useGetOrdersQuery, useGetDetailQuery, usePlaceOrderMutation } =
-  ordersApi;
+export const {
+  useGetOrdersQuery,
+  useGetDetailQuery,
+  usePlaceOrderMutation,
+  useUpdateOrderMutation,
+} = ordersApi;

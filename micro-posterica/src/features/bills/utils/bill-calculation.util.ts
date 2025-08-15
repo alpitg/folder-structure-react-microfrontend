@@ -139,7 +139,7 @@ export const mapOrderForApi = (
     order: {
       orderCode: "",
       customerName: item?.order?.customerName,
-      customerId: item?.order?.customerName,
+      customerId: item?.order?.customerId,
       handledBy: item?.order?.handledBy,
       createdAt: item?.order?.createdAt,
       likelyDateOfDelivery: item?.order?.likelyDateOfDelivery,

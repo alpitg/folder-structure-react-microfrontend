@@ -21,6 +21,7 @@ let environment = {
       list: "",
       detail: "",
       placeOrder: "",
+      updateOrder: "",
     },
     customer: {
       list: "",

@@ -70,12 +70,12 @@ const RoutesApp = () => {
                 element={<OrderAddApp />}
               />
               <Route
-                path={ROUTE_URL.SALES.ORDER.VIEW}
-                element={<OrderViewApp />}
+                path={ROUTE_URL.SALES.ORDER.EDIT}
+                element={<OrderAddApp />}
               />
               <Route
-                path={ROUTE_URL.SALES.ORDER.EDIT}
-                element={<OrderEditApp />}
+                path={ROUTE_URL.SALES.ORDER.VIEW}
+                element={<OrderViewApp />}
               />
             </Route>
 

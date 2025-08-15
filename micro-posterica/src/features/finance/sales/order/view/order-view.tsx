@@ -25,7 +25,7 @@ const OrderViewApp = () => {
   };
 
   const getGrandTotal = () =>
-    (getSubTotal() - (data?.order?.discountAmount || 0))?.toFixed(2);
+    getSubTotal() - (data?.order?.discountAmount || 0);
 
   const handlePrint = () => {
     if (!printRef.current) return;
@@ -76,12 +76,19 @@ const OrderViewApp = () => {
           </span>
         </NavLink>
 
-        <NavLink to={ROUTE_URL.SALES.ORDER.ADD}>
-          <span className="btn btn-primary btn-sm">
-            <i className="bi bi-plus-lg fs-3"></i>
-            Add New Order
-          </span>
-        </NavLink>
+        {data?.order?.id && (
+          <NavLink
+            to={ROUTE_URL.SALES.ORDER.EDIT?.replace(
+              ":orderId",
+              data?.order?.id
+            )}
+          >
+            <span className="btn btn-primary btn-sm">
+              <i className="bi bi-pencil-square"></i>
+              Edit Order
+            </span>
+          </NavLink>
+        )}
       </OrderHeaderApp>
 
       <div className="d-flex flex-column gap-7 gap-lg-10">
@@ -255,8 +262,8 @@ const OrderViewApp = () => {
                   </tr>
                 </thead>
                 <tbody className="fw-semibold text-gray-600">
-                  {data?.order?.items?.map((item) => (
-                    <tr key={item._id}>
+                  {data?.order?.items?.map((item, index) => (
+                    <tr key={item._id ?? index}>
                       <td>
                         <div className="d-flex align-items-center">
                           <div className="ms-5">
@@ -284,7 +291,7 @@ const OrderViewApp = () => {
                     <td colSpan={4} className="text-end">
                       Subtotal
                     </td>
-                    <td className="text-end">{getSubTotal()}</td>
+                    <td className="text-end">{getSubTotal()?.toFixed(2)}</td>
                   </tr>
 
                   <tr>
@@ -315,7 +322,7 @@ const OrderViewApp = () => {
                       Grand Total
                     </td>
                     <td className="text-gray-900 fs-3 fw-bolder text-end">
-                      {getGrandTotal()}
+                      {getGrandTotal()?.toFixed(2)}
                     </td>
                   </tr>
                 </tbody>
