@@ -123,21 +123,42 @@ const OrderAddApp = () => {
     if (isEditMode && orderDetail) {
       methods.reset({
         order: {
+          customerId: orderDetail?.order?.customerId,
           customerName: orderDetail.order?.customerName || "",
           discountAmount: orderDetail.order?.discountAmount || 0,
           items:
             orderDetail.order?.items?.length > 0
               ? orderDetail.order.items
               : [new InitializeOrderItem()],
-              orderCode: orderDetail?.order?.orderCode
+          orderCode: orderDetail?.order?.orderCode,
+          createdAt: orderDetail?.order?.createdAt,
+          handledBy: orderDetail?.order?.handledBy,
+          invoiceId: orderDetail?.order?.invoiceId,
+          id: orderDetail?.order?.id,
+          likelyDateOfDelivery: orderDetail?.order?.likelyDateOfDelivery,
+          miscCharges: orderDetail?.order?.miscCharges,
+          note: orderDetail?.order?.note,
+          orderStatus: orderDetail?.order?.orderStatus,
         },
         invoice: {
+          id: orderDetail?.invoice?.id,
           advancePaid: orderDetail.invoice?.advancePaid || 0,
           paymentStatus: orderDetail.invoice?.paymentStatus || "pending",
           billTo: {
             phone: orderDetail.invoice?.billTo?.phone || "",
             detail: orderDetail.invoice?.billTo?.detail || "",
           },
+          generateInvoice: orderDetail.invoice?.generateInvoice,
+          orderIds: orderDetail?.invoice?.orderIds,
+          billDate: orderDetail?.invoice?.billDate,
+          createdAt: orderDetail?.invoice?.createdAt,
+          paymentMode: orderDetail?.invoice?.paymentMode,
+          billFrom: {
+            phone: orderDetail.invoice?.billFrom?.phone || "",
+            detail: orderDetail.invoice?.billFrom?.detail || "",
+          },
+          balanceAmount: orderDetail?.invoice?.balanceAmount,
+          totalAmount: orderDetail?.invoice?.totalAmount,
         },
       });
     }

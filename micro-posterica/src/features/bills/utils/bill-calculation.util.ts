@@ -133,8 +133,6 @@ export const mapOrderForApi = (
     return null;
   }
 
-  const defaultPaymentStatus: PaymentStatusType = "pending";
-
   let order: IOrderInvoiceData = {
     order: {
       orderCode: "",
@@ -202,7 +200,7 @@ export const mapOrderForApi = (
       orderIds: item?.invoice?.orderIds,
       balanceAmount: item?.invoice?.balanceAmount,
       createdAt: item?.invoice?.createdAt,
-      paymentMode: item?.invoice?.paymentMode || defaultPaymentStatus,
+      paymentMode: item?.invoice?.paymentMode || "cash",
       paymentStatus: item?.invoice?.paymentStatus,
       totalAmount: item?.invoice?.totalAmount,
       advancePaid: item?.invoice?.advancePaid,
