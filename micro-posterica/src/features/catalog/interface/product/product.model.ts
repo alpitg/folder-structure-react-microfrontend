@@ -15,7 +15,8 @@ export interface IProductPrice {
 export interface IProductInventory {
   sku: string | null;
   barcode: string | null;
-  quantity: number;
+  quantityInShelf: number;
+  quantityInWarehouse: number;
   allowBackorders: boolean;
 }
 

@@ -72,7 +72,8 @@ const ProductFormApp = ({ mode }: ProductFormAppProps) => {
       inventory: {
         sku: null,
         barcode: null,
-        quantity: 0,
+        quantityInShelf: 0,
+        quantityInWarehouse: 0,
         allowBackorders: false,
       },
       variations: [

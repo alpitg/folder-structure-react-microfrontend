@@ -1,4 +1,9 @@
+import type { IProductData } from "../../../interface/product/product.model";
+import { useFormContext } from "react-hook-form";
+
 const ProductInventoryApp = () => {
+  const { register } = useFormContext<IProductData>();
+
   return (
     <div className="card card-flush py-4">
       <div className="card-header">
@@ -10,59 +15,55 @@ const ProductInventoryApp = () => {
       </div>
 
       <div className="card-body pt-0">
-        <div className="mb-10 fv-row fv-plugins-icon-container">
+        <div className="mb-10 fv-row">
           <label className="required form-label">
             <i className="bi bi-upc-scan me-2"></i>SKU
           </label>
           <input
             type="text"
-            name="sku"
-            className="form-control mb-2"
             placeholder="SKU Number"
-            value=""
+            className="form-control mb-2"
+            {...register("inventory.sku")}
           />
           <div className="text-muted fs-7">Enter the product SKU.</div>
-          <div className="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
         </div>
 
-        <div className="mb-10 fv-row fv-plugins-icon-container">
+        <div className="mb-10 fv-row">
           <label className="required form-label">
             <i className="bi bi-upc me-2"></i>Barcode
           </label>
           <input
             type="text"
-            name="barcode"
-            className="form-control mb-2"
             placeholder="Barcode Number"
-            value=""
+            className="form-control mb-2"
+            {...register("inventory.barcode")}
           />
           <div className="text-muted fs-7">
             Enter the product barcode number.
           </div>
-          <div className="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
         </div>
 
-        <div className="mb-10 fv-row fv-plugins-icon-container">
+        <div className="mb-10 fv-row">
           <label className="required form-label">
             <i className="bi bi-stack me-2"></i>Quantity
           </label>
           <div className="d-flex gap-3">
             <input
               type="number"
-              name="shelf"
-              className="form-control mb-2"
               placeholder="On shelf"
-              value=""
+              className="form-control mb-2"
+              {...register("inventory.quantityInShelf", {
+                valueAsNumber: true,
+              })}
             />
             <input
               type="number"
-              name="warehouse"
-              className="form-control mb-2"
               placeholder="In warehouse"
+              className="form-control mb-2"
+              {...register("inventory.quantityInWarehouse")}
             />
           </div>
           <div className="text-muted fs-7">Enter the product quantity.</div>
-          <div className="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
         </div>
 
         <div className="fv-row">
@@ -70,7 +71,13 @@ const ProductInventoryApp = () => {
             <i className="bi bi-cart-x me-2"></i>Allow Backorders
           </label>
           <div className="form-check form-check-custom form-check-solid mb-2">
-            <input className="form-check-input" type="checkbox" value="" />
+            <input
+              className="form-check-input"
+              type="checkbox"
+              {...register("inventory.allowBackorders", {
+                valueAsNumber: true,
+              })}
+            />
             <label className="form-check-label">Yes</label>
           </div>
           <div className="text-muted fs-7">
