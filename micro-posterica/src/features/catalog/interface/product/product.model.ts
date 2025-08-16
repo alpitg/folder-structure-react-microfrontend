@@ -52,7 +52,7 @@ export interface IProductData {
   name: string;
   code: string;
   description: string;
-  status: "draft" | "published" | string;
+  status: "published" | "inactive" | "scheduled" | "draft";
   template: string;
   categories: string[];
   tags: string[];

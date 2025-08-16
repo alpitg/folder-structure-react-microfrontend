@@ -44,8 +44,8 @@ const ProductTemplateApp = () => {
         </label>
 
         <select
-          className="form-select mb-2"
           id="catalog_add_product_store_template"
+          className="form-select mb-2"
           defaultValue="default"
           {...register("template")}
         >
