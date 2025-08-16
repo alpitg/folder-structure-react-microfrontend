@@ -15,8 +15,8 @@ export interface IProductPrice {
 export interface IProductInventory {
   sku: string | null;
   barcode: string | null;
-  quantityInShelf: number;
-  quantityInWarehouse: number;
+  quantityInShelf: number | null;
+  quantityInWarehouse: number | null;
   /**
    * @readonly this is readonly property
    */

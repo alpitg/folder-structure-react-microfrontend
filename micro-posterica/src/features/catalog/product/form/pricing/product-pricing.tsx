@@ -160,8 +160,10 @@ const ProductPricing = () => {
             <input
               id="discounted_price"
               type="number"
+              min={0}
               {...register("price.fixedDiscountedPrice", {
                 valueAsNumber: true,
+                min: 0,
               })}
               className="form-control mb-2"
               placeholder="Discounted price"

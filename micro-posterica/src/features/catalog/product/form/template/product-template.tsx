@@ -1,4 +1,32 @@
+import type { IProductData } from "../../../interface/product/product.model";
+import { useFormContext } from "react-hook-form";
+
 const ProductTemplateApp = () => {
+  const { register } = useFormContext<IProductData>();
+
+  const templates = [
+    {
+      id: 1,
+      displayName: "Default template",
+      value: "default",
+    },
+    {
+      id: 2,
+      displayName: "Electronics",
+      value: "electronics",
+    },
+    {
+      id: 3,
+      displayName: "Office stationary",
+      value: "office_stationary",
+    },
+    {
+      id: 4,
+      displayName: "Fashion",
+      value: "fashion",
+    },
+  ];
+
   return (
     <div className="card card-flush py-4">
       <div className="card-header">
@@ -19,12 +47,11 @@ const ProductTemplateApp = () => {
           className="form-select mb-2"
           id="catalog_add_product_store_template"
           defaultValue="default"
+          {...register("template")}
         >
-          <option value=""></option>
-          <option value="default">Default template</option>
-          <option value="electronics">Electronics</option>
-          <option value="office">Office stationary</option>
-          <option value="fashion">Fashion</option>
+          {templates?.map((x) => {
+            return <option value={x?.value}>{x?.displayName}</option>;
+          })}
         </select>
 
         <div className="text-muted fs-7">
