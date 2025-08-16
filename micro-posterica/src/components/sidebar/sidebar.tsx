@@ -6,6 +6,108 @@ import { ROUTE_URL } from "../auth/constants/routes.const";
 import { useState } from "react";
 
 const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
+  const catalog: IRoutes = {
+    id: "catalog",
+    title: "Catalog",
+    path: ROUTE_URL.CATALOG.BASE,
+    icon: "bi bi-box",
+    claims: [],
+    subRoutes: [
+      {
+        id: "product-list",
+        title: "Product Listing",
+        path: ROUTE_URL.CATALOG.PRODUCT.BASE,
+        icon: "bi bi-person-fill-gea",
+        claims: [],
+        subRoutes: [],
+      },
+      {
+        id: "product-add",
+        title: "Add Product",
+        path: ROUTE_URL.CATALOG.PRODUCT.ADD,
+        icon: "bi bi-person-fill-gear",
+        claims: [],
+        subRoutes: [],
+      },
+      {
+        id: "product-category-list",
+        title: "Category Listing",
+        path: ROUTE_URL.CATALOG.CATEGORY.BASE,
+        icon: "bi bi-person-fill-gea",
+        claims: [],
+        subRoutes: [],
+      },
+      {
+        id: "product-category-add",
+        title: "Add Category",
+        path: ROUTE_URL.CATALOG.CATEGORY.ADD,
+        icon: "bi bi-person-fill-gear",
+        claims: [],
+        subRoutes: [],
+      },
+    ],
+  };
+
+  const sales: IRoutes = {
+    id: "sales",
+    title: "Sales",
+    path: ROUTE_URL.SALES.BASE,
+    icon: "bi bi-journal-bookmark",
+    claims: [],
+    subRoutes: [
+      {
+        id: "order-list",
+        title: "Order Listing",
+        path: ROUTE_URL.SALES.ORDER.BASE,
+        icon: "bi bi-person-fill-gea",
+        claims: [],
+        subRoutes: [],
+      },
+      {
+        id: "order-add",
+        title: "Add Order",
+        path: ROUTE_URL.SALES.ORDER.ADD,
+        icon: "bi bi-person-fill-gear",
+        claims: [],
+        subRoutes: [],
+      },
+    ],
+  };
+
+  const master: IRoutes = {
+    id: "masters",
+    title: "Masters",
+    path: ROUTE_URL.MASTER.BASE,
+    icon: "bi bi-shield-check",
+    claims: [],
+    subRoutes: [
+      {
+        id: "frame-types",
+        title: "Frame Types",
+        path: ROUTE_URL.MASTER.FRAME_TYPES.BASE,
+        icon: "bi bi-door-closed",
+        claims: [],
+        subRoutes: [],
+      },
+      {
+        id: "glass-types",
+        title: "Glass Types",
+        path: ROUTE_URL.MASTER.GLASS_TYPES.BASE,
+        icon: "bi bi-sunglasses",
+        claims: [],
+        subRoutes: [],
+      },
+      {
+        id: "mounting-types",
+        title: "Miscellaneous charges",
+        path: ROUTE_URL.MASTER.MISC_CHARGES.BASE,
+        icon: "bi bi-currency-rupee",
+        claims: [],
+        subRoutes: [],
+      },
+    ],
+  };
+
   const routes: IRoutes[] = [
     {
       id: "dashboard",
@@ -23,64 +125,9 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
       claims: [],
       subRoutes: [],
     },
-    {
-      id: "sales",
-      title: "Sales",
-      path: ROUTE_URL.SALES.BASE,
-      icon: "bi bi-journal-bookmark",
-      claims: [],
-      subRoutes: [
-        {
-          id: "order-list",
-          title: "Order Listing",
-          path: ROUTE_URL.SALES.ORDER.BASE,
-          icon: "bi bi-person-fill-gea",
-          claims: [],
-          subRoutes: [],
-        },
-        {
-          id: "order-add",
-          title: "Add Order",
-          path: ROUTE_URL.SALES.ORDER.ADD,
-          icon: "bi bi-person-fill-gear",
-          claims: [],
-          subRoutes: [],
-        },
-      ],
-    },
-    {
-      id: "masters",
-      title: "Masters",
-      path: ROUTE_URL.CUSTOMERS,
-      icon: "bi bi-shield-check",
-      claims: [],
-      subRoutes: [
-        {
-          id: "frame-types",
-          title: "Frame Types",
-          path: ROUTE_URL.MASTER.FRAME_TYPES.BASE,
-          icon: "bi bi-door-closed",
-          claims: [],
-          subRoutes: [],
-        },
-        {
-          id: "glass-types",
-          title: "Glass Types",
-          path: ROUTE_URL.MASTER.GLASS_TYPES.BASE,
-          icon: "bi bi-sunglasses",
-          claims: [],
-          subRoutes: [],
-        },
-        {
-          id: "mounting-types",
-          title: "Miscellaneous charges",
-          path: ROUTE_URL.MASTER.MISC_CHARGES.BASE,
-          icon: "bi bi-currency-rupee",
-          claims: [],
-          subRoutes: [],
-        },
-      ],
-    },
+    catalog,
+    sales,
+    master,
     // {
     //   id: "invoice-manager",
     //   title: "Invoice Manager",

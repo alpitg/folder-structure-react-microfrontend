@@ -1,3 +1,39 @@
+const SALES_ROUTE_URL = {
+  BASE: "/sales",
+  ORDER: {
+    BASE: "/sales/order/list",
+    VIEW: "/sales/order/:orderId",
+    ADD: "/sales/order/add",
+    EDIT: "/sales/order/:orderId/edit",
+  },
+};
+
+const CATALOG = {
+  BASE: "/catalog",
+  PRODUCT: {
+    BASE: "/catalog/product/list",
+    VIEW: "/catalog/product/:id",
+    ADD: "/catalog/product/add",
+    EDIT: "/catalog/product/:id/edit",
+  },
+  CATEGORY: {
+    BASE: "/catalog/category/list",
+    VIEW: "/catalog/category/:id",
+    ADD: "/catalog/category/add",
+    EDIT: "/catalog/category/:id/edit",
+  },
+};
+
+const CUSTOMER_ROUTE_URL = {
+  BASE: "/customer",
+  ORDER: {
+    BASE: "/customer/list",
+    VIEW: "/customer/:id",
+    ADD: "/customer/add",
+    EDIT: "/customer/:id/edit",
+  },
+};
+
 export const ROUTE_URL = {
   HOME: "",
   DASHBOARD: "/",
@@ -8,16 +44,9 @@ export const ROUTE_URL = {
   UI: "/ui",
   NOT_ALLOWED: "/not-allowed",
   SOCIAL_MEDIA_MANAGEMENT: "/social-media",
-  CUSTOMERS: "/customers",
-  SALES: {
-    BASE: "/sales",
-    ORDER: {
-      BASE: "/sales/order/list",
-      VIEW: "/sales/order/:orderId",
-      ADD: "/sales/order/add",
-      EDIT: "/sales/order/:orderId/edit",
-    },
-  },
+  CUSTOMERS: CUSTOMER_ROUTE_URL,
+  SALES: SALES_ROUTE_URL,
+  CATALOG: CATALOG,
   INVOICE_MANAGER: {
     BASE: "/invoice",
     CREATE: "/invoice/create",

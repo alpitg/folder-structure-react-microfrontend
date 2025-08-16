@@ -112,3 +112,48 @@ export default tseslint.config({
   },
 })
 ```
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                  Client (Web)                               │
+│  React (Vite/Next.js), Router, State (Redux/Zustand), TanStack Query        │
+│  Auth UI (OIDC), Feature Flags, i18n                                        │
+└──────────────────────────────────────────────────────────────────────────────┘
+                │ HTTPS (JWT)                                    ▲ Webhooks
+                ▼                                                 │
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                 API Gateway / Edge                           │
+│  TLS termination, rate limiting, WAF, tenant routing by subdomain/header     │
+└──────────────────────────────────────────────────────────────────────────────┘
+                │                                                             
+                ▼                                                             
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                Python Backend (FastAPI)                      │
+│  Modules: auth, tenants, users, contacts, deals, activities, billing, files │
+│  Patterns: service + repository, Pydantic schemas, dependency‑injection      │
+│  Tenancy middleware: resolve tenant -> context -> row filtering/RLS          │
+└──────────────────────────────────────────────────────────────────────────────┘
+        │            │                 │                 │                  
+        │            │                 │                 │                  
+        ▼            ▼                 ▼                 ▼                  
+┌─────────────┐ ┌──────────────┐ ┌──────────────┐ ┌───────────────┐ ┌─────────────┐
+│ PostgreSQL  │ │ Redis        │ │ Object Store │ │ Message Queue │ │ Search      │
+│ (RLS)       │ │ (cache,      │ │ (S3/minio)   │ │ (Celery+RQ)   │ │ (OpenSearch │
+│             │ │ sessions,     │ │ tenant key   │ │ workers       │ │  optional)  │
+└─────────────┘ │ rate limits)  │ │ prefixes)    │ │               │ └─────────────┘
+                └──────────────┘ └──────────────┘ └───────────────┘
+
+
+
+
+app/
+  main.py
+  core/        # settings, db, cache, security, logging
+  middleware/  # tenant_resolver.py, rls.py, rate_limit.py
+  modules/
+    auth/
+    tenants/
+    crm/ (contacts, orgs, deals, pipelines, activities)
+    billing/
+    files/
+  workers/     # Celery tasks (emails, webhooks, exports)
