@@ -6,7 +6,6 @@ import { lazy } from "react";
 const ProductApp = lazy(() => import("../product/product"));
 const ProductListApp = lazy(() => import("../product/list/product-list"));
 const ProductFormApp = lazy(() => import("../product/form/product-form"));
-const ProductViewApp = lazy(() => import("../product/view/product-view"));
 
 const CategoryApp = lazy(() => import("../category/product-category"));
 const CategoryListApp = lazy(
@@ -34,10 +33,6 @@ export const CatalogRoutes = () => {
         <Route
           path={ROUTE_URL.CATALOG.PRODUCT.EDIT}
           element={<ProductFormApp mode="edit" />}
-        />
-        <Route
-          path={ROUTE_URL.CATALOG.PRODUCT.VIEW}
-          element={<ProductViewApp />}
         />
       </Route>
 

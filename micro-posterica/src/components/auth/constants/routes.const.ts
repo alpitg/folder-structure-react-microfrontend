@@ -14,7 +14,6 @@ const CATALOG = {
   PRODUCT: {
     BASE: "/catalog/product",
     LIST: "/catalog/product/list",
-    VIEW: "/catalog/product/:id",
     ADD: "/catalog/product/add",
     EDIT: "/catalog/product/edit/:id",
   },

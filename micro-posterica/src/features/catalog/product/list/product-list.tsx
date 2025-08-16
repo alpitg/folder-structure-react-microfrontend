@@ -91,7 +91,7 @@ const ProductListApp = () => {
                   <tr key={product?.id}>
                     <td>
                       <NavLink
-                        to={ROUTE_URL.CATALOG.PRODUCT.VIEW.replace(
+                        to={ROUTE_URL.CATALOG.PRODUCT.EDIT.replace(
                           ":id",
                           product?.id
                         )}
