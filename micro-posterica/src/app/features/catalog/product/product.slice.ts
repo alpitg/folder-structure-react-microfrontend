@@ -1,8 +1,8 @@
-import type { IProductList } from "../../../../features/catalog/interfaces/catalog/product/product.model";
+import type { IProductData } from "../../../../features/catalog/interfaces/catalog/product/product.model";
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface IProductsState {
-  products: IProductList[];
+  products: IProductData[];
   error: string | null;
 }
 

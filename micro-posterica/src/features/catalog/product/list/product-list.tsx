@@ -24,7 +24,8 @@ const ProductListApp = () => {
   } = useGetProductsQuery({
     page,
     pageSize: 10,
-    name: search || undefined,
+    searchText: search,
+    status: "",
     sort,
   });
 
@@ -100,10 +101,10 @@ const ProductListApp = () => {
                       </NavLink>
                     </td>
                     <td>{product?.name}</td>
-                    <td>{product?.sku}</td>
-                    <td>{product?.quantity}</td>
-                    <td>{product?.price?.toFixed(2)}</td>
-                    <td>{product?.rating?.toFixed(2)}</td>
+                    <td>{product?.inventory?.sku}</td>
+                    <td>{product?.inventory?.quantity}</td>
+                    <td>{product?.price?.base_price?.toFixed(2)}</td>
+                    <td>{2 / 5}</td>
                     <td>{product?.status}</td>
                   </tr>
                 ))}
