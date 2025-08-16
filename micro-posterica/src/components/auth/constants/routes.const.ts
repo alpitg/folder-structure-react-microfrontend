@@ -11,16 +11,18 @@ const SALES_ROUTE_URL = {
 const CATALOG = {
   BASE: "/catalog",
   PRODUCT: {
-    BASE: "/catalog/product/list",
+    BASE: "/catalog/product",
+    LIST: "/catalog/product/list",
     VIEW: "/catalog/product/:id",
     ADD: "/catalog/product/add",
-    EDIT: "/catalog/product/:id/edit",
+    EDIT: "/catalog/product/edit/:id",
   },
   CATEGORY: {
-    BASE: "/catalog/category/list",
+    BASE: "/catalog/category",
+    LIST: "/catalog/category/list",
     VIEW: "/catalog/category/:id",
     ADD: "/catalog/category/add",
-    EDIT: "/catalog/category/:id/edit",
+    EDIT: "/catalog/category/edit/:id",
   },
 };
 

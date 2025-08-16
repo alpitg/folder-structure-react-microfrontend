@@ -1,9 +1,10 @@
 import "./sidebar.scss";
 
+import { useEffect, useState } from "react";
+
 import type { IRoutes } from "../../interfaces/route.model";
 import { NavLink } from "react-router";
 import { ROUTE_URL } from "../auth/constants/routes.const";
-import { useState } from "react";
 
 const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
   const catalog: IRoutes = {
@@ -16,7 +17,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
       {
         id: "product-list",
         title: "Product Listing",
-        path: ROUTE_URL.CATALOG.PRODUCT.BASE,
+        path: ROUTE_URL.CATALOG.PRODUCT.LIST,
         icon: "bi bi-person-fill-gea",
         claims: [],
         subRoutes: [],
@@ -32,7 +33,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
       {
         id: "product-category-list",
         title: "Category Listing",
-        path: ROUTE_URL.CATALOG.CATEGORY.BASE,
+        path: ROUTE_URL.CATALOG.CATEGORY.LIST,
         icon: "bi bi-person-fill-gea",
         claims: [],
         subRoutes: [],
@@ -193,6 +194,18 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
     setActiveMenu((prev) => (prev === menuId ? null : menuId));
   };
 
+   // ✅ open parent menu if current route matches subRoute
+   useEffect(() => {
+    routes.forEach((route) => {
+      if (route.subRoutes?.some((sub) => location.pathname.startsWith(sub.path))) {
+        setActiveMenu(route.id);
+      }
+      if (location.pathname.startsWith(route.path) && !route.subRoutes?.length) {
+        setActiveMenu(route.id);
+      }
+    });
+  }, [location.pathname]);
+  
   return (
     <div className="app-sidebar flex-column">
       <div className="app-sidebar-menu overflow-hidden flex-column-fluid">
@@ -263,7 +276,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
         </div>
       </div>
 
-      <div
+      {/* <div
         className="app-sidebar-footer flex-column-auto pt-2 pb-6 px-6"
         id="kt_app_sidebar_footer"
       >
@@ -274,7 +287,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
             <span className="path2"></span>
           </i>
         </a>
-      </div>
+      </div> */}
     </div>
   );
 };

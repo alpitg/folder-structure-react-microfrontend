@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 import { Suspense, lazy } from "react";
 
+import { CatalogRoutes } from "../../features/catalog/routes/catalog.routes";
 import LoadingApp from "../loading/loading";
 import { ROUTE_URL } from "./constants/routes.const";
 
@@ -39,9 +40,6 @@ const SalesApp = lazy(() => import("../../features/finance/sales/sales"));
 const OrderListApp = lazy(
   () => import("../../features/finance/sales/order/list/order-list")
 );
-const OrderEditApp = lazy(
-  () => import("../../features/finance/sales/order/edit/order-edit")
-);
 const OrderAddApp = lazy(
   () => import("../../features/finance/sales/order/add/order-add")
 );
@@ -64,7 +62,10 @@ const RoutesApp = () => {
             <Route path={ROUTE_URL.APP_SETTINGS} element={<SettingsApp />} />
 
             <Route path={ROUTE_URL.SALES.BASE} element={<SalesApp />}>
-              <Route path={ROUTE_URL.SALES.ORDER.BASE} element={<OrderListApp />} />
+              <Route
+                path={ROUTE_URL.SALES.ORDER.BASE}
+                element={<OrderListApp />}
+              />
               <Route
                 path={ROUTE_URL.SALES.ORDER.ADD}
                 element={<OrderAddApp />}
@@ -78,6 +79,8 @@ const RoutesApp = () => {
                 element={<OrderViewApp />}
               />
             </Route>
+
+            {CatalogRoutes()}
 
             <Route
               path={ROUTE_URL.INVOICE_MANAGER.CREATE}
