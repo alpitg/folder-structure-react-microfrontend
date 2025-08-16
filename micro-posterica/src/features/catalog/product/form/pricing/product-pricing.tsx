@@ -1,3 +1,4 @@
+import CustomSliderApp from "../../../../../components/ui/slider/slider";
 import type { IProductData } from "../../../interface/product/product.model";
 import { useFormContext } from "react-hook-form";
 
@@ -6,6 +7,7 @@ const ProductPricing = () => {
     register,
     watch,
     formState: { errors },
+    setValue,
   } = useFormContext<IProductData>();
   const discountType = watch("price.discountType");
 
@@ -44,6 +46,10 @@ const ProductPricing = () => {
       displayName: "Downloadable Product",
     },
   ];
+
+  const setDiscountPercentage = (value: number) => {
+    setValue("price.discountPercentage", value);
+  };
 
   return (
     <div className="card card-flush py-4">
@@ -137,20 +143,8 @@ const ProductPricing = () => {
             <label htmlFor="discount_percentage_input" className="form-label">
               Set Discount Percentage
             </label>
-            <div className="d-flex flex-column text-center mb-5">
-              <div className="d-flex align-items-start justify-content-center mb-7">
-                <span
-                  className="fw-bold fs-3x"
-                  id="catalog_add_product_discount_label"
-                >
-                  10
-                </span>
-                <span className="fw-bold fs-4 mt-1 ms-2">%</span>
-              </div>
-              <div
-                id="catalog_add_product_discount_slider"
-                className="noUi-sm noUi-target noUi-ltr noUi-horizontal noUi-txt-dir-ltr"
-              ></div>
+            <div className="d-flex flex-column text-center">
+              <CustomSliderApp getValue={(e) => setDiscountPercentage(e)} />
             </div>
             <div className="text-muted fs-7">
               Set a percentage discount to be applied on this product.
