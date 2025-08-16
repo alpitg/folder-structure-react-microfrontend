@@ -254,8 +254,8 @@ const ProductFormApp = ({ mode }: ProductFormAppProps) => {
                 >
                   <div className="d-flex flex-column gap-7 gap-lg-10">
                     <ProductGeneralApp />
-                    <ProductMediaApp />
                     <ProductPricing />
+                    <ProductMediaApp />
                   </div>
                 </div>
 
