@@ -40,8 +40,8 @@ const SalesApp = lazy(() => import("../../features/finance/sales/sales"));
 const OrderListApp = lazy(
   () => import("../../features/finance/sales/order/list/order-list")
 );
-const OrderAddApp = lazy(
-  () => import("../../features/finance/sales/order/add/order-add")
+const OrderFormApp = lazy(
+  () => import("../../features/finance/sales/order/form/order-form")
 );
 const OrderViewApp = lazy(
   () => import("../../features/finance/sales/order/view/order-view")
@@ -68,11 +68,11 @@ const RoutesApp = () => {
               />
               <Route
                 path={ROUTE_URL.SALES.ORDER.ADD}
-                element={<OrderAddApp />}
+                element={<OrderFormApp />}
               />
               <Route
                 path={ROUTE_URL.SALES.ORDER.EDIT}
-                element={<OrderAddApp />}
+                element={<OrderFormApp />}
               />
               <Route
                 path={ROUTE_URL.SALES.ORDER.VIEW}

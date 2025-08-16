@@ -23,7 +23,7 @@ import CustomizedArtApp from "./customized/customized-art";
 import OrderSummaryApp from "./order-summary/order-summary";
 import { mapOrderForApi } from "../../../../bills/utils/bill-calculation.util";
 
-const OrderAddApp = () => {
+const OrderFormApp = () => {
   const { orderId } = useParams<{ orderId?: string }>();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -318,4 +318,4 @@ const OrderAddApp = () => {
   );
 };
 
-export default OrderAddApp;
+export default OrderFormApp;
