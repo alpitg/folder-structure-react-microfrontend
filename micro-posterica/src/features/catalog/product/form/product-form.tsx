@@ -2,6 +2,7 @@ import { FormProvider, useForm, type SubmitHandler } from "react-hook-form";
 import { NavLink, useParams } from "react-router";
 import {
   useAddProductMutation,
+  useGetProductDetailQuery,
   useUpdateProductMutation,
 } from "../../../../app/features/catalog/product/product.api";
 
@@ -20,6 +21,7 @@ import ProductTemplateApp from "./template/product-template";
 import ProductThumbnailApp from "./thumbnail/product-thumbnail";
 import ProductVariantsApp from "./variants/product-variants";
 import { ROUTE_URL } from "../../../../components/auth/constants/routes.const";
+import { useEffect } from "react";
 
 type ProductFormAppProps = {
   mode: "add" | "edit";
@@ -29,10 +31,17 @@ const ProductFormApp = ({ mode }: ProductFormAppProps) => {
   const isEditMode = mode === "edit";
   const { id } = useParams<{ id?: string }>();
 
+  //#region RTK APIs
   const [updateProduct, { isLoading: isUpdateProductLoading }] =
     useUpdateProductMutation();
+
   const [addProduct, { isLoading: isaddProductLoading }] =
     useAddProductMutation();
+
+  const { data, isLoading: isOrderLoading } = useGetProductDetailQuery(id!, {
+    skip: !isEditMode,
+  });
+  //#endregion
 
   const methods = useForm<IProductData>({
     mode: "onSubmit",
@@ -99,17 +108,71 @@ const ProductFormApp = ({ mode }: ProductFormAppProps) => {
     console.log(request);
     if (!request) return;
 
-    // if (isEditMode) {
-    //   updateProduct({ id: id!, data: request });
-    //   // .unwrap()
-    //   // .then(() => {
-    //   //   // Go back to list and tell it to refresh
-    //   //   navigate(ROUTE_URL.SALES.ORDER.LIST, { state: { refresh: true } });
-    //   // });
-    // } else {
-    //   addProduct(request);
-    // }
+    if (isEditMode) {
+      updateProduct({ id: id!, data: request });
+      // .unwrap()
+      // .then(() => {
+      //   // Go back to list and tell it to refresh
+      //   navigate(ROUTE_URL.SALES.ORDER.LIST, { state: { refresh: true } });
+      // });
+    } else {
+      addProduct(request);
+    }
   };
+
+  // Populate form in edit mode
+  useEffect(() => {
+    if (isEditMode && data) {
+      methods.reset({
+        id: data.id,
+        name: data.name,
+        code: data.code,
+        description: data.description,
+        status: data.status,
+        template: data.template,
+        categories: data.categories,
+        tags: data.tags,
+        media: data.media,
+        price: {
+          basePrice: data.price.basePrice,
+          discountType: data.price.discountType,
+          discountPercentage: data.price.discountPercentage,
+          fixedDiscountedPrice: data.price.fixedDiscountedPrice,
+          taxClass: data.price.taxClass,
+          vatPercent: data.price.vatPercent,
+        },
+        totalWishlistedCount: data.totalWishlistedCount,
+        inventory: {
+          sku: data.inventory.sku,
+          barcode: data.inventory.barcode,
+          quantity: data.inventory.quantity,
+          allowBackorders: data.inventory.allowBackorders,
+        },
+        variations: data.variations,
+        shipping: {
+          isPhysical: data.shipping.isPhysical,
+          weightInKg: data.shipping.weightInKg,
+          lengthInCm: data.shipping.lengthInCm,
+          widthInCm: data.shipping.widthInCm,
+          heightInCm: data.shipping.heightInCm,
+        },
+        meta: {
+          metaTitle: data.meta.metaTitle,
+          metaDescription: data.meta.metaDescription,
+          metaKeywords: data.meta.metaKeywords,
+        },
+        scheduling: {
+          publishAt: data.scheduling.publishAt,
+        },
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt,
+      });
+    }
+  }, [isEditMode, data, methods]);
+
+  if (isEditMode && isOrderLoading) {
+    return <p>Loading details...</p>;
+  }
 
   return (
     <div className="product-form-app">
@@ -137,23 +200,14 @@ const ProductFormApp = ({ mode }: ProductFormAppProps) => {
             <button type="submit" className="btn btn-sm btn-flex btn-primary">
               {isEditMode ? (
                 <>
-                  <i className="bi bi-plus-lg fs-3"></i>Add Product
+                  <i className="bi bi-save fs-3"></i> Save Changes
                 </>
               ) : (
                 <>
-                  <i className="bi bi-save fs-3"></i> Save Changes
+                  <i className="bi bi-plus-lg fs-3"></i>Add Product
                 </>
               )}
             </button>
-
-            {isEditMode && id && (
-              <NavLink to={ROUTE_URL.CATALOG.PRODUCT.EDIT?.replace(":id", id)}>
-                <span className="btn btn-primary btn-sm">
-                  <i className="bi bi-pencil-square"></i>
-                  Edit Product
-                </span>
-              </NavLink>
-            )}
           </ProductHeaderApp>
 
           <div className="form d-flex flex-column flex-lg-row fv-plugins-bootstrap5 fv-plugins-framework">

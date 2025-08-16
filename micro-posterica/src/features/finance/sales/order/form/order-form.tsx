@@ -173,7 +173,7 @@ const OrderFormApp = () => {
   //#endregion
 
   if (isEditMode && isOrderLoading) {
-    return <p>Loading order details...</p>;
+    return <p>Loading details...</p>;
   }
 
   return (

@@ -21,7 +21,7 @@ export const productsApi = createApi({
       }),
     }),
 
-    getDetail: builder.query<IProductData, string>({
+    getProductDetail: builder.query<IProductData, string>({
       query: (productId) =>
         GetEnvConfig()?.api?.baseUrl +
         GetEnvConfig()?.api?.catalog?.product?.detail?.replace(
@@ -60,7 +60,7 @@ export const productsApi = createApi({
 
 export const {
   useGetProductsQuery,
-  useGetDetailQuery,
+  useGetProductDetailQuery,
   useAddProductMutation,
   useUpdateProductMutation,
 } = productsApi;
