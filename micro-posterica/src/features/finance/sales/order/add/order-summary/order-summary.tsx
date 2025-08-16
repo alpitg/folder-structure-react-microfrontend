@@ -30,7 +30,7 @@ const OrderSummaryApp = ({
 
   const [isDiscard, setIsDiscard] = useState<boolean>(false);
   const handleOnDiscard = () => {
-    navigate(ROUTE_URL.SALES.ORDER.BASE);
+    navigate(ROUTE_URL.SALES.ORDER.LIST);
   };
 
   return (

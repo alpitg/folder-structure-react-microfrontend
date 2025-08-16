@@ -21,7 +21,21 @@ let environment = {
       list: "",
       detail: "",
       placeOrder: "",
-      updateOrder: "",
+      update: "",
+    },
+    catalog: {
+      product: {
+        list: "",
+        detail: "",
+        add: "",
+        update: "",
+      },
+      category: {
+        list: "",
+        detail: "",
+        add: "",
+        update: "",
+      },
     },
     customer: {
       list: "",

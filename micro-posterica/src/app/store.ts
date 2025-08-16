@@ -1,8 +1,10 @@
+import catalogReducer from "./features/catalog/catalog.reducer";
 import { configureStore } from "@reduxjs/toolkit";
 import coreReducer from "./features/core/core.reducer";
 import { customersApi } from "./features/customer/list/customer.api";
 import masterReducer from "./features/master/master.reducer";
 import { ordersApi } from "./features/sales/order/order.api";
+import { productsApi } from "./features/catalog/product/product.api";
 import salesReducer from "./features/sales/sales.reducer";
 
 const store = configureStore({
@@ -10,7 +12,9 @@ const store = configureStore({
     core: coreReducer,
     master: masterReducer,
     sales: salesReducer,
+    catalog: catalogReducer,
 
+    [productsApi.reducerPath]: productsApi.reducer,
     [ordersApi.reducerPath]: ordersApi.reducer,
     [customersApi.reducerPath]: customersApi.reducer,
   }, // Add your reducers here
@@ -18,7 +22,11 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false, // Disable serializable check for non-serializable data
-    }).concat(ordersApi.middleware, customersApi.middleware),
+    }).concat(
+      productsApi.middleware,
+      ordersApi.middleware,
+      customersApi.middleware
+    ),
 
   devTools: process.env.NODE_ENV !== "production", // Enable Redux DevTools in development mode
 });

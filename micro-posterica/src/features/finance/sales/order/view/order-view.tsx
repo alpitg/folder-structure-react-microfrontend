@@ -79,7 +79,7 @@ const OrderViewApp = () => {
         header="Order detail"
         description="Order details are here."
       >
-        <NavLink to={ROUTE_URL.SALES.ORDER.BASE}>
+        <NavLink to={ROUTE_URL.SALES.ORDER.LIST}>
           <span className="btn btn-light btn-active-secondary btn-sm me-5">
             <i className="bi bi-chevron-left fs-5"></i>
             Back to Order List

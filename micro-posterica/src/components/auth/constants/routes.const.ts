@@ -1,7 +1,8 @@
 const SALES_ROUTE_URL = {
   BASE: "/sales",
   ORDER: {
-    BASE: "/sales/order/list",
+    BASE: "/sales/order",
+    LIST: "/sales/order/list",
     VIEW: "/sales/order/:orderId",
     ADD: "/sales/order/add",
     EDIT: "/sales/order/:orderId/edit",

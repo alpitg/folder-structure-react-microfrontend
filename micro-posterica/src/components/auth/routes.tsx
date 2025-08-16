@@ -63,7 +63,7 @@ const RoutesApp = () => {
 
             <Route path={ROUTE_URL.SALES.BASE} element={<SalesApp />}>
               <Route
-                path={ROUTE_URL.SALES.ORDER.BASE}
+                path={ROUTE_URL.SALES.ORDER.LIST}
                 element={<OrderListApp />}
               />
               <Route

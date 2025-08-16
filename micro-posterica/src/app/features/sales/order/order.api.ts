@@ -41,7 +41,7 @@ export const ordersApi = createApi({
       query: ({ orderId, data }) => ({
         url:
           GetEnvConfig()?.api?.baseUrl +
-          GetEnvConfig()?.api?.order?.updateOrder?.replace(
+          GetEnvConfig()?.api?.order?.update?.replace(
             "{orderId}",
             orderId
           ),

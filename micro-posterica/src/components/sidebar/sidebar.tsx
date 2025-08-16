@@ -59,7 +59,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
       {
         id: "order-list",
         title: "Order Listing",
-        path: ROUTE_URL.SALES.ORDER.BASE,
+        path: ROUTE_URL.SALES.ORDER.LIST,
         icon: "bi bi-person-fill-gea",
         claims: [],
         subRoutes: [],

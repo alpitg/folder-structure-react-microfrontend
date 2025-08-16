@@ -30,23 +30,7 @@ const OrderHeaderApp = ({
               {header}
             </h1>
           </div>
-
           <span className="text-muted">{description}</span>
-
-          {/* <ul className="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
-            <li className="breadcrumb-item text-muted">
-              <a
-                href="/keen/demo1/index.html"
-                className="text-muted text-hover-primary"
-              >
-                Sales
-              </a>
-            </li>
-            <li className="breadcrumb-item">
-              <span className="bullet bg-gray-500 w-5px h-2px"></span>
-            </li>
-            <li className="breadcrumb-item text-muted">Order </li>
-          </ul> */}
         </div>
         <div className="d-flex align-items-center gap-2 gap-lg-3">
           <div className="d-flex">{children}</div>

@@ -1,6 +1,6 @@
-import { useAutoFocus } from "../../../../../../hooks/use-auto-focus";
+import { useAutoFocus } from "../../../../../hooks/use-auto-focus";
 
-interface OrderFilterProps {
+interface ProductFilterProps {
   page: number;
   setPage: (page: number) => void;
   search: string;
@@ -13,7 +13,7 @@ interface OrderFilterProps {
   setSort?: (sort: "newest" | "oldest") => void;
 }
 
-const OrderFilterApp = ({
+const ProductFilterApp = ({
   page,
   setPage,
   search,
@@ -24,7 +24,7 @@ const OrderFilterApp = ({
   total,
   sort = "newest",
   setSort = () => {},
-}: OrderFilterProps) => {
+}: ProductFilterProps) => {
   const inputRef = useAutoFocus<HTMLInputElement>();
 
   const start = total === 0 ? 0 : (page - 1) * pageSize + 1;
@@ -34,7 +34,7 @@ const OrderFilterApp = ({
   const handleNextPage = () => page < pages && setPage(page + 1);
 
   return (
-    <div className="order-filter-app">
+    <div className="product-filter-app">
       <div className="card-header align-items-center px-0 gap-2 gap-md-5 flex-wrap">
         <div className="card-title flex-grow-1">
           <div
@@ -45,11 +45,11 @@ const OrderFilterApp = ({
             <input
               type="text"
               className="form-control form-control-solid ps-12"
-              placeholder="Search by customer / order code"
+              placeholder="Search by product name / code"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && onSearch()}
-              aria-label="Search orders"
+              aria-label="Search products"
               tabIndex={0}
               ref={inputRef}
             />
@@ -61,17 +61,16 @@ const OrderFilterApp = ({
             <button
               className="btn btn-link btn-color-gray-500 btn-active-color-primary"
               type="button"
-              id="orderSortDropdown"
+              id="productSortDropdown"
               data-bs-toggle="dropdown"
               aria-expanded="false"
-              aria-label="Sort orders"
-              tabIndex={1}
+              aria-label="Sort products"
             >
               {`${start}-${end} of ${total || 0}`}
             </button>
             <ul
               className="dropdown-menu dropdown-menu-end p-0"
-              aria-labelledby="orderSortDropdown"
+              aria-labelledby="productSortDropdown"
               role="menu"
             >
               <li>
@@ -105,7 +104,6 @@ const OrderFilterApp = ({
             onClick={handlePreviousPage}
             disabled={page <= 1}
             aria-label="Previous page"
-            tabIndex={2}
           >
             <i className="bi bi-chevron-left" />
           </button>
@@ -116,7 +114,6 @@ const OrderFilterApp = ({
             onClick={handleNextPage}
             disabled={page >= pages}
             aria-label="Next page"
-            tabIndex={3}
           >
             <i className="bi bi-chevron-right" />
           </button>
@@ -126,4 +123,4 @@ const OrderFilterApp = ({
   );
 };
 
-export default OrderFilterApp;
+export default ProductFilterApp;

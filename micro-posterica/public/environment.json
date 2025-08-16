@@ -19,7 +19,21 @@
       "list": "/api/orders/search",
       "detail": "/api/orders/{orderId}",
       "placeOrder": "/api/orders/place-order",
-      "updateOrder": "/api/orders/{orderId}"
+      "update": "/api/orders/{orderId}"
+    },
+    "catalog": {
+      "product": {
+        "list": "/api/products/search",
+        "detail": "/api/products/{id}",
+        "add": "/api/products/add",
+        "update": "/api/products/{id}"
+      },
+      "category": {
+        "list": "/api/products/category/search",
+        "detail": "/api/products/category/{id}",
+        "add": "/api/products/category/add",
+        "update": "/api/products/category/{id}"
+      }
     },
     "customer": {
       "list": "/api/customer",

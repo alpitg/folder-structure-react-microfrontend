@@ -120,7 +120,7 @@ const OrderAddApp = () => {
   useEffect(() => {
     if (isOrderPlaced || isOrderUpdated) {
       // Go back to list and tell it to refresh
-      navigate(ROUTE_URL.SALES.ORDER.BASE, { state: { refresh: true } });
+      navigate(ROUTE_URL.SALES.ORDER.LIST, { state: { refresh: true } });
     }
   }, [isOrderPlaced, isOrderUpdated, navigate]);
 
@@ -184,7 +184,7 @@ const OrderAddApp = () => {
           isEditMode ? "Update existing order details." : "Create a new order."
         }
       >
-        <NavLink to={ROUTE_URL.SALES.ORDER.BASE}>
+        <NavLink to={ROUTE_URL.SALES.ORDER.LIST}>
           <span className="btn btn-light btn-active-secondary btn-sm me-5">
             <i className="bi bi-chevron-left fs-5"></i>
             Back to Order List

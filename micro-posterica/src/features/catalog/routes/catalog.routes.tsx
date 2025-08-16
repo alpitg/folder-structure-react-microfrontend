@@ -41,7 +41,7 @@ export const CatalogRoutes = () => {
         />
       </Route>
 
-      <Route path={ROUTE_URL.CATALOG.PRODUCT.BASE} element={<CategoryApp />}>
+      <Route path={ROUTE_URL.CATALOG.CATEGORY.BASE} element={<CategoryApp />}>
         <Route
           path={ROUTE_URL.CATALOG.CATEGORY.LIST}
           element={<CategoryListApp />}
