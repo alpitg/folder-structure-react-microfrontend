@@ -2,7 +2,7 @@ import type {
   GetProductsParams,
   IProductData,
   PaginatedProducts,
-} from "../../../../features/catalog/interfaces/product/product.model";
+} from "../../../../features/catalog/interface/product/product.model";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { GetEnvConfig } from "../../../../app.config";
