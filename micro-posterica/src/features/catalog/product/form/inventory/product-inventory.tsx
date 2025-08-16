@@ -2,7 +2,10 @@ import type { IProductData } from "../../../interface/product/product.model";
 import { useFormContext } from "react-hook-form";
 
 const ProductInventoryApp = () => {
-  const { register } = useFormContext<IProductData>();
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext<IProductData>();
 
   return (
     <div className="card card-flush py-4">
@@ -22,10 +25,21 @@ const ProductInventoryApp = () => {
           <input
             type="text"
             placeholder="SKU Number"
-            className="form-control mb-2"
-            {...register("inventory.sku")}
+            className={`form-control form-control-solid mb-2 ${
+              errors?.inventory?.sku ? "is-invalid" : ""
+            }`}
+            {...register("inventory.sku", {
+              required: "SKU number is required",
+            })}
           />
-          <div className="text-muted fs-7">Enter the product SKU.</div>
+
+          {errors?.inventory?.sku?.message ? (
+            <div className="invalid-feedback">
+              {errors?.inventory?.sku?.message}
+            </div>
+          ) : (
+            <div className="text-muted fs-7">Enter the product SKU.</div>
+          )}
         </div>
 
         <div className="mb-10 fv-row">
@@ -35,12 +49,23 @@ const ProductInventoryApp = () => {
           <input
             type="text"
             placeholder="Barcode Number"
-            className="form-control mb-2"
-            {...register("inventory.barcode")}
+            className={`form-control mb-2 ${
+              errors?.inventory?.barcode ? "is-invalid" : ""
+            }`}
+            {...register("inventory.barcode", {
+              required: "Barcode number is required",
+            })}
           />
-          <div className="text-muted fs-7">
-            Enter the product barcode number.
-          </div>
+
+          {errors?.inventory?.barcode?.message ? (
+            <div className="invalid-feedback">
+              {errors?.inventory?.barcode?.message}
+            </div>
+          ) : (
+            <div className="text-muted fs-7">
+              Enter the product barcode number.
+            </div>
+          )}
         </div>
 
         <div className="mb-10 fv-row">
@@ -51,19 +76,32 @@ const ProductInventoryApp = () => {
             <input
               type="number"
               placeholder="On shelf"
-              className="form-control mb-2"
+              className={`form-control  mb-2 ${
+                errors?.inventory?.quantityInShelf ? "is-invalid" : ""
+              }`}
               {...register("inventory.quantityInShelf", {
                 valueAsNumber: true,
+                required: "On Shelf quantity is required",
               })}
             />
             <input
               type="number"
               placeholder="In warehouse"
-              className="form-control mb-2"
-              {...register("inventory.quantityInWarehouse")}
+              className={`form-control mb-2 ${
+                errors?.inventory?.quantityInWarehouse ? "is-invalid" : ""
+              }`}
+              {...register("inventory.quantityInWarehouse", {
+                required: "In-Warehouse quantity is required",
+              })}
             />
           </div>
-          <div className="text-muted fs-7">Enter the product quantity.</div>
+          {errors?.inventory?.quantityInWarehouse?.message ? (
+            <div className="invalid-feedback">
+              {errors?.inventory?.quantityInWarehouse?.message}
+            </div>
+          ) : (
+            <div className="text-muted fs-7">Enter the product quantity.</div>
+          )}
         </div>
 
         <div className="fv-row">
