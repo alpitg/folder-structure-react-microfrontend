@@ -235,7 +235,7 @@ const OrderFormApp = () => {
                       <input
                         type="text"
                         className={`form-control form-control-solid ${
-                          errors.order?.customerName ? "is-invalid" : ""
+                          errors?.order?.customerName ? "is-invalid" : ""
                         }`}
                         placeholder="Customer Name"
                         list="list-customer"
@@ -250,9 +250,9 @@ const OrderFormApp = () => {
                           </option>
                         ))}
                       </datalist>
-                      {errors.order?.customerName?.message && (
+                      {errors?.order?.customerName?.message && (
                         <div className="invalid-feedback">
-                          {errors.order.customerName.message}
+                          {errors?.order.customerName.message}
                         </div>
                       )}
                     </div>

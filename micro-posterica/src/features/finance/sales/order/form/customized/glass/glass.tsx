@@ -1,3 +1,4 @@
+import type { IOrderInvoiceData } from "../../../../../../../interfaces/order/order.model";
 import { useFormContext } from "react-hook-form";
 
 type GlassSectionProps = {
@@ -6,7 +7,7 @@ type GlassSectionProps = {
 };
 
 const GlassSection: React.FC<GlassSectionProps> = ({ index, glassTypes }) => {
-  const { register, watch } = useFormContext();
+  const { register, watch } = useFormContext<IOrderInvoiceData>();
 
   const isGlassEnabled = watch(
     `order.items.${index}.customizedDetails.glass.isEnabled`

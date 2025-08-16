@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router";
 
 import DeleteConfirmationApp from "../../../../../../components/ui/delete-confirmation/delete-confirmation";
+import type { IOrderInvoiceData } from "../../../../../../interfaces/order/order.model";
 import { ROUTE_URL } from "../../../../../../components/auth/constants/routes.const";
 import { calculateTotalAmount } from "../../../../../bills/utils/bill-calculation.util";
 import { paymentModes } from "../../../../../../constants/app.const";
@@ -15,7 +16,7 @@ const OrderSummaryApp = ({
   isEditMode: boolean;
 }) => {
   const { orderId } = useParams<{ orderId?: string }>();
-  const { register, watch } = useFormContext();
+  const { register, watch } = useFormContext<IOrderInvoiceData>();
 
   const [order] = watch(["order", "invoice"]) || [];
 

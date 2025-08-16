@@ -30,7 +30,7 @@ export const productsApi = createApi({
         ),
     }),
 
-    placeProduct: builder.mutation<IProductData, IProductData>({
+    addProduct: builder.mutation<IProductData, IProductData>({
       query: (body) => ({
         url:
           GetEnvConfig()?.api?.baseUrl +
@@ -42,14 +42,14 @@ export const productsApi = createApi({
 
     updateProduct: builder.mutation<
       IProductData,
-      { productId: string; data: IProductData }
+      { id: string; data: IProductData }
     >({
-      query: ({ productId, data }) => ({
+      query: ({ id, data }) => ({
         url:
           GetEnvConfig()?.api?.baseUrl +
           GetEnvConfig()?.api?.catalog?.product?.update?.replace(
             "{id}",
-            productId
+            id
           ),
         method: "PUT",
         body: data,
@@ -61,6 +61,6 @@ export const productsApi = createApi({
 export const {
   useGetProductsQuery,
   useGetDetailQuery,
-  usePlaceProductMutation,
+  useAddProductMutation,
   useUpdateProductMutation,
 } = productsApi;

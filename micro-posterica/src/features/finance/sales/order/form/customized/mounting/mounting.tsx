@@ -1,3 +1,4 @@
+import type { IOrderInvoiceData } from "../../../../../../../interfaces/order/order.model";
 import { useFormContext } from "react-hook-form";
 
 type MountingSectionProps = {
@@ -5,7 +6,7 @@ type MountingSectionProps = {
 };
 
 const MountingSection: React.FC<MountingSectionProps> = ({ index }) => {
-  const { register, watch } = useFormContext();
+  const { register, watch } = useFormContext<IOrderInvoiceData>();
 
   const isMountingEnabled = watch(
     `order.items.${index}.customizedDetails.mounting.isEnabled`

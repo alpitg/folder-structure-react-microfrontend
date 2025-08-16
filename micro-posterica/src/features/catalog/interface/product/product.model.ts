@@ -4,19 +4,19 @@ export interface IProductMedia {
 }
 
 export interface IProductPrice {
-  base_price: number;
-  discount_type: "none" | "percentage" | "fixed";
-  discount_percentage: number;
-  fixed_discounted_price: number;
-  tax_class: "taxable_goods" | "non_taxable" | string;
-  vat_percent: number;
+  basePrice: number | null;
+  discountType: "none" | "percentage" | "fixed";
+  discountPercentage: number | null;
+  fixedDiscountedPrice: number | null;
+  taxClass: "tax_free" | "taxable_goods" | "non_taxable" | string;
+  vatPercent: number | null;
 }
 
 export interface IProductInventory {
   sku: string | null;
   barcode: string | null;
   quantity: number;
-  allow_backorders: boolean;
+  allowBackorders: boolean;
 }
 
 export interface IProductVariation {
@@ -25,21 +25,21 @@ export interface IProductVariation {
 }
 
 export interface IProductShipping {
-  is_physical: boolean;
-  weight_kg: number | null;
-  length_cm: number | null;
-  width_cm: number | null;
-  height_cm: number | null;
+  isPhysical: boolean;
+  weightInKg: number | null;
+  lengthInCm: number | null;
+  widthInCm: number | null;
+  heightInCm: number | null;
 }
 
 export interface IProductMeta {
-  meta_title: string | null;
-  meta_description: string | null;
-  meta_keywords: string[];
+  metaTitle: string | null;
+  metaDescription: string | null;
+  metaKeywords: string[];
 }
 
 export interface IProductScheduling {
-  publish_at: string | null;
+  publishAt: string | null;
 }
 
 export interface IProductData {
@@ -59,8 +59,8 @@ export interface IProductData {
   shipping: IProductShipping;
   meta: IProductMeta;
   scheduling: IProductScheduling;
-  created_at: string;
-  updated_at: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface GetProductsParams {
