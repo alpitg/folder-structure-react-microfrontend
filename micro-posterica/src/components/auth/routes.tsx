@@ -28,10 +28,6 @@ const MiscChargesApp = lazy(
   () => import("../../features/master/misc-charges/misc-charges")
 );
 
-const CreateInvoiceApp = lazy(
-  () => import("../../features/bills/invoice/create/create-invoice")
-);
-
 const ViewInvoiceApp = lazy(
   () => import("../../features/bills/invoice/view/view-invoice")
 );
@@ -83,10 +79,6 @@ const RoutesApp = () => {
             {CatalogRoutes()}
 
             <Route
-              path={ROUTE_URL.INVOICE_MANAGER.CREATE}
-              element={<CreateInvoiceApp />}
-            />
-            <Route
               path={ROUTE_URL.INVOICE_MANAGER.VIEW}
               element={<ViewInvoiceApp />}
             />
@@ -109,15 +101,15 @@ const RoutesApp = () => {
           <Route path={ROUTE_URL.LOGIN} element={<LoginApp />} />
 
           {/* PAGES */}
-          {/* <Route>
-              <Route path={ROUTE_URL.ABOUT} element={<About />} />
+          <Route>
+            {/* <Route path={ROUTE_URL.ABOUT} element={<About />} />
               <Route path={ROUTE_URL.CONTACT} element={<Contact />} />
               <Route
                 path={ROUTE_URL.SOCIAL_MEDIA_MANAGEMENT}
                 element={<SocialMedia />}
-              />
-              <Route path={ROUTE_URL.UI} element={<UI />} />
-            </Route> */}
+              /> */}
+            <Route path={ROUTE_URL.UI} element={<UIApp />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </Suspense>
