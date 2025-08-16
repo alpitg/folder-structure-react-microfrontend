@@ -205,7 +205,13 @@ const ProductPricing = () => {
             <input
               id="vat_amount"
               type="number"
-              {...register("price.vatPercent", { valueAsNumber: true })}
+              min={0}
+              max={100}
+              {...register("price.vatPercent", {
+                valueAsNumber: true,
+                min: 0,
+                max: 100,
+              })}
               className="form-control mb-2"
             />
             <div className="text-muted fs-7">Set the product VAT amount.</div>

@@ -17,6 +17,10 @@ export interface IProductInventory {
   barcode: string | null;
   quantityInShelf: number;
   quantityInWarehouse: number;
+  /**
+   * @readonly this is readonly property
+   */
+  quantity?: number | null;
   allowBackorders: boolean;
 }
 
@@ -60,6 +64,7 @@ export interface IProductData {
   shipping: IProductShipping;
   meta: IProductMeta;
   scheduling: IProductScheduling;
+  rating: number;
   createdAt: string;
   updatedAt: string;
 }

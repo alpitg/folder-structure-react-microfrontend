@@ -147,7 +147,7 @@ const OrderSummaryApp = ({
           {isOrderPlacingInProgress ? (
             <span className="spinner-border spinner-border-sm align-middle me-2"></span>
           ) : (
-            <i className="bi bi-save fs-3 me-2"></i>
+            <i className="bi bi-check2 fs-3 me-2"></i>
           )}
           {isEditMode ? "Save changes" : "Place Order"}
         </button>

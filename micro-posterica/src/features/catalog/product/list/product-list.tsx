@@ -91,20 +91,19 @@ const ProductListApp = () => {
                   <tr key={product?.id}>
                     <td>
                       <NavLink
+                        className="btn btn-sm fs-5 fw-bold"
                         to={ROUTE_URL.CATALOG.PRODUCT.EDIT.replace(
                           ":id",
                           product?.id
                         )}
-                        className="btn btn-sm"
                       >
-                        {product?.code}
+                        {product?.name}
                       </NavLink>
                     </td>
-                    <td>{product?.name}</td>
                     <td>{product?.inventory?.sku}</td>
                     <td>{product?.inventory?.quantity}</td>
-                    <td>{product?.price?.base_price?.toFixed(2)}</td>
-                    <td>{2 / 5}</td>
+                    <td>{product?.price?.basePrice?.toFixed(2)}</td>
+                    <td>{product?.rating}</td>
                     <td>{product?.status}</td>
                   </tr>
                 ))}

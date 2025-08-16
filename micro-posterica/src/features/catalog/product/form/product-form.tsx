@@ -189,16 +189,17 @@ const ProductFormApp = ({ mode }: ProductFormAppProps) => {
               </span>
             </NavLink>
 
-            <button type="submit" className="btn btn-sm btn-flex btn-primary">
-              {isEditMode ? (
-                <>
-                  <i className="bi bi-save fs-3"></i> Save Changes
-                </>
+            <button
+              type="submit"
+              className="btn btn-sm btn-flex btn-primary"
+              disabled={isaddProductLoading || isUpdateProductLoading}
+            >
+              {isaddProductLoading || isUpdateProductLoading ? (
+                <span className="spinner-border spinner-border-sm align-middle me-2"></span>
               ) : (
-                <>
-                  <i className="bi bi-plus-lg fs-3"></i>Add Product
-                </>
+                <i className="bi bi-check2 fs-3"></i>
               )}
+              Save changes
             </button>
           </ProductHeaderApp>
 
