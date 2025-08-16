@@ -19,11 +19,12 @@ const LandingPageApp = () => {
         <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
         <div className="app-wrapper mb-5">
           <div
-            className={
+            className={`container-xxl ${
               !isOpen
                 ? `landing-page-content`
                 : `landing-page-content-collapsed`
             }
+            `}
           >
             <Outlet />
           </div>
