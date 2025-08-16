@@ -25,13 +25,13 @@
       "product": {
         "list": "/api/products/search",
         "detail": "/api/products/{id}",
-        "add": "/api/products/add",
+        "add": "/api/products",
         "update": "/api/products/{id}"
       },
       "category": {
         "list": "/api/products/category/search",
         "detail": "/api/products/category/{id}",
-        "add": "/api/products/category/add",
+        "add": "/api/products/category",
         "update": "/api/products/category/{id}"
       }
     },
