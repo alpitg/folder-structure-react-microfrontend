@@ -10,7 +10,7 @@ import { fetchProfile } from "../../../../../app/redux/core/profile/profile-deta
 import { fetchFrameTypes } from "../../../../../app/redux/master/frame-types/frame-types.thunk";
 import { fetchGlassTypes } from "../../../../../app/redux/master/glass-types/glass-types.thunk";
 import { fetchMiscCharges } from "../../../../../app/redux/master/misc-charges/misc-charges.thunk";
-import { useGetcustomersQuery } from "../../../../../app/redux/customer/customer.api";
+import { useGetPaginatedCustomersQuery } from "../../../../../app/redux/customer/customer.api";
 import {
   useGetDetailQuery,
   usePlaceOrderMutation,
@@ -40,7 +40,7 @@ const OrderFormApp = () => {
     { isLoading: isOrderUpdateInProgress, isSuccess: isOrderUpdated },
   ] = useUpdateOrderMutation();
 
-  const { data: customers } = useGetcustomersQuery();
+  const { data: customers } = useGetPaginatedCustomersQuery({});
 
   const { data: orderDetail, isLoading: isOrderLoading } = useGetDetailQuery(
     orderId!,
@@ -244,7 +244,7 @@ const OrderFormApp = () => {
                         })}
                       />
                       <datalist id="list-customer">
-                        {customers?.map((customer) => (
+                        {customers?.items?.map((customer) => (
                           <option key={customer.id} value={customer.name}>
                             {customer.name}
                           </option>

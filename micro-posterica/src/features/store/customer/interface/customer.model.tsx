@@ -21,8 +21,8 @@ export interface ICustomer {
   shippingAddress?: IAddress; // optional for custom shipping address
   billingAddress?: IAddress;
   isActive: boolean;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 // Listing

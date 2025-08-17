@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import CustomerFilterApp from "./filter/customer-filter";
 import CustomerHeaderApp from "../header/customer-header";
 import { ROUTE_URL } from "../../../../components/auth/constants/routes.const";
-import { useGetPaginatedcustomersQuery } from "../../../../app/redux/customer/customer.api";
+import { useGetPaginatedCustomersQuery } from "../../../../app/redux/customer/customer.api";
 
 type sortType = "newest" | "oldest";
 
@@ -15,7 +15,7 @@ const CustomerListApp = () => {
   const [sort, setSort] = useState<sortType>("newest");
 
   // Query hook for customers
-  const { data, isLoading, refetch } = useGetPaginatedcustomersQuery({
+  const { data, isLoading, refetch } = useGetPaginatedCustomersQuery({
     page,
     pageSize: 10,
     searchText: search,
@@ -41,7 +41,7 @@ const CustomerListApp = () => {
   return (
     <div className="customer-list-app">
       <CustomerHeaderApp
-        header="Product Listing"
+        header="Customer Listing"
         description="All customers are listed here."
       >
         <NavLink to={ROUTE_URL.CUSTOMER.ADD} className="btn btn-primary btn-sm">
@@ -91,7 +91,7 @@ const CustomerListApp = () => {
                     </td>
                     <td>{item?.email}</td>
                     <td>{item?.isActive ? "Active" : "Locked"}</td>
-                    <td>{item?.createdAt?.toLocaleDateString()}</td>
+                    <td>{item?.createdAt}</td>
                   </tr>
                 ))}
               </tbody>

@@ -36,7 +36,7 @@
       }
     },
     "customer": {
-      "list": "/api/customer",
+      "list": "/api/customer/search",
       "create": "/api/customers/create",
       "update": "/api/customers/update",
       "delete": "/api/customers/delete"
