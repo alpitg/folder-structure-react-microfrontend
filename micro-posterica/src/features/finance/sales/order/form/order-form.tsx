@@ -21,7 +21,7 @@ import { ROUTE_URL } from "../../../../../components/auth/constants/routes.const
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import CustomizedArtApp from "./customized/customized-art";
 import OrderSummaryApp from "./order-summary/order-summary";
-import { mapOrderForApi } from "../../../../catalog/product/utils/bill-calculation.util";
+import { mapOrderForApi } from "../../../../catalog/product/utils/costing.util";
 
 const OrderFormApp = () => {
   const { orderId } = useParams<{ orderId?: string }>();

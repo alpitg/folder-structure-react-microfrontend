@@ -11,7 +11,7 @@ import type {
 } from "../../../../../../interfaces/order/order.model";
 import type { IGlassType } from "../../../../../../app/features/master/glass-types/glass-types.slice";
 import type { IFrameType } from "../../../../../../app/features/master/frame-types/frame-types.slice";
-import { BillCalculation } from "../../../../../catalog/product/utils/bill-calculation.util";
+import { BillCalculation } from "../../../../../catalog/product/utils/costing.util";
 import { useEffect } from "react";
 
 type CustomizedArtAppProps = {
