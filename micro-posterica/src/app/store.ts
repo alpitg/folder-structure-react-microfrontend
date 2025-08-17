@@ -1,7 +1,7 @@
 import catalogReducer from "./redux/catalog/catalog.reducer";
 import { configureStore } from "@reduxjs/toolkit";
 import coreReducer from "./redux/core/core.reducer";
-import { customersApi } from "./redux/customer/list/customer.api";
+import { customersApi } from "./redux/customer/customer.api";
 import masterReducer from "./redux/master/master.reducer";
 import { ordersApi } from "./redux/sales/order/order.api";
 import { productsApi } from "./redux/catalog/product/product.api";

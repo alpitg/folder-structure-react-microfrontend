@@ -75,6 +75,32 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
     ],
   };
 
+  const customer: IRoutes = {
+    id: "customer",
+    title: "Customers",
+    path: ROUTE_URL.CUSTOMER.BASE,
+    icon: "bi bi-journal-bookmark",
+    claims: [],
+    subRoutes: [
+      {
+        id: "customer-list",
+        title: "Customer Listing",
+        path: ROUTE_URL.CUSTOMER.LIST,
+        icon: "bi bi-person-fill-gea",
+        claims: [],
+        subRoutes: [],
+      },
+      {
+        id: "customer-add",
+        title: "Add Customer",
+        path: ROUTE_URL.CUSTOMER.ADD,
+        icon: "bi bi-person-fill-gear",
+        claims: [],
+        subRoutes: [],
+      },
+    ],
+  };
+
   const master: IRoutes = {
     id: "masters",
     title: "Masters",
@@ -128,6 +154,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
     },
     catalog,
     sales,
+    customer,
     master,
     // {
     //   id: "invoice-manager",
@@ -194,18 +221,23 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
     setActiveMenu((prev) => (prev === menuId ? null : menuId));
   };
 
-   // ✅ open parent menu if current route matches subRoute
-   useEffect(() => {
+  // ✅ open parent menu if current route matches subRoute
+  useEffect(() => {
     routes.forEach((route) => {
-      if (route.subRoutes?.some((sub) => location.pathname.startsWith(sub.path))) {
+      if (
+        route.subRoutes?.some((sub) => location.pathname.startsWith(sub.path))
+      ) {
         setActiveMenu(route.id);
       }
-      if (location.pathname.startsWith(route.path) && !route.subRoutes?.length) {
+      if (
+        location.pathname.startsWith(route.path) &&
+        !route.subRoutes?.length
+      ) {
         setActiveMenu(route.id);
       }
     });
   }, [location.pathname]);
-  
+
   return (
     <div className="app-sidebar flex-column">
       <div className="app-sidebar-menu overflow-hidden flex-column-fluid">

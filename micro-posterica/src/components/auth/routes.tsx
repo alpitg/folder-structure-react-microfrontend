@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import { Suspense, lazy } from "react";
 
 import { CatalogRoutes } from "../../features/store/catalog/routes/catalog.routes";
+import { CustomerRoutes } from "../../features/store/customer/routes/customer.route";
 import LoadingApp from "../loading/loading";
 import { ROUTE_URL } from "./constants/routes.const";
 
@@ -73,6 +74,7 @@ const RoutesApp = () => {
             </Route>
 
             {CatalogRoutes()}
+            {CustomerRoutes()}
 
             <Route path={ROUTE_URL.MASTER.BASE} element={<MasterApp />}>
               <Route

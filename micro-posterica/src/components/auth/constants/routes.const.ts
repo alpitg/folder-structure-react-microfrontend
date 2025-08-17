@@ -28,12 +28,10 @@ const CATALOG = {
 
 const CUSTOMER_ROUTE_URL = {
   BASE: "/customer",
-  ORDER: {
-    BASE: "/customer/list",
-    VIEW: "/customer/:id",
-    ADD: "/customer/add",
-    EDIT: "/customer/:id/edit",
-  },
+  LIST: "/customer/list",
+  VIEW: "/customer/:id",
+  ADD: "/customer/add",
+  EDIT: "/customer/:id/edit",
 };
 
 export const ROUTE_URL = {
@@ -46,7 +44,7 @@ export const ROUTE_URL = {
   UI: "/ui",
   NOT_ALLOWED: "/not-allowed",
   SOCIAL_MEDIA_MANAGEMENT: "/social-media",
-  CUSTOMERS: CUSTOMER_ROUTE_URL,
+  CUSTOMER: CUSTOMER_ROUTE_URL,
   SALES: SALES_ROUTE_URL,
   CATALOG: CATALOG,
   INVOICE_MANAGER: {

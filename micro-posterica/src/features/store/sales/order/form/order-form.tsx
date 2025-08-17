@@ -10,7 +10,7 @@ import { fetchProfile } from "../../../../../app/redux/core/profile/profile-deta
 import { fetchFrameTypes } from "../../../../../app/redux/master/frame-types/frame-types.thunk";
 import { fetchGlassTypes } from "../../../../../app/redux/master/glass-types/glass-types.thunk";
 import { fetchMiscCharges } from "../../../../../app/redux/master/misc-charges/misc-charges.thunk";
-import { useGetcustomersQuery } from "../../../../../app/redux/customer/list/customer.api";
+import { useGetcustomersQuery } from "../../../../../app/redux/customer/customer.api";
 import {
   useGetDetailQuery,
   usePlaceOrderMutation,
