@@ -1,7 +1,6 @@
 import { NavLink, useLocation } from "react-router";
 import { useEffect, useState } from "react";
 
-import ErrorPage from "../../../../../components/ui/error/error-page";
 import ProductFilterApp from "./filter/product-filter";
 import ProductHeaderApp from "../header/product-header";
 import { ROUTE_URL } from "../../../../../components/auth/constants/routes.const";
@@ -19,7 +18,6 @@ const ProductListApp = () => {
   const {
     data: productData,
     isLoading,
-    error,
     refetch,
   } = useGetProductsQuery({
     page,

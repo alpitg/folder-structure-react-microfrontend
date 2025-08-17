@@ -1,4 +1,3 @@
-import { ApiEndpoint } from "../endpoints/webapi-endpoint";
 import axios from "axios";
 
 export const axiosInstance = axios.create();

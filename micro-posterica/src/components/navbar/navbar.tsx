@@ -1,15 +1,9 @@
 import "./navbar.scss";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const NavbarApp = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [pathParts, setPathParts] = useState<string[]>([]);
-
-  useEffect(() => {
-    const currentLocation = window.location.pathname;
-    setPathParts(currentLocation.split("/").filter((part) => part !== ""));
-  }, []);
 
   return (
     <div className="navbar-app">
@@ -20,24 +14,6 @@ const NavbarApp = () => {
           </div>
         </div>
         <div className="nav-right">
-          {/* <div className="nav-right-breadcrumb me-4">
-            <nav aria-label="breadcrumb">
-              <ol className="breadcrumb">
-                {pathParts.map((part, index) => {
-                  const isActive = index === pathParts.length - 1;
-                  return (
-                    <li
-                      key={index}
-                      className={`breadcrumb-item ${isActive ? "active" : ""}`}
-                      aria-current={isActive ? "page" : undefined}
-                    >
-                      <a href={isActive ? "#" : `/${part}`}>{part}</a>
-                    </li>
-                  );
-                })}
-              </ol>
-            </nav>
-          </div> */}
           <i className="bi bi-sun-fill ms-2" title="Light theme"></i>
           <div className="ms-2 form-check form-switch">
             <input
