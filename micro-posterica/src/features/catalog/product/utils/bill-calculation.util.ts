@@ -4,12 +4,11 @@ import type {
   IOrder,
   IOrderInvoiceData,
   IOrderItem,
-  PaymentStatusType,
-} from "../../../interfaces/order/order.model";
+} from "../../../../interfaces/order/order.model";
 
-import { ADDITIONAL_SERVICE_CODE } from "../../../constants/global/global-key.const";
-import type { IFrameType } from "../../../app/features/master/frame-types/frame-types.slice";
-import type { IGlassType } from "../../../app/features/master/glass-types/glass-types.slice";
+import { ADDITIONAL_SERVICE_CODE } from "../../../../constants/global/global-key.const";
+import type { IFrameType } from "../../../../app/features/master/frame-types/frame-types.slice";
+import type { IGlassType } from "../../../../app/features/master/glass-types/glass-types.slice";
 
 export class BillCalculation {
   frameTypes: IFrameType[];

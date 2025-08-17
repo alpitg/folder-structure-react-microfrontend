@@ -28,10 +28,6 @@ const MiscChargesApp = lazy(
   () => import("../../features/master/misc-charges/misc-charges")
 );
 
-const ViewInvoiceApp = lazy(
-  () => import("../../features/bills/invoice/view/view-invoice")
-);
-
 const SalesApp = lazy(() => import("../../features/finance/sales/sales"));
 const OrderListApp = lazy(
   () => import("../../features/finance/sales/order/list/order-list")
@@ -78,10 +74,6 @@ const RoutesApp = () => {
 
             {CatalogRoutes()}
 
-            <Route
-              path={ROUTE_URL.INVOICE_MANAGER.VIEW}
-              element={<ViewInvoiceApp />}
-            />
             <Route path={ROUTE_URL.MASTER.BASE} element={<MasterApp />}>
               <Route
                 path={ROUTE_URL.MASTER.FRAME_TYPES.BASE}
