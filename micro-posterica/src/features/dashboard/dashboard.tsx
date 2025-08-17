@@ -5,7 +5,7 @@ const DashboardApp = () => {
   return (
     <div>
       <h1>DashboardApp</h1>
-      <p>This is the DashboardApp section of the application.</p>
+      <p>This is the Dashboard section of the application.</p>
 
       <div className="row gy-5">
         <div className="col-xl-4">
