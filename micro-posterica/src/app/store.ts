@@ -1,11 +1,11 @@
-import catalogReducer from "./features/catalog/catalog.reducer";
+import catalogReducer from "./redux/catalog/catalog.reducer";
 import { configureStore } from "@reduxjs/toolkit";
-import coreReducer from "./features/core/core.reducer";
-import { customersApi } from "./features/customer/list/customer.api";
-import masterReducer from "./features/master/master.reducer";
-import { ordersApi } from "./features/sales/order/order.api";
-import { productsApi } from "./features/catalog/product/product.api";
-import salesReducer from "./features/sales/sales.reducer";
+import coreReducer from "./redux/core/core.reducer";
+import { customersApi } from "./redux/customer/list/customer.api";
+import masterReducer from "./redux/master/master.reducer";
+import { ordersApi } from "./redux/sales/order/order.api";
+import { productsApi } from "./redux/catalog/product/product.api";
+import salesReducer from "./redux/sales/sales.reducer";
 
 const store = configureStore({
   reducer: {

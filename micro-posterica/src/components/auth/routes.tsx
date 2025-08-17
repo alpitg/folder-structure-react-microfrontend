@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 import { Suspense, lazy } from "react";
 
-import { CatalogRoutes } from "../../features/catalog/routes/catalog.routes";
+import { CatalogRoutes } from "../../features/store/catalog/routes/catalog.routes";
 import LoadingApp from "../loading/loading";
 import { ROUTE_URL } from "./constants/routes.const";
 
@@ -15,28 +15,28 @@ const AdministrationApp = lazy(
 const UIApp = lazy(() => import("../../components/ui/ui"));
 const LoginApp = lazy(() => import("../../components/auth/login/login"));
 
-const MasterApp = lazy(() => import("../../features/master/master"));
+const MasterApp = lazy(() => import("../../features/store/master/master"));
 const FrameTypesApp = lazy(
-  () => import("../../features/master/frame/frame-types/frame-types")
+  () => import("../../features/store/master/frame/frame-types/frame-types")
 );
 
 const GlassTypesApp = lazy(
-  () => import("../../features/master/glass-types/glass-types")
+  () => import("../../features/store/master/glass-types/glass-types")
 );
 
 const MiscChargesApp = lazy(
-  () => import("../../features/master/misc-charges/misc-charges")
+  () => import("../../features/store/master/misc-charges/misc-charges")
 );
 
-const SalesApp = lazy(() => import("../../features/finance/sales/sales"));
+const SalesApp = lazy(() => import("../../features/store/sales/sales"));
 const OrderListApp = lazy(
-  () => import("../../features/finance/sales/order/list/order-list")
+  () => import("../../features/store/sales/order/list/order-list")
 );
 const OrderFormApp = lazy(
-  () => import("../../features/finance/sales/order/form/order-form")
+  () => import("../../features/store/sales/order/form/order-form")
 );
 const OrderViewApp = lazy(
-  () => import("../../features/finance/sales/order/view/order-view")
+  () => import("../../features/store/sales/order/view/order-view")
 );
 
 const RoutesApp = () => {
