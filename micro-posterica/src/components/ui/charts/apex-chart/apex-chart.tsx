@@ -22,6 +22,7 @@ const ApexChartApp = () => {
       },
     },
     tooltip: {
+      theme: "dark", // TODO: make the theme dynamic
       x: { format: "dd MMM" },
       y: {
         formatter: (val: any) => `${val}K`,

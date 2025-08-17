@@ -57,6 +57,12 @@ const NavbarApp = () => {
                   "data-kt-app-layout",
                   !isDarkMode ? "light-sidebar" : "light-sidebar"
                 );
+                document.body.setAttribute(
+                  "apexcharts-tooltip apexcharts-theme-dark apexcharts-active",
+                  !isDarkMode ? "apexcharts-theme-dark" : "apexcharts-theme-dark"
+                );
+
+                
               }}
             />
             <label
