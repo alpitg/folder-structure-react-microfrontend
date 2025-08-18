@@ -10,6 +10,7 @@ import { GetEnvConfig } from "../../../app.config";
 export const customersApi = createApi({
   reducerPath: "customersApi",
   baseQuery: fetchBaseQuery({ baseUrl: "" }), // Adjust base URL
+  tagTypes: ["Customer"], // 👈 important
   endpoints: (builder) => ({
     getPaginatedCustomers: builder.query<
       PaginatedCustomers,
@@ -43,7 +44,7 @@ export const customersApi = createApi({
       query: ({ id, data }) => ({
         url:
           GetEnvConfig()?.api?.baseUrl +
-          GetEnvConfig()?.api?.order?.update?.replace("{id}", id),
+          GetEnvConfig()?.api?.customer?.update?.replace("{id}", id),
         method: "PUT",
         body: data,
       }),

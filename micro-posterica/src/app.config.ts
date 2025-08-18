@@ -41,6 +41,7 @@ let environment = {
       list: "",
       detail: "",
       add: "",
+      update: "",
     },
   },
 };

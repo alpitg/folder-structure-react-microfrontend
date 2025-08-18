@@ -1,5 +1,5 @@
 import { FormProvider, useForm, type SubmitHandler } from "react-hook-form";
-import { NavLink, useParams } from "react-router";
+import { NavLink, useNavigate, useParams } from "react-router";
 import {
   useAddProductMutation,
   useGetProductDetailQuery,
@@ -30,17 +30,26 @@ type ProductFormAppProps = {
 const ProductFormApp = ({ mode }: ProductFormAppProps) => {
   const isEditMode = mode === "edit";
   const { id } = useParams<{ id?: string }>();
+  const navigate = useNavigate();
 
   //#region RTK APIs
-  const [updateProduct, { isLoading: isUpdateProductLoading }] =
-    useUpdateProductMutation();
+  const [
+    updateProduct,
+    { isLoading: isUpdateProductLoading, isSuccess: isAddSuccess },
+  ] = useUpdateProductMutation();
 
-  const [addProduct, { isLoading: isaddProductLoading }] =
-    useAddProductMutation();
+  const [
+    addProduct,
+    { isLoading: isaddProductLoading, isSuccess: isUpdateSuccess },
+  ] = useAddProductMutation();
 
   const { data, isLoading: isOrderLoading } = useGetProductDetailQuery(id!, {
     skip: !isEditMode,
+    refetchOnMountOrArgChange: true,
   });
+
+  const isSuccess = isAddSuccess || isUpdateSuccess;
+
   //#endregion
 
   const methods = useForm<IProductData>({
@@ -110,6 +119,13 @@ const ProductFormApp = ({ mode }: ProductFormAppProps) => {
       addProduct(request);
     }
   };
+
+  // Navigate after add or update
+  useEffect(() => {
+    if (isSuccess) {
+      navigate(ROUTE_URL.CATALOG.PRODUCT.LIST, { state: { refresh: true } });
+    }
+  }, [isSuccess, navigate]);
 
   // Populate form in edit mode
   useEffect(() => {

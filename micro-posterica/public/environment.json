@@ -39,7 +39,7 @@
       "list": "/api/customer/search",
       "detail": "/api/customer/{id}",
       "add": "/api/customer",
-      "update": "/api/customer/update",
+      "update": "/api/customer/{id}",
       "delete": "/api/customer/delete"
     }
   }

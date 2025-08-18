@@ -46,6 +46,7 @@ const OrderFormApp = () => {
     orderId!,
     {
       skip: !isEditMode,
+      refetchOnMountOrArgChange: true,
     }
   );
   //#endregion

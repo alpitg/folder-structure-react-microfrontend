@@ -15,10 +15,9 @@ import { useEffect } from "react";
 
 type CustomerFormAppProps = {
   mode: "add" | "edit";
-  defaultValues?: ICustomer; // passed in edit mode
 };
 
-const CustomerAddFormApp = ({ mode, defaultValues }: CustomerFormAppProps) => {
+const CustomerAddFormApp = ({ mode }: CustomerFormAppProps) => {
   const isEditMode = mode === "edit";
   const { id } = useParams<{ id?: string }>();
   const navigate = useNavigate();
@@ -35,6 +34,7 @@ const CustomerAddFormApp = ({ mode, defaultValues }: CustomerFormAppProps) => {
   const { data: customerData, isLoading: isCustomerLoading } =
     useGetCustomerDetailQuery(id!, {
       skip: !isEditMode || !id,
+      refetchOnMountOrArgChange: true,
     });
 
   const isLoading = isAddInProgress || isUpdateInProgress;
@@ -42,7 +42,7 @@ const CustomerAddFormApp = ({ mode, defaultValues }: CustomerFormAppProps) => {
   //#endregion
 
   const methods = useForm<ICustomer>({
-    defaultValues: defaultValues || {
+    defaultValues: {
       name: "",
       email: "",
       description: "",
@@ -70,10 +70,14 @@ const CustomerAddFormApp = ({ mode, defaultValues }: CustomerFormAppProps) => {
 
   // If editing, set values from API response
   useEffect(() => {
-    if (isEditMode && (defaultValues || customerData)) {
-      reset(defaultValues || customerData);
+    if (isEditMode && customerData) {
+      reset(customerData);
     }
-  }, [isEditMode, defaultValues, customerData, reset]);
+  }, [isEditMode, customerData, reset]);
+
+  if (isEditMode && isCustomerLoading) {
+    return <p>Loading details...</p>;
+  }
 
   return (
     <FormProvider {...methods}>
@@ -108,12 +112,12 @@ const CustomerAddFormApp = ({ mode, defaultValues }: CustomerFormAppProps) => {
             </button>
           </CustomerHeaderApp>
 
-          <div className="form d-flex flex-column flex-xl-row">
+          <div className="form d-flex flex-column flex-xl-row gap-5">
             {/* Basic Info */}
             <CustomerBasicInfo />
 
             {/* Addresses (Shipping / Billing) */}
-            <div className="flex-lg-row-fluid ms-lg-10">
+            <div className="flex-lg-row-fluid">
               <CustomerAddressForm />
             </div>
           </div>
