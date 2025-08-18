@@ -22,6 +22,12 @@ export const customersApi = createApi({
       }),
     }),
 
+    getCustomerDetail: builder.query<ICustomer, string>({
+      query: (id) =>
+        GetEnvConfig()?.api?.baseUrl +
+        GetEnvConfig()?.api?.customer?.detail?.replace("{id}", id),
+    }),
+
     addCustomer: builder.mutation<ICustomer, ICustomer>({
       query: (body) => ({
         url: GetEnvConfig()?.api?.baseUrl + GetEnvConfig()?.api?.customer?.add,
@@ -47,6 +53,7 @@ export const customersApi = createApi({
 
 export const {
   useGetPaginatedCustomersQuery,
+  useGetCustomerDetailQuery,
   useAddCustomerMutation,
   useUpdateCustomerMutation,
 } = customersApi;

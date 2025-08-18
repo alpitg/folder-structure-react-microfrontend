@@ -39,7 +39,7 @@ let environment = {
     },
     customer: {
       list: "",
-      details: "",
+      detail: "",
       add: "",
     },
   },

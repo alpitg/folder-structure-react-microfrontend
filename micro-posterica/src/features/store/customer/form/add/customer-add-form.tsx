@@ -2,6 +2,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { NavLink, useNavigate, useParams } from "react-router";
 import {
   useAddCustomerMutation,
+  useGetCustomerDetailQuery,
   useUpdateCustomerMutation,
 } from "../../../../../app/redux/customer/customer.api";
 
@@ -23,19 +24,21 @@ const CustomerAddFormApp = ({ mode, defaultValues }: CustomerFormAppProps) => {
   const navigate = useNavigate();
 
   //#region RTK APIs
-  const [
-    addCustomer,
-    { isLoading: isAddInProgress, isSuccess: isAddSucccess },
-  ] = useAddCustomerMutation();
+  const [addCustomer, { isLoading: isAddInProgress, isSuccess: isAddSuccess }] =
+    useAddCustomerMutation();
 
   const [
     updateCustomer,
-    { isLoading: isUpdateInProgress, isSuccess: isUpdateSucccess },
+    { isLoading: isUpdateInProgress, isSuccess: isUpdateSuccess },
   ] = useUpdateCustomerMutation();
 
-  const isLoading = isAddInProgress || isUpdateInProgress;
-  const isSuccess = isAddSucccess || isUpdateSucccess;
+  const { data: customerData, isLoading: isCustomerLoading } =
+    useGetCustomerDetailQuery(id!, {
+      skip: !isEditMode || !id,
+    });
 
+  const isLoading = isAddInProgress || isUpdateInProgress;
+  const isSuccess = isAddSuccess || isUpdateSuccess;
   //#endregion
 
   const methods = useForm<ICustomer>({
@@ -50,39 +53,27 @@ const CustomerAddFormApp = ({ mode, defaultValues }: CustomerFormAppProps) => {
 
   const { reset, handleSubmit } = methods;
 
-  const onSubmit = (data: ICustomer) => {
-    console.log("Form Submitted:", data);
-
-    const request = data;
-    // const request = mapOrderForApi(data);
-    if (!request) return;
-
-    if (isEditMode) {
-      updateCustomer({ id: id!, data: request });
-      // .unwrap()
-      // .then(() => {
-      //   // Go back to list and tell it to refresh
-      //   navigate(ROUTE_URL.SALES.ORDER.LIST, { state: { refresh: true } });
-      // });
+  const onSubmit = (formData: ICustomer) => {
+    if (isEditMode && id) {
+      updateCustomer({ id, data: formData });
     } else {
-      addCustomer(request);
+      addCustomer(formData);
     }
   };
 
   // Navigate after add or update
   useEffect(() => {
     if (isSuccess) {
-      // Go back to list and tell it to refresh
       navigate(ROUTE_URL.CUSTOMER.LIST, { state: { refresh: true } });
     }
   }, [isSuccess, navigate]);
 
-  // If editing, set values from API
+  // If editing, set values from API response
   useEffect(() => {
-    if (isEditMode && defaultValues) {
-      reset(defaultValues);
+    if (isEditMode && (defaultValues || customerData)) {
+      reset(defaultValues || customerData);
     }
-  }, [isEditMode, defaultValues, reset]);
+  }, [isEditMode, defaultValues, customerData, reset]);
 
   return (
     <FormProvider {...methods}>

@@ -5,7 +5,7 @@ import { lazy } from "react";
 const CustomerApp = lazy(() => import("../customer"));
 const CustomerListApp = lazy(() => import("../list/customer-list"));
 const CustomerAddFormApp = lazy(() => import("../form/add/customer-add-form"));
-const CustomerFormApp = lazy(() => import("../form/customer-form"));
+// const CustomerFormApp = lazy(() => import("../form/customer-form"));
 
 export const CustomerRoutes = () => {
   return (
@@ -17,7 +17,7 @@ export const CustomerRoutes = () => {
       />
       <Route
         path={ROUTE_URL.CUSTOMER.EDIT}
-        element={<CustomerFormApp mode="edit" />}
+        element={<CustomerAddFormApp mode="edit" />}
       />
     </Route>
   );
