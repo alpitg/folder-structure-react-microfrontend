@@ -1,5 +1,6 @@
 import type {
   GetCustomersParams,
+  ICustomer,
   PaginatedCustomers,
 } from "../../../features/store/customer/interface/customer.model";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
@@ -20,7 +21,32 @@ export const customersApi = createApi({
         body: params,
       }),
     }),
+
+    addCustomer: builder.mutation<ICustomer, ICustomer>({
+      query: (body) => ({
+        url: GetEnvConfig()?.api?.baseUrl + GetEnvConfig()?.api?.customer?.add,
+        method: "POST",
+        body,
+      }),
+    }),
+
+    updateCustomer: builder.mutation<
+      ICustomer,
+      { id: string; data: ICustomer }
+    >({
+      query: ({ id, data }) => ({
+        url:
+          GetEnvConfig()?.api?.baseUrl +
+          GetEnvConfig()?.api?.order?.update?.replace("{id}", id),
+        method: "PUT",
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useGetPaginatedCustomersQuery } = customersApi;
+export const {
+  useGetPaginatedCustomersQuery,
+  useAddCustomerMutation,
+  useUpdateCustomerMutation,
+} = customersApi;

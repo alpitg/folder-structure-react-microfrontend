@@ -40,6 +40,7 @@ let environment = {
     customer: {
       list: "",
       details: "",
+      add: "",
     },
   },
 };
