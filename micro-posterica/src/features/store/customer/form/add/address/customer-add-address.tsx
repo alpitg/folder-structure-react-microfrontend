@@ -36,6 +36,7 @@ const CustomerAddressForm = () => {
               </label>
               <input
                 id="addressLine1"
+                placeholder="Enter street address"
                 {...register("shippingAddress.addressLine1")}
                 className="form-control form-control-solid"
               />
@@ -48,6 +49,7 @@ const CustomerAddressForm = () => {
               </label>
               <input
                 id="addressLine2"
+                placeholder="Apartment, suite, unit, etc. (optional)"
                 {...register("shippingAddress.addressLine2")}
                 className="form-control form-control-solid"
               />
@@ -60,6 +62,7 @@ const CustomerAddressForm = () => {
               </label>
               <input
                 id="city"
+                placeholder="Enter town or city"
                 {...register("shippingAddress.city")}
                 className="form-control form-control-solid"
               />
@@ -76,6 +79,7 @@ const CustomerAddressForm = () => {
                 </label>
                 <input
                   id="state"
+                  placeholder="Enter state or province"
                   {...register("shippingAddress.state")}
                   className="form-control form-control-solid"
                 />
@@ -89,6 +93,7 @@ const CustomerAddressForm = () => {
                 </label>
                 <input
                   id="postcode"
+                  placeholder="Enter postal code"
                   {...register("shippingAddress.postcode")}
                   className="form-control form-control-solid"
                 />
