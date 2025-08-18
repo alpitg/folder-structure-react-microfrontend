@@ -66,7 +66,7 @@ const CustomerFilterApp = ({
               aria-expanded="false"
               aria-label="Sort customers"
             >
-              {`${start}-${end} of ${total || 0}`}
+              {`${start} - ${end} of ${total || 0}`}
             </button>
             <ul
               className="dropdown-menu dropdown-menu-end p-0"

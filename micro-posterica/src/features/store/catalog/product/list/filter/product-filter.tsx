@@ -32,7 +32,7 @@ const ProductFilterApp = ({
 
   const handlePreviousPage = () => page > 1 && setPage(page - 1);
   const handleNextPage = () => page < pages && setPage(page + 1);
-  
+
   return (
     <div className="product-filter-app">
       <div className="card-header align-items-center px-0 gap-2 gap-md-5 flex-wrap">
@@ -66,7 +66,7 @@ const ProductFilterApp = ({
               aria-expanded="false"
               aria-label="Sort products"
             >
-              {`${start}-${end} of ${total || 0}`}
+              {`${start} - ${end} of ${total || 0}`}
             </button>
             <ul
               className="dropdown-menu dropdown-menu-end p-0"

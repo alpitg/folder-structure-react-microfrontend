@@ -67,7 +67,7 @@ const OrderFilterApp = ({
               aria-label="Sort orders"
               tabIndex={1}
             >
-              {`${start}-${end} of ${total || 0}`}
+              {`${start} - ${end} of ${total || 0}`}
             </button>
             <ul
               className="dropdown-menu dropdown-menu-end p-0"
