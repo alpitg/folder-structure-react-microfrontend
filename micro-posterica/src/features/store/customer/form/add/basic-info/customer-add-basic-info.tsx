@@ -16,6 +16,7 @@ const CustomerBasicInfo = () => {
             <input
               type="text"
               id="name"
+              placeholder="Enter customer name"
               {...register("name")}
               className="form-control form-control-solid"
             />
@@ -30,6 +31,7 @@ const CustomerBasicInfo = () => {
             <input
               type="email"
               id="email"
+              placeholder="Enter email address"
               {...register("email")}
               className="form-control form-control-solid"
             />
@@ -43,6 +45,7 @@ const CustomerBasicInfo = () => {
             <input
               type="text"
               id="description"
+              placeholder="Enter description (optional)"
               {...register("description")}
               className="form-control form-control-solid"
             />
