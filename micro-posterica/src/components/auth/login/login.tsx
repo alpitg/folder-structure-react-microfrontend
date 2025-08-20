@@ -48,7 +48,7 @@ const LoginApp = () => {
             <a href="/keen/demo1/index.html" className="mb-0 mb-lg-20">
               <img
                 alt="Logo"
-                src="/static/media/img/login-bg.png"
+                src="/static/media/img/logo.png"
                 className="h-40px h-lg-50px"
               />
             </a>
@@ -105,7 +105,7 @@ const LoginApp = () => {
                   <div className="col-md-6">
                     <a
                       href="#"
-                      className="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100"
+                      className="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap"
                     >
                       <img
                         alt="Logo"

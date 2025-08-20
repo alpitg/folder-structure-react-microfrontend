@@ -7,6 +7,40 @@ import { NavLink } from "react-router";
 import { ROUTE_URL } from "../auth/constants/routes.const";
 
 const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
+  const administration: IRoutes = {
+    id: "administration",
+    title: "Administration",
+    path: ROUTE_URL.ADMINISTRATION.BASE,
+    icon: "bi bi-person-fill-gear fs-3",
+    claims: [],
+    subRoutes: [
+      {
+        id: "organization-units",
+        title: "Organization Units",
+        path: ROUTE_URL.ADMINISTRATION.ORGANIZATION_UNIT.BASE,
+        icon: "bi bi-person-fill-gea",
+        claims: [],
+        subRoutes: [],
+      },
+      {
+        id: "roles",
+        title: "Roles",
+        path: ROUTE_URL.ADMINISTRATION.ROLES.BASE,
+        icon: "bi bi-person-fill-gear",
+        claims: [],
+        subRoutes: [],
+      },
+      {
+        id: "users",
+        title: "Users",
+        path: ROUTE_URL.ADMINISTRATION.USERS.BASE,
+        icon: "bi bi-person-fill-gear",
+        claims: [],
+        subRoutes: [],
+      },
+    ],
+  };
+
   const catalog: IRoutes = {
     id: "catalog",
     title: "Catalog",
@@ -144,14 +178,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
       claims: [],
       subRoutes: [],
     },
-    {
-      id: "administration",
-      title: "Administration",
-      path: ROUTE_URL.ADMIN.BASE,
-      icon: "bi bi-person-fill-gear",
-      claims: [],
-      subRoutes: [],
-    },
+    administration,
     catalog,
     sales,
     customer,

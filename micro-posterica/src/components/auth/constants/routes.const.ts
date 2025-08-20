@@ -47,6 +47,27 @@ export const ROUTE_URL = {
   CUSTOMER: CUSTOMER_ROUTE_URL,
   SALES: SALES_ROUTE_URL,
   CATALOG: CATALOG,
+  ADMINISTRATION: {
+    BASE: "/admin",
+    ORGANIZATION_UNIT: {
+      BASE: "/admin/organization-units",
+      LIST: "",
+      EDIT: "edit/:id",
+      ADD: "add",
+    },
+    ROLES: {
+      BASE: "/admin/roles",
+      LIST: "",
+      EDIT: "edit/:id",
+      ADD: "add",
+    },
+    USERS: {
+      BASE: "/admin/users",
+      LIST: "",
+      EDIT: "edit/:id",
+      ADD: "add",
+    },
+  },
   INVOICE_MANAGER: {
     BASE: "/invoice",
     CREATE: "/invoice/create",

@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 import { Suspense, lazy } from "react";
 
+import { AdministrationRoutes } from "../../features/administration/administration.routes";
 import { CatalogRoutes } from "../../features/store/catalog/routes/catalog.routes";
 import { CustomerRoutes } from "../../features/store/customer/routes/customer.route";
 import LoadingApp from "../loading/loading";
@@ -9,9 +10,6 @@ import { ROUTE_URL } from "./constants/routes.const";
 const LandingPageApp = lazy(() => import("../landing-page/landing-page"));
 const DashboardApp = lazy(() => import("../../features/dashboard/dashboard"));
 const SettingsApp = lazy(() => import("../../features/settings/settings"));
-const AdministrationApp = lazy(
-  () => import("../../features/administration/administration")
-);
 
 const UIApp = lazy(() => import("../../components/ui/ui"));
 const LoginApp = lazy(() => import("../../components/auth/login/login"));
@@ -48,10 +46,7 @@ const RoutesApp = () => {
           <Route path={ROUTE_URL.DASHBOARD} element={<LandingPageApp />}>
             <Route path={ROUTE_URL.DASHBOARD} element={<DashboardApp />} />
             <Route path={ROUTE_URL.UI} element={<UIApp />} />
-            <Route
-              path={ROUTE_URL.ADMIN.BASE}
-              element={<AdministrationApp />}
-            />
+
             <Route path={ROUTE_URL.APP_SETTINGS} element={<SettingsApp />} />
 
             <Route path={ROUTE_URL.SALES.BASE} element={<SalesApp />}>
@@ -75,6 +70,7 @@ const RoutesApp = () => {
 
             {CatalogRoutes()}
             {CustomerRoutes()}
+            {AdministrationRoutes()}
 
             <Route path={ROUTE_URL.MASTER.BASE} element={<MasterApp />}>
               <Route
