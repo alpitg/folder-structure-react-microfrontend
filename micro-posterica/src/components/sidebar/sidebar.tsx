@@ -18,7 +18,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
         id: "organization-units",
         title: "Organization Units",
         path: ROUTE_URL.ADMINISTRATION.ORGANIZATION_UNIT.BASE,
-        icon: "bi bi-person-fill-gea",
+        icon: "bi bi-diagram-3 fs-3",
         claims: [],
         subRoutes: [],
       },
@@ -26,7 +26,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
         id: "roles",
         title: "Roles",
         path: ROUTE_URL.ADMINISTRATION.ROLES.BASE,
-        icon: "bi bi-person-fill-gear",
+        icon: "bi bi-suitcase-lg fs-3",
         claims: [],
         subRoutes: [],
       },
@@ -34,7 +34,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
         id: "users",
         title: "Users",
         path: ROUTE_URL.ADMINISTRATION.USERS.BASE,
-        icon: "bi bi-person-fill-gear",
+        icon: "bi bi-people fs-3",
         claims: [],
         subRoutes: [],
       },
@@ -320,8 +320,8 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
                         }}
                       >
                         <NavLink className="menu-link" to={subRoute?.path}>
-                          <span className="menu-bullet">
-                            <span className="bullet bullet-dot"></span>
+                          <span className="menu-icon">
+                            <i className={subRoute?.icon}></i>
                           </span>
                           <span className="menu-title">{subRoute?.title}</span>
                         </NavLink>

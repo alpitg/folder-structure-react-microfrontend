@@ -82,10 +82,10 @@ const OrganizationTreeApp = () => {
 
   return (
     <div className="card shadow-sm mb-4 border-0">
-      <div className="card-header d-flex justify-content-between align-items-center bg-white border-0">
+      <div className="card-header d-flex justify-content-between align-items-center border-0">
         <h5 className="mb-0">Organisation Tree</h5>
         <button className="btn btn-primary btn-sm">
-          <i className="bi bi-plus-lg me-2"></i> Add Root Unit
+          <i className="bi bi-plus-lg fs-3"></i> Add Root Unit
         </button>
       </div>
       <div className="card-body pt-2">
