@@ -11,7 +11,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
     id: "administration",
     title: "Administration",
     path: ROUTE_URL.ADMINISTRATION.BASE,
-    icon: "bi bi-person-fill-gear fs-3",
+    icon: "bi bi bi-sliders fs-3",
     claims: [],
     subRoutes: [
       {
@@ -45,7 +45,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
     id: "catalog",
     title: "Catalog",
     path: ROUTE_URL.CATALOG.BASE,
-    icon: "bi bi-box",
+    icon: "bi bi-box fs-3",
     claims: [],
     subRoutes: [
       {
@@ -87,7 +87,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
     id: "sales",
     title: "Sales",
     path: ROUTE_URL.SALES.BASE,
-    icon: "bi bi-journal-bookmark",
+    icon: "bi bi-journal-bookmark fs-3",
     claims: [],
     subRoutes: [
       {
@@ -113,7 +113,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
     id: "customer",
     title: "Customers",
     path: ROUTE_URL.CUSTOMER.BASE,
-    icon: "bi bi-journal-bookmark",
+    icon: "bi bi-journal-bookmark fs-3",
     claims: [],
     subRoutes: [
       {
@@ -139,7 +139,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
     id: "masters",
     title: "Masters",
     path: ROUTE_URL.MASTER.BASE,
-    icon: "bi bi-shield-check",
+    icon: "bi bi-shield-check fs-3",
     claims: [],
     subRoutes: [
       {
@@ -174,7 +174,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
       id: "dashboard",
       title: "Dashboard",
       path: ROUTE_URL.DASHBOARD,
-      icon: "bi bi-pie-chart-fill",
+      icon: "bi bi-pie-chart-fill fs-3",
       claims: [],
       subRoutes: [],
     },
@@ -224,19 +224,19 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
     //   claims: [],
     // subRoutes: [],
     // },
-    // {
-    //   id: "ui",
-    //   title: "UI",
-    //   path: ROUTE_URL.UI,
-    //   icon: "bi bi-shield-check",
-    //   claims: [],
-    // subRoutes: [],
-    // },
+    {
+      id: "ui",
+      title: "UI",
+      path: ROUTE_URL.UI,
+      icon: "bi bi-shield-check fs-3",
+      claims: [],
+      subRoutes: [],
+    },
     {
       id: "settings",
       title: "Settings",
       path: ROUTE_URL.APP_SETTINGS,
-      icon: "bi bi-shield-check",
+      icon: "bi bi-shield-check fs-3",
       claims: [],
       subRoutes: [],
     },

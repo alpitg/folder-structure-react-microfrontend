@@ -8,16 +8,16 @@ const TreeNode = ({ label, members, roles, children }: any) => {
   return (
     <li className="list-unstyled">
       <div
-        className="d-flex align-items-center py-2"
+        className="d-flex align-items-center py-2 gap-3"
         style={{ cursor: hasChildren ? "pointer" : "default" }}
         onClick={() => hasChildren && setExpanded(!expanded)}
       >
         {/* Chevron */}
         {hasChildren ? (
           expanded ? (
-            <i className="bi bi-chevron-down me-1 text-muted" />
+            <i className="bi bi-chevron-down text-muted" />
           ) : (
-            <i className="bi bi-chevron-right me-1 text-muted" />
+            <i className="bi bi-chevron-right text-muted" />
           )
         ) : (
           <span className="me-3"></span>
@@ -25,9 +25,9 @@ const TreeNode = ({ label, members, roles, children }: any) => {
 
         {/* Folder Icon */}
         {expanded ? (
-          <i className="bi bi-folder2-open text-primary me-2" />
+          <i className="bi bi-folder2-open text-primary" />
         ) : (
-          <i className="bi bi-folder text-primary me-2" />
+          <i className="bi bi-folder text-primary" />
         )}
 
         {/* Label */}
