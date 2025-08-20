@@ -89,11 +89,15 @@ const OrganizationTreeApp = () => {
         </button>
       </div>
       <div className="card-body pt-2">
-        <ul className="list-unstyled mb-0">
-          {data.map((node, index) => (
-            <TreeNode key={index} {...node} />
-          ))}
-        </ul>
+        {data?.length === 0 ? (
+          <div className="text-muted">No organisation unit defined yet.</div>
+        ) : (
+          <ul className="list-unstyled mb-0">
+            {data.map((node, index) => (
+              <TreeNode key={index} {...node} />
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );
