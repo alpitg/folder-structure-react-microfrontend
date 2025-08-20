@@ -1,8 +1,8 @@
 import { NavLink, useLocation } from "react-router";
 import { useEffect, useState } from "react";
 
+import PageHeaderApp from "../../../../../components/header/page-header/page-header";
 import ProductFilterApp from "./filter/product-filter";
-import ProductHeaderApp from "../header/product-header";
 import { ROUTE_URL } from "../../../../../components/auth/constants/routes.const";
 import { useGetProductsQuery } from "../../../../../app/redux/catalog/product/product.api";
 
@@ -44,7 +44,7 @@ const ProductListApp = () => {
 
   return (
     <div className="product-list-app">
-      <ProductHeaderApp
+      <PageHeaderApp
         header="Product Listing"
         description="All products are listed here."
       >
@@ -55,7 +55,7 @@ const ProductListApp = () => {
           <i className="bi bi-plus-lg fs-3"></i>
           Add New Product
         </NavLink>
-      </ProductHeaderApp>
+      </PageHeaderApp>
 
       <div className="card">
         <div className="card-body">

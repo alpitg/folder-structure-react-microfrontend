@@ -8,8 +8,8 @@ import {
 
 import CustomerAddressForm from "./address/customer-add-address";
 import CustomerBasicInfo from "./basic-info/customer-add-basic-info";
-import CustomerHeaderApp from "../../header/customer-header";
 import type { ICustomer } from "../../interface/customer.model";
+import PageHeaderApp from "../../../../../components/header/page-header/page-header";
 import { ROUTE_URL } from "../../../../../components/auth/constants/routes.const";
 import { useEffect } from "react";
 
@@ -83,7 +83,7 @@ const CustomerAddFormApp = ({ mode }: CustomerFormAppProps) => {
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="customer-form-app">
-          <CustomerHeaderApp
+          <PageHeaderApp
             header={isEditMode ? "Edit Customer" : "Add Customer"}
             description={
               isEditMode
@@ -110,7 +110,7 @@ const CustomerAddFormApp = ({ mode }: CustomerFormAppProps) => {
               )}
               Save changes
             </button>
-          </CustomerHeaderApp>
+          </PageHeaderApp>
 
           <div className="form d-flex flex-column flex-xl-row gap-5">
             {/* Basic Info */}

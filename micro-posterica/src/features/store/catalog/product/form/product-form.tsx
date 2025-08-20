@@ -9,7 +9,6 @@ import {
 import type { IProductData } from "../../interface/product/product.model";
 import ProductCategoryTag from "./category-tag/product-category-tag";
 import ProductGeneralApp from "./general/product-general";
-import ProductHeaderApp from "../header/product-header";
 import ProductInventoryApp from "./inventory/product-inventory";
 import ProductMediaApp from "./media/product-media";
 import ProductMetaOptionApp from "./meta-option/product-meta-option";
@@ -22,6 +21,7 @@ import ProductThumbnailApp from "./thumbnail/product-thumbnail";
 import ProductVariantsApp from "./variants/product-variants";
 import { ROUTE_URL } from "../../../../../components/auth/constants/routes.const";
 import { useEffect } from "react";
+import PageHeaderApp from "../../../../../components/header/page-header/page-header";
 
 type ProductFormAppProps = {
   mode: "add" | "edit";
@@ -190,7 +190,7 @@ const ProductFormApp = ({ mode }: ProductFormAppProps) => {
           onSubmit={methods.handleSubmit(onSubmit)}
           noValidate
         >
-          <ProductHeaderApp
+          <PageHeaderApp
             header={isEditMode ? "Edit Product" : "Add Product"}
             description={
               isEditMode
@@ -217,7 +217,7 @@ const ProductFormApp = ({ mode }: ProductFormAppProps) => {
               )}
               Save changes
             </button>
-          </ProductHeaderApp>
+          </PageHeaderApp>
 
           <div className="form d-flex flex-column flex-lg-row">
             <div className="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10">

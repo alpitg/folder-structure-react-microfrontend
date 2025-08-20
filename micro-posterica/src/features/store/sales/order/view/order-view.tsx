@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 
 import ErrorPage from "../../../../../components/ui/error/error-page";
 import NoRecordApp from "../list/no-record/no-record";
-import OrderHeaderApp from "../header/order-header";
+import PageHeaderApp from "../../../../../components/header/page-header/page-header";
 import { ROUTE_URL } from "../../../../../components/auth/constants/routes.const";
 import { useGetDetailQuery } from "../../../../../app/redux/sales/order/order.api";
 
@@ -75,7 +75,7 @@ const OrderViewApp = () => {
 
   return (
     <div className="order-header-app flex flex-col gap-4 mb-3">
-      <OrderHeaderApp
+      <PageHeaderApp
         header="Order detail"
         description="Order details are here."
       >
@@ -99,7 +99,7 @@ const OrderViewApp = () => {
             </span>
           </NavLink>
         )}
-      </OrderHeaderApp>
+      </PageHeaderApp>
 
       <div className="d-flex flex-column gap-7 gap-lg-10">
         <div className="d-flex flex-column flex-xl-row gap-7 gap-lg-10">

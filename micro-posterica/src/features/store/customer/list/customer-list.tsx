@@ -2,7 +2,7 @@ import { NavLink, useLocation } from "react-router";
 import { useEffect, useState } from "react";
 
 import CustomerFilterApp from "./filter/customer-filter";
-import CustomerHeaderApp from "../header/customer-header";
+import PageHeaderApp from "../../../../components/header/page-header/page-header";
 import { ROUTE_URL } from "../../../../components/auth/constants/routes.const";
 import { useGetPaginatedCustomersQuery } from "../../../../app/redux/customer/customer.api";
 
@@ -40,7 +40,7 @@ const CustomerListApp = () => {
 
   return (
     <div className="customer-list-app">
-      <CustomerHeaderApp
+      <PageHeaderApp
         header="Customer Listing"
         description="All customers are listed here."
       >
@@ -48,7 +48,7 @@ const CustomerListApp = () => {
           <i className="bi bi-plus-lg fs-3"></i>
           Add New Customer
         </NavLink>
-      </CustomerHeaderApp>
+      </PageHeaderApp>
 
       <div className="card">
         <div className="card-body">

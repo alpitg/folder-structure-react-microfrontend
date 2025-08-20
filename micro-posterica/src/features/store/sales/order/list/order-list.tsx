@@ -1,7 +1,6 @@
 import { NavLink, useLocation } from "react-router";
 import { useEffect, useState } from "react";
 
-import OrderHeaderApp from "../header/order-header";
 import PaymentBadge, {
   type PaymentStatus,
 } from "../../../../../components/ui/payment-badges/payment-badges";
@@ -9,6 +8,7 @@ import { ROUTE_URL } from "../../../../../components/auth/constants/routes.const
 import ErrorPage from "../../../../../components/ui/error/error-page";
 import OrderFilterApp from "./filter/order-filter";
 import { useGetOrdersQuery } from "../../../../../app/redux/sales/order/order.api";
+import PageHeaderApp from "../../../../../components/header/page-header/page-header";
 
 type sortType = "newest" | "oldest";
 
@@ -50,7 +50,7 @@ const OrderListApp = () => {
 
   return (
     <div className="order-list-app">
-      <OrderHeaderApp header="Order listing" description="All orders are here.">
+      <PageHeaderApp header="Order listing" description="All orders are here.">
         <NavLink
           to={ROUTE_URL.SALES.ORDER.ADD}
           className="btn btn-primary btn-sm"
@@ -58,7 +58,7 @@ const OrderListApp = () => {
           <i className="bi bi-plus-lg fs-3"></i>
           Add New Order
         </NavLink>
-      </OrderHeaderApp>
+      </PageHeaderApp>
 
       <div className="card">
         <div className="card-body">

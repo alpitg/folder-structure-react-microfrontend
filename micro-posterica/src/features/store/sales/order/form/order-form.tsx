@@ -3,7 +3,6 @@ import {
   InitializeOrderItem,
   type IOrderInvoiceData,
 } from "../../../../../interfaces/order/order.model";
-import OrderHeaderApp from "../header/order-header";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, AppState } from "../../../../../app/store";
 import { fetchProfile } from "../../../../../app/redux/core/profile/profile-detail.thunk";
@@ -22,6 +21,7 @@ import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import CustomizedArtApp from "./customized/customized-art";
 import OrderSummaryApp from "./order-summary/order-summary";
 import { mapOrderForApi } from "../../../catalog/product/utils/costing.util";
+import PageHeaderApp from "../../../../../components/header/page-header/page-header";
 
 const OrderFormApp = () => {
   const { orderId } = useParams<{ orderId?: string }>();
@@ -179,7 +179,7 @@ const OrderFormApp = () => {
 
   return (
     <div className="order-list-app">
-      <OrderHeaderApp
+      <PageHeaderApp
         header={isEditMode ? "Edit Order" : "Add Order"}
         description={
           isEditMode ? "Update existing order details." : "Create a new order."
@@ -191,7 +191,7 @@ const OrderFormApp = () => {
             Back to Order List
           </span>
         </NavLink>
-      </OrderHeaderApp>
+      </PageHeaderApp>
 
       <FormProvider {...methods}>
         <form

@@ -1,6 +1,6 @@
 import { NavLink, useParams } from "react-router";
 
-import CustomerHeaderApp from "../header/customer-header";
+import PageHeaderApp from "../../../../components/header/page-header/page-header";
 import { ROUTE_URL } from "../../../../components/auth/constants/routes.const";
 
 type CustomerFormAppProps = {
@@ -13,7 +13,7 @@ const CustomerFormApp = ({ mode }: CustomerFormAppProps) => {
 
   return (
     <div className="customer-form-app">
-      <CustomerHeaderApp
+      <PageHeaderApp
         header={isEditMode ? "Edit Customer" : "Add Customer"}
         description={
           isEditMode
@@ -40,7 +40,7 @@ const CustomerFormApp = ({ mode }: CustomerFormAppProps) => {
           )}
           Save changes
         </button> */}
-      </CustomerHeaderApp>
+      </PageHeaderApp>
 
       <div className="form d-flex flex-column flex-lg-row">
         <div className="flex-column flex-lg-row-auto w-100 w-xl-350px mb-10">
