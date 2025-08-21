@@ -24,10 +24,7 @@ export const organizationUnitsApi = createApi({
       }),
     }),
 
-    getOrganizationUnits: builder.query<
-      PaginatedOrganizationUnits,
-      GetOrganizationUnitsParams
-    >({
+    getOrganizationUnits: builder.query<PaginatedOrganizationUnits, void>({
       query: () => ({
         url:
           GetEnvConfig()?.api?.baseUrl +

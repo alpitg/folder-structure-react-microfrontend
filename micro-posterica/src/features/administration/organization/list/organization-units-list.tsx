@@ -7,10 +7,7 @@ import { useLocation } from "react-router";
 const OrganizationUnitsListApp = () => {
   const location = useLocation();
   // Query hook for organization-units-list
-  const { data, isLoading, refetch } = useGetOrganizationUnitsQuery(
-    
-    { refetchOnMountOrArgChange: true }
-  );
+  const { data, isLoading, refetch } = useGetOrganizationUnitsQuery();
 
   // Refresh on navigation with state
   useEffect(() => {
