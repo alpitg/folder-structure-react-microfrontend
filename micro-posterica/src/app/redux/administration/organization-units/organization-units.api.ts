@@ -11,7 +11,7 @@ export const organizationUnitsApi = createApi({
   reducerPath: "organizationUnitsApi",
   baseQuery: fetchBaseQuery({ baseUrl: "" }), // Adjust base URL
   endpoints: (builder) => ({
-    getOrganizationUnits: builder.query<
+    getPaginatedOrganizationUnits: builder.query<
       PaginatedOrganizationUnits,
       GetOrganizationUnitsParams
     >({
@@ -24,6 +24,18 @@ export const organizationUnitsApi = createApi({
       }),
     }),
 
+    getOrganizationUnits: builder.query<
+      PaginatedOrganizationUnits,
+      GetOrganizationUnitsParams
+    >({
+      query: () => ({
+        url:
+          GetEnvConfig()?.api?.baseUrl +
+          GetEnvConfig()?.api?.administration?.organizationUnits?.list,
+        method: "GET",
+      }),
+    }),
+
     // getOrganizationUnitsDetail: builder.query<IOrganizationUnitsData, string>({
     //   query: (productId) =>
     //     GetEnvConfig()?.api?.baseUrl +
@@ -33,7 +45,10 @@ export const organizationUnitsApi = createApi({
     //     ),
     // }),
 
-    addOrganizationUnits: builder.mutation<IOrganizationUnitsData, IOrganizationUnitsData>({
+    addOrganizationUnits: builder.mutation<
+      IOrganizationUnitsData,
+      IOrganizationUnitsData
+    >({
       query: (body) => ({
         url:
           GetEnvConfig()?.api?.baseUrl +
@@ -62,6 +77,7 @@ export const organizationUnitsApi = createApi({
 });
 
 export const {
+  useGetPaginatedOrganizationUnitsQuery,
   useGetOrganizationUnitsQuery,
   // useGetOrganizationUnitsDetailQuery,
   useAddOrganizationUnitsMutation,

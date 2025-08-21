@@ -84,3 +84,10 @@ export interface PaginatedOrganizationUnits {
   pages: number; // total pages
   items: IOrganizationUnitsData[];
 }
+
+export interface IOrganizationUnitTree {
+  label: string;
+  members: number;
+  roles: number;
+  children: IOrganizationUnitTree[];
+}

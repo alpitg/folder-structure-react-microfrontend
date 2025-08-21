@@ -9,7 +9,7 @@
     "apiVersion": "v1",
     "administration": {
       "organizationUnits": {
-        "list": "/api/organization-units/search",
+        "list": "/api/organization-units",
         "detail": "/api/organization-units/{id}",
         "add": "/api/organization-units",
         "update": "/api/organization-units/{id}",
