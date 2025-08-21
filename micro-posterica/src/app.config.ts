@@ -12,6 +12,29 @@ let environment = {
     profile: {
       posterica: "",
     },
+    administration: {
+      organizationUnits: {
+        list: "",
+        detail: "",
+        add: "",
+        update: "",
+        delete: "",
+      },
+      roles: {
+        list: "",
+        detail: "",
+        add: "",
+        update: "",
+        delete: "",
+      },
+      users: {
+        list: "",
+        detail: "",
+        add: "",
+        update: "",
+        delete: "",
+      },
+    },
     master: {
       frameTypes: "",
       glassTypes: "",
@@ -22,6 +45,7 @@ let environment = {
       detail: "",
       placeOrder: "",
       update: "",
+      delete: "",
     },
     catalog: {
       product: {
@@ -29,12 +53,14 @@ let environment = {
         detail: "",
         add: "",
         update: "",
+        delete: "",
       },
       category: {
         list: "",
         detail: "",
         add: "",
         update: "",
+        delete: "",
       },
     },
     customer: {
@@ -42,6 +68,7 @@ let environment = {
       detail: "",
       add: "",
       update: "",
+      delete: "",
     },
   },
 };

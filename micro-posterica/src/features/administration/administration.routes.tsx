@@ -1,5 +1,7 @@
 import OrganizationUnitApp from "./organization/organization-unit";
+import OrganizationUnitsListApp from "./organization/list/organization-units-list";
 import { ROUTE_URL } from "../../components/auth/constants/routes.const";
+import RoleListApp from "./roles/list/role-list";
 import { Route } from "react-router";
 import { lazy } from "react";
 
@@ -14,21 +16,18 @@ export const AdministrationRoutes = () => {
         path={ROUTE_URL.ADMINISTRATION.ORGANIZATION_UNIT.BASE}
         element={<OrganizationUnitApp />}
       >
-        {/* <Route
-          path={ROUTE_URL.CATALOG.PRODUCT.LIST}
-          element={<ProductListApp />}
-        />
         <Route
-          path={ROUTE_URL.CATALOG.PRODUCT.ADD}
-          element={<ProductFormApp mode="add" />}
+          path={ROUTE_URL.ADMINISTRATION.ORGANIZATION_UNIT.LIST}
+          element={<OrganizationUnitsListApp />}
         />
-        <Route
-          path={ROUTE_URL.CATALOG.PRODUCT.EDIT}
-          element={<ProductFormApp mode="edit" />}
-        /> */}
       </Route>
 
       <Route path={ROUTE_URL.ADMINISTRATION.ROLES.BASE} element={<RolesApp />}>
+        <Route
+          path={ROUTE_URL.ADMINISTRATION.ROLES.LIST}
+          element={<RoleListApp />}
+        />
+
         {/* <Route
           path={ROUTE_URL.CATALOG.PRODUCT.LIST}
           element={<ProductListApp />}

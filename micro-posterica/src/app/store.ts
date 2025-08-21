@@ -4,7 +4,9 @@ import coreReducer from "./redux/core/core.reducer";
 import { customersApi } from "./redux/customer/customer.api";
 import masterReducer from "./redux/master/master.reducer";
 import { ordersApi } from "./redux/sales/order/order.api";
+import { organizationUnitsApi } from "./redux/administration/organization-units/organization-units.api";
 import { productsApi } from "./redux/catalog/product/product.api";
+import { rolesApi } from "./redux/administration/roles/roles.api";
 import salesReducer from "./redux/sales/sales.reducer";
 
 const store = configureStore({
@@ -13,6 +15,10 @@ const store = configureStore({
     master: masterReducer,
     sales: salesReducer,
     catalog: catalogReducer,
+
+    // administration
+    [organizationUnitsApi.reducerPath]: organizationUnitsApi.reducer,
+    [rolesApi.reducerPath]: rolesApi.reducer,
 
     [productsApi.reducerPath]: productsApi.reducer,
     [ordersApi.reducerPath]: ordersApi.reducer,
@@ -23,6 +29,10 @@ const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: false, // Disable serializable check for non-serializable data
     }).concat(
+      // administration
+      organizationUnitsApi.middleware,
+      rolesApi.middleware,
+
       productsApi.middleware,
       ordersApi.middleware,
       customersApi.middleware

@@ -7,6 +7,29 @@
   "api": {
     "baseUrl": "http://localhost:8000",
     "apiVersion": "v1",
+    "administration": {
+      "organizationUnits": {
+        "list": "/api/organization-units/search",
+        "detail": "/api/organization-units/{id}",
+        "add": "/api/organization-units",
+        "update": "/api/organization-units/{id}",
+        "delete": "/api/organization-units/delete"
+      },
+      "roles": {
+        "list": "/api/roles/search",
+        "detail": "/api/roles/{id}",
+        "add": "/api/roles",
+        "update": "/api/roles/{id}",
+        "delete": "/api/roles/delete"
+      },
+      "users": {
+        "list": "/api/users/search",
+        "detail": "/api/users/{id}",
+        "add": "/api/users",
+        "update": "/api/users/{id}",
+        "delete": "/api/users/delete"
+      }
+    },
     "profile": {
       "posterica": "/api/profile/frame-types"
     },

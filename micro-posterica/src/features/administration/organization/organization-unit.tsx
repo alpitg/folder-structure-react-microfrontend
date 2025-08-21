@@ -1,14 +1,9 @@
-import OrganizationTreeApp from "./tree/organization-tree";
-import PageHeaderApp from "../../../components/header/page-header/page-header";
+import { Outlet } from "react-router";
 
 const OrganizationUnitApp = () => {
   return (
     <div>
-      <PageHeaderApp
-        header="Organisation Units"
-        description="Use organisation units to organise users and entities."
-      />
-      <OrganizationTreeApp />
+      <Outlet />
     </div>
   );
 };

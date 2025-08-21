@@ -1,13 +1,9 @@
-import PageHeaderApp from "../../../components/header/page-header/page-header";
+import { Outlet } from "react-router";
 
 const RolesApp = () => {
   return (
     <div>
-      <PageHeaderApp
-        header="Roles"
-        description="Use roles to group permissions."
-      />
-      RolesApp
+      <Outlet />
     </div>
   );
 };
