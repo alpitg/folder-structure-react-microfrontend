@@ -10,6 +10,7 @@ import type { IOrganizationUnitsData } from "../../interfaces/organization-units
 import ModelApp from "../../../../components/ui/model/model";
 import PageHeaderApp from "../../../../components/header/page-header/page-header";
 import { ROUTE_URL } from "../../../../components/auth/constants/routes.const";
+import OrganizationUnitsFilterApp from "./filter/organization-units-filter";
 
 type sortType = "newest" | "oldest";
 
@@ -79,7 +80,7 @@ const OrganizationUnitsListApp = () => {
     if (isUpdateSuccess) {
       reset(); // clear form after success
       setShowAddModel(false); // close modal
-      refetch(); // 👈 refresh list
+      refetch(); // refresh list
     }
   }, [isUpdateSuccess, reset, refetch]);
 
@@ -109,18 +110,18 @@ const OrganizationUnitsListApp = () => {
 
           <div className="card">
             <div className="card-body">
-              {/* <OrganizationUnitsListFilterApp
-            page={page}
-            setPage={setPage}
-            search={search}
-            setSearch={setSearch}
-            pages={data?.pages || 1}
-            onSearch={() => setPage(1)}
-            pageSize={data?.pageSize || 0}
-            total={data?.total || 0}
-            sort={sort}
-            setSort={handleSortChange}
-          /> */}
+              <OrganizationUnitsFilterApp
+                page={page}
+                setPage={setPage}
+                search={search}
+                setSearch={setSearch}
+                pages={data?.pages || 1}
+                onSearch={() => setPage(1)}
+                pageSize={data?.pageSize || 0}
+                total={data?.total || 0}
+                sort={sort}
+                setSort={handleSortChange}
+              />
 
               <div className="table-responsive">
                 <table className="table table-row-dashed table-row-gray-300 gy-7">
