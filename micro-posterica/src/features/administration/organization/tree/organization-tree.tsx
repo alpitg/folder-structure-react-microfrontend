@@ -101,15 +101,15 @@ export function buildOrganizationUnitTree(
 const AddOrganizationUnitForm = ({
   onClose,
   onSuccess,
-  isLoading,
 }: {
   onClose: () => void;
   onSuccess: () => void;
-  isLoading: boolean;
 }) => {
   const { register, handleSubmit, reset } =
     useFormContext<IOrganizationUnitsData>();
-  const [addOrganizationUnits] = useAddOrganizationUnitsMutation();
+
+  const [addOrganizationUnits, { isLoading }] =
+    useAddOrganizationUnitsMutation();
 
   const onSubmit = async (values: IOrganizationUnitsData) => {
     try {
@@ -174,8 +174,7 @@ const OrganizationTreeApp = ({
 }) => {
   const [showAddModel, setShowAddModel] = useState<boolean>(false);
   const methods = useForm<IOrganizationUnitsData>();
-  const { isLoading: isAddLoading, isSuccess: isAddSuccess } =
-    useAddOrganizationUnitsMutation()[1];
+  const { isSuccess: isAddSuccess } = useAddOrganizationUnitsMutation()[1];
 
   useEffect(() => {
     if (isAddSuccess) {
@@ -216,7 +215,6 @@ const OrganizationTreeApp = ({
           <AddOrganizationUnitForm
             onClose={() => setShowAddModel(false)}
             onSuccess={refetch}
-            isLoading={isAddLoading}
           />
         </FormProvider>
       </ModelApp>
