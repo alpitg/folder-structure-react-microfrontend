@@ -1,6 +1,14 @@
+import SamplesApp from "../samples/samples";
+
 const Sample1App = () => {
   return (
     <div className="container">
+      <div className="col-sm-12">
+        <SamplesApp />
+        <br />
+        <br />
+      </div>
+
       <div className="col-sm-12">
         <h2>File upload - items list - </h2>
         <br />
@@ -62,6 +70,8 @@ const Sample1App = () => {
         </div>
       </div>
       <div className="col-sm-12">
+        <br />
+        <br />
         <h2>Dropdown menu - For filter this can be used</h2>
         <button
           type="button"

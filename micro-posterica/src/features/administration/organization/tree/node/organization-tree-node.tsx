@@ -14,15 +14,24 @@ const OrganizationTreeNodeApp = ({
     <li className="list-unstyled">
       <div
         className="d-flex align-items-center py-2 gap-3"
-        style={{ cursor: hasChildren ? "pointer" : "default" }}
-        onClick={() => hasChildren && setExpanded(!expanded)}
+        // style={{ cursor: hasChildren ? "pointer" : "default" }}
       >
         {/* Chevron */}
         {hasChildren ? (
           expanded ? (
-            <i className="bi bi-chevron-down text-muted" />
+            <i
+              className={`bi bi-chevron-down text-muted ${
+                hasChildren ? "cursor-pointer" : "cursor-default"
+              }`}
+              onClick={() => hasChildren && setExpanded(!expanded)}
+            />
           ) : (
-            <i className="bi bi-chevron-right text-muted" />
+            <i
+              className={`bi bi-chevron-right text-muted ${
+                hasChildren ? "cursor-pointer" : "cursor-default"
+              }`}
+              onClick={() => hasChildren && setExpanded(!expanded)}
+            />
           )
         ) : (
           <span className="me-3"></span>
