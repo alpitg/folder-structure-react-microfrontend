@@ -147,17 +147,19 @@ const RoleListApp = () => {
                       {formattedDate(role?.creationTime)}
                     </td>
                     <td className="align-content-center">
-                      <button
-                        type="button"
-                        className="btn btn-light text-hover-danger btn-icon btn-sm"
-                        onClick={() => {
-                          setSelectedRole(role); // store which role to delete
-                          setShowDeleteConfirmationModel(true);
-                        }}
-                        aria-label="Delete role"
-                      >
-                        <i className="bi bi-trash3" />
-                      </button>
+                      {!role?.isStatic && (
+                        <button
+                          type="button"
+                          className="btn btn-light text-hover-danger btn-icon btn-sm"
+                          onClick={() => {
+                            setSelectedRole(role); // store which role to delete
+                            setShowDeleteConfirmationModel(true);
+                          }}
+                          aria-label="Delete role"
+                        >
+                          <i className="bi bi-trash3" />
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}
