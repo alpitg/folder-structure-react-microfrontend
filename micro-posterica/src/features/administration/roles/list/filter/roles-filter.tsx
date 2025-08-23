@@ -47,7 +47,7 @@ const RolesFilterApp = ({
             <input
               type="text"
               className="form-control form-control-solid ps-12"
-              placeholder="Search by roles name / code"
+              placeholder="Search by roles name"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && onSearch()}

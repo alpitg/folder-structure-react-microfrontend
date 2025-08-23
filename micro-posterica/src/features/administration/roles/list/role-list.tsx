@@ -6,6 +6,7 @@ import PageHeaderApp from "../../../../components/header/page-header/page-header
 import { ROUTE_URL } from "../../../../components/auth/constants/routes.const";
 import RolesFilterApp from "./filter/roles-filter";
 import RolesFormApp from "../form/roles-form";
+import { formattedDate } from "../../../../utils/date.util";
 import { useGetRolesQuery } from "../../../../app/redux/administration/roles/roles.api";
 
 type sortType = "newest" | "oldest";
@@ -86,8 +87,7 @@ const RoleListApp = () => {
               <thead>
                 <tr className="fw-bold fs-6 text-gray-800">
                   <th>NAME</th>
-                  <th>DESCRIPTION</th>
-                  <th>PERMISSIONS</th>
+                  <th>CREATED TIME</th>
                   <th>STATUS</th>
                 </tr>
               </thead>
@@ -104,9 +104,13 @@ const RoleListApp = () => {
                       >
                         {role?.displayName}
                       </NavLink>
+
+                      <span>
+                        <span className="badge badge-primary me-2">Static</span>
+                        <span className="badge badge-dark">Default</span>
+                      </span>
                     </td>
-                    <td>{role?.description || ""}</td>
-                    {/* <td>{role?.permissions?.length || 0}</td> */}
+                    <td>{formattedDate(role?.creationTime)}</td>
                     <td>{role?.isActive}</td>
                   </tr>
                 ))}
