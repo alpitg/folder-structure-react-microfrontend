@@ -88,13 +88,13 @@ const RoleListApp = () => {
                 <tr className="fw-bold fs-6 text-gray-800">
                   <th>NAME</th>
                   <th>CREATED TIME</th>
-                  <th>STATUS</th>
+                  <th>ACTIONS</th>
                 </tr>
               </thead>
               <tbody className="fw-semibold text-gray-600">
                 {roleData?.items?.map((role) => (
                   <tr key={role?.id}>
-                    <td>
+                    <td className="align-content-center">
                       <NavLink
                         className="btn btn-sm fs-5 fw-bold"
                         to={ROUTE_URL.ADMINISTRATION.ROLES.EDIT.replace(
@@ -106,12 +106,25 @@ const RoleListApp = () => {
                       </NavLink>
 
                       <span>
-                        <span className="badge badge-primary me-2">Static</span>
-                        <span className="badge badge-dark">Default</span>
+                        {role?.isActive && (
+                          <span className="badge badge-success me-2">
+                            Active
+                          </span>
+                        )}
+                        {role?.isStatic && (
+                          <span className="badge badge-primary me-2">
+                            Static
+                          </span>
+                        )}
+                        {role?.isDefault && (
+                          <span className="badge badge-dark me-2">Default</span>
+                        )}
                       </span>
                     </td>
-                    <td>{formattedDate(role?.creationTime)}</td>
-                    <td>{role?.isActive}</td>
+                    <td className="align-content-center">
+                      {formattedDate(role?.creationTime)}
+                    </td>
+                    <td className="align-content-center">{role?.isActive}</td>
                   </tr>
                 ))}
               </tbody>

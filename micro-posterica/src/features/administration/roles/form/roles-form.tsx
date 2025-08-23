@@ -23,6 +23,20 @@ const RolesFormApp = ({ mode, handleClose }: RolesFormAppProps) => {
 
   const permissionItems: IRolesPermissionItem[] = [
     {
+      name: "Pages",
+      displayName: "Pages",
+      description: "Access to all pages",
+      parentName: "",
+      isGrantedByDefault: false,
+    },
+    {
+      name: "Pages.Administration",
+      displayName: "Administration",
+      description: "Access to all Administration pages",
+      parentName: "Pages",
+      isGrantedByDefault: false,
+    },
+    {
       name: "Pages.Administration.OrganizationUnits",
       displayName: "Organization Units",
       description: "Access to organization units",
@@ -93,6 +107,34 @@ const RolesFormApp = ({ mode, handleClose }: RolesFormAppProps) => {
       isGrantedByDefault: false,
     },
     {
+      name: "Pages.Administration.Users.Create",
+      displayName: "Create User",
+      description: "Create new user",
+      parentName: "Pages.Administration.Users",
+      isGrantedByDefault: false,
+    },
+    {
+      name: "Pages.Administration.Users.Edit",
+      displayName: "Edit User",
+      description: "Edit user",
+      parentName: "Pages.Administration.Users",
+      isGrantedByDefault: false,
+    },
+    {
+      name: "Pages.Administration.Users.Delete",
+      displayName: "Delete User",
+      description: "Delete existing user",
+      parentName: "Pages.Administration.Users",
+      isGrantedByDefault: false,
+    },
+    {
+      name: "Pages.Catalog",
+      displayName: "Catalog",
+      description: "Manage access for Catalog",
+      parentName: "Pages",
+      isGrantedByDefault: false,
+    },
+    {
       name: "Pages.Catalog.Product",
       displayName: "Products",
       description: "Manage products in catalog",
@@ -104,6 +146,13 @@ const RolesFormApp = ({ mode, handleClose }: RolesFormAppProps) => {
       displayName: "Product Categories",
       description: "Manage product categories",
       parentName: "Pages.Catalog",
+      isGrantedByDefault: false,
+    },
+    {
+      name: "Pages.Sales",
+      displayName: "Sales",
+      description: "Manage access for Sales",
+      parentName: "Pages",
       isGrantedByDefault: false,
     },
     {
@@ -145,6 +194,7 @@ const RolesFormApp = ({ mode, handleClose }: RolesFormAppProps) => {
 
   //#endregion
 
+  //#region form
   const methods = useForm<IRoleWithPermissions>();
   const {
     register,
@@ -171,8 +221,9 @@ const RolesFormApp = ({ mode, handleClose }: RolesFormAppProps) => {
       addRoles(request);
     }
   };
+  //#endregion
 
-  // Navigate after add or update
+  //#region useEffect
   useEffect(() => {
     if (isSuccess) {
       reset();
@@ -197,6 +248,8 @@ const RolesFormApp = ({ mode, handleClose }: RolesFormAppProps) => {
       });
     }
   }, [isEditMode, data, methods]);
+
+  //#endregion
 
   if (isEditMode && isRolesLoading) {
     return <p>Loading details...</p>;

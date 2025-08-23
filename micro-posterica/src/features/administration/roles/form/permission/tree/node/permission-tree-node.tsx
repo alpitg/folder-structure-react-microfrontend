@@ -1,10 +1,47 @@
+import type { IRoleWithPermissions } from "../../../../../interfaces/roles.model";
 import type { ITreeNode } from "../../../../../../../interfaces/tree-node.model";
+import { useFormContext } from "react-hook-form";
 import { useState } from "react";
 
 const PermissionTreeNodeApp = ({ props }: { props: ITreeNode }) => {
   const [expanded, setExpanded] = useState(false);
+  const { setValue, watch } = useFormContext<IRoleWithPermissions>();
 
   const hasChildren = props?.children && props?.children.length > 0;
+
+  const granted = watch("grantedPermissionNames") || [];
+  const isChecked = granted.includes(props.code);
+
+  // Utility: recursively get all descendant codes
+  const getDescendantCodes = (node: ITreeNode): string[] => {
+    let codes: string[] = [node.code];
+    for (const child of node.children || []) {
+      codes = [...codes, ...getDescendantCodes(child)];
+    }
+    return codes;
+  };
+
+  const handleToggle = () => {
+    const allCodes = getDescendantCodes(props); // parent + children
+
+    if (isChecked) {
+      // Uncheck parent + all children
+      setValue(
+        "grantedPermissionNames",
+        granted.filter((x) => !allCodes.includes(x)),
+        { shouldDirty: true }
+      );
+    } else {
+      // Check parent + all children
+      setValue(
+        "grantedPermissionNames",
+        [...new Set([...granted, ...allCodes])],
+        {
+          shouldDirty: true,
+        }
+      );
+    }
+  };
 
   return (
     <div>
@@ -31,11 +68,13 @@ const PermissionTreeNodeApp = ({ props }: { props: ITreeNode }) => {
             <span className="me-4"></span>
           )}
 
+          {/* Checkbox */}
           <div className="form-check">
             <input
-              className="form-check-input cursor-pointer"
               type="checkbox"
-              value=""
+              className="form-check-input cursor-pointer"
+              checked={isChecked}
+              onChange={handleToggle}
             />
           </div>
 
