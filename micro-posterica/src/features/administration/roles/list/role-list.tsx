@@ -1,9 +1,11 @@
 import { NavLink, useLocation } from "react-router";
 import { useEffect, useState } from "react";
 
+import ModelApp from "../../../../components/ui/model/model";
 import PageHeaderApp from "../../../../components/header/page-header/page-header";
 import { ROUTE_URL } from "../../../../components/auth/constants/routes.const";
 import RolesFilterApp from "./filter/roles-filter";
+import RolesFormApp from "../form/roles-form";
 import { useGetRolesQuery } from "../../../../app/redux/administration/roles/roles.api";
 
 type sortType = "newest" | "oldest";
@@ -13,6 +15,7 @@ const RoleListApp = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<sortType>("newest");
+  const [showFormModel, setShowFormModel] = useState<boolean>(false);
 
   // Query hook for roles
   const {
@@ -46,13 +49,13 @@ const RoleListApp = () => {
         header="Roles"
         description="Use roles to group permissions."
       >
-        <NavLink
-          to={ROUTE_URL.ADMINISTRATION.ROLES.ADD}
+        <button
           className="btn btn-primary btn-sm"
+          onClick={() => setShowFormModel(!showFormModel)}
         >
           <i className="bi bi-plus-lg fs-3"></i>
           Add New Role
-        </NavLink>
+        </button>
       </PageHeaderApp>
 
       <div className="card">
@@ -68,6 +71,7 @@ const RoleListApp = () => {
             total={roleData?.total || 0}
             sort={sort}
             setSort={handleSortChange}
+            handleRefresh={refetch}
           />
 
           <div className="table-responsive">
@@ -102,6 +106,10 @@ const RoleListApp = () => {
               </tbody>
             </table>
           </div>
+
+          <ModelApp show={showFormModel}>
+            <RolesFormApp mode="add" />
+          </ModelApp>
         </div>
       </div>
     </div>

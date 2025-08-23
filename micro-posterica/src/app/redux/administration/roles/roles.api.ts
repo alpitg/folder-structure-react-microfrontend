@@ -1,5 +1,6 @@
 import type {
   GetRolesParams,
+  IRolesData,
   PaginatedRoles,
 } from "../../../../features/administration/interfaces/roles.model";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
@@ -20,46 +21,45 @@ export const rolesApi = createApi({
       }),
     }),
 
-    // getRolesDetail: builder.query<IRolesData, string>({
-    //   query: (productId) =>
-    //     GetEnvConfig()?.api?.baseUrl +
-    //     GetEnvConfig()?.api?.catalog?.product?.detail?.replace(
-    //       "{id}",
-    //       productId
-    //     ),
-    // }),
+    getRolesDetail: builder.query<IRolesData, string>({
+      query: (productId) =>
+        GetEnvConfig()?.api?.baseUrl +
+        GetEnvConfig()?.api?.administration?.roles?.detail?.replace(
+          "{id}",
+          productId
+        ),
+    }),
 
-    // addRoles: builder.mutation<IRolesData, IRolesData>({
-    //   query: (body) => ({
-    //     url:
-    //       GetEnvConfig()?.api?.baseUrl +
-    //       GetEnvConfig()?.api?.catalog?.product?.add,
-    //     method: "POST",
-    //     body,
-    //   }),
-    // }),
+    addRoles: builder.mutation<IRolesData, IRolesData>({
+      query: (body) => ({
+        url:
+          GetEnvConfig()?.api?.baseUrl +
+          GetEnvConfig()?.api?.administration?.roles?.add,
+        method: "POST",
+        body,
+      }),
+    }),
 
-    //   updateRoles: builder.mutation<
-    //     IRolesData,
-    //     { id: string; data: IRolesData }
-    //   >({
-    //     query: ({ id, data }) => ({
-    //       url:
-    //         GetEnvConfig()?.api?.baseUrl +
-    //         GetEnvConfig()?.api?.catalog?.product?.update?.replace(
-    //           "{id}",
-    //           id
-    //         ),
-    //       method: "PUT",
-    //       body: data,
-    //     }),
-    //   }),
+    updateRoles: builder.mutation<IRolesData, { id: string; data: IRolesData }>(
+      {
+        query: ({ id, data }) => ({
+          url:
+            GetEnvConfig()?.api?.baseUrl +
+            GetEnvConfig()?.api?.administration?.roles?.update?.replace(
+              "{id}",
+              id
+            ),
+          method: "PUT",
+          body: data,
+        }),
+      }
+    ),
   }),
 });
 
 export const {
   useGetRolesQuery,
-  // useGetRolesDetailQuery,
-  // useAddRolesMutation,
-  // useUpdateRolesMutation,
+  useGetRolesDetailQuery,
+  useAddRolesMutation,
+  useUpdateRolesMutation,
 } = rolesApi;

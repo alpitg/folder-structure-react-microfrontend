@@ -23,7 +23,6 @@ const OrganizationTreeNodeApp = (props: IOrganizationUnitTree) => {
       <li className="list-unstyled">
         <div
           className="d-flex align-items-center py-2 gap-3"
-          // style={{ cursor: hasChildren ? "pointer" : "default" }}
         >
           {/* Chevron */}
           {hasChildren ? (

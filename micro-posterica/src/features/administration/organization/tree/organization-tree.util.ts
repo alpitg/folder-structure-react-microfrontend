@@ -24,11 +24,11 @@ export const buildOrganizationUnitTree = (
 
   // 2. Link children with parents
   for (const unit of units) {
-    const node = map.get(unit.id || "");
+    const node = map.get(unit?.id || "");
     if (!node) continue;
 
-    if (unit.parentId && map.has(unit.parentId)) {
-      map.get(unit.parentId)!.children.push(node);
+    if (unit?.parentId && map.has(unit?.parentId)) {
+      map.get(unit?.parentId)!.children.push(node);
     } else {
       roots.push(node); // top-level
     }

@@ -11,6 +11,7 @@ interface ProductFilterProps {
   total: number;
   sort?: "newest" | "oldest";
   setSort?: (sort: "newest" | "oldest") => void;
+  handleRefresh?: () => void;
 }
 
 const RolesFilterApp = ({
@@ -24,6 +25,7 @@ const RolesFilterApp = ({
   total,
   sort = "newest",
   setSort = () => {},
+  handleRefresh,
 }: ProductFilterProps) => {
   const inputRef = useAutoFocus<HTMLInputElement>();
 
@@ -116,6 +118,16 @@ const RolesFilterApp = ({
             aria-label="Next page"
           >
             <i className="bi bi-chevron-right" />
+          </button>
+
+          <button
+            type="button"
+            className="btn btn-light btn-icon btn-sm"
+            onClick={handleRefresh}
+            aria-label="Previous page"
+            title="Refresh"
+          >
+            <i className="bi bi-arrow-repeat" />
           </button>
         </div>
       </div>

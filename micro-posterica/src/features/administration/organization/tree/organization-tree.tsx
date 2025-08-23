@@ -15,7 +15,7 @@ const OrganizationTreeApp = ({
   data?: IOrganizationUnitsData[];
   refetch: () => void;
 }) => {
-  const [showAddModel, setShowAddModel] = useState<boolean>(false);
+  const [showFormModel, setShowFormModel] = useState<boolean>(false);
   const methods = useForm<IOrganizationUnitsData>();
   const { isSuccess: isAddSuccess } = useAddOrganizationUnitsMutation()[1];
 
@@ -37,7 +37,7 @@ const OrganizationTreeApp = ({
               <button
                 type="button"
                 className="btn btn-primary btn-sm"
-                onClick={() => setShowAddModel(true)}
+                onClick={() => setShowFormModel(true)}
               >
                 <i className="bi bi-plus-lg fs-3"></i>
                 Add Root unit
@@ -58,10 +58,10 @@ const OrganizationTreeApp = ({
               )}
             </div>
 
-            <ModelApp show={showAddModel}>
+            <ModelApp show={showFormModel}>
               <FormProvider {...methods}>
                 <OrganizationTreeFormApp
-                  onClose={() => setShowAddModel(false)}
+                  onClose={() => setShowFormModel(false)}
                   onSuccess={refetch}
                 />
               </FormProvider>
@@ -77,7 +77,7 @@ const OrganizationTreeApp = ({
                 <button
                   type="button"
                   className="btn btn-primary btn-sm"
-                  onClick={() => setShowAddModel(true)}
+                  onClick={() => setShowFormModel(true)}
                 >
                   <i className="bi bi-plus-lg fs-3"></i>
                   Add Members
@@ -135,7 +135,7 @@ const OrganizationTreeApp = ({
                 <button
                   type="button"
                   className="btn btn-primary btn-sm"
-                  onClick={() => setShowAddModel(true)}
+                  onClick={() => setShowFormModel(true)}
                 >
                   <i className="bi bi-plus-lg fs-3"></i>
                   Add Roles
