@@ -1,7 +1,6 @@
 import type {
   GetRolesParams,
   IRoleWithPermissions,
-  IRolesData,
   PaginatedRoles,
 } from "../../../../features/administration/interfaces/roles.model";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
@@ -25,10 +24,7 @@ export const rolesApi = createApi({
     getRolesDetail: builder.query<IRoleWithPermissions, string>({
       query: (id) =>
         GetEnvConfig()?.api?.baseUrl +
-        GetEnvConfig()?.api?.administration?.roles?.detail?.replace(
-          "{id}",
-          id
-        ),
+        GetEnvConfig()?.api?.administration?.roles?.detail?.replace("{id}", id),
     }),
 
     addRoles: builder.mutation<IRoleWithPermissions, IRoleWithPermissions>({
@@ -56,6 +52,18 @@ export const rolesApi = createApi({
         body: data,
       }),
     }),
+
+    deleteRole: builder.mutation<IRoleWithPermissions, string>({
+      query: (id) => ({
+        url:
+          GetEnvConfig()?.api?.baseUrl +
+          GetEnvConfig()?.api?.administration?.roles?.delete?.replace(
+            "{id}",
+            id
+          ),
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
@@ -64,4 +72,5 @@ export const {
   useGetRolesDetailQuery,
   useAddRolesMutation,
   useUpdateRolesMutation,
+  useDeleteRoleMutation,
 } = rolesApi;

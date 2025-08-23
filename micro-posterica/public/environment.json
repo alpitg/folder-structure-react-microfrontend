@@ -13,21 +13,21 @@
         "detail": "/api/organization-units/{id}",
         "add": "/api/organization-units",
         "update": "/api/organization-units/{id}",
-        "delete": "/api/organization-units/delete"
+        "delete": "/api/organization-units/{id}"
       },
       "roles": {
         "list": "/api/roles/search",
         "detail": "/api/roles/{id}",
         "add": "/api/roles",
         "update": "/api/roles/{id}",
-        "delete": "/api/roles/delete"
+        "delete": "/api/roles/{id}"
       },
       "users": {
         "list": "/api/users/search",
         "detail": "/api/users/{id}",
         "add": "/api/users",
         "update": "/api/users/{id}",
-        "delete": "/api/users/delete"
+        "delete": "/api/users/{id}"
       }
     },
     "profile": {

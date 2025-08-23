@@ -1,12 +1,16 @@
+import {
+  useDeleteRoleMutation,
+  useGetRolesQuery,
+} from "../../../../app/redux/administration/roles/roles.api";
 import { useEffect, useState } from "react";
 
+import DeleteModelApp from "../../../../components/delete-model/delete-model";
 import type { IRolesData } from "../../interfaces/roles.model";
 import ModelApp from "../../../../components/ui/model/model";
 import PageHeaderApp from "../../../../components/header/page-header/page-header";
 import RolesFilterApp from "./filter/roles-filter";
 import RolesFormApp from "../form/roles-form";
 import { formattedDate } from "../../../../utils/date.util";
-import { useGetRolesQuery } from "../../../../app/redux/administration/roles/roles.api";
 import { useLocation } from "react-router";
 
 type sortType = "newest" | "oldest";
@@ -17,9 +21,11 @@ const RoleListApp = () => {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<sortType>("newest");
   const [showFormModel, setShowFormModel] = useState<boolean>(false);
+  const [showDeleteConfirmationModel, setShowDeleteConfirmationModel] =
+    useState<boolean>(false);
   const [selectedRole, setSelectedRole] = useState<IRolesData | null>(null);
 
-  // Query hook for roles
+  //#region RTK APIs
   const {
     data: roleData,
     isLoading,
@@ -30,6 +36,9 @@ const RoleListApp = () => {
     searchText: search,
     sort,
   });
+
+  const [deleteRole] = useDeleteRoleMutation();
+  //#endregion
 
   const handleSortChange = (newSort: sortType) => {
     setSort(newSort);
@@ -42,6 +51,10 @@ const RoleListApp = () => {
     if (refresh) {
       refetch();
     }
+  };
+
+  const handleDeleteConfirm = (id: string) => {
+    deleteRole(id);
   };
 
   // Refresh on navigation with state
@@ -99,38 +112,52 @@ const RoleListApp = () => {
               <tbody className="fw-semibold text-gray-600">
                 {roleData?.items?.map((role) => (
                   <tr key={role?.id}>
-                    <td className="d-flex gap-5 align-content-center">
-                      <button
-                        className="btn btn-link text-gray-800 text-hover-primary fs-5 fw-bold p-0"
-                        onClick={() => {
-                          setSelectedRole(role);
-                          setShowFormModel(true);
-                        }}
-                      >
-                        {role?.displayName}
-                      </button>
+                    <td className="align-content-center">
+                      <span className="d-flex gap-5">
+                        <button
+                          className="btn btn-link text-gray-800 text-hover-primary fs-5 fw-bold p-0"
+                          onClick={() => {
+                            setSelectedRole(role);
+                            setShowFormModel(true);
+                          }}
+                        >
+                          {role?.displayName}
+                        </button>
 
-                      <span>
-                        {role?.isActive && (
-                          <span className="badge badge-success me-2">
-                            Active
-                          </span>
-                        )}
-                        {role?.isStatic && (
-                          <span className="badge badge-primary me-2">
-                            Static
-                          </span>
-                        )}
-                        {role?.isDefault && (
-                          <span className="badge badge-dark me-2">Default</span>
-                        )}
+                        <span>
+                          {role?.isActive && (
+                            <span className="badge badge-success me-2">
+                              Active
+                            </span>
+                          )}
+                          {role?.isStatic && (
+                            <span className="badge badge-primary me-2">
+                              Static
+                            </span>
+                          )}
+                          {role?.isDefault && (
+                            <span className="badge badge-dark me-2">
+                              Default
+                            </span>
+                          )}
+                        </span>
                       </span>
                     </td>
                     <td className="align-content-center">
                       {formattedDate(role?.creationTime)}
                     </td>
                     <td className="align-content-center">
-                      {role?.isActive ? "Yes" : "No"}
+                      <button
+                        type="button"
+                        className="btn btn-light text-hover-danger btn-icon btn-sm"
+                        onClick={() => {
+                          setSelectedRole(role); // store which role to delete
+                          setShowDeleteConfirmationModel(true);
+                        }}
+                        aria-label="Delete role"
+                      >
+                        <i className="bi bi-trash3" />
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -145,6 +172,18 @@ const RoleListApp = () => {
               handleClose={handleFormClose}
             />
           </ModelApp>
+
+          <DeleteModelApp
+            handleCancel={() => setShowDeleteConfirmationModel(false)}
+            handleConfirm={() => {
+              if (selectedRole?.id) {
+                handleDeleteConfirm(selectedRole?.id);
+                setShowDeleteConfirmationModel(false);
+                refetch(); // refresh after deletion
+              }
+            }}
+            show={showDeleteConfirmationModel}
+          />
         </div>
       </div>
     </div>
