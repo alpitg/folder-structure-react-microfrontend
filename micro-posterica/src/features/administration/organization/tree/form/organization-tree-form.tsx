@@ -41,12 +41,13 @@ const OrganizationTreeFormApp = ({
     <form onSubmit={handleSubmit(onSubmit)}>
       {parent && (
         <div className="fv-row w-100 py-5">
-          <label className="form-label">
-            Parent Organization Unit <span className="text-danger">*</span>
+          <label className="form-label" htmlFor="parentOrganizationUnits">
+            Add sub unit for:
           </label>
           <input
+            id="parentOrganizationUnits"
             type="text"
-            className="form-control form-control-flush"
+            className="form-control form-control-flush fw-bold"
             placeholder="Parent Organization unit name"
             readOnly={true}
             value={parent?.label}
@@ -54,10 +55,11 @@ const OrganizationTreeFormApp = ({
         </div>
       )}
       <div className="fv-row w-100 py-5">
-        <label className="form-label">
+        <label className="form-label" htmlFor="organizationName">
           Name <span className="text-danger">*</span>
         </label>
         <input
+          id="organizationName"
           type="text"
           className="form-control form-control-solid"
           placeholder="Organization unit name"
