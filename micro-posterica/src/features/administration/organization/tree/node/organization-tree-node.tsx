@@ -12,7 +12,7 @@ import { useState } from "react";
 const OrganizationTreeNodeApp = (props: IOrganizationUnitTree) => {
   const { refetch } = useGetOrganizationUnitsQuery();
 
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
   const [showAddModel, setShowAddModel] = useState<boolean>(false);
   const methods = useForm<IOrganizationUnitsData>();
 
