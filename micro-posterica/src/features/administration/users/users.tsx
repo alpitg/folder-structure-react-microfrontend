@@ -1,13 +1,9 @@
-import PageHeaderApp from "../../../components/header/page-header/page-header";
+import { Outlet } from "react-router";
 
 const UsersApp = () => {
   return (
     <div>
-      <PageHeaderApp
-        header="Users"
-        description="Manage users and permissions."
-      />
-      UsersApp
+      <Outlet />
     </div>
   );
 };

@@ -8,6 +8,7 @@ import { organizationUnitsApi } from "./redux/administration/organization-units/
 import { productsApi } from "./redux/catalog/product/product.api";
 import { rolesApi } from "./redux/administration/roles/roles.api";
 import salesReducer from "./redux/sales/sales.reducer";
+import { usersApi } from "./redux/administration/users/users.api";
 
 const store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ const store = configureStore({
     // administration
     [organizationUnitsApi.reducerPath]: organizationUnitsApi.reducer,
     [rolesApi.reducerPath]: rolesApi.reducer,
+    [usersApi.reducerPath]: usersApi.reducer,
 
     [productsApi.reducerPath]: productsApi.reducer,
     [ordersApi.reducerPath]: ordersApi.reducer,
@@ -32,6 +34,7 @@ const store = configureStore({
       // administration
       organizationUnitsApi.middleware,
       rolesApi.middleware,
+      usersApi.middleware,
 
       productsApi.middleware,
       ordersApi.middleware,

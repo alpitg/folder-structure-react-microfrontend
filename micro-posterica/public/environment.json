@@ -28,7 +28,8 @@
         "detail": "/api/users/{id}",
         "add": "/api/users",
         "update": "/api/users/{id}",
-        "delete": "/api/users/{id}"
+        "delete": "/api/users/{id}",
+        "permissions": "/api/users/permissions"
       }
     },
     "profile": {

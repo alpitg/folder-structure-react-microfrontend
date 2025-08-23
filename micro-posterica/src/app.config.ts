@@ -26,7 +26,7 @@ let environment = {
         add: "",
         update: "",
         delete: "",
-        permissions: ""
+        permissions: "",
       },
       users: {
         list: "",
@@ -34,6 +34,7 @@ let environment = {
         add: "",
         update: "",
         delete: "",
+        permissions: "",
       },
     },
     master: {
