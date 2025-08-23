@@ -1,72 +1,12 @@
-export interface IRolesMedia {
-  url: string;
-  alt: string;
-}
-
-export interface IRolesPrice {
-  basePrice: number | null;
-  discountType: "none" | "percentage" | "fixed";
-  discountPercentage: number | null;
-  fixedDiscountedPrice: number | null;
-  taxClass: "tax_free" | "taxable_goods" | "non_taxable" | string;
-  vatPercent: number | null;
-}
-
-export interface IRolesInventory {
-  sku: string | null;
-  barcode: string | null;
-  quantityInShelf: number | null;
-  quantityInWarehouse: number | null;
-  /**
-   * @readonly this is readonly property
-   */
-  quantity?: number | null;
-  allowBackorders: boolean;
-}
-
-export interface IRolesVariation {
-  name: string;
-  values: string[];
-}
-
-export interface IRolesShipping {
-  isPhysical: boolean;
-  weightInKg: number | null;
-  lengthInCm: number | null;
-  widthInCm: number | null;
-  heightInCm: number | null;
-}
-
-export interface IRolesMeta {
-  metaTitle: string | null;
-  metaDescription: string | null;
-  metaKeywords: string[];
-}
-
-export interface IRolesScheduling {
-  publishAt: string | null;
-}
-
 export interface IRolesData {
-  id: string;
-  name: string;
-  code: string;
+  id: string; // Unique identifier
+  name: string; // Internal role name (e.g., "Admin")
+  displayName: string; // Display label (e.g., "Admin")
   description: string;
-  status: "published" | "inactive" | "scheduled" | "draft";
-  template: string;
-  categories: string[];
-  tags: string[];
-  media: IRolesMedia[];
-  price: IRolesPrice;
-  totalWishlistedCount: number;
-  inventory: IRolesInventory;
-  variations: IRolesVariation[];
-  shipping: IRolesShipping;
-  meta: IRolesMeta;
-  scheduling: IRolesScheduling;
-  rating: number;
-  createdAt: string;
-  updatedAt: string;
+  isDefault: boolean; // If assigned by default
+  isStatic: boolean; // If system/static role
+  isActive: boolean;
+  creationTime: string; // ISO timestamp, e.g. "2025-08-23T10:44:20.5455664"
 }
 
 export interface GetRolesParams {

@@ -100,7 +100,7 @@ const RoleListApp = () => {
                     </td>
                     <td>{role?.description || ""}</td>
                     {/* <td>{role?.permissions?.length || 0}</td> */}
-                    <td>{role?.status}</td>
+                    <td>{role?.isActive}</td>
                   </tr>
                 ))}
               </tbody>
@@ -108,7 +108,10 @@ const RoleListApp = () => {
           </div>
 
           <ModelApp show={showFormModel}>
-            <RolesFormApp mode="add" />
+            <RolesFormApp
+              mode="add"
+              onClose={() => setShowFormModel(!showFormModel)}
+            />
           </ModelApp>
         </div>
       </div>

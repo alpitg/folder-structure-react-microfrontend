@@ -15,9 +15,10 @@ import { buildPermissionTree } from "./roles-tree.util";
 
 type RolesFormAppProps = {
   mode: "add" | "edit";
+  onClose?: () => void;
 };
 
-const RolesFormApp = ({ mode }: RolesFormAppProps) => {
+const RolesFormApp = ({ mode, onClose }: RolesFormAppProps) => {
   const isEditMode = mode === "edit";
   const { id } = useParams<{ id?: string }>();
   const navigate = useNavigate();
@@ -67,8 +68,22 @@ const RolesFormApp = ({ mode }: RolesFormAppProps) => {
     },
     {
       name: "Pages.Administration.Roles.Create",
-      displayName: "Create new roles",
-      description: "Manage application roles",
+      displayName: "Create Role",
+      description: "Create new role",
+      parentName: "Pages.Administration.Roles",
+      isGrantedByDefault: false,
+    },
+    {
+      name: "Pages.Administration.Roles.Edit",
+      displayName: "Edit Role",
+      description: "Edit role",
+      parentName: "Pages.Administration.Roles",
+      isGrantedByDefault: false,
+    },
+    {
+      name: "Pages.Administration.Roles.Delete",
+      displayName: "Delete Role",
+      description: "Delete existing role",
       parentName: "Pages.Administration.Roles",
       isGrantedByDefault: false,
     },
@@ -128,10 +143,16 @@ const RolesFormApp = ({ mode }: RolesFormAppProps) => {
   });
 
   const isSuccess = isAddSuccess || isUpdateSuccess;
+  const isLoading = isaddRolesLoading || isUpdateRolesLoading;
 
   //#endregion
 
   const methods = useForm<IRolesData>();
+  const {
+    register,
+    reset,
+    formState: { errors },
+  } = methods;
 
   const onSubmit: SubmitHandler<IRolesData> = (data: IRolesData) => {
     // const request = mapOrderForApi(data);
@@ -159,53 +180,16 @@ const RolesFormApp = ({ mode }: RolesFormAppProps) => {
     }
   }, [isSuccess, navigate]);
 
-  // Populate form in edit mode
+  // ✅ Populate form in edit mode
   useEffect(() => {
     if (isEditMode && data) {
       methods.reset({
-        id: data?.id,
-        name: data?.name,
-        code: data?.code,
-        description: data?.description,
-        status: data?.status,
-        template: data?.template,
-        categories: data?.categories,
-        tags: data?.tags,
-        media: data?.media,
-        price: {
-          basePrice: data?.price?.basePrice,
-          discountType: data?.price?.discountType,
-          discountPercentage: data?.price?.discountPercentage,
-          fixedDiscountedPrice: data?.price?.fixedDiscountedPrice,
-          taxClass: data?.price?.taxClass,
-          vatPercent: data?.price?.vatPercent,
-        },
-        totalWishlistedCount: data?.totalWishlistedCount,
-        inventory: {
-          sku: data?.inventory?.sku,
-          barcode: data?.inventory?.barcode,
-          quantityInShelf: data?.inventory?.quantityInShelf,
-          quantityInWarehouse: data?.inventory?.quantityInWarehouse,
-          allowBackorders: data?.inventory?.allowBackorders,
-        },
-        variations: data?.variations,
-        shipping: {
-          isPhysical: data?.shipping.isPhysical,
-          weightInKg: data?.shipping.weightInKg,
-          lengthInCm: data?.shipping.lengthInCm,
-          widthInCm: data?.shipping.widthInCm,
-          heightInCm: data?.shipping.heightInCm,
-        },
-        meta: {
-          metaTitle: data?.meta.metaTitle,
-          metaDescription: data?.meta.metaDescription,
-          metaKeywords: data?.meta.metaKeywords,
-        },
-        scheduling: {
-          publishAt: data?.scheduling.publishAt,
-        },
-        createdAt: data?.createdAt,
-        updatedAt: data?.updatedAt,
+        id: data.id,
+        name: data.name,
+        displayName: data.displayName,
+        isDefault: data.isDefault,
+        isStatic: data.isStatic,
+        creationTime: data.creationTime,
       });
     }
   }, [isEditMode, data, methods]);
@@ -229,22 +213,9 @@ const RolesFormApp = ({ mode }: RolesFormAppProps) => {
                 ? "Update existing roles details."
                 : "Create a new roles."
             }
-          >
-            <button
-              type="submit"
-              className="btn btn-sm btn-flex btn-primary"
-              disabled={isaddRolesLoading || isUpdateRolesLoading}
-            >
-              {isaddRolesLoading || isUpdateRolesLoading ? (
-                <span className="spinner-border spinner-border-sm align-middle me-2"></span>
-              ) : (
-                <i className="bi bi-check2 fs-3"></i>
-              )}
-              Save changes
-            </button>
-          </PageHeaderApp>
+          ></PageHeaderApp>
 
-          <div className="form d-flex flex-column flex-lg-row">
+          <div className="form d-flex flex-column flex-lg-row mb-5">
             <div className="d-flex flex-column gap-7">
               <div
                 className="tab-pane active p-5"
@@ -261,13 +232,19 @@ const RolesFormApp = ({ mode }: RolesFormAppProps) => {
                   <input
                     id="RoleDisplayName"
                     type="text"
-                    name="DisplayName"
-                    required
-                    className="form-control"
+                    className={`form-control form-control-solid ${
+                      errors?.name ? "is-invalid" : ""
+                    }`}
+                    placeholder="Role Name"
+                    {...register("displayName", {
+                      required: "Role name is required",
+                    })}
                   />
-                  <div className="text-danger mt-1">
-                    This field is required.
-                  </div>
+                  {errors?.displayName?.message && (
+                    <div className="text-danger mt-1">
+                      {errors?.displayName?.message}
+                    </div>
+                  )}
                 </div>
 
                 <div className="form-check form-check-custom form-check-solid py-1">
@@ -316,6 +293,31 @@ const RolesFormApp = ({ mode }: RolesFormAppProps) => {
                 </div>
               </div>
             </div>
+          </div>
+
+          <div className="model-footer d-flex justify-content-end gap-4">
+            <button
+              type="button"
+              className="btn btn-secondary btn-sm"
+              onClick={() => {
+                reset();
+                onClose?.();
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="btn btn-sm btn-flex btn-primary"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <span className="spinner-border spinner-border-sm align-middle me-2"></span>
+              ) : (
+                <i className="bi bi-check2 fs-3"></i>
+              )}
+              Save changes
+            </button>
           </div>
         </form>
       </FormProvider>

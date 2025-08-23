@@ -3,7 +3,6 @@ import { useState } from "react";
 
 const PermissionTreeNodeApp = ({ props }: { props: ITreeNode }) => {
   const [expanded, setExpanded] = useState(false);
-  const [showAddModel, setShowAddModel] = useState<boolean>(false);
 
   const hasChildren = props?.children && props?.children.length > 0;
 
@@ -34,7 +33,7 @@ const PermissionTreeNodeApp = ({ props }: { props: ITreeNode }) => {
 
           <div className="form-check">
             <input
-              className="form-check-input"
+              className="form-check-input cursor-pointer"
               type="checkbox"
               value=""
               checked
