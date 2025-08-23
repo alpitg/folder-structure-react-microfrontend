@@ -16,8 +16,13 @@ const OrganizationTreeFormApp = ({
   onClose: () => void;
   onSuccess: () => void;
 }) => {
-  const { register, handleSubmit, reset, setValue } =
-    useFormContext<IOrganizationUnitsData>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useFormContext<IOrganizationUnitsData>();
 
   const [addOrganizationUnits, { isLoading }] =
     useAddOrganizationUnitsMutation();
@@ -61,10 +66,17 @@ const OrganizationTreeFormApp = ({
         <input
           id="organizationName"
           type="text"
-          className="form-control form-control-solid"
+          className={`form-control form-control-solid ${
+            errors?.displayName?.message ? "is-invalid" : ""
+          }`}
           placeholder="Organization unit name"
-          {...register("displayName", { required: true })}
+          {...register("displayName", {
+            required: "Organization unit name is required",
+          })}
         />
+        {errors?.displayName?.message && (
+          <div className="invalid-feedback">{errors?.displayName?.message}</div>
+        )}
       </div>
 
       <div className="model-footer d-flex justify-content-end gap-4">
