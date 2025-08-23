@@ -1,4 +1,4 @@
-export interface IRolesPermissionItem {
+export interface IRolePermission {
   name: string; // Unique permission name, e.g., "Pages.Administration"
   displayName: string; // Display label
   description: string | null; // Optional or nullable

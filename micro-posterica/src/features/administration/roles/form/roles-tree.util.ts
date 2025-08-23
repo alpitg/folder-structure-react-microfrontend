@@ -1,12 +1,12 @@
+import type { IRolePermission } from "../../interfaces/role-permission.model";
 import type { IRoleWithPermissions } from "../../interfaces/roles.model";
-import type { IRolesPermissionItem } from "../../interfaces/roles-permission.model";
 import type { ITreeNode } from "../../../../interfaces/tree-node.model";
 
 // ---------------- Tree Builder ----------------
 export const buildPermissionTree = (
-  permissions: IRolesPermissionItem[]
-): ITreeNode<IRolesPermissionItem>[] => {
-  const map = new Map<string, ITreeNode<IRolesPermissionItem>>();
+  permissions: IRolePermission[]
+): ITreeNode<IRolePermission>[] => {
+  const map = new Map<string, ITreeNode<IRolePermission>>();
 
   // 1. Initialize all nodes
   for (const perm of permissions) {
@@ -20,7 +20,7 @@ export const buildPermissionTree = (
     });
   }
 
-  const roots: ITreeNode<IRolesPermissionItem>[] = [];
+  const roots: ITreeNode<IRolePermission>[] = [];
 
   // 2. Link children with parents
   for (const perm of permissions) {

@@ -20,7 +20,8 @@
         "detail": "/api/roles/{id}",
         "add": "/api/roles",
         "update": "/api/roles/{id}",
-        "delete": "/api/roles/{id}"
+        "delete": "/api/roles/{id}",
+        "permissions": "/api/roles-permissions"
       },
       "users": {
         "list": "/api/users/search",

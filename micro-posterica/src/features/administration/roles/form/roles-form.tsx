@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import PageHeaderApp from "../../../../components/header/page-header/page-header";
 import {
   useAddRolesMutation,
+  useGetPermissionsQuery,
   useGetRolesDetailQuery,
   useUpdateRolesMutation,
 } from "../../../../app/redux/administration/roles/roles.api";
@@ -13,7 +14,6 @@ import type {
   IRoleWithPermissions,
 } from "../../interfaces/roles.model";
 import PermissionTreeApp from "./permission/tree/permission-tree";
-import type { IRolesPermissionItem } from "../../interfaces/roles-permission.model";
 import { buildPermissionTree, mapRolesForApi } from "./roles-tree.util";
 
 type RolesFormAppProps = {
@@ -25,158 +25,6 @@ type RolesFormAppProps = {
 const RolesFormApp = ({ mode, role, handleClose }: RolesFormAppProps) => {
   const isEditMode = mode === "edit";
   const id = role?.id || null;
-
-  const permissionItems: IRolesPermissionItem[] = [
-    {
-      name: "Pages",
-      displayName: "Pages",
-      description: "Access to all pages",
-      parentName: "",
-      isGrantedByDefault: false,
-    },
-    {
-      name: "Pages.Administration",
-      displayName: "Administration",
-      description: "Access to all Administration pages",
-      parentName: "Pages",
-      isGrantedByDefault: false,
-    },
-    {
-      name: "Pages.Administration.OrganizationUnits",
-      displayName: "Organization Units",
-      description: "Access to organization units",
-      parentName: "Pages.Administration",
-      isGrantedByDefault: false,
-    },
-    {
-      name: "Pages.Administration.OrganizationUnits.Detail",
-      displayName: "Organization Unit Details",
-      description: "View organization unit details",
-      parentName: "Pages.Administration.OrganizationUnits",
-      isGrantedByDefault: false,
-    },
-    {
-      name: "Pages.Administration.OrganizationUnits.Create",
-      displayName: "Create Organization Unit",
-      description: "Create new organization units",
-      parentName: "Pages.Administration.OrganizationUnits",
-      isGrantedByDefault: false,
-    },
-    {
-      name: "Pages.Administration.OrganizationUnits.Edit",
-      displayName: "Edit Organization Unit",
-      description: "Edit existing organization units",
-      parentName: "Pages.Administration.OrganizationUnits",
-      isGrantedByDefault: false,
-    },
-    {
-      name: "Pages.Administration.OrganizationUnits.Delete",
-      displayName: "Delete Organization Unit",
-      description: "Delete organization units",
-      parentName: "Pages.Administration.OrganizationUnits",
-      isGrantedByDefault: false,
-    },
-    {
-      name: "Pages.Administration.Roles",
-      displayName: "Roles",
-      description: "Manage application roles",
-      parentName: "Pages.Administration",
-      isGrantedByDefault: false,
-    },
-    {
-      name: "Pages.Administration.Roles.Create",
-      displayName: "Create Role",
-      description: "Create new role",
-      parentName: "Pages.Administration.Roles",
-      isGrantedByDefault: false,
-    },
-    {
-      name: "Pages.Administration.Roles.Edit",
-      displayName: "Edit Role",
-      description: "Edit role",
-      parentName: "Pages.Administration.Roles",
-      isGrantedByDefault: false,
-    },
-    {
-      name: "Pages.Administration.Roles.Delete",
-      displayName: "Delete Role",
-      description: "Delete existing role",
-      parentName: "Pages.Administration.Roles",
-      isGrantedByDefault: false,
-    },
-    {
-      name: "Pages.Administration.Users",
-      displayName: "Users",
-      description: "Manage users and their permissions",
-      parentName: "Pages.Administration",
-      isGrantedByDefault: false,
-    },
-    {
-      name: "Pages.Administration.Users.Create",
-      displayName: "Create User",
-      description: "Create new user",
-      parentName: "Pages.Administration.Users",
-      isGrantedByDefault: false,
-    },
-    {
-      name: "Pages.Administration.Users.Edit",
-      displayName: "Edit User",
-      description: "Edit user",
-      parentName: "Pages.Administration.Users",
-      isGrantedByDefault: false,
-    },
-    {
-      name: "Pages.Administration.Users.Delete",
-      displayName: "Delete User",
-      description: "Delete existing user",
-      parentName: "Pages.Administration.Users",
-      isGrantedByDefault: false,
-    },
-    {
-      name: "Pages.Catalog",
-      displayName: "Catalog",
-      description: "Manage access for Catalog",
-      parentName: "Pages",
-      isGrantedByDefault: false,
-    },
-    {
-      name: "Pages.Catalog.Product",
-      displayName: "Products",
-      description: "Manage products in catalog",
-      parentName: "Pages.Catalog",
-      isGrantedByDefault: false,
-    },
-    {
-      name: "Pages.Catalog.ProductCategory",
-      displayName: "Product Categories",
-      description: "Manage product categories",
-      parentName: "Pages.Catalog",
-      isGrantedByDefault: false,
-    },
-    {
-      name: "Pages.Sales",
-      displayName: "Sales",
-      description: "Manage access for Sales",
-      parentName: "Pages",
-      isGrantedByDefault: false,
-    },
-    {
-      name: "Pages.Sales.Order",
-      displayName: "Orders",
-      description: "Manage sales orders",
-      parentName: "Pages.Sales",
-      isGrantedByDefault: false,
-    },
-    {
-      name: "Pages.Sales.Customers",
-      displayName: "Customers",
-      description: "Manage sales customers",
-      parentName: "Pages.Sales",
-      isGrantedByDefault: false,
-    },
-  ];
-
-  const treeData = buildPermissionTree(permissionItems);
 
   //#region RTK APIs
   const [
@@ -197,6 +45,9 @@ const RolesFormApp = ({ mode, role, handleClose }: RolesFormAppProps) => {
     skip: !isEditMode,
     refetchOnMountOrArgChange: true,
   });
+
+  const { data: permissionItems } = useGetPermissionsQuery();
+  const treeData = buildPermissionTree(permissionItems || []);
 
   const isSuccess = isAddSuccess || isUpdateSuccess;
   const isLoading = isaddRolesLoading || isUpdateRolesLoading;

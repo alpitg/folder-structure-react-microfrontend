@@ -1,4 +1,4 @@
-import type { IRolesPermissionItem } from "./roles-permission.model";
+import type { IRolePermission } from "./role-permission.model";
 
 export interface IRolesData {
   id: string; // Unique identifier
@@ -14,7 +14,7 @@ export interface IRolesData {
 export interface IRoleWithPermissions {
   role: IRolesData;
   grantedPermissionNames: string[];
-  permissions?: IRolesPermissionItem[];
+  permissions?: IRolePermission[];
 }
 
 export interface GetRolesParams {

@@ -6,6 +6,7 @@ import type {
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { GetEnvConfig } from "../../../../app.config";
+import type { IRolePermission } from "../../../../features/administration/interfaces/role-permission.model";
 
 export const rolesApi = createApi({
   reducerPath: "rolesApi",
@@ -64,6 +65,15 @@ export const rolesApi = createApi({
         method: "DELETE",
       }),
     }),
+
+    getPermissions: builder.query<IRolePermission[], void>({
+      query: () => ({
+        url:
+          GetEnvConfig()?.api?.baseUrl +
+          GetEnvConfig()?.api?.administration?.roles?.permissions,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -73,4 +83,6 @@ export const {
   useAddRolesMutation,
   useUpdateRolesMutation,
   useDeleteRoleMutation,
+
+  useGetPermissionsQuery,
 } = rolesApi;
