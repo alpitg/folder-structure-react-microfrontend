@@ -1,5 +1,5 @@
 import { FormProvider, useForm, type SubmitHandler } from "react-hook-form";
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
 import { useEffect } from "react";
 import PageHeaderApp from "../../../../components/header/page-header/page-header";
 import {
@@ -7,21 +7,19 @@ import {
   useGetRolesDetailQuery,
   useUpdateRolesMutation,
 } from "../../../../app/redux/administration/roles/roles.api";
-import { ROUTE_URL } from "../../../../components/auth/constants/routes.const";
-import type { IRolesData } from "../../interfaces/roles.model";
+import type { IRoleWithPermissions } from "../../interfaces/roles.model";
 import PermissionTreeApp from "./permission/tree/permission-tree";
 import type { IRolesPermissionItem } from "../../interfaces/roles-permission.model";
-import { buildPermissionTree } from "./roles-tree.util";
+import { buildPermissionTree, mapRolesForApi } from "./roles-tree.util";
 
 type RolesFormAppProps = {
   mode: "add" | "edit";
-  onClose?: () => void;
+  handleClose?: ({ refresh }: { refresh: boolean }) => void;
 };
 
-const RolesFormApp = ({ mode, onClose }: RolesFormAppProps) => {
+const RolesFormApp = ({ mode, handleClose }: RolesFormAppProps) => {
   const isEditMode = mode === "edit";
   const { id } = useParams<{ id?: string }>();
-  const navigate = useNavigate();
 
   const permissionItems: IRolesPermissionItem[] = [
     {
@@ -137,7 +135,7 @@ const RolesFormApp = ({ mode, onClose }: RolesFormAppProps) => {
     { isLoading: isaddRolesLoading, isSuccess: isUpdateSuccess },
   ] = useAddRolesMutation();
 
-  const { data, isLoading: isOrderLoading } = useGetRolesDetailQuery(id!, {
+  const { data, isLoading: isRolesLoading } = useGetRolesDetailQuery(id!, {
     skip: !isEditMode,
     refetchOnMountOrArgChange: true,
   });
@@ -147,16 +145,17 @@ const RolesFormApp = ({ mode, onClose }: RolesFormAppProps) => {
 
   //#endregion
 
-  const methods = useForm<IRolesData>();
+  const methods = useForm<IRoleWithPermissions>();
   const {
     register,
     reset,
     formState: { errors },
   } = methods;
 
-  const onSubmit: SubmitHandler<IRolesData> = (data: IRolesData) => {
-    // const request = mapOrderForApi(data);
-    const request = data;
+  const onSubmit: SubmitHandler<IRoleWithPermissions> = (
+    data: IRoleWithPermissions
+  ) => {
+    const request = mapRolesForApi(data);
 
     console.log(request);
     if (!request) return;
@@ -176,25 +175,30 @@ const RolesFormApp = ({ mode, onClose }: RolesFormAppProps) => {
   // Navigate after add or update
   useEffect(() => {
     if (isSuccess) {
-      navigate(ROUTE_URL.CATALOG.PRODUCT.LIST, { state: { refresh: true } });
+      reset();
+      handleClose?.({ refresh: true });
     }
-  }, [isSuccess, navigate]);
+  }, [isSuccess]);
 
   // ✅ Populate form in edit mode
   useEffect(() => {
     if (isEditMode && data) {
       methods.reset({
-        id: data.id,
-        name: data.name,
-        displayName: data.displayName,
-        isDefault: data.isDefault,
-        isStatic: data.isStatic,
-        creationTime: data.creationTime,
+        role: {
+          id: data?.role?.id,
+          name: data?.role?.name,
+          displayName: data?.role?.displayName,
+          description: null,
+          isDefault: data?.role?.isDefault,
+          isStatic: data?.role?.isStatic,
+          creationTime: data?.role?.creationTime,
+        },
+        grantedPermissionNames: data?.grantedPermissionNames || [],
       });
     }
   }, [isEditMode, data, methods]);
 
-  if (isEditMode && isOrderLoading) {
+  if (isEditMode && isRolesLoading) {
     return <p>Loading details...</p>;
   }
 
@@ -233,16 +237,16 @@ const RolesFormApp = ({ mode, onClose }: RolesFormAppProps) => {
                     id="RoleDisplayName"
                     type="text"
                     className={`form-control form-control-solid ${
-                      errors?.name ? "is-invalid" : ""
+                      errors?.role?.name ? "is-invalid" : ""
                     }`}
                     placeholder="Role Name"
-                    {...register("displayName", {
+                    {...register("role.displayName", {
                       required: "Role name is required",
                     })}
                   />
-                  {errors?.displayName?.message && (
+                  {errors?.role?.displayName?.message && (
                     <div className="text-danger mt-1">
-                      {errors?.displayName?.message}
+                      {errors?.role?.displayName?.message}
                     </div>
                   )}
                 </div>
@@ -301,7 +305,7 @@ const RolesFormApp = ({ mode, onClose }: RolesFormAppProps) => {
               className="btn btn-secondary btn-sm"
               onClick={() => {
                 reset();
-                onClose?.();
+                handleClose?.({ refresh: false });
               }}
             >
               Cancel

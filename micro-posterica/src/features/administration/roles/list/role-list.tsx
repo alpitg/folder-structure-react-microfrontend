@@ -34,6 +34,13 @@ const RoleListApp = () => {
     setPage(1);
   };
 
+  const handleFormClose = ({ refresh }: { refresh?: boolean } = {}) => {
+    setShowFormModel(false);
+    if (refresh) {
+      refetch();
+    }
+  };
+
   // Refresh on navigation with state
   useEffect(() => {
     if (location?.state?.refresh) {
@@ -95,7 +102,7 @@ const RoleListApp = () => {
                           role?.id
                         )}
                       >
-                        {role?.name}
+                        {role?.displayName}
                       </NavLink>
                     </td>
                     <td>{role?.description || ""}</td>
@@ -108,10 +115,7 @@ const RoleListApp = () => {
           </div>
 
           <ModelApp show={showFormModel}>
-            <RolesFormApp
-              mode="add"
-              onClose={() => setShowFormModel(!showFormModel)}
-            />
+            <RolesFormApp mode="add" handleClose={handleFormClose} />
           </ModelApp>
         </div>
       </div>

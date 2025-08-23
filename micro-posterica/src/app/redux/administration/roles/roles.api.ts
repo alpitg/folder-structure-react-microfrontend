@@ -1,5 +1,6 @@
 import type {
   GetRolesParams,
+  IRoleWithPermissions,
   IRolesData,
   PaginatedRoles,
 } from "../../../../features/administration/interfaces/roles.model";
@@ -21,7 +22,7 @@ export const rolesApi = createApi({
       }),
     }),
 
-    getRolesDetail: builder.query<IRolesData, string>({
+    getRolesDetail: builder.query<IRoleWithPermissions, string>({
       query: (productId) =>
         GetEnvConfig()?.api?.baseUrl +
         GetEnvConfig()?.api?.administration?.roles?.detail?.replace(
@@ -30,7 +31,7 @@ export const rolesApi = createApi({
         ),
     }),
 
-    addRoles: builder.mutation<IRolesData, IRolesData>({
+    addRoles: builder.mutation<IRoleWithPermissions, IRoleWithPermissions>({
       query: (body) => ({
         url:
           GetEnvConfig()?.api?.baseUrl +
@@ -40,20 +41,21 @@ export const rolesApi = createApi({
       }),
     }),
 
-    updateRoles: builder.mutation<IRolesData, { id: string; data: IRolesData }>(
-      {
-        query: ({ id, data }) => ({
-          url:
-            GetEnvConfig()?.api?.baseUrl +
-            GetEnvConfig()?.api?.administration?.roles?.update?.replace(
-              "{id}",
-              id
-            ),
-          method: "PUT",
-          body: data,
-        }),
-      }
-    ),
+    updateRoles: builder.mutation<
+      IRoleWithPermissions,
+      { id: string; data: IRoleWithPermissions }
+    >({
+      query: ({ id, data }) => ({
+        url:
+          GetEnvConfig()?.api?.baseUrl +
+          GetEnvConfig()?.api?.administration?.roles?.update?.replace(
+            "{id}",
+            id
+          ),
+        method: "PUT",
+        body: data,
+      }),
+    }),
   }),
 });
 

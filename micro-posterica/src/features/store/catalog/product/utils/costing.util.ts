@@ -132,7 +132,7 @@ export const mapOrderForApi = (
     return null;
   }
 
-  let order: IOrderInvoiceData = {
+  const order: IOrderInvoiceData = {
     order: {
       orderCode: "",
       customerName: item?.order?.customerName,

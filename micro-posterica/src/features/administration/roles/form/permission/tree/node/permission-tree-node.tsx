@@ -36,7 +36,6 @@ const PermissionTreeNodeApp = ({ props }: { props: ITreeNode }) => {
               className="form-check-input cursor-pointer"
               type="checkbox"
               value=""
-              checked
             />
           </div>
 
