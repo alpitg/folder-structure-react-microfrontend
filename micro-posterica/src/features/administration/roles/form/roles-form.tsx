@@ -153,7 +153,7 @@ const RolesFormApp = ({ mode, role, handleClose }: RolesFormAppProps) => {
           ></PageHeaderApp>
 
           <div className="form d-flex flex-column flex-lg-row mb-5 p-5">
-            <div className="d-flex flex-column gap-2">
+            <div className="d-flex flex-column gap-4 w-100">
               <div>
                 <div className="mb-5">
                   <label
@@ -184,8 +184,8 @@ const RolesFormApp = ({ mode, role, handleClose }: RolesFormAppProps) => {
                   <input
                     id="EditRole_IsDefault"
                     type="checkbox"
-                    name="IsDefault"
                     className="form-check-input"
+                    {...register("role.isDefault")}
                   />
                   <label
                     className="form-check-label"
@@ -202,28 +202,6 @@ const RolesFormApp = ({ mode, role, handleClose }: RolesFormAppProps) => {
               <div className="separator separator-dashed"></div>
 
               <div className="row">
-                <div className="col-12">
-                  <div className="d-flex justify-content-between align-items-center mb-5">
-                    <div>
-                      <button
-                        type="button"
-                        className="btn btn-sm btn-outline-secondary"
-                        title="Collapse All"
-                      >
-                        <i className="bi bi-chevron-double-down"></i>
-                        <span className="ms-2 text-muted">Collapse All</span>
-                      </button>
-                    </div>
-
-                    <div className="form-check form-switch">
-                      <label className="form-check-label">
-                        <input type="checkbox" className="form-check-input" />
-                        Only Show Enabled Permissions
-                      </label>
-                    </div>
-                  </div>
-                </div>
-
                 <div className="col-12">
                   <PermissionTreeApp data={treeData} />
                 </div>
