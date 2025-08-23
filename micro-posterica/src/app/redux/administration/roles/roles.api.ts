@@ -23,11 +23,11 @@ export const rolesApi = createApi({
     }),
 
     getRolesDetail: builder.query<IRoleWithPermissions, string>({
-      query: (productId) =>
+      query: (id) =>
         GetEnvConfig()?.api?.baseUrl +
         GetEnvConfig()?.api?.administration?.roles?.detail?.replace(
           "{id}",
-          productId
+          id
         ),
     }),
 

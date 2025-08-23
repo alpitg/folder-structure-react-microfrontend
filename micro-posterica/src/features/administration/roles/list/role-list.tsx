@@ -1,13 +1,13 @@
-import { NavLink, useLocation } from "react-router";
 import { useEffect, useState } from "react";
 
+import type { IRolesData } from "../../interfaces/roles.model";
 import ModelApp from "../../../../components/ui/model/model";
 import PageHeaderApp from "../../../../components/header/page-header/page-header";
-import { ROUTE_URL } from "../../../../components/auth/constants/routes.const";
 import RolesFilterApp from "./filter/roles-filter";
 import RolesFormApp from "../form/roles-form";
 import { formattedDate } from "../../../../utils/date.util";
 import { useGetRolesQuery } from "../../../../app/redux/administration/roles/roles.api";
+import { useLocation } from "react-router";
 
 type sortType = "newest" | "oldest";
 
@@ -17,6 +17,7 @@ const RoleListApp = () => {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<sortType>("newest");
   const [showFormModel, setShowFormModel] = useState<boolean>(false);
+  const [selectedRole, setSelectedRole] = useState<IRolesData | null>(null);
 
   // Query hook for roles
   const {
@@ -37,6 +38,7 @@ const RoleListApp = () => {
 
   const handleFormClose = ({ refresh }: { refresh?: boolean } = {}) => {
     setShowFormModel(false);
+    setSelectedRole(null);
     if (refresh) {
       refetch();
     }
@@ -59,7 +61,10 @@ const RoleListApp = () => {
       >
         <button
           className="btn btn-primary btn-sm"
-          onClick={() => setShowFormModel(!showFormModel)}
+          onClick={() => {
+            setSelectedRole(null); // reset
+            setShowFormModel(true);
+          }}
         >
           <i className="bi bi-plus-lg fs-3"></i>
           Add New Role
@@ -94,16 +99,16 @@ const RoleListApp = () => {
               <tbody className="fw-semibold text-gray-600">
                 {roleData?.items?.map((role) => (
                   <tr key={role?.id}>
-                    <td className="align-content-center">
-                      <NavLink
-                        className="btn btn-sm fs-5 fw-bold"
-                        to={ROUTE_URL.ADMINISTRATION.ROLES.EDIT.replace(
-                          ":id",
-                          role?.id
-                        )}
+                    <td className="d-flex gap-5 align-content-center">
+                      <button
+                        className="btn btn-link text-gray-800 text-hover-primary fs-5 fw-bold p-0"
+                        onClick={() => {
+                          setSelectedRole(role);
+                          setShowFormModel(true);
+                        }}
                       >
                         {role?.displayName}
-                      </NavLink>
+                      </button>
 
                       <span>
                         {role?.isActive && (
@@ -124,7 +129,9 @@ const RoleListApp = () => {
                     <td className="align-content-center">
                       {formattedDate(role?.creationTime)}
                     </td>
-                    <td className="align-content-center">{role?.isActive}</td>
+                    <td className="align-content-center">
+                      {role?.isActive ? "Yes" : "No"}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -132,7 +139,11 @@ const RoleListApp = () => {
           </div>
 
           <ModelApp show={showFormModel}>
-            <RolesFormApp mode="add" handleClose={handleFormClose} />
+            <RolesFormApp
+              mode={selectedRole ? "edit" : "add"}
+              role={selectedRole}
+              handleClose={handleFormClose}
+            />
           </ModelApp>
         </div>
       </div>

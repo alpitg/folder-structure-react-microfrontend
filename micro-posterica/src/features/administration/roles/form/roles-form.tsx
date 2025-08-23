@@ -1,5 +1,6 @@
+const serverErrorIcon = "/static/media/img/svg/server-error-1.svg";
+
 import { FormProvider, useForm, type SubmitHandler } from "react-hook-form";
-import { useParams } from "react-router";
 import { useEffect } from "react";
 import PageHeaderApp from "../../../../components/header/page-header/page-header";
 import {
@@ -7,19 +8,23 @@ import {
   useGetRolesDetailQuery,
   useUpdateRolesMutation,
 } from "../../../../app/redux/administration/roles/roles.api";
-import type { IRoleWithPermissions } from "../../interfaces/roles.model";
+import type {
+  IRolesData,
+  IRoleWithPermissions,
+} from "../../interfaces/roles.model";
 import PermissionTreeApp from "./permission/tree/permission-tree";
 import type { IRolesPermissionItem } from "../../interfaces/roles-permission.model";
 import { buildPermissionTree, mapRolesForApi } from "./roles-tree.util";
 
 type RolesFormAppProps = {
   mode: "add" | "edit";
+  role: IRolesData | null;
   handleClose?: ({ refresh }: { refresh: boolean }) => void;
 };
 
-const RolesFormApp = ({ mode, handleClose }: RolesFormAppProps) => {
+const RolesFormApp = ({ mode, role, handleClose }: RolesFormAppProps) => {
   const isEditMode = mode === "edit";
-  const { id } = useParams<{ id?: string }>();
+  const id = role?.id || null;
 
   const permissionItems: IRolesPermissionItem[] = [
     {
@@ -184,7 +189,11 @@ const RolesFormApp = ({ mode, handleClose }: RolesFormAppProps) => {
     { isLoading: isaddRolesLoading, isSuccess: isUpdateSuccess },
   ] = useAddRolesMutation();
 
-  const { data, isLoading: isRolesLoading } = useGetRolesDetailQuery(id!, {
+  const {
+    data,
+    isLoading: isRolesDetailLoading,
+    isError,
+  } = useGetRolesDetailQuery(id!, {
     skip: !isEditMode,
     refetchOnMountOrArgChange: true,
   });
@@ -251,8 +260,28 @@ const RolesFormApp = ({ mode, handleClose }: RolesFormAppProps) => {
 
   //#endregion
 
-  if (isEditMode && isRolesLoading) {
+  if (isEditMode && isRolesDetailLoading) {
     return <p>Loading details...</p>;
+  }
+
+  if (isError) {
+    return (
+      <div className="text-center py-5">
+        <img src={serverErrorIcon} style={{ maxHeight: "200px" }} />
+
+        <p className="text-muted m-4">
+          Something went wrong on our side. Please try again later.
+        </p>
+
+        <button
+          type="button"
+          className="btn btn-secondary btn-sm"
+          onClick={() => handleClose?.({ refresh: false })}
+        >
+          Close
+        </button>
+      </div>
+    );
   }
 
   return (
@@ -272,13 +301,9 @@ const RolesFormApp = ({ mode, handleClose }: RolesFormAppProps) => {
             }
           ></PageHeaderApp>
 
-          <div className="form d-flex flex-column flex-lg-row mb-5">
-            <div className="d-flex flex-column gap-7">
-              <div
-                className="tab-pane active p-5"
-                role="tabpanel"
-                aria-labelledby=""
-              >
+          <div className="form d-flex flex-column flex-lg-row mb-5 p-5">
+            <div className="d-flex flex-column gap-2">
+              <div>
                 <div className="mb-5">
                   <label
                     htmlFor="RoleDisplayName"
@@ -322,6 +347,9 @@ const RolesFormApp = ({ mode, handleClose }: RolesFormAppProps) => {
                   </label>
                 </div>
               </div>
+
+              <div className="separator separator-dashed"></div>
+
               <div className="row">
                 <div className="col-12">
                   <div className="d-flex justify-content-between align-items-center mb-5">
