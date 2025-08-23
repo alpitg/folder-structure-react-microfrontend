@@ -86,6 +86,7 @@ export interface PaginatedOrganizationUnits {
 }
 
 export interface IOrganizationUnitTree {
+  id: string;
   label: string;
   members: number;
   roles: number;

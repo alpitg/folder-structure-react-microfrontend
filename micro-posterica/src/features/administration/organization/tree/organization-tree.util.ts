@@ -12,7 +12,8 @@ export const buildOrganizationUnitTree = (
   // 1. Initialize all nodes
   for (const unit of units) {
     map.set(unit.id || "", {
-      label: unit.displayName,
+      id: unit?.id ?? "",
+      label: unit?.displayName,
       members: unit.memberCount ?? 0,
       roles: unit.roleCount ?? 0,
       children: [],

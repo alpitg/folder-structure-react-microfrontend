@@ -1,15 +1,22 @@
-import type { IOrganizationUnitsData } from "../../../interfaces/organization-units.model";
+import type {
+  IOrganizationUnitTree,
+  IOrganizationUnitsData,
+} from "../../../interfaces/organization-units.model";
+
 import { useAddOrganizationUnitsMutation } from "../../../../../app/redux/administration/organization-units/organization-units.api";
+import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
 const OrganizationTreeFormApp = ({
+  parent,
   onClose,
   onSuccess,
 }: {
+  parent?: IOrganizationUnitTree;
   onClose: () => void;
   onSuccess: () => void;
 }) => {
-  const { register, handleSubmit, reset } =
+  const { register, handleSubmit, reset, setValue } =
     useFormContext<IOrganizationUnitsData>();
 
   const [addOrganizationUnits, { isLoading }] =
@@ -26,8 +33,26 @@ const OrganizationTreeFormApp = ({
     }
   };
 
+  useEffect(() => {
+    setValue("parentId", parent?.id ?? null);
+  }, [parent]);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      {parent && (
+        <div className="fv-row w-100 py-5">
+          <label className="form-label">
+            Parent Organization Unit <span className="text-danger">*</span>
+          </label>
+          <input
+            type="text"
+            className="form-control form-control-flush"
+            placeholder="Parent Organization unit name"
+            readOnly={true}
+            value={parent?.label}
+          />
+        </div>
+      )}
       <div className="fv-row w-100 py-5">
         <label className="form-label">
           Name <span className="text-danger">*</span>
