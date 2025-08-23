@@ -101,7 +101,6 @@ const UserListApp = () => {
             <table className="table table-row-dashed table-row-gray-300 gy-7">
               <thead>
                 <tr className="fw-bold fs-6 text-gray-800">
-                  <th>ACTIONS</th>
                   <th>USER NAME</th>
                   <th>NAME</th>
                   <th>SURNAME</th>
@@ -110,24 +109,12 @@ const UserListApp = () => {
                   <th>EMAIL CONFIRM</th>
                   <th>ACTIVE</th>
                   <th>CREATION TIME</th>
+                  <th>ACTIONS</th>
                 </tr>
               </thead>
               <tbody className="fw-semibold text-gray-600">
                 {userData?.items?.map((user) => (
                   <tr key={user?.id}>
-                    <td className="align-content-center">
-                      <button
-                        type="button"
-                        className="btn btn-light text-hover-danger btn-icon btn-sm"
-                        onClick={() => {
-                          setSelectedUser(user); // store which user to delete
-                          setShowDeleteConfirmationModel(true);
-                        }}
-                        aria-label="Delete user"
-                      >
-                        <i className="bi bi-trash3" />
-                      </button>
-                    </td>
                     <td>{user?.userName}</td>
                     <td>{user?.name}</td>
                     <td>{user?.surname}</td>
@@ -157,6 +144,19 @@ const UserListApp = () => {
                       )}
                     </td>
                     <td>{formattedDate(user?.creationTime)}</td>
+                    <td className="align-content-center">
+                      <button
+                        type="button"
+                        className="btn btn-light text-hover-danger btn-icon btn-sm"
+                        onClick={() => {
+                          setSelectedUser(user); // store which user to delete
+                          setShowDeleteConfirmationModel(true);
+                        }}
+                        aria-label="Delete user"
+                      >
+                        <i className="bi bi-trash3" />
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
