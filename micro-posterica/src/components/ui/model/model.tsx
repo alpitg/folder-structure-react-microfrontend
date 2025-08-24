@@ -1,9 +1,10 @@
 interface ModelAppProps {
   show: boolean;
-  children: any;
+  modelSize?: "sm" | "lg" | "xl" | "fullscreen";
+  children: React.ReactNode;
 }
 
-const ModelApp: React.FC<ModelAppProps> = ({ show, children }) => {
+const ModelApp: React.FC<ModelAppProps> = ({ show, modelSize, children }) => {
   return (
     <>
       {show && (
@@ -13,7 +14,11 @@ const ModelApp: React.FC<ModelAppProps> = ({ show, children }) => {
           tabIndex={-1}
           role="dialog"
         >
-          <div className="modal-dialog modal-dialog-centered">
+          <div
+            className={`modal-dialog modal-dialog-centered ${
+              modelSize ? `modal-${modelSize}` : ""
+            }`}
+          >
             <div className="modal-content">
               <div className="modal-body">{children}</div>
             </div>
@@ -23,4 +28,5 @@ const ModelApp: React.FC<ModelAppProps> = ({ show, children }) => {
     </>
   );
 };
+
 export default ModelApp;

@@ -25,7 +25,7 @@ export const usersApi = createApi({
     getUsersDetail: builder.query<IUserWithPermissions, string>({
       query: (id) =>
         GetEnvConfig()?.api?.baseUrl +
-        GetEnvConfig()?.api?.administration?.users?.detail?.replace("{id}", id),
+        GetEnvConfig()?.api?.administration?.users?.getUserForEdit?.replace("{id}", id),
     }),
 
     addUsers: builder.mutation<IUserWithPermissions, IUserWithPermissions>({

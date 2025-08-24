@@ -26,9 +26,10 @@
       "users": {
         "list": "/api/users/search",
         "detail": "/api/users/{id}",
-        "add": "/api/users",
+        "add": "/api/users/create",
         "update": "/api/users/{id}",
         "delete": "/api/users/{id}",
+        "getUserForEdit": "/api/users/GetUserForEdit?id={id}",
         "permissions": "/api/users/permissions"
       }
     },

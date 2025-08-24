@@ -34,6 +34,7 @@ let environment = {
         add: "",
         update: "",
         delete: "",
+        getUserForEdit: "",
         permissions: "",
       },
     },

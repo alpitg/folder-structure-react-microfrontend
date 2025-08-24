@@ -1,14 +1,15 @@
 import type { IRolePermission } from "./role-permission.model";
 
 export interface IRolesData {
-  id: string; // Unique identifier
-  name: string; // Internal role name (e.g., "Admin")
-  displayName: string; // Display label (e.g., "Admin")
+  id: string;
+  name: string;
+  displayName: string;
   description: string | null;
-  isDefault: boolean; // If assigned by default
+  isDefault: boolean;
   isStatic: boolean; // If system/static role
   isActive: boolean;
-  creationTime: string; // ISO timestamp, e.g. "2025-08-23T10:44:20.5455664"
+  creationTime: string;
+  isAssigned?: boolean;
 }
 
 export interface IRoleWithPermissions {

@@ -163,7 +163,7 @@ const UserListApp = () => {
             </table>
           </div>
 
-          <ModelApp show={showFormModel}>
+          <ModelApp show={showFormModel} modelSize="lg">
             <UsersFormApp
               mode={selectedUser ? "edit" : "add"}
               user={selectedUser}

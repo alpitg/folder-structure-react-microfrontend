@@ -1,3 +1,4 @@
+import type { IOrganizationUnitsData } from "./organization-units.model";
 import type { IRolePermission } from "./role-permission.model";
 import type { IRolesData } from "./roles.model";
 
@@ -9,17 +10,26 @@ export interface IUsersData {
   roles: IRolesData[]; // List of assigned roles
   emailAddress: string; // Email address
   isEmailConfirmed: boolean; // Whether the email is confirmed
+  password: string;
   isActive: boolean; // Whether the account is active
   phoneNumber: string | null; // User's phone number (nullable)
   profilePictureId: string | null; // Profile picture identifier (nullable GUID/UUID)
   lockoutEndDateUtc: string | null; // Lockout end date if user is locked, otherwise null
   creationTime: string; // ISO timestamp of account creation
+
+  setRandomPassword?: boolean;
+  shouldChangePasswordOnNextLogin?: boolean;
+  sendActivationEmail?: boolean;
+  isLockoutEnabled?: boolean;
 }
 
 export interface IUserWithPermissions {
   user: IUsersData;
-  //   roles: IUsersData;
-  grantedPermissionNames: string[];
+  grantedRoles: string[];
+  roles: IRolesData[];
+  memberedOrganisationUnits: string[];
+  allOrganizationUnits: IOrganizationUnitsData[];
+  grantedPermissionNames?: string[];
   permissions?: IRolePermission[];
 }
 
