@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import type { IUserWithPermissions } from "../../../interfaces/users.model";
+import { allowedChar } from "../../../../../utils/auth.util";
 import { useFormContext } from "react-hook-form";
 
 const UserInfoFormApp: React.FC = () => {
@@ -132,9 +133,7 @@ const UserInfoFormApp: React.FC = () => {
           placeholder="Username"
           {...register("user.userName", { required: "Username is required" })}
         />
-        <span className="text-muted">
-          Allowed characters: abcdefghijklmnopABCDEFGHIJKLMNOPQRSTUVWXYZ-.@_+
-        </span>
+        <span className="text-muted">Allowed characters: {allowedChar()}</span>
 
         {errors?.user?.userName && (
           <div className="invalid-feedback d-block">
