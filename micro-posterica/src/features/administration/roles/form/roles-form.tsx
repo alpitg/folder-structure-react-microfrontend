@@ -203,6 +203,7 @@ const RolesFormApp = ({ mode, role, handleClose }: RolesFormAppProps) => {
 
               <div className="row">
                 <div className="col-12">
+                    <div className="text-muted fs-3 mb-3">Select Permissions</div>
                   <PermissionTreeApp data={treeData} />
                 </div>
               </div>
