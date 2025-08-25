@@ -167,7 +167,7 @@ const RoleListApp = () => {
             </table>
           </div>
 
-          <ModelApp show={showFormModel}>
+          <ModelApp show={showFormModel} modelSize="lg">
             <RolesFormApp
               mode={selectedRole ? "edit" : "add"}
               role={selectedRole}

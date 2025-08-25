@@ -4,7 +4,11 @@ interface ModelAppProps {
   children: React.ReactNode;
 }
 
-const ModelApp: React.FC<ModelAppProps> = ({ show, modelSize, children }) => {
+const ModelApp: React.FC<ModelAppProps> = ({
+  show,
+  modelSize = "lg",
+  children,
+}) => {
   return (
     <>
       {show && (
