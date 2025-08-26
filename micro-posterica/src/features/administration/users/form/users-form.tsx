@@ -239,7 +239,7 @@ const UsersFormApp = ({ mode, user, handleClose }: UsersFormAppProps) => {
                   id="user_information"
                   role="tab-panel"
                 >
-                  <UserInfoFormApp />
+                  <UserInfoFormApp mode={mode} />
                 </div>
                 <div className="tab-pane fade" id="user_roles" role="tab-panel">
                   <div className="d-flex flex-column gap-7 gap-lg-10">

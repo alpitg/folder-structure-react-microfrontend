@@ -4,7 +4,11 @@ import type { IUserWithPermissions } from "../../../interfaces/users.model";
 import { allowedChar } from "../../../../../utils/auth.util";
 import { useFormContext } from "react-hook-form";
 
-const UserInfoFormApp: React.FC = () => {
+type UserInfoFormAppProps = {
+  mode: "add" | "edit";
+};
+
+const UserInfoFormApp: React.FC<UserInfoFormAppProps> = ({ mode }) => {
   const {
     watch,
     register,
@@ -164,25 +168,37 @@ const UserInfoFormApp: React.FC = () => {
             <input
               id="Password"
               type={showPassword ? "text" : "password"}
-              className="form-control form-control-solid"
+              className={`form-control form-control-solid ${
+                errors?.user?.password ? "is-invalid" : ""
+              }`}
               autoComplete="new-password"
               {...register("user.password", {
-                required: !setRandomPassword || "Password is required",
-                maxLength: 32,
+                required:
+                  mode === "add" && !setRandomPassword
+                    ? "Password is required"
+                    : false,
               })}
             />
-            <button
-              type="button"
-              className="btn btn-sm btn-icon position-absolute top-50 end-0 translate-middle-y me-2"
-              onClick={() => setShowPassword(!showPassword)}
-              tabIndex={-1}
-            >
-              <i
-                className={`bi ${
-                  showPassword ? "bi-eye" : "bi-eye-slash"
-                } fs-4`}
-              ></i>
-            </button>
+            {!errors?.user?.password?.message && (
+              <button
+                type="button"
+                className="btn btn-sm btn-icon position-absolute top-50 end-0 translate-middle-y me-2"
+                onClick={() => setShowPassword(!showPassword)}
+                tabIndex={-1}
+              >
+                <i
+                  className={`bi ${
+                    showPassword ? "bi-eye" : "bi-eye-slash"
+                  } fs-4`}
+                ></i>
+              </button>
+            )}
+
+            {errors?.user?.password?.message && (
+              <div className="invalid-feedback">
+                {errors.user.password.message}
+              </div>
+            )}
           </div>
         </div>
       )}
