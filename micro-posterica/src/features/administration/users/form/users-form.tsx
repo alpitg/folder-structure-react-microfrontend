@@ -138,12 +138,20 @@ const UsersFormApp = ({ mode, user, handleClose }: UsersFormAppProps) => {
           lockoutEndDateUtc: data?.user?.lockoutEndDateUtc ?? null,
           roles: data?.user?.roles || [],
           creationTime: data?.user?.creationTime ?? "",
+          password: data?.user?.password ?? "",
+
+          setRandomPassword: data?.user?.setRandomPassword && true,
+          shouldChangePasswordOnNextLogin:
+            data?.user?.shouldChangePasswordOnNextLogin || false,
+          sendActivationEmail: data?.user?.sendActivationEmail || false,
+          isLockoutEnabled: data?.user?.isLockoutEnabled || false,
         },
         grantedPermissionNames: data?.grantedPermissionNames || [],
         permissions: data?.permissions || [],
       });
     }
   }, [isEditMode, data, reset]);
+
   //#endregion
 
   if (isEditMode && isUsersDetailLoading) {

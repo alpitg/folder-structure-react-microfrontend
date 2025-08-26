@@ -17,10 +17,10 @@ export interface IUsersData {
   lockoutEndDateUtc: string | null; // Lockout end date if user is locked, otherwise null
   creationTime: string; // ISO timestamp of account creation
 
-  setRandomPassword?: boolean;
-  shouldChangePasswordOnNextLogin?: boolean;
-  sendActivationEmail?: boolean;
-  isLockoutEnabled?: boolean;
+  setRandomPassword: boolean;
+  shouldChangePasswordOnNextLogin: boolean;
+  sendActivationEmail: boolean;
+  isLockoutEnabled: boolean;
 }
 
 export interface IUserWithPermissions {
