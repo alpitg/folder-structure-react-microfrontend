@@ -115,7 +115,17 @@ const UserListApp = () => {
               <tbody className="fw-semibold text-gray-600">
                 {userData?.items?.map((user) => (
                   <tr key={user?.id}>
-                    <td>{user?.userName}</td>
+                    <td>
+                      <button
+                        className="btn btn-link text-gray-800 text-hover-primary fs-5 fw-bold p-0"
+                        onClick={() => {
+                          setSelectedUser(user);
+                          setShowFormModel(true);
+                        }}
+                      >
+                        {user?.userName}
+                      </button>
+                    </td>
                     <td>{user?.name}</td>
                     <td>{user?.surname}</td>
                     <td>
