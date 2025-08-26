@@ -3,19 +3,19 @@ import type { IRolePermission } from "./role-permission.model";
 import type { IRolesData } from "./roles.model";
 
 export interface IUsersData {
-  id: string; // Unique identifier for the user
-  userName: string; // Username (login/account name)
-  name: string; // First name
-  surname: string; // Last name
-  roles: IRolesData[]; // List of assigned roles
-  emailAddress: string; // Email address
-  isEmailConfirmed: boolean; // Whether the email is confirmed
-  password: string;
-  isActive: boolean; // Whether the account is active
-  phoneNumber: string | null; // User's phone number (nullable)
-  profilePictureId: string | null; // Profile picture identifier (nullable GUID/UUID)
+  id: string;
+  userName: string;
+  name: string;
+  surname: string;
+  roles: IRolesData[];
+  emailAddress: string;
+  isEmailConfirmed: boolean;
+  password: string | null;
+  isActive: boolean;
+  phoneNumber: string | null;
+  profilePictureId: string | null;
   lockoutEndDateUtc: string | null; // Lockout end date if user is locked, otherwise null
-  creationTime: string; // ISO timestamp of account creation
+  creationTime: string;
 
   setRandomPassword: boolean;
   shouldChangePasswordOnNextLogin: boolean;

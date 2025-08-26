@@ -138,7 +138,7 @@ const UsersFormApp = ({ mode, user, handleClose }: UsersFormAppProps) => {
           lockoutEndDateUtc: data?.user?.lockoutEndDateUtc ?? null,
           roles: data?.user?.roles || [],
           creationTime: data?.user?.creationTime ?? "",
-          password: data?.user?.password ?? "",
+          password: null, // NOTE: No need to set the value
 
           setRandomPassword: data?.user?.setRandomPassword && true,
           shouldChangePasswordOnNextLogin:
