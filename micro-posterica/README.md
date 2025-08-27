@@ -9,6 +9,8 @@
 
 # React + TypeScript + Vite
 
+```md
+
 src/
 │
 ├── app/                     # redux or global store
@@ -52,6 +54,7 @@ src/
     ├── jwt.ts                  # decode JWT if needed
     └── helpers.ts
 
+```
 
 ## Future plan -
 1. Multi tenancy
