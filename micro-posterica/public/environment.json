@@ -25,7 +25,7 @@
       },
       "users": {
         "login": "/api/auth/login",
-        "updatePassword": "/api/auth/updatePassword",
+        "updatePassword": "/api/auth/users/{id}/change-password",
         "list": "/api/users/search",
         "detail": "/api/users/{id}",
         "add": "/api/users/create",

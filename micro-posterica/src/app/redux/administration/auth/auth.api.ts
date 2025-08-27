@@ -26,14 +26,17 @@ export const authApi = createApi({
 
     updatePassword: builder.mutation<
       IUpdatePasswordResponse,
-      IUpdatePasswordRequest
+      { id: string; data: IUpdatePasswordRequest }
     >({
-      query: (payload) => ({
+      query: ({ id, data }) => ({
         url:
           GetEnvConfig()?.api?.baseUrl +
-          GetEnvConfig()?.api?.administration?.users?.updatePassword,
-        method: "POST",
-        body: payload,
+          GetEnvConfig()?.api?.administration?.users?.updatePassword?.replace(
+            "{id}",
+            id
+          ),
+        method: "PUT",
+        body: data,
       }),
     }),
   }),

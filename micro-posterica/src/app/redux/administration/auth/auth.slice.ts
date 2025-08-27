@@ -1,11 +1,12 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { ILoginResponse } from "../../../../components/auth/login/login";
 import { LOCALSTORAGE_AUTH_KEY } from "../../../../constants/global/global-key.const";
+import type { IUserWithPermissions } from "../../../../features/administration/interfaces/users.model";
 
 interface AuthState {
   accessToken: string | null;
   tokenType: string | null; // Replace with IUser type if you have it
-  user: any | null;
+  user: IUserWithPermissions | null;
   /**
    * ➡️ Taking the persisted state (usually from localStorage, cookies, or server-rendered HTML) and rehydrating (restoring) it into your app’s in-memory state (Redux store)
    */

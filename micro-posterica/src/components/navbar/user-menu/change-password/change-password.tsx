@@ -5,6 +5,7 @@ import PageHeaderApp from "../../../header/page-header/page-header";
 import { useUpdatePasswordMutation } from "../../../../app/redux/administration/auth/auth.api";
 import ToastApp, { type ToastAppProps } from "../../../ui/toast/toast";
 import { useEffect, useState } from "react";
+import { useAuth } from "../../../../hooks/use-auth";
 
 type FormValues = {
   user: {
@@ -28,6 +29,7 @@ const ChangePasswordApp: React.FC<{
   //#region RTK APIs
 
   const [updatePassword, { isLoading }] = useUpdatePasswordMutation();
+  const { user } = useAuth();
 
   //#endregion
 
@@ -49,22 +51,26 @@ const ChangePasswordApp: React.FC<{
   } = methods;
   const onSubmit: SubmitHandler<FormValues> = (formData) => {
     updatePassword({
-      currentPassword: formData.user.currentPassword,
-      newPassword: formData.user.newPassword,
+      id: user?.user?.id || "",
+      data: {
+        currentPassword: formData.user.currentPassword,
+        newPassword: formData.user.newPassword,
+      },
     })
       .unwrap()
-      .then(() => {
+      .then((response) => {
         handleClose?.({ refresh: true });
         setToast({
           show: true,
-          message: "Password updated successfully.",
+          message: response?.message || "Password updated successfully.",
           variant: "success",
         });
       })
-      .catch(() => {
+      .catch((response) => {
         setToast({
           show: true,
-          message: "Server error! Failed to update password.",
+          message:
+            response?.data?.detail || "Server error! Failed to update password.",
           variant: "danger",
         });
       });
