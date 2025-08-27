@@ -91,7 +91,7 @@ const ChangePasswordApp: React.FC<{
 
   return (
     <>
-      <ModelApp show={show} modelSize="sm">
+      <ModelApp show={show} modelSize="md">
         <div className="users-form-app">
           <FormProvider {...methods}>
             <form

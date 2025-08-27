@@ -183,3 +183,9 @@ app/
     billing/
     files/
   workers/     # Celery tasks (emails, webhooks, exports)
+
+
+## PROMPT
+```shell
+want to create a React component similar to the Angular HTML you shared (for editing user info: First Name, Surname, Email, Username), and implement it using React Hook Form + Bootstrap + Bootstrap Icons, similar to your ChangePasswordApp component.
+```

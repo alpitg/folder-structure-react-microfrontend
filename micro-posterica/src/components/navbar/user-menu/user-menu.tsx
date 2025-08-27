@@ -2,10 +2,12 @@ import { useState, type FC } from "react";
 import { clearCredentials } from "../../../app/redux/administration/auth/auth.slice";
 import { useDispatch } from "react-redux";
 import ChangePasswordApp from "./change-password/change-password";
+import UserSettingApp from "./user-setting/user-setting";
 
 const UserMenuApp: FC = () => {
   const dispatch = useDispatch();
   const [showChangePassword, setShowChangePassword] = useState(false);
+  const [showUserSettingApp, setShowUserSettingApp] = useState(false);
 
   return (
     <div className="user-menu-app">
@@ -81,9 +83,12 @@ const UserMenuApp: FC = () => {
           </li>
 
           <li>
-            <a className="dropdown-item" href="/account/settings">
-              <i className="bi bi-gear me-2 fs-3"></i> Account Settings
-            </a>
+            <button
+              className="dropdown-item"
+              onClick={() => setShowUserSettingApp(!showUserSettingApp)}
+            >
+              <i className="bi bi-gear me-2 fs-3 fs-3"></i> Account Settings
+            </button>
           </li>
 
           <li>
@@ -107,7 +112,14 @@ const UserMenuApp: FC = () => {
         </ul>
       </div>
 
-      <ChangePasswordApp show={showChangePassword} handleClose={()=> setShowChangePassword(!showChangePassword)}/>
+      <ChangePasswordApp
+        show={showChangePassword}
+        handleClose={() => setShowChangePassword(!showChangePassword)}
+      />
+      <UserSettingApp
+        show={showUserSettingApp}
+        handleClose={() => setShowUserSettingApp(!showUserSettingApp)}
+      />
     </div>
   );
 };

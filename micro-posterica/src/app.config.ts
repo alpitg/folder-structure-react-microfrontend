@@ -31,6 +31,7 @@ let environment = {
       users: {
         login: "",
         updatePassword: "",
+        updateCurrentUserProfile: "",
         list: "",
         detail: "",
         add: "",

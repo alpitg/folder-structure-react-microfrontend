@@ -26,6 +26,7 @@
       "users": {
         "login": "/api/auth/login",
         "updatePassword": "/api/auth/users/{id}/change-password",
+        "updateCurrentUserProfile": "/api/auth/users/{id}/updateCurrentUserProfile",
         "list": "/api/users/search",
         "detail": "/api/users/{id}",
         "add": "/api/users/create",

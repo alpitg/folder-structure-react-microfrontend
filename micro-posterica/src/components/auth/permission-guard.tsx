@@ -9,7 +9,7 @@ const PermissionGuard = ({
   children: ReactNode;
 }) => {
   const { user } = useAuth();
-  if (!user?.permissions?.includes(permission)) {
+  if (!user?.permissions?.map((x) => x.name)?.includes(permission)) {
     return null; // or show fallback
   }
   return <>{children}</>;

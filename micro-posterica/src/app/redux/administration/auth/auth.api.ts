@@ -6,6 +6,10 @@ import type {
   IUpdatePasswordRequest,
   IUpdatePasswordResponse,
 } from "../../../../components/navbar/user-menu/change-password/change-password.model";
+import type {
+  IUpdateUserSettingRequest,
+  IUpdateUserSettingResponse,
+} from "../../../../components/navbar/user-menu/user-setting/user-setting.model";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { GetEnvConfig } from "../../../../app.config";
@@ -39,7 +43,27 @@ export const authApi = createApi({
         body: data,
       }),
     }),
+
+    updateCurrentUserProfile: builder.mutation<
+      IUpdateUserSettingResponse,
+      { id: string; data: IUpdateUserSettingRequest }
+    >({
+      query: ({ id, data }) => ({
+        url:
+          GetEnvConfig()?.api?.baseUrl +
+          GetEnvConfig()?.api?.administration?.users?.updateCurrentUserProfile?.replace(
+            "{id}",
+            id
+          ),
+        method: "PUT",
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation, useUpdatePasswordMutation } = authApi;
+export const {
+  useLoginMutation,
+  useUpdatePasswordMutation,
+  useUpdateCurrentUserProfileMutation,
+} = authApi;

@@ -1,6 +1,6 @@
 interface ModelAppProps {
   show: boolean;
-  modelSize?: "sm" | "lg" | "xl" | "fullscreen";
+  modelSize?: "sm" | "md" | "lg" | "xl" | "fullscreen";
   children: React.ReactNode;
 }
 
