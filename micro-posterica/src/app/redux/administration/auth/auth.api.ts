@@ -13,6 +13,7 @@ import type {
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { GetEnvConfig } from "../../../../app.config";
+import type { IUsersData } from "../../../../features/administration/interfaces/users.model";
 
 export const authApi = createApi({
   reducerPath: "authApi",
@@ -44,6 +45,18 @@ export const authApi = createApi({
       }),
     }),
 
+    getCurrentUserProfile: builder.query<IUsersData, string>({
+      query: (id) => ({
+        url:
+          GetEnvConfig()?.api?.baseUrl +
+          GetEnvConfig()?.api?.administration?.users?.getCurrentUserProfile?.replace(
+            "{id}",
+            id
+          ),
+        method: "GET",
+      }),
+    }),
+
     updateCurrentUserProfile: builder.mutation<
       IUpdateUserSettingResponse,
       { id: string; data: IUpdateUserSettingRequest }
@@ -65,5 +78,6 @@ export const authApi = createApi({
 export const {
   useLoginMutation,
   useUpdatePasswordMutation,
+  useGetCurrentUserProfileQuery,
   useUpdateCurrentUserProfileMutation,
 } = authApi;

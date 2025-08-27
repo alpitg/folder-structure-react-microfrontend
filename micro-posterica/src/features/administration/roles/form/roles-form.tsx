@@ -1,5 +1,3 @@
-const serverErrorIcon = "/static/media/img/svg/server-error-1.svg";
-
 import { FormProvider, useForm, type SubmitHandler } from "react-hook-form";
 import { useEffect } from "react";
 import PageHeaderApp from "../../../../components/header/page-header/page-header";
@@ -15,6 +13,7 @@ import type {
 } from "../../interfaces/roles.model";
 import PermissionTreeApp from "./permission/tree/permission-tree";
 import { buildPermissionTree, mapRolesForApi } from "./roles-tree.util";
+import SomethingWentWrongPage from "../../../../components/ui/error/something-went-wrong/something-went-wrong";
 
 type RolesFormAppProps = {
   mode: "add" | "edit";
@@ -117,13 +116,7 @@ const RolesFormApp = ({ mode, role, handleClose }: RolesFormAppProps) => {
 
   if (isError) {
     return (
-      <div className="text-center py-5">
-        <img src={serverErrorIcon} style={{ maxHeight: "200px" }} />
-
-        <p className="text-muted m-4">
-          Something went wrong on our side. Please try again later.
-        </p>
-
+      <SomethingWentWrongPage>
         <button
           type="button"
           className="btn btn-secondary btn-sm"
@@ -131,7 +124,7 @@ const RolesFormApp = ({ mode, role, handleClose }: RolesFormAppProps) => {
         >
           Close
         </button>
-      </div>
+      </SomethingWentWrongPage>
     );
   }
 
@@ -203,7 +196,7 @@ const RolesFormApp = ({ mode, role, handleClose }: RolesFormAppProps) => {
 
               <div className="row">
                 <div className="col-12">
-                    <div className="text-muted fs-3 mb-3">Select Permissions</div>
+                  <div className="text-muted fs-3 mb-3">Select Permissions</div>
                   <PermissionTreeApp data={treeData} />
                 </div>
               </div>

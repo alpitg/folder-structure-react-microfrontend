@@ -1,10 +1,15 @@
 import { FormProvider, useForm, type SubmitHandler } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { useAuth } from "../../../../hooks/use-auth";
+import {
+  useGetCurrentUserProfileQuery,
+  useUpdateCurrentUserProfileMutation,
+} from "../../../../app/redux/administration/auth/auth.api";
+
 import ModelApp from "../../../ui/model/model";
 import PageHeaderApp from "../../../header/page-header/page-header";
 import ToastApp, { type ToastAppProps } from "../../../ui/toast/toast";
-import { useEffect, useState } from "react";
-import { useAuth } from "../../../../hooks/use-auth";
-import { useUpdateCurrentUserProfileMutation } from "../../../../app/redux/administration/auth/auth.api";
+import SomethingWentWrongPage from "../../../ui/error/something-went-wrong/something-went-wrong";
 
 type FormValues = {
   user: {
@@ -18,21 +23,30 @@ type FormValues = {
 const UserSettingApp: React.FC<{
   show: boolean;
   handleClose?: (args?: { refresh: boolean }) => void;
-  initialData?: FormValues;
-}> = ({ show, handleClose, initialData }) => {
+}> = ({ show, handleClose }) => {
+  const { user } = useAuth();
+
   const [toast, setToast] = useState<ToastAppProps>({
     show: false,
     message: "",
     variant: "info",
   });
 
-  const [updateCurrentUserProfile, { isLoading }] =
+  const [updateCurrentUserProfile, { isLoading: isUpdateLoading }] =
     useUpdateCurrentUserProfileMutation();
-  const { user } = useAuth();
+
+  const {
+    data,
+    isLoading: isGetLoading,
+    isError,
+    refetch,
+  } = useGetCurrentUserProfileQuery(user?.user?.id ?? "", {
+    skip: !user?.user?.id,
+  });
 
   //#region form
   const methods = useForm<FormValues>({
-    defaultValues: initialData || {
+    defaultValues: {
       user: {
         name: "",
         surname: "",
@@ -49,54 +63,73 @@ const UserSettingApp: React.FC<{
     formState: { errors },
   } = methods;
 
-  const onSubmit: SubmitHandler<FormValues> = (formData) => {
-    console.log("Submitted user data:", formData);
+  const onSubmit: SubmitHandler<FormValues> = async (formData) => {
+    try {
+      const response = await updateCurrentUserProfile({
+        id: user?.user?.id ?? "",
+        data: formData.user,
+      }).unwrap();
 
-    updateCurrentUserProfile({
-      id: user?.user?.id || "",
-      data: {
-        name: formData?.user?.name,
-        surname: formData?.user?.surname,
-        emailAddress: formData?.user?.emailAddress,
-        userName: formData?.user?.userName,
-      },
-    })
-      .unwrap()
-      .then((response) => {
-        handleClose?.({ refresh: true });
-        setToast({
-          show: true,
-          message: response?.message || "User info updated successfully.",
-          variant: "success",
-        });
-      })
-      .catch((response) => {
-        setToast({
-          show: true,
-          message:
-            response?.data?.detail || "Server error! Failed to update detail.",
-          variant: "danger",
-        });
+      handleClose?.({ refresh: true });
+      setToast({
+        show: true,
+        message: response?.message || "User info updated successfully.",
+        variant: "success",
       });
+    } catch (error: any) {
+      setToast({
+        show: true,
+        message:
+          (typeof error?.data?.detail === "object"
+            ? error?.data?.detail?.[0]?.msg
+            : error?.data?.detail) || "Server error! Failed to update detail.",
+        variant: "danger",
+      });
+    }
   };
-
   //#endregion
 
-  // Reset form when modal opens
+  /**
+   * Refetch when modal opens
+   */
   useEffect(() => {
-    if (show) {
-      reset(
-        initialData || {
-          user: {
-            name: user?.user?.name || "",
-            surname: user?.user?.surname || "",
-            emailAddress: user?.user?.emailAddress || "",
-            userName: user?.user?.userName || "",
-          },
-        }
-      );
+    if (show) refetch();
+  }, [show, refetch]);
+
+  /**
+   * Sync fetched data into form
+   */
+  useEffect(() => {
+    if (data) {
+      reset({ user: data });
     }
-  }, [show, reset, initialData]);
+  }, [data, reset]);
+
+  // Handle loading
+  if (isGetLoading) {
+    return (
+      <ModelApp show={show} modelSize="md">
+        <div className="p-5 text-center">Loading details...</div>
+      </ModelApp>
+    );
+  }
+
+  // Handle error
+  if (isError) {
+    return (
+      <ModelApp show={show} modelSize="md">
+        <SomethingWentWrongPage>
+          <button
+            type="button"
+            className="btn btn-secondary btn-sm"
+            onClick={() => handleClose?.()}
+          >
+            Close
+          </button>
+        </SomethingWentWrongPage>
+      </ModelApp>
+    );
+  }
 
   return (
     <>
@@ -105,8 +138,8 @@ const UserSettingApp: React.FC<{
           <FormProvider {...methods}>
             <form onSubmit={handleSubmit(onSubmit)} noValidate>
               <PageHeaderApp
-                header="Edit User"
-                description="Update the user's personal information."
+                header="My settings"
+                description="Update your personal information."
               />
 
               <div className="form d-flex flex-column flex-lg-row p-5">
@@ -202,7 +235,7 @@ const UserSettingApp: React.FC<{
                       disabled
                     />
                     <span className="form-text text-muted">
-                      Cannot change username of the admin.
+                      Cannot change username.
                     </span>
                   </div>
                 </div>
@@ -223,9 +256,9 @@ const UserSettingApp: React.FC<{
                 <button
                   type="submit"
                   className="btn btn-sm btn-flex btn-primary"
-                  disabled={isLoading}
+                  disabled={isUpdateLoading}
                 >
-                  {isLoading ? (
+                  {isUpdateLoading ? (
                     <span className="spinner-border spinner-border-sm align-middle me-2"></span>
                   ) : (
                     <i className="bi bi-check2 fs-3"></i>
@@ -242,7 +275,7 @@ const UserSettingApp: React.FC<{
         show={toast.show}
         message={toast.message}
         variant={toast.variant}
-        onClose={() => setToast({ ...toast, show: false })}
+        onClose={() => setToast((t) => ({ ...t, show: false }))}
       />
     </>
   );

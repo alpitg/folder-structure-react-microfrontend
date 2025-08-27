@@ -112,14 +112,18 @@ const UserMenuApp: FC = () => {
         </ul>
       </div>
 
-      <ChangePasswordApp
-        show={showChangePassword}
-        handleClose={() => setShowChangePassword(!showChangePassword)}
-      />
-      <UserSettingApp
-        show={showUserSettingApp}
-        handleClose={() => setShowUserSettingApp(!showUserSettingApp)}
-      />
+      {showChangePassword && (
+        <ChangePasswordApp
+          show={showChangePassword}
+          handleClose={() => setShowChangePassword(!showChangePassword)}
+        />
+      )}
+      {showUserSettingApp && (
+        <UserSettingApp
+          show={showUserSettingApp}
+          handleClose={() => setShowUserSettingApp(!showUserSettingApp)}
+        />
+      )}
     </div>
   );
 };

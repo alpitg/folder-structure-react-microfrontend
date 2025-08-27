@@ -17,8 +17,7 @@ import UserOrganisationUnitsFormApp from "./organisation-units/user-organisation
 import ToastApp, {
   type ToastAppProps,
 } from "../../../../components/ui/toast/toast";
-
-const serverErrorIcon = "/static/media/img/svg/server-error-1.svg";
+import SomethingWentWrongPage from "../../../../components/ui/error/something-went-wrong/something-went-wrong";
 
 type UsersFormAppProps = {
   mode: "add" | "edit";
@@ -164,11 +163,7 @@ const UsersFormApp = ({ mode, user, handleClose }: UsersFormAppProps) => {
 
   if (isError) {
     return (
-      <div className="text-center py-5">
-        <img src={serverErrorIcon} style={{ maxHeight: "200px" }} />
-        <p className="text-muted m-4">
-          Something went wrong on our side. Please try again later.
-        </p>
+      <SomethingWentWrongPage>
         <button
           type="button"
           className="btn btn-secondary btn-sm"
@@ -176,7 +171,7 @@ const UsersFormApp = ({ mode, user, handleClose }: UsersFormAppProps) => {
         >
           Close
         </button>
-      </div>
+      </SomethingWentWrongPage>
     );
   }
 

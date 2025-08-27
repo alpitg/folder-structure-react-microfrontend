@@ -26,13 +26,14 @@
       "users": {
         "login": "/api/auth/login",
         "updatePassword": "/api/auth/users/{id}/change-password",
-        "updateCurrentUserProfile": "/api/auth/users/{id}/updateCurrentUserProfile",
+        "getCurrentUserProfile": "/api/auth/users/{id}/current-user-profile",
+        "updateCurrentUserProfile": "/api/auth/users/{id}/current-user-profile",
         "list": "/api/users/search",
         "detail": "/api/users/{id}",
         "add": "/api/users/create",
         "update": "/api/users/{id}",
         "delete": "/api/users/{id}",
-        "getUserForEdit": "/api/users/GetUserForEdit?id={id}",
+        "getUserForEdit": "/api/users/get-user-for-edit?id={id}",
         "permissions": "/api/users/permissions"
       }
     },
