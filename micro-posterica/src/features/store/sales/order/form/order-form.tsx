@@ -16,7 +16,7 @@ import {
   useUpdateOrderMutation,
 } from "../../../../../app/redux/sales/order/order.api";
 import { NavLink, useNavigate, useParams } from "react-router";
-import { ROUTE_URL } from "../../../../../components/auth/constants/routes.const";
+import { ROUTE_URL } from "../../../../../routes/constants/routes.const";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import CustomizedArtApp from "./customized/customized-art";
 import OrderSummaryApp from "./order-summary/order-summary";

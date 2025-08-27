@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router";
 
-import { useAuth } from "../../hooks/use-auth";
+import { useAuth } from "../hooks/use-auth";
 
 const PrivateRoute = ({ requiredRole }: { requiredRole?: string }) => {
   const { isAuthenticated, user, hydrated } = useAuth();

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import PaymentBadge, {
   type PaymentStatus,
 } from "../../../../../components/ui/payment-badges/payment-badges";
-import { ROUTE_URL } from "../../../../../components/auth/constants/routes.const";
+import { ROUTE_URL } from "../../../../../routes/constants/routes.const";
 import ErrorPage from "../../../../../components/ui/error/error-page";
 import OrderFilterApp from "./filter/order-filter";
 import { useGetOrdersQuery } from "../../../../../app/redux/sales/order/order.api";

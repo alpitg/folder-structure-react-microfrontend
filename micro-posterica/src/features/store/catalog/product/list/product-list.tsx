@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import PageHeaderApp from "../../../../../components/header/page-header/page-header";
 import ProductFilterApp from "./filter/product-filter";
-import { ROUTE_URL } from "../../../../../components/auth/constants/routes.const";
+import { ROUTE_URL } from "../../../../../routes/constants/routes.const";
 import { useGetProductsQuery } from "../../../../../app/redux/catalog/product/product.api";
 
 type sortType = "newest" | "oldest";

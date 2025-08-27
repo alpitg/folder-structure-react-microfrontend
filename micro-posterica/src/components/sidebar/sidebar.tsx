@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import type { IRoutes } from "../../interfaces/route.model";
 import { NavLink } from "react-router";
-import { ROUTE_URL } from "../auth/constants/routes.const";
+import { ROUTE_URL } from "../../routes/constants/routes.const";
 
 const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
   const administration: IRoutes = {

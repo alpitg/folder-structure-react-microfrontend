@@ -10,7 +10,7 @@ import CustomerAddressForm from "./address/customer-add-address";
 import CustomerBasicInfo from "./basic-info/customer-add-basic-info";
 import type { ICustomer } from "../../interface/customer.model";
 import PageHeaderApp from "../../../../../components/header/page-header/page-header";
-import { ROUTE_URL } from "../../../../../components/auth/constants/routes.const";
+import { ROUTE_URL } from "../../../../../routes/constants/routes.const";
 import { useEffect } from "react";
 
 type CustomerFormAppProps = {

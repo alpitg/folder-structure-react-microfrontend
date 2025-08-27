@@ -1,38 +1,40 @@
-import { BrowserRouter, Route, Routes } from "react-router";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { Suspense, lazy } from "react";
 
-import { AdministrationRoutes } from "../../features/administration/administration.routes";
-import { CatalogRoutes } from "../../features/store/catalog/routes/catalog.routes";
-import { CustomerRoutes } from "../../features/store/customer/routes/customer.route";
-import LoadingApp from "../loading/loading";
+import { AdministrationRoutes } from "../features/administration/administration.routes";
+import { CatalogRoutes } from "../features/store/catalog/routes/catalog.routes";
+import { CustomerRoutes } from "../features/store/customer/routes/customer.route";
+import LoadingApp from "../components/loading/loading";
 import PrivateRoute from "./private-route";
 import { ROUTE_URL } from "./constants/routes.const";
-import { useAuthInit } from "../../hooks/use-auth-init";
+import { useAuthInit } from "../hooks/use-auth-init";
 
-const LandingPageApp = lazy(() => import("../landing-page/landing-page"));
-const DashboardApp = lazy(() => import("../../features/dashboard/dashboard"));
-const SettingsApp = lazy(() => import("../../features/settings/settings"));
-const UIApp = lazy(() => import("../../components/ui/ui"));
-const LoginApp = lazy(() => import("../../components/auth/login/login"));
-const MasterApp = lazy(() => import("../../features/store/master/master"));
+const LandingPageApp = lazy(
+  () => import("../components/landing-page/landing-page")
+);
+const DashboardApp = lazy(() => import("../features/dashboard/dashboard"));
+const SettingsApp = lazy(() => import("../features/settings/settings"));
+const UIApp = lazy(() => import("../components/ui/ui"));
+const LoginApp = lazy(() => import("../components/auth/login/login"));
+const MasterApp = lazy(() => import("../features/store/master/master"));
 const FrameTypesApp = lazy(
-  () => import("../../features/store/master/frame/frame-types/frame-types")
+  () => import("../features/store/master/frame/frame-types/frame-types")
 );
 const GlassTypesApp = lazy(
-  () => import("../../features/store/master/glass-types/glass-types")
+  () => import("../features/store/master/glass-types/glass-types")
 );
 const MiscChargesApp = lazy(
-  () => import("../../features/store/master/misc-charges/misc-charges")
+  () => import("../features/store/master/misc-charges/misc-charges")
 );
-const SalesApp = lazy(() => import("../../features/store/sales/sales"));
+const SalesApp = lazy(() => import("../features/store/sales/sales"));
 const OrderListApp = lazy(
-  () => import("../../features/store/sales/order/list/order-list")
+  () => import("../features/store/sales/order/list/order-list")
 );
 const OrderFormApp = lazy(
-  () => import("../../features/store/sales/order/form/order-form")
+  () => import("../features/store/sales/order/form/order-form")
 );
 const OrderViewApp = lazy(
-  () => import("../../features/store/sales/order/view/order-view")
+  () => import("../features/store/sales/order/view/order-view")
 );
 
 const RoutesApp = () => {
@@ -91,6 +93,8 @@ const RoutesApp = () => {
               </Route>
             </Route>
           </Route>
+
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
     </Suspense>

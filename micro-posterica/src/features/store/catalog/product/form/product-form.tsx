@@ -19,7 +19,7 @@ import ProductStatusApp from "./status/product-status";
 import ProductTemplateApp from "./template/product-template";
 import ProductThumbnailApp from "./thumbnail/product-thumbnail";
 import ProductVariantsApp from "./variants/product-variants";
-import { ROUTE_URL } from "../../../../../components/auth/constants/routes.const";
+import { ROUTE_URL } from "../../../../../routes/constants/routes.const";
 import { useEffect } from "react";
 import PageHeaderApp from "../../../../../components/header/page-header/page-header";
 

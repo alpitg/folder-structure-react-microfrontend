@@ -16,3 +16,13 @@ const PermissionGuard = ({
 };
 
 export default PermissionGuard;
+
+// // usage -
+// <Route
+//   path="/settings"
+//   element={
+//     <PermissionGuard permission="can_view_settings">
+//       <SettingsApp />
+//     </PermissionGuard>
+//   }
+// />

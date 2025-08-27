@@ -1,6 +1,6 @@
 import OrganizationUnitApp from "./organization/organization-unit";
 import OrganizationUnitsListApp from "./organization/list/organization-units-list";
-import { ROUTE_URL } from "../../components/auth/constants/routes.const";
+import { ROUTE_URL } from "../../routes/constants/routes.const";
 import RoleListApp from "./roles/list/role-list";
 import { Route } from "react-router";
 import UserListApp from "./users/list/users-list";

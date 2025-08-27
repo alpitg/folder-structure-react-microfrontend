@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router";
 import DeleteConfirmationApp from "../../../../../../components/ui/delete-confirmation/delete-confirmation";
 import type { IOrderInvoiceData } from "../../../../../../interfaces/order/order.model";
 import { ROUTE_URL } from "../../../../../../routes/constants/routes.const";
-import { calculateTotalAmount } from "../../../../catalog/product/utils/costing.util";
+import { calculateTotalAmount } from "../../../../../store/catalog/product/utils/costing.util";
 import { paymentModes } from "../../../../../../constants/app.const";
 import { useFormContext } from "react-hook-form";
 import { useState } from "react";

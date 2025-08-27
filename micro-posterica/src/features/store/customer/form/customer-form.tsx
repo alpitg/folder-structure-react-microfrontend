@@ -1,7 +1,7 @@
 import { NavLink, useParams } from "react-router";
 
 import PageHeaderApp from "../../../../components/header/page-header/page-header";
-import { ROUTE_URL } from "../../../../components/auth/constants/routes.const";
+import { ROUTE_URL } from "../../../../routes/constants/routes.const";
 
 type CustomerFormAppProps = {
   mode: "add" | "edit";

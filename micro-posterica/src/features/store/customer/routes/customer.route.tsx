@@ -1,4 +1,4 @@
-import { ROUTE_URL } from "../../../../components/auth/constants/routes.const";
+import { ROUTE_URL } from "../../../../routes/constants/routes.const";
 import { Route } from "react-router";
 import { lazy } from "react";
 
