@@ -109,7 +109,7 @@ const UserSettingApp: React.FC<{
   // Handle loading
   if (isGetLoading) {
     return (
-      <ModelApp show={show} modelSize="md">
+      <ModelApp show={show} modelSize="md" onClose={() => {}}>
         <div className="p-5 text-center">Loading details...</div>
       </ModelApp>
     );

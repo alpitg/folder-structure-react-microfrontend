@@ -167,11 +167,15 @@ const RoleListApp = () => {
             </table>
           </div>
 
-          <ModelApp show={showFormModel} modelSize="lg">
+          <ModelApp
+            show={showFormModel}
+            modelSize="lg"
+            onClose={() => handleFormClose()}
+          >
             <RolesFormApp
               mode={selectedRole ? "edit" : "add"}
               role={selectedRole}
-              handleClose={handleFormClose}
+              handleClose={() => handleFormClose}
             />
           </ModelApp>
 

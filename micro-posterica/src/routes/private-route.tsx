@@ -14,7 +14,7 @@ const PrivateRoute = ({ requiredRole }: { requiredRole?: string }) => {
     return <Navigate to="/login" replace />;
   }
 
-  if (requiredRole && !user?.roles?.includes(requiredRole)) {
+  if (requiredRole && !user?.roles?.map((x) => x.name).includes(requiredRole)) {
     return <Navigate to="/403" replace />;
   }
 
