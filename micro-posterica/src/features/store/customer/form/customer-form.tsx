@@ -1,5 +1,4 @@
-import { NavLink, useParams } from "react-router";
-
+import { NavLink } from "react-router";
 import PageHeaderApp from "../../../../components/header/page-header/page-header";
 import { ROUTE_URL } from "../../../../routes/constants/routes.const";
 
@@ -9,7 +8,6 @@ type CustomerFormAppProps = {
 
 const CustomerFormApp = ({ mode }: CustomerFormAppProps) => {
   const isEditMode = mode === "edit";
-  const { id } = useParams<{ id?: string }>();
 
   return (
     <div className="customer-form-app">

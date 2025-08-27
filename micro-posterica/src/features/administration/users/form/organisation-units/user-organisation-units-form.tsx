@@ -5,7 +5,7 @@ const UserOrganisationUnitsFormApp = ({
 }: {
   data?: IUserWithPermissions;
 }) => {
-  return <div className="user-info-form-app">"permiss"</div>;
+  return <div className="user-info-form-app">"permiss" {data?.user?.id}</div>;
 };
 
 export default UserOrganisationUnitsFormApp;

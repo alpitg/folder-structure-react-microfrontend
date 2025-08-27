@@ -23,7 +23,7 @@ const LoginApp = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   // ✅ RTK Mutation hook
-  const [login, { data, isLoading, isError, isSuccess }] = useLoginMutation();
+  const [login, { isLoading, isError, isSuccess }] = useLoginMutation();
 
   const {
     register,
