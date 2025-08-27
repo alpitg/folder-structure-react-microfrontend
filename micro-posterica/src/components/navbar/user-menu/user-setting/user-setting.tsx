@@ -1,5 +1,5 @@
 import { FormProvider, useForm, type SubmitHandler } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAuth } from "../../../../hooks/use-auth";
 import {
   useGetCurrentUserProfileQuery,
@@ -8,8 +8,9 @@ import {
 
 import ModelApp from "../../../ui/model/model";
 import PageHeaderApp from "../../../header/page-header/page-header";
-import ToastApp, { type ToastAppProps } from "../../../ui/toast/toast";
 import SomethingWentWrongPage from "../../../ui/error/something-went-wrong/something-went-wrong";
+import { useDispatch } from "react-redux";
+import { setToast } from "../../../../app/redux/core/app-settings/app-settings.slice";
 
 type FormValues = {
   user: {
@@ -25,12 +26,7 @@ const UserSettingApp: React.FC<{
   handleClose?: (args?: { refresh: boolean }) => void;
 }> = ({ show, handleClose }) => {
   const { user } = useAuth();
-
-  const [toast, setToast] = useState<ToastAppProps>({
-    show: false,
-    message: "",
-    variant: "info",
-  });
+  const dispatch = useDispatch();
 
   const [updateCurrentUserProfile, { isLoading: isUpdateLoading }] =
     useUpdateCurrentUserProfileMutation();
@@ -70,21 +66,26 @@ const UserSettingApp: React.FC<{
         data: formData.user,
       }).unwrap();
 
+      dispatch(
+        setToast({
+          show: true,
+          message: response?.message || "User info updated successfully.",
+          variant: "success",
+        })
+      );
       handleClose?.({ refresh: true });
-      setToast({
-        show: true,
-        message: response?.message || "User info updated successfully.",
-        variant: "success",
-      });
     } catch (error: any) {
-      setToast({
-        show: true,
-        message:
-          (typeof error?.data?.detail === "object"
-            ? error?.data?.detail?.[0]?.msg
-            : error?.data?.detail) || "Server error! Failed to update detail.",
-        variant: "danger",
-      });
+      dispatch(
+        setToast({
+          show: true,
+          message:
+            (typeof error?.data?.detail === "object"
+              ? error?.data?.detail?.[0]?.msg
+              : error?.data?.detail) ||
+            "Server error! Failed to update detail.",
+          variant: "danger",
+        })
+      );
     }
   };
   //#endregion
@@ -270,13 +271,6 @@ const UserSettingApp: React.FC<{
           </FormProvider>
         </div>
       </ModelApp>
-
-      <ToastApp
-        show={toast.show}
-        message={toast.message}
-        variant={toast.variant}
-        onClose={() => setToast((t) => ({ ...t, show: false }))}
-      />
     </>
   );
 };

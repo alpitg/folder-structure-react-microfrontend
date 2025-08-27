@@ -3,9 +3,10 @@ import { FormProvider, useForm, type SubmitHandler } from "react-hook-form";
 import ModelApp from "../../../ui/model/model";
 import PageHeaderApp from "../../../header/page-header/page-header";
 import { useUpdatePasswordMutation } from "../../../../app/redux/administration/auth/auth.api";
-import ToastApp, { type ToastAppProps } from "../../../ui/toast/toast";
-import { useEffect, useState } from "react";
 import { useAuth } from "../../../../hooks/use-auth";
+import { useDispatch } from "react-redux";
+import { setToast } from "../../../../app/redux/core/app-settings/app-settings.slice";
+import { useEffect } from "react";
 
 type FormValues = {
   user: {
@@ -20,11 +21,7 @@ const ChangePasswordApp: React.FC<{
   handleClose?: (args?: { refresh: boolean }) => void;
   isLoading?: boolean;
 }> = ({ show, handleClose }) => {
-  const [toast, setToast] = useState<ToastAppProps>({
-    show: false,
-    message: "",
-    variant: "info",
-  });
+  const dispatch = useDispatch();
 
   //#region RTK APIs
 
@@ -60,19 +57,25 @@ const ChangePasswordApp: React.FC<{
       .unwrap()
       .then((response) => {
         handleClose?.({ refresh: true });
-        setToast({
-          show: true,
-          message: response?.message || "Password updated successfully.",
-          variant: "success",
-        });
+
+        dispatch(
+          setToast({
+            show: true,
+            message: response?.message || "Password updated successfully.",
+            variant: "success",
+          })
+        );
       })
       .catch((response) => {
-        setToast({
-          show: true,
-          message:
-            response?.data?.detail || "Server error! Failed to update password.",
-          variant: "danger",
-        });
+        dispatch(
+          setToast({
+            show: true,
+            message:
+              response?.data?.detail ||
+              "Server error! Failed to update password.",
+            variant: "danger",
+          })
+        );
       });
   };
 
@@ -209,12 +212,6 @@ const ChangePasswordApp: React.FC<{
           </FormProvider>
         </div>
       </ModelApp>
-      <ToastApp
-        show={toast?.show}
-        message={toast?.message}
-        variant={toast?.variant}
-        onClose={() => setToast({ ...toast, show: false })}
-      />
     </>
   );
 };
