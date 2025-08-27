@@ -24,6 +24,7 @@
         "permissions": "/api/roles-permissions"
       },
       "users": {
+        "login": "/api/auth/login",
         "list": "/api/users/search",
         "detail": "/api/users/{id}",
         "add": "/api/users/create",

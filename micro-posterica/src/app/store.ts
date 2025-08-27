@@ -1,3 +1,4 @@
+import { authApi } from "./redux/administration/auth/auth.api";
 import catalogReducer from "./redux/catalog/catalog.reducer";
 import { configureStore } from "@reduxjs/toolkit";
 import coreReducer from "./redux/core/core.reducer";
@@ -18,6 +19,7 @@ const store = configureStore({
     catalog: catalogReducer,
 
     // administration
+    [authApi.reducerPath]: authApi.reducer,
     [organizationUnitsApi.reducerPath]: organizationUnitsApi.reducer,
     [rolesApi.reducerPath]: rolesApi.reducer,
     [usersApi.reducerPath]: usersApi.reducer,
@@ -32,6 +34,7 @@ const store = configureStore({
       serializableCheck: false, // Disable serializable check for non-serializable data
     }).concat(
       // administration
+      authApi.middleware,
       organizationUnitsApi.middleware,
       rolesApi.middleware,
       usersApi.middleware,

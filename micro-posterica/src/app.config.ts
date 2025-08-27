@@ -29,6 +29,7 @@ let environment = {
         permissions: "",
       },
       users: {
+        login: "",
         list: "",
         detail: "",
         add: "",

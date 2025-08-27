@@ -1,208 +1,186 @@
-import "./login.scss";
-// import { useEffect, useState } from "react";
-// import { Card } from "primereact/card";
-// import { InputText } from "primereact/inputtext";
-// import { useNavigate } from "react-router";
-// import { useDispatch, useSelector } from "react-redux";
-// import { authenticateRequest } from "../../../store/actions/auth.action";
-// import { IAuthenticationRequestModel } from "../../../interfaces/auth.model";
-// import { ROUTE_URL } from "../constants/routes.const";
-// import SaveLoaderButtonApp from "../../ui/save-loader-button/save-loader-button";
-// import AuthService from "../../../services/auth.service";
-// import { AppState } from "../../../store/reducers/root.reducer";
-// import MessagesApp from "../../ui/messages/messages";
+import { useForm, type SubmitHandler } from "react-hook-form";
+import { useState } from "react";
+import { useLoginMutation } from "../../../app/redux/administration/auth/auth.api";
+import { useNavigate } from "react-router";
+
+export interface ILoginForm {
+  userName: string;
+  password: string;
+  rememberMe?: boolean;
+}
+
+export interface ILoginResponse {
+  token_type: string;
+  access_token: string;
+}
 
 const LoginApp = () => {
-  //   const auth = useSelector((x: AppState) => x.authenticate);
-  //   const isAuthenticated = AuthService.getAuthDetail()?.isAuthenticated;
-  //   const navigate = useNavigate();
-  //   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
-  //   const [useLoginDetail, setUseLoginDetail] =
-  //     useState<IAuthenticationRequestModel>({
-  //       userName: "admin@gmail.com",
-  //       password: "admin@123",
-  //       remoteIp: "",
-  //       latitude: "",
-  //       longitude: "",
-  //     });
+  // ✅ RTK Mutation hook
+  const [login, { data, isLoading, isError, isSuccess }] = useLoginMutation();
 
-  //   useEffect(() => {
-  //     // NOTE: Currently checking both localstorage & store for auth flag
-  //     if (isAuthenticated || auth?.result?.isAuthenticated) {
-  //       navigate(ROUTE_URL.DASHBOARD);
-  //     }
-  //     // eslint-disable-next-line react-hooks/exhaustive-deps
-  //   }, [auth?.result?.isAuthenticated]);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ILoginForm>();
 
-  //   const onLogin = (e: any) => {
-  //     e?.preventDefault();
-  //     dispatch(authenticateRequest(useLoginDetail));
-  //   };
+  const onSubmit: SubmitHandler<ILoginForm> = async (formData) => {
+    try {
+      const response = await login(formData).unwrap(); // unwrap to get raw response or throw error
+      console.log("Login successful:", response);
+
+      // ✅ Store token in localStorage or cookies (optional)
+      localStorage.setItem("access_token", response.access_token);
+
+      // ✅ Redirect to home
+      navigate("/");
+    } catch (err) {
+      console.error("Login failed:", err);
+    }
+  };
 
   return (
-    <div className="login-app">
-      <div className="d-flex flex-column flex-lg-row flex-column-fluid">
-        <div className="d-flex flex-lg-row-fluid w-lg-50 bgi-position-center">
-          <div className="d-flex flex-column flex-center p-6 p-lg-10 w-100">
-            <a href="/keen/demo1/index.html" className="mb-0 mb-lg-20">
-              <img
-                alt="Logo"
-                src="/static/media/img/logo.png"
-                className="h-40px h-lg-50px"
-              />
-            </a>
-
-            <img
-              className="d-none d-lg-block mx-auto w-300px w-lg-75 w-xl-500px mb-10 mb-lg-20"
-              src="/static/media/img/login-auth.png"
-              alt=""
-            />
-
-            <h1 className="d-none d-lg-block text-white fs-2qx fw-bold text-center mb-7">
-              Fast, Efficient and Productive
-            </h1>
-
-            <div className="d-none d-lg-block text-white fs-base text-center">
-              In this kind of post,
-              <a
-                href="#"
-                className="opacity-75-hover text-warning fw-semibold me-1"
-              >
-                the blogger
-              </a>
-              introduces a person they've interviewed <br />
-              and provides some background information about{" "}
-              <a
-                href="#"
-                className="opacity-75-hover text-warning fw-semibold me-1"
-              >
-                the interviewee
-              </a>
-              and their <br />
-              work following this is a transcript of the interview.
-            </div>
+    <div
+      className="d-flex align-items-center justify-content-center min-vh-100"
+      style={{
+        backgroundImage: "url('/static/media/img/login-bg.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      <div className="card shadow-lg m-10 w-100 w-lg-500px">
+        <div className="card-body p-10">
+          <div className="mb-10 text-center">
+            <h3 className="fw-bolder text-gray-900 fs-1">Log in</h3>
+            <p className="text-muted">Access your account</p>
           </div>
-        </div>
 
-        <div className="d-flex flex-column flex-lg-row-fluid w-lg-50 p-10">
-          <div className="d-flex flex-center flex-column flex-lg-row-fluid">
-            <div className="w-lg-500px p-10">
-              <form
-                className="form w-100 fv-plugins-bootstrap5 fv-plugins-framework"
-                id="kt_sign_in_form"
-                noValidate
-                data-kt-redirect-url="/keen/demo1/index.html"
-              >
-                <div className="text-center mb-11">
-                  <h1 className="text-gray-900 fw-bolder mb-3">Sign In</h1>
-                  <div className="text-gray-500 fw-semibold fs-6">
-                    Your Personalized App
+          {/* ✅ Error message */}
+          {isError && (
+            <div className="alert alert-danger">
+              Invalid username or password
+            </div>
+          )}
+
+          {/* Success */}
+          {isSuccess && (
+            <div className="alert alert-success mt-3">
+              Login successful! Redirecting...
+            </div>
+          )}
+
+          {/* Form */}
+          <form onSubmit={handleSubmit(onSubmit)} noValidate>
+            <div className="d-flex flex-column gap-5">
+              {/* Username */}
+              <div>
+                <input
+                  type="text"
+                  autoComplete="username"
+                  className={`form-control form-control-solid ${
+                    errors.userName ? "is-invalid" : ""
+                  }`}
+                  placeholder="User name or email *"
+                  tabIndex={-1}
+                  {...register("userName", { required: true })}
+                />
+                {errors.userName && (
+                  <div className="invalid-feedback">
+                    Username or email is required
                   </div>
-                </div>
+                )}
+              </div>
 
-                <div className="row g-3 mb-9 justify-content-center">
-                  <div className="col-md-6">
-                    <a
-                      href="#"
-                      className="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap"
+              {/* Password */}
+              <div>
+                <div className="position-relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    autoComplete="current-password"
+                    maxLength={32}
+                    className={`form-control form-control-solid ${
+                      errors.password ? "is-invalid" : ""
+                    }`}
+                    placeholder="Password *"
+                    {...register("password", { required: true })}
+                  />
+                  {!errors.password && (
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-icon position-absolute top-50 end-0 translate-middle-y me-2"
+                      onClick={() => setShowPassword(!showPassword)}
                     >
-                      <img
-                        alt="Logo"
-                        src="/static/media/icon/google-icon.svg"
-                        className="h-15px me-3"
-                      />
-                      Sign in with Google
-                    </a>
+                      <i
+                        className={`bi ${
+                          showPassword ? "bi-eye" : "bi-eye-slash"
+                        } fs-4`}
+                      ></i>
+                    </button>
+                  )}
+                </div>
+                {errors.password && (
+                  <div className="invalid-feedback d-block">
+                    Password is required
                   </div>
-                </div>
+                )}
+              </div>
 
-                <div className="separator separator-content my-14">
-                  <span className="w-125px text-gray-500 fw-semibold fs-7">
-                    Or with email
-                  </span>
-                </div>
-
-                <div className="fv-row mb-8 fv-plugins-icon-container">
+              {/* Remember Me */}
+              <div className="d-flex justify-content-between align-items-center">
+                <div className="form-check">
                   <input
-                    type="text"
-                    placeholder="Email"
-                    name="email"
-                    autoComplete="off"
-                    className="form-control bg-transparent"
+                    className="form-check-input cursor-pointer"
+                    type="checkbox"
+                    id="rememberMe"
+                    {...register("rememberMe")}
                   />
-                  <div className="fv-plugins-message-container invalid-feedback" />
-                </div>
-
-                <div className="fv-row mb-3 fv-plugins-icon-container">
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    name="password"
-                    autoComplete="off"
-                    className="form-control bg-transparent"
-                  />
-                  <div className="fv-plugins-message-container invalid-feedback" />
-                </div>
-
-                <div className="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
-                  <div />
-                  <a
-                    href="/keen/demo1/authentication/layouts/corporate/reset-password.html"
-                    className="link-primary"
+                  <label
+                    className="form-check-label cursor-pointer"
+                    htmlFor="rememberMe"
                   >
-                    Forgot Password ?
-                  </a>
+                    Remember me
+                  </label>
                 </div>
+                <a
+                  href="/account/forgot-password"
+                  className="text-primary fw-semibold text-decoration-none"
+                >
+                  Forgot password?
+                </a>
+              </div>
 
-                <div className="d-grid mb-10">
-                  <button
-                    type="submit"
-                    id="kt_sign_in_submit"
-                    className="btn btn-primary"
-                  >
-                    <span className="indicator-label">Sign In</span>
-                  </button>
-                </div>
-
-                <div className="text-gray-500 text-center fw-semibold fs-6">
-                  Not a Member yet?
-                  <a
-                    href="/keen/demo1/authentication/layouts/corporate/sign-up.html"
-                    className="link-primary"
-                  >
-                    Sign up
-                  </a>
-                </div>
-              </form>
+              {/* Submit */}
+              <div className="d-grid mb-3">
+                <button
+                  type="submit"
+                  className="btn btn-primary fw-bold py-3"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Logging in..." : "Log in"}
+                </button>
+              </div>
             </div>
-          </div>
+          </form>
 
-          <div className="d-flex flex-center flex-wrap px-5">
-            <div className="d-flex fw-semibold text-primary fs-base">
+          {/* Sign up */}
+          <div className="mt-4 text-center">
+            <p className="mb-1">Not a member yet?</p>
+            <div>
               <a
-                href="https://keenthemes.com"
-                className="px-5"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/account/register"
+                className="fw-semibold text-decoration-none me-2"
               >
-                Terms
+                Create account
               </a>
+              <span className="text-muted">|</span>
               <a
-                href="https://devs.keenthemes.com"
-                className="px-5"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/account/email-activation"
+                className="fw-semibold text-decoration-none ms-2"
               >
-                Plans
-              </a>
-              <a
-                href="https://themes.getbootstrap.com/product/keen-the-ultimate-bootstrap-admin-theme/"
-                className="px-5"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Contact Us
+                Email activation
               </a>
             </div>
           </div>
@@ -211,4 +189,5 @@ const LoginApp = () => {
     </div>
   );
 };
+
 export default LoginApp;
