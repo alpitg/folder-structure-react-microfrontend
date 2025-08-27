@@ -34,4 +34,12 @@
   .margin-left {
     margin-left: var(--sidebar-width);
   }
+
+  .dropdown .dropdown-menu {
+    display: none;
+  }
+  .dropdown:hover .dropdown-menu {
+    display: block;
+    right: 0;
+  }
 }
