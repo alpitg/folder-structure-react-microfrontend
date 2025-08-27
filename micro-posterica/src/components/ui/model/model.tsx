@@ -2,12 +2,14 @@ interface ModelAppProps {
   show: boolean;
   modelSize?: "sm" | "md" | "lg" | "xl" | "fullscreen";
   children: React.ReactNode;
+  onClose: () => void;
 }
 
 const ModelApp: React.FC<ModelAppProps> = ({
   show,
   modelSize = "lg",
   children,
+  onClose,
 }) => {
   return (
     <>
@@ -24,6 +26,14 @@ const ModelApp: React.FC<ModelAppProps> = ({
             }`}
           >
             <div className="modal-content">
+            <div className="ribbon ribbon-triangle ribbon-top-end border-primary">
+                <div
+                  className="ribbon-icon mt-n6 cursor-pointer"
+                  onClick={() => onClose?.()}
+                >
+                  <i className="bi bi-x fs-1 text-white"></i>
+                </div>
+              </div>
               <div className="modal-body">{children}</div>
             </div>
           </div>

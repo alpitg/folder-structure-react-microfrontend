@@ -58,7 +58,11 @@ const OrganizationTreeApp = ({
               )}
             </div>
 
-            <ModelApp show={showFormModel}>
+            <ModelApp
+              show={showFormModel}
+              modelSize="sm"
+              onClose={() => setShowFormModel(false)}
+            >
               <FormProvider {...methods}>
                 <OrganizationTreeFormApp
                   onClose={() => setShowFormModel(false)}

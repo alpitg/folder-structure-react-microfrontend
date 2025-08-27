@@ -175,11 +175,15 @@ const UserListApp = () => {
             </table>
           </div>
 
-          <ModelApp show={showFormModel} modelSize="lg">
+          <ModelApp
+            show={showFormModel}
+            modelSize="lg"
+            onClose={() => handleFormClose()}
+          >
             <UsersFormApp
               mode={selectedUser ? "edit" : "add"}
               user={selectedUser}
-              handleClose={handleFormClose}
+              handleClose={() => handleFormClose}
             />
           </ModelApp>
 

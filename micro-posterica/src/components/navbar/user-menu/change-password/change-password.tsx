@@ -94,7 +94,14 @@ const ChangePasswordApp: React.FC<{
 
   return (
     <>
-      <ModelApp show={show} modelSize="md">
+      <ModelApp
+        show={show}
+        modelSize="md"
+        onClose={() => {
+          reset();
+          handleClose?.({ refresh: false });
+        }}
+      >
         <div className="users-form-app">
           <FormProvider {...methods}>
             <form

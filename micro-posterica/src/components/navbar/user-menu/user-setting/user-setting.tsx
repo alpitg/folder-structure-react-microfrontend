@@ -118,7 +118,13 @@ const UserSettingApp: React.FC<{
   // Handle error
   if (isError) {
     return (
-      <ModelApp show={show} modelSize="md">
+      <ModelApp
+        show={show}
+        modelSize="md"
+        onClose={() => {
+          handleClose?.({ refresh: false });
+        }}
+      >
         <SomethingWentWrongPage>
           <button
             type="button"
@@ -134,7 +140,14 @@ const UserSettingApp: React.FC<{
 
   return (
     <>
-      <ModelApp show={show} modelSize="md">
+      <ModelApp
+        show={show}
+        modelSize="md"
+        onClose={() => {
+          reset();
+          handleClose?.({ refresh: false });
+        }}
+      >
         <div className="users-form-app">
           <FormProvider {...methods}>
             <form onSubmit={handleSubmit(onSubmit)} noValidate>

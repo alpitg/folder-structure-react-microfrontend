@@ -3,8 +3,11 @@ import { clearCredentials } from "../../../app/redux/administration/auth/auth.sl
 import { useDispatch } from "react-redux";
 import ChangePasswordApp from "./change-password/change-password";
 import UserSettingApp from "./user-setting/user-setting";
+import { useAuth } from "../../../hooks/use-auth";
 
 const UserMenuApp: FC = () => {
+  const { user } = useAuth();
+
   const dispatch = useDispatch();
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [showUserSettingApp, setShowUserSettingApp] = useState(false);
@@ -49,18 +52,17 @@ const UserMenuApp: FC = () => {
             <i className="bi bi-person-circle fs-1 w-50px h-50px"></i>
             <div>
               <div className="fw-bold d-flex align-items-center">
-                Max Smith
+                {user?.user?.name} {user?.user?.surname}
                 <span className="badge bg-success text-white ms-2">Pro</span>
               </div>
-              <small className="text-muted">max@kt.com</small>
+              <small className="text-muted">{user?.user?.emailAddress}</small>
             </div>
           </li>
 
-          <li>
+          {/* <li>
             <hr className="dropdown-divider" />
           </li>
 
-          {/* Menu Items */}
           <li>
             <a className="dropdown-item" href="/account/overview">
               <i className="bi bi-person me-2 fs-3"></i> My Profile
@@ -76,7 +78,7 @@ const UserMenuApp: FC = () => {
               </span>
               <span className="badge bg-danger rounded-pill">3</span>
             </a>
-          </li>
+          </li> */}
 
           <li>
             <hr className="dropdown-divider" />

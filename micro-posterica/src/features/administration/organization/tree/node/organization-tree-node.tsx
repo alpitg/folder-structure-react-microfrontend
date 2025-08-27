@@ -21,9 +21,7 @@ const OrganizationTreeNodeApp = (props: IOrganizationUnitTree) => {
   return (
     <div>
       <li className="list-unstyled">
-        <div
-          className="d-flex align-items-center py-2 gap-3"
-        >
+        <div className="d-flex align-items-center py-2 gap-3">
           {/* Chevron */}
           {hasChildren ? (
             expanded ? (
@@ -76,7 +74,11 @@ const OrganizationTreeNodeApp = (props: IOrganizationUnitTree) => {
         )}
       </li>
 
-      <ModelApp show={showAddModel}>
+      <ModelApp
+        show={showAddModel}
+        modelSize="sm"
+        onClose={() => setShowAddModel(false)}
+      >
         <FormProvider {...methods}>
           <OrganizationTreeFormApp
             parent={props}
