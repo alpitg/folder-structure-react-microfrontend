@@ -35,14 +35,10 @@ src/
 │   ├── useAuth.ts              # check login + user
 │   ├── usePermission.ts        # check if user has required permission
 │
-├── pages/
-│   ├── auth/
+├── features/
+│   ├── master/
 │   │   ├── LoginPage.tsx
 │   │   └── RegisterPage.tsx
-│   ├── dashboard/
-│   │   └── DashboardPage.tsx
-│   ├── roles/
-│   │   └── RoleListApp.tsx
 │   └── ...
 │
 ├── routes/
