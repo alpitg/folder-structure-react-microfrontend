@@ -10,21 +10,47 @@
 # React + TypeScript + Vite
 
 src/
+│
+├── app/                     # redux or global store
+│   ├── store.ts
+│   └── redux/
+│       └── auth/
+│           ├── auth.api.ts     # RTK Query calls (login, refresh, logout)
+│           ├── auth.slice.ts   # stores token + user info
+│           ├── auth.types.ts   # types for user, roles, permissions
+│           └── role/           # role API + slice
+│
 ├── components/
-│   ├── ui/         # reusable buttons, inputs, cards
-│   ├── estimates/
-│   ├── bills/
-│   └── customers/
-├── features/
-│   ├── Dashboard.tsx
-│   ├── Customers.tsx
-│   ├── EstimateForm.tsx
-│   └── Bills.tsx
-├── services/
-│   └── api.ts      # axios-based API client
+│   ├── auth/
+│   │   ├── PrivateRoute.tsx    # route guard
+│   │   ├── PermissionGuard.tsx # check if user has permission
+│   │   └── constants/
+│   │       └── routes.const.ts # route names
+│   ├── layout/
+│   └── ui/                     # generic UI
+│
 ├── hooks/
-├── utils/
-└── App.tsx
+│   ├── useAuth.ts              # check login + user
+│   ├── usePermission.ts        # check if user has required permission
+│
+├── pages/
+│   ├── auth/
+│   │   ├── LoginPage.tsx
+│   │   └── RegisterPage.tsx
+│   ├── dashboard/
+│   │   └── DashboardPage.tsx
+│   ├── roles/
+│   │   └── RoleListApp.tsx
+│   └── ...
+│
+├── routes/
+│   ├── AppRoutes.tsx           # central route config
+│   └── ProtectedRoutes.tsx     # wraps routes with auth guard
+│
+└── utils/
+    ├── storage.ts              # token handling
+    ├── jwt.ts                  # decode JWT if needed
+    └── helpers.ts
 
 
 ## Future plan -
