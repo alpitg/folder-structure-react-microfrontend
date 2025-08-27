@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { clearCredentials } from "../../app/redux/administration/auth/auth.slice";
+import { clearCredentials } from "../../../app/redux/administration/auth/auth.slice";
 import { useDispatch } from "react-redux";
 
 const UserMenuApp: FC = () => {
