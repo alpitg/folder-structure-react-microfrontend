@@ -2,6 +2,8 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { useState } from "react";
 import { useLoginMutation } from "../../../app/redux/administration/auth/auth.api";
 import { useNavigate } from "react-router";
+import { setCredentials } from "../../../app/redux/administration/auth/auth.slice";
+import { useDispatch } from "react-redux";
 
 export interface ILoginForm {
   userName: string;
@@ -12,10 +14,12 @@ export interface ILoginForm {
 export interface ILoginResponse {
   tokenType: string;
   accessToken: string;
+  user: any;
 }
 
 const LoginApp = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
 
   // ✅ RTK Mutation hook
@@ -31,6 +35,14 @@ const LoginApp = () => {
     try {
       const response = await login(formData).unwrap(); // unwrap to get raw response or throw error
       console.log("Login successful:", response);
+
+      dispatch(
+        setCredentials({
+          accessToken: response.accessToken,
+          tokenType: response.tokenType,
+          user: response.user,
+        })
+      );
 
       // ✅ Redirect to home
       navigate("/");

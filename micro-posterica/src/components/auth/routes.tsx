@@ -7,6 +7,7 @@ import { CustomerRoutes } from "../../features/store/customer/routes/customer.ro
 import LoadingApp from "../loading/loading";
 import PrivateRoute from "./private-route";
 import { ROUTE_URL } from "./constants/routes.const";
+import { useAuthInit } from "../../hooks/use-auth-init";
 
 const LandingPageApp = lazy(() => import("../landing-page/landing-page"));
 const DashboardApp = lazy(() => import("../../features/dashboard/dashboard"));
@@ -35,6 +36,8 @@ const OrderViewApp = lazy(
 );
 
 const RoutesApp = () => {
+  useAuthInit(); // run once at app start
+
   return (
     <Suspense fallback={<LoadingApp />}>
       <BrowserRouter>

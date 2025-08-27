@@ -5,7 +5,6 @@ import type {
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { GetEnvConfig } from "../../../../app.config";
-import { setCredentials } from "./auth.slice";
 
 export const authApi = createApi({
   reducerPath: "authApi",
@@ -19,14 +18,14 @@ export const authApi = createApi({
         method: "POST",
         body: credentials,
       }),
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          dispatch(setCredentials(data));
-        } catch (err) {
-          console.error("Login failed", err);
-        }
-      },
+      // async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+      //   try {
+      //     const { data } = await queryFulfilled;
+      //     dispatch(setCredentials(data));
+      //   } catch (err) {
+      //     console.error("Login failed", err);
+      //   }
+      // },
     }),
   }),
 });
