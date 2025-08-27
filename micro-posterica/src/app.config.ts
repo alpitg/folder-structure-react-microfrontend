@@ -30,6 +30,7 @@ let environment = {
       },
       users: {
         login: "",
+        updatePassword: "",
         list: "",
         detail: "",
         add: "",

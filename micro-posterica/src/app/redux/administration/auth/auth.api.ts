@@ -2,6 +2,10 @@ import type {
   ILoginForm,
   ILoginResponse,
 } from "../../../../components/auth/login/login";
+import type {
+  IUpdatePasswordRequest,
+  IUpdatePasswordResponse,
+} from "../../../../components/navbar/user-menu/change-password/change-password.model";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { GetEnvConfig } from "../../../../app.config";
@@ -18,16 +22,21 @@ export const authApi = createApi({
         method: "POST",
         body: credentials,
       }),
-      // async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-      //   try {
-      //     const { data } = await queryFulfilled;
-      //     dispatch(setCredentials(data));
-      //   } catch (err) {
-      //     console.error("Login failed", err);
-      //   }
-      // },
+    }),
+
+    updatePassword: builder.mutation<
+      IUpdatePasswordResponse,
+      IUpdatePasswordRequest
+    >({
+      query: (payload) => ({
+        url:
+          GetEnvConfig()?.api?.baseUrl +
+          GetEnvConfig()?.api?.administration?.users?.updatePassword,
+        method: "POST",
+        body: payload,
+      }),
     }),
   }),
 });
 
-export const { useLoginMutation } = authApi;
+export const { useLoginMutation, useUpdatePasswordMutation } = authApi;
