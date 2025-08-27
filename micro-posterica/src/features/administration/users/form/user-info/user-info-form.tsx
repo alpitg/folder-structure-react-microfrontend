@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import type { IUserWithPermissions } from "../../../interfaces/users.model";
 import { allowedChar } from "../../../../../utils/auth.util";
+import { useAutoFocus } from "../../../../../hooks/use-auto-focus";
 import { useFormContext } from "react-hook-form";
 
 type UserInfoFormAppProps = {
@@ -9,13 +10,14 @@ type UserInfoFormAppProps = {
 };
 
 const UserInfoFormApp: React.FC<UserInfoFormAppProps> = ({ mode }) => {
+  const inputRef = useAutoFocus<HTMLInputElement>();
+  const [showPassword, setShowPassword] = useState(false);
+
   const {
     watch,
     register,
     formState: { errors },
   } = useFormContext<IUserWithPermissions>();
-
-  const [showPassword, setShowPassword] = useState(false);
   // Watch the checkbox to determine if password input should be disabled
   const setRandomPassword = watch("user.setRandomPassword", false);
 
@@ -49,6 +51,10 @@ const UserInfoFormApp: React.FC<UserInfoFormAppProps> = ({ mode }) => {
               }`}
               placeholder="Enter first name"
               {...register("user.name", { required: "First name is required" })}
+              ref={(e) => {
+                register("user.name")?.ref(e); // connect RHF (React Hook Form)
+                inputRef.current = e; // keep local ref
+              }}
             />
             {errors?.user?.name && (
               <div className="invalid-feedback">{errors.user.name.message}</div>
