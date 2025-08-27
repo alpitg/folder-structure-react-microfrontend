@@ -115,7 +115,7 @@ const UserListApp = () => {
               <tbody className="fw-semibold text-gray-600">
                 {userData?.items?.map((user) => (
                   <tr key={user?.id}>
-                    <td>
+                    <td className="align-middle">
                       <button
                         className="btn btn-link text-gray-800 text-hover-primary fs-5 fw-bold p-0"
                         onClick={() => {
@@ -126,9 +126,9 @@ const UserListApp = () => {
                         {user?.userName}
                       </button>
                     </td>
-                    <td>{user?.name}</td>
-                    <td>{user?.surname}</td>
-                    <td>
+                    <td className="align-middle">{user?.name}</td>
+                    <td className="align-middle">{user?.surname}</td>
+                    <td className="align-middle">
                       {user?.roles?.map((role) => (
                         <span
                           key={"role" + role?.id}
@@ -138,22 +138,24 @@ const UserListApp = () => {
                         </span>
                       ))}
                     </td>
-                    <td>{user?.emailAddress}</td>
-                    <td>
+                    <td className="align-middle">{user?.emailAddress}</td>
+                    <td className="align-middle">
                       {user?.isEmailConfirmed ? (
                         <span className="badge badge-success">Yes</span>
                       ) : (
                         <span className="badge badge-danger">No</span>
                       )}
                     </td>
-                    <td>
+                    <td className="align-middle">
                       {user?.isActive ? (
                         <span className="badge badge-success">Active</span>
                       ) : (
                         <span className="badge badge-secondary">Inactive</span>
                       )}
                     </td>
-                    <td>{formattedDate(user?.creationTime)}</td>
+                    <td className="align-middle">
+                      {formattedDate(user?.creationTime)}
+                    </td>
                     <td className="align-content-center">
                       <button
                         type="button"
