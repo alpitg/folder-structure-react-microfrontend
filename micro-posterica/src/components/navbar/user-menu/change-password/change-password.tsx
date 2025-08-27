@@ -7,6 +7,7 @@ import { useAuth } from "../../../../hooks/use-auth";
 import { useDispatch } from "react-redux";
 import { setToast } from "../../../../app/redux/core/app-settings/app-settings.slice";
 import { useEffect } from "react";
+import { useAutoFocus } from "../../../../hooks/use-auto-focus";
 
 type FormValues = {
   user: {
@@ -22,6 +23,7 @@ const ChangePasswordApp: React.FC<{
   isLoading?: boolean;
 }> = ({ show, handleClose }) => {
   const dispatch = useDispatch();
+  const inputRef = useAutoFocus<HTMLInputElement>();
 
   //#region RTK APIs
 
@@ -130,6 +132,10 @@ const ChangePasswordApp: React.FC<{
                       {...register("user.currentPassword", {
                         required: "Current password is required",
                       })}
+                      ref={(e) => {
+                        register("user.currentPassword")?.ref(e); // connect RHF (React Hook Form)
+                        inputRef.current = e; // keep local ref
+                      }}
                     />
                     {errors.user?.currentPassword && (
                       <div className="invalid-feedback">

@@ -175,7 +175,7 @@ const RoleListApp = () => {
             <RolesFormApp
               mode={selectedRole ? "edit" : "add"}
               role={selectedRole}
-              handleClose={() => handleFormClose}
+              handleClose={() => handleFormClose()}
             />
           </ModelApp>
 

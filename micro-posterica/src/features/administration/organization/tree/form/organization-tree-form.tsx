@@ -4,6 +4,7 @@ import type {
 } from "../../../interfaces/organization-units.model";
 
 import { useAddOrganizationUnitsMutation } from "../../../../../app/redux/administration/organization-units/organization-units.api";
+import { useAutoFocus } from "../../../../../hooks/use-auto-focus";
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
@@ -16,6 +17,8 @@ const OrganizationTreeFormApp = ({
   onClose: () => void;
   onSuccess: () => void;
 }) => {
+  const inputRef = useAutoFocus<HTMLInputElement>();
+
   const {
     register,
     handleSubmit,
@@ -73,6 +76,10 @@ const OrganizationTreeFormApp = ({
           {...register("displayName", {
             required: "Organization unit name is required",
           })}
+          ref={(e) => {
+            register("displayName")?.ref(e); // connect RHF (React Hook Form)
+            inputRef.current = e; // keep local ref
+          }}
         />
         {errors?.displayName?.message && (
           <div className="invalid-feedback">{errors?.displayName?.message}</div>

@@ -14,6 +14,7 @@ import type {
 import PermissionTreeApp from "./permission/tree/permission-tree";
 import { buildPermissionTree, mapRolesForApi } from "./roles-tree.util";
 import SomethingWentWrongPage from "../../../../components/ui/error/something-went-wrong/something-went-wrong";
+import { useAutoFocus } from "../../../../hooks/use-auto-focus";
 
 type RolesFormAppProps = {
   mode: "add" | "edit";
@@ -24,6 +25,8 @@ type RolesFormAppProps = {
 const RolesFormApp = ({ mode, role, handleClose }: RolesFormAppProps) => {
   const isEditMode = mode === "edit";
   const id = role?.id || null;
+
+  const inputRef = useAutoFocus<HTMLInputElement>();
 
   //#region RTK APIs
   const [
@@ -165,6 +168,10 @@ const RolesFormApp = ({ mode, role, handleClose }: RolesFormAppProps) => {
                     {...register("role.displayName", {
                       required: "Role name is required",
                     })}
+                    ref={(e) => {
+                      register("role.displayName")?.ref(e), // connect RHF (React Hook Form)
+                        (inputRef.current = e); // keep local ref
+                    }}
                   />
                   {errors?.role?.displayName?.message && (
                     <div className="text-danger mt-1">
