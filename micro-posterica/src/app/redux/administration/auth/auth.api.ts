@@ -5,10 +5,11 @@ import type {
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { GetEnvConfig } from "../../../../app.config";
+import { setCredentials } from "./auth.slice";
 
 export const authApi = createApi({
   reducerPath: "authApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "" }), // Adjust base URL
+  baseQuery: fetchBaseQuery({ baseUrl: "" }),
   endpoints: (builder) => ({
     login: builder.mutation<ILoginResponse, ILoginForm>({
       query: (credentials) => ({
@@ -18,6 +19,14 @@ export const authApi = createApi({
         method: "POST",
         body: credentials,
       }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(setCredentials(data));
+        } catch (err) {
+          console.error("Login failed", err);
+        }
+      },
     }),
   }),
 });

@@ -10,8 +10,8 @@ export interface ILoginForm {
 }
 
 export interface ILoginResponse {
-  token_type: string;
-  access_token: string;
+  tokenType: string;
+  accessToken: string;
 }
 
 const LoginApp = () => {
@@ -31,9 +31,6 @@ const LoginApp = () => {
     try {
       const response = await login(formData).unwrap(); // unwrap to get raw response or throw error
       console.log("Login successful:", response);
-
-      // ✅ Store token in localStorage or cookies (optional)
-      localStorage.setItem("access_token", response.access_token);
 
       // ✅ Redirect to home
       navigate("/");
