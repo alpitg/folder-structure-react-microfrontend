@@ -75,6 +75,7 @@ const UsersFormApp = ({ mode, user, handleClose }: UsersFormAppProps) => {
         setRandomPassword: true,
         shouldChangePasswordOnNextLogin: false,
         isLockoutEnabled: false,
+        isDarkMode: false,
       },
       grantedPermissionNames: [],
       permissions: [],
@@ -145,6 +146,7 @@ const UsersFormApp = ({ mode, user, handleClose }: UsersFormAppProps) => {
             data?.user?.shouldChangePasswordOnNextLogin || false,
           sendActivationEmail: data?.user?.sendActivationEmail || false,
           isLockoutEnabled: data?.user?.isLockoutEnabled || false,
+          isDarkMode: data?.user?.isDarkMode || false,
         },
         grantedRoles:
           data?.roles?.filter((x) => x?.isAssigned)?.map((x) => x?.id) || [],

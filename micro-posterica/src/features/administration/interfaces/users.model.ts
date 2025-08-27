@@ -21,6 +21,7 @@ export interface IUsersData {
   shouldChangePasswordOnNextLogin: boolean;
   sendActivationEmail: boolean;
   isLockoutEnabled: boolean;
+  isDarkMode: boolean;
 }
 
 export interface IUserWithPermissions {
