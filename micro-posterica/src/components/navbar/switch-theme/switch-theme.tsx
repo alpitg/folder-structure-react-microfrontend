@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 
+import { LOCALSTORAGE_IS_DARK_MODE_KEY } from "../../../constants/global/global-key.const";
+
 const SwitchThemeApp = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   // Load theme from localStorage on mount
   useEffect(() => {
-    const savedTheme = localStorage.getItem("isDarkMode") === "true";
+    const savedTheme =
+      localStorage.getItem(LOCALSTORAGE_IS_DARK_MODE_KEY) === "true";
     setIsDarkMode(savedTheme);
     document.body.setAttribute("data-bs-theme", savedTheme ? "dark" : "light");
     document.body.setAttribute("data-kt-app-layout", "light-sidebar");
@@ -24,7 +27,10 @@ const SwitchThemeApp = () => {
           onChange={() => {
             const newTheme = !isDarkMode;
             setIsDarkMode(newTheme);
-            localStorage.setItem("isDarkMode", newTheme.toString());
+            localStorage.setItem(
+              LOCALSTORAGE_IS_DARK_MODE_KEY,
+              newTheme.toString()
+            );
             document.body.setAttribute(
               "data-bs-theme",
               newTheme ? "dark" : "light"
