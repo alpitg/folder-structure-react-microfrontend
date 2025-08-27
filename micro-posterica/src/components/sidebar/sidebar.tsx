@@ -284,7 +284,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
                 >
                   <>
                     {route?.subRoutes && route?.subRoutes?.length > 0 ? (
-                      <span className="menu-link">
+                      <span className="menu-link hover-scale">
                         <span className="menu-icon">
                           <i className={route.icon}></i>
                         </span>
@@ -292,7 +292,10 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
                         <span className="menu-arrow"></span>
                       </span>
                     ) : (
-                      <NavLink className="menu-link" to={route.path}>
+                      <NavLink
+                        className="menu-link hover-scale"
+                        to={route.path}
+                      >
                         <span className="menu-icon">
                           <i className={route.icon}></i>
                         </span>
@@ -319,7 +322,10 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
                           handleMenuClick(subRoute?.id);
                         }}
                       >
-                        <NavLink className="menu-link" to={subRoute?.path}>
+                        <NavLink
+                          className="menu-link hover-scale"
+                          to={subRoute?.path}
+                        >
                           <span className="menu-icon">
                             <i className={subRoute?.icon}></i>
                           </span>
