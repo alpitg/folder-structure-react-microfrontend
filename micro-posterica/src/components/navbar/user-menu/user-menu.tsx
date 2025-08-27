@@ -107,7 +107,7 @@ const UserMenuApp: FC = () => {
         </ul>
       </div>
 
-      <ChangePasswordApp show={showChangePassword} />
+      <ChangePasswordApp show={showChangePassword} handleClose={()=> setShowChangePassword(!showChangePassword)}/>
     </div>
   );
 };
