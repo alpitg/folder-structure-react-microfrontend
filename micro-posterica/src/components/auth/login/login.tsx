@@ -67,17 +67,33 @@ const LoginApp = () => {
             <p className="text-muted">Access your account</p>
           </div>
 
-          {/* ✅ Error message */}
+          {/* Error message */}
           {isError && (
-            <div className="alert alert-danger">
-              Invalid username or password
+            <div
+              className="alert bg-light-danger d-flex align-items-center p-4 mb-4"
+              role="alert"
+            >
+              <i className="bi bi-shield-check fs-2 me-3 text-danger"></i>
+              <div className="d-flex flex-column">
+                <span className="text-danger">
+                  Invalid username or password
+                </span>
+              </div>
             </div>
           )}
 
           {/* Success */}
           {isSuccess && (
-            <div className="alert alert-success mt-3">
-              Login successful! Redirecting...
+            <div
+              className="alert bg-light-success d-flex align-items-center p-4 mb-4"
+              role="alert"
+            >
+              <i className="bi bi-shield-check fs-2 me-3 text-success"></i>
+              <div className="d-flex flex-column">
+                <span className="text-success">
+                  Login successful! Redirecting...
+                </span>
+              </div>
             </div>
           )}
 
