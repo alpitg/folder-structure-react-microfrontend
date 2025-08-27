@@ -1,8 +1,9 @@
+import { Controller, useFormContext } from "react-hook-form";
+
 import type { IUserWithPermissions } from "../../../interfaces/users.model";
-import { useFormContext } from "react-hook-form";
 
 const UserRolesFormApp = ({ data }: { data?: IUserWithPermissions }) => {
-  const { register } = useFormContext<IUserWithPermissions>();
+  const { control } = useFormContext<IUserWithPermissions>();
 
   return (
     <div className="users-form-app">
@@ -12,14 +13,30 @@ const UserRolesFormApp = ({ data }: { data?: IUserWithPermissions }) => {
             <div className="d-flex flex-column gap-2 p-4 border rounded h-100">
               <div>
                 <div className="form-check d-flex align-items-center mb-2">
-                  <input
-                    className="form-check-input me-2"
-                    type="checkbox"
-                    id={`role-${role?.id}`}
-                    value={role?.id}
-                    defaultChecked={role?.isAssigned} // ✅ works with register
-                    {...register("grantedRoles")}
+                  <Controller
+                    name="grantedRoles"
+                    control={control}
+                    render={({ field }) => (
+                      <input
+                        className="form-check-input me-2"
+                        type="checkbox"
+                        id={`role-${role?.id}`}
+                        value={role?.id}
+                        checked={field.value?.includes(role?.id)} // ✅ controlled
+                        onChange={(e) => {
+                          const { checked, value } = e.target;
+                          let newValue = [...(field.value || [])];
+                          if (checked) {
+                            newValue.push(value);
+                          } else {
+                            newValue = newValue.filter((v) => v !== value);
+                          }
+                          field.onChange(newValue);
+                        }}
+                      />
+                    )}
                   />
+
                   <label
                     className="form-check-label fw-semibold"
                     htmlFor={`role-${role?.id}`}
@@ -28,7 +45,7 @@ const UserRolesFormApp = ({ data }: { data?: IUserWithPermissions }) => {
                   </label>
                 </div>
                 {role?.description && (
-                  <p className="text-muted small mb-0">{role.description}</p>
+                  <p className="text-muted small mb-0">{role?.description}</p>
                 )}
               </div>
 

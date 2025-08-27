@@ -146,6 +146,8 @@ const UsersFormApp = ({ mode, user, handleClose }: UsersFormAppProps) => {
           sendActivationEmail: data?.user?.sendActivationEmail || false,
           isLockoutEnabled: data?.user?.isLockoutEnabled || false,
         },
+        grantedRoles:
+          data?.roles?.filter((x) => x?.isAssigned)?.map((x) => x?.id) || [],
         grantedPermissionNames: data?.grantedPermissionNames || [],
         permissions: data?.permissions || [],
       });
