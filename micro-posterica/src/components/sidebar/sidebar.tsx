@@ -266,7 +266,11 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
   }, [location.pathname]);
 
   return (
-    <div className="app-sidebar flex-column">
+    <div
+      className={`app-sidebar flex-column ${
+        props?.isOpen ? "sidebar-open" : ""
+      }`}
+    >
       <div className="app-sidebar-menu overflow-hidden flex-column-fluid">
         <div id="kt_app_sidebar_menu_wrapper" className="app-sidebar-wrapper">
           <div

@@ -20,23 +20,28 @@ const LandingPageApp = () => {
 
   return (
     <div className="landing-page-app">
-      <NavbarApp />
+      <NavbarApp toggleSidebar={toggleSidebar} />
+      {/* Pass toggle to navbar menu btn */}
       <div className="landing-page-container">
         <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
+
+        {/* Overlay for mobile */}
+        {isOpen && (
+          <div className="sidebar-overlay" onClick={toggleSidebar}></div>
+        )}
+
         <div className="app-wrapper mb-5">
           <div
             className={`container-xxl ${
               !isOpen
-                ? `landing-page-content`
-                : `landing-page-content-collapsed`
-            }
-            `}
+                ? "landing-page-content"
+                : "landing-page-content-collapsed"
+            }`}
           >
             <Outlet />
           </div>
         </div>
       </div>
-
       <ToastApp
         show={toast.show}
         message={toast.message}

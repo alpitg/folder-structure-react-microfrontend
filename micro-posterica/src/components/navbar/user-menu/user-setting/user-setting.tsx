@@ -206,7 +206,7 @@ const UserSettingApp: React.FC<{
                     )}
                   </div>
 
-                  {/* Email Address */}
+                  {/* Email Address (disabled) */}
                   <div className="mb-3">
                     <label className="form-label fw-semibold">
                       <i className="bi bi-envelope-fill me-2 text-warning"></i>
@@ -226,6 +226,7 @@ const UserSettingApp: React.FC<{
                           message: "Invalid email address",
                         },
                       })}
+                      disabled
                     />
                     {errors.user?.emailAddress && (
                       <div className="invalid-feedback">
