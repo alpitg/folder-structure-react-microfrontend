@@ -7,6 +7,8 @@ import { NavLink } from "react-router";
 import { ROUTE_URL } from "../../routes/constants/routes.const";
 
 const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
+  //#region sidebar menu constant
+
   const administration: IRoutes = {
     id: "administration",
     title: "Administration",
@@ -241,6 +243,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
       subRoutes: [],
     },
   ];
+  //#endregion
 
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
 
@@ -268,15 +271,17 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
   return (
     <div
       className={`app-sidebar flex-column ${
-        props?.isOpen ? "sidebar-open" : ""
+        props?.isOpen ? "sidebar-open" : "sidebar-closed"
       }`}
     >
       <div className="app-sidebar-menu overflow-hidden flex-column-fluid">
-        <div id="kt_app_sidebar_menu_wrapper" className="app-sidebar-wrapper">
-          <div
-            id="kt_app_sidebar_menu_scroll"
-            className="hover-scroll-y my-5 mx-3"
-          >
+        <div className="app-sidebar-wrapper">
+          <div className="hover-scroll-y my-5 mx-3">
+            <div className="sidebar-header mb-10">
+              <div className="d-flex align-items-center justify-content-between">
+                <h2 className="m-0">Posterica</h2>
+              </div>
+            </div>
             <div className="menu menu-column menu-rounded menu-sub-indention fw-semibold">
               {routes.map((route) => (
                 <div

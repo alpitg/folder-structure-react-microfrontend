@@ -12,7 +12,7 @@ import { useToast } from "../../hooks/use-toast";
 const LandingPageApp = () => {
   const { toast } = useToast();
   const dispatch = useDispatch();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -20,24 +20,21 @@ const LandingPageApp = () => {
 
   return (
     <div className="landing-page-app">
-      <NavbarApp toggleSidebar={toggleSidebar} />
-      {/* Pass toggle to navbar menu btn */}
       <div className="landing-page-container">
         <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
+        <NavbarApp isOpen={isOpen} toggleSidebar={toggleSidebar} />
 
         {/* Overlay for mobile */}
         {isOpen && (
           <div className="sidebar-overlay" onClick={toggleSidebar}></div>
         )}
 
-        <div className="app-wrapper mb-5">
-          <div
-            className={`container-xxl ${
-              !isOpen
-                ? "landing-page-content"
-                : "landing-page-content-collapsed"
-            }`}
-          >
+        <div
+          className={`main-body-container ${
+            !isOpen ? "landing-page-content" : "landing-page-content-collapsed"
+          }`}
+        >
+          <div className="container-xxl">
             <Outlet />
           </div>
         </div>

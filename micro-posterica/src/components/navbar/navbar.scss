@@ -1,44 +1,53 @@
 .navbar-app {
   height: var(--bs-app-header-height);
-  transition: none;
   position: fixed;
+  top: 0;
+  // left: 0;
   display: flex;
   align-items: stretch;
-  top: 0;
   width: 100%;
-  z-index: 9;
+  z-index: 100;
   background-color: var(--bs-app-header-base-bg-color);
   box-shadow: var(--bs-app-header-base-box-shadow);
   border-bottom: var(--bs-app-header-base-border-bottom);
+  transition: left 0.3s ease, width 0.3s ease;
 
   .navbar-content {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px 0 20px;
-    margin-left: 35px;
-    width: 100%;
+    flex: 1;
+    padding: 0 1rem;
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+
+      h2 {
+        font-size: 1.25rem;
+        margin: 0;
+        font-weight: 600;
+      }
+    }
 
     .nav-right {
       display: flex;
       align-items: center;
-
-      .breadcrumb {
-        margin: 0;
-      }
+      gap: 1rem;
     }
   }
 
-  .margin-left {
-    margin-left: var(--sidebar-width);
-  }
-
+  // ✅ remove manual dropdown toggle
   .dropdown .dropdown-menu {
     display: none;
   }
   .dropdown:hover .dropdown-menu {
     display: block;
     right: 0;
+  }
+
+  .sidebar-open {
+    margin-left: var(--bs-app-sidebar-width);
   }
 }
