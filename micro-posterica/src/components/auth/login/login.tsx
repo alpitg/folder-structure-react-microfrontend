@@ -4,6 +4,7 @@ import { useLoginMutation } from "../../../app/redux/administration/auth/auth.ap
 import { useNavigate } from "react-router";
 import { setCredentials } from "../../../app/redux/administration/auth/auth.slice";
 import { useDispatch } from "react-redux";
+import { useAutoFocus } from "../../../hooks/use-auto-focus";
 
 export interface ILoginForm {
   userName: string;
@@ -20,6 +21,7 @@ export interface ILoginResponse {
 const LoginApp = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const inputRef = useAutoFocus<HTMLInputElement>();
   const [showPassword, setShowPassword] = useState(false);
 
   // ✅ RTK Mutation hook
@@ -111,6 +113,10 @@ const LoginApp = () => {
                   placeholder="User name or email *"
                   tabIndex={-1}
                   {...register("userName", { required: true })}
+                  ref={(e) => {
+                    register("userName")?.ref(e); // connect RHF (React Hook Form)
+                    inputRef.current = e; // keep local ref
+                  }}
                 />
                 {errors.userName && (
                   <div className="invalid-feedback">

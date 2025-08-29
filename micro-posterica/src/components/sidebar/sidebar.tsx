@@ -277,8 +277,8 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
       <div className="app-sidebar-menu overflow-hidden flex-column-fluid">
         <div className="app-sidebar-wrapper">
           <div className="hover-scroll-y my-5 mx-3">
-            <div className="sidebar-header mb-10">
-              <div className="d-flex align-items-center justify-content-between">
+            <div className="sidebar-header mb-5">
+              <div className="d-flex align-items-center justify-content-between p-5">
                 <h2 className="m-0">Posterica</h2>
               </div>
             </div>
