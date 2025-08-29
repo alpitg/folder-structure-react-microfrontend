@@ -38,6 +38,8 @@ export const ROUTE_URL = {
   HOME: "",
   DASHBOARD: "/",
   LOGIN: "/login",
+  FORGET_PASSWORD: "/forget-password",
+  RESET_PASSWORD: "/reset-password",
   REGISTER: "/register",
   ABOUT: "/about",
   CONTACT: "/contact",

@@ -1,5 +1,5 @@
 import { FormProvider, useForm, type SubmitHandler } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import PageHeaderApp from "../../../../components/header/page-header/page-header";
 import {
   useAddUsersMutation,
@@ -14,10 +14,9 @@ import { mapUsersForApi } from "./users.util";
 import UserInfoFormApp from "./user-info/user-info-form";
 import UserRolesFormApp from "./user-roles/user-roles-form";
 import UserOrganisationUnitsFormApp from "./organisation-units/user-organisation-units-form";
-import ToastApp, {
-  type ToastAppProps,
-} from "../../../../components/ui/toast/toast";
 import SomethingWentWrongPage from "../../../../components/ui/error/something-went-wrong/something-went-wrong";
+import { useDispatch } from "react-redux";
+import { setToast } from "../../../../app/redux/core/app-settings/app-settings.slice";
 
 type UsersFormAppProps = {
   mode: "add" | "edit";
@@ -28,11 +27,8 @@ type UsersFormAppProps = {
 const UsersFormApp = ({ mode, user, handleClose }: UsersFormAppProps) => {
   const isEditMode = mode === "edit";
   const id = user?.id || null;
-  const [toast, setToast] = useState<ToastAppProps>({
-    show: false,
-    message: "",
-    variant: "info",
-  });
+
+  const dispatch = useDispatch();
 
   //#region RTK APIs
   const [
@@ -94,21 +90,25 @@ const UsersFormApp = ({ mode, user, handleClose }: UsersFormAppProps) => {
       updateUsers({ id: id!, data: request })
         .unwrap()
         .catch(() => {
-          setToast({
-            show: true,
-            message: "Server error! Failed to save.",
-            variant: "danger",
-          });
+          dispatch(
+            setToast({
+              show: true,
+              message: "Server error! Failed to save.",
+              variant: "danger",
+            })
+          );
         });
     } else {
       addUsers(request)
         .unwrap()
         .catch(() => {
-          setToast({
-            show: true,
-            message: "Server error! Failed to save.",
-            variant: "danger",
-          });
+          dispatch(
+            setToast({
+              show: true,
+              message: "Server error! Failed to save.",
+              variant: "danger",
+            })
+          );
         });
     }
   };
@@ -286,13 +286,6 @@ const UsersFormApp = ({ mode, user, handleClose }: UsersFormAppProps) => {
             </button>
           </div>
         </form>
-
-        <ToastApp
-          show={toast?.show}
-          message={toast?.message}
-          variant={toast?.variant}
-          onClose={() => setToast({ ...toast, show: false })}
-        />
       </FormProvider>
     </div>
   );

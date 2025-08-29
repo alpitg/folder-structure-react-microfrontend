@@ -9,13 +9,21 @@ import PrivateRoute from "./private-route";
 import { ROUTE_URL } from "./constants/routes.const";
 import { useAuthInit } from "../hooks/use-auth-init";
 
+const AuthApp = lazy(() => import("../components/auth/auth"));
+const LoginApp = lazy(() => import("../components/auth/login/login"));
+const ForgetPasswordApp = lazy(
+  () => import("../components/auth/forget-password/forget-password")
+);
+const ResetPasswordApp = lazy(
+  () => import("../components/auth/reset-password/reset-password")
+);
+
 const LandingPageApp = lazy(
   () => import("../components/landing-page/landing-page")
 );
 const DashboardApp = lazy(() => import("../features/dashboard/dashboard"));
 const SettingsApp = lazy(() => import("../features/settings/settings"));
 const UIApp = lazy(() => import("../components/ui/ui"));
-const LoginApp = lazy(() => import("../components/auth/login/login"));
 const MasterApp = lazy(() => import("../features/store/master/master"));
 const FrameTypesApp = lazy(
   () => import("../features/store/master/frame/frame-types/frame-types")
@@ -45,7 +53,17 @@ const RoutesApp = () => {
       <BrowserRouter>
         <Routes>
           {/* 🔓 Public */}
-          <Route path={ROUTE_URL.LOGIN} element={<LoginApp />} />
+          <Route element={<AuthApp />}>
+            <Route path={ROUTE_URL.LOGIN} element={<LoginApp />} />
+            <Route
+              path={ROUTE_URL.FORGET_PASSWORD}
+              element={<ForgetPasswordApp />}
+            />
+            <Route
+              path={ROUTE_URL.RESET_PASSWORD}
+              element={<ResetPasswordApp />}
+            />
+          </Route>
 
           {/* 🔒 Protected */}
           <Route element={<PrivateRoute />}>

@@ -29,6 +29,32 @@ export const authApi = createApi({
       }),
     }),
 
+    // ✅ Forgot password
+    forgotPassword: builder.mutation<any, { emailAddress: string }>({
+      query: (data) => ({
+        url:
+          GetEnvConfig()?.api?.baseUrl +
+          GetEnvConfig()?.api?.administration?.users?.forgotPassword,
+        method: "POST",
+        body: data,
+      }),
+    }),
+
+    // ✅ Reset password
+    resetPassword: builder.mutation<
+      any, // you can type response here
+      { code: string; newPassword: string } // payload type
+    >({
+      query: (data) => ({
+        url:
+          GetEnvConfig()?.api?.baseUrl +
+          GetEnvConfig()?.api?.administration?.users?.resetPassword,
+        method: "POST",
+        body: data,
+      }),
+    }),
+
+    // ✅ Update password
     updatePassword: builder.mutation<
       IUpdatePasswordResponse,
       { id: string; data: IUpdatePasswordRequest }
@@ -45,6 +71,7 @@ export const authApi = createApi({
       }),
     }),
 
+    // ✅ Get current user profile
     getCurrentUserProfile: builder.query<IUsersData, string>({
       query: (id) => ({
         url:
@@ -57,6 +84,7 @@ export const authApi = createApi({
       }),
     }),
 
+    // ✅ Update current user profile
     updateCurrentUserProfile: builder.mutation<
       IUpdateUserSettingResponse,
       { id: string; data: IUpdateUserSettingRequest }
@@ -77,6 +105,8 @@ export const authApi = createApi({
 
 export const {
   useLoginMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
   useUpdatePasswordMutation,
   useGetCurrentUserProfileQuery,
   useUpdateCurrentUserProfileMutation,

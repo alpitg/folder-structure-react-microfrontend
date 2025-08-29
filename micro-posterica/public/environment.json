@@ -25,6 +25,8 @@
       },
       "users": {
         "login": "/api/auth/login",
+        "forgotPassword": "/api/auth/forgot-password",
+        "resetPassword": "/api/auth/reset-password",
         "updatePassword": "/api/auth/users/{id}/change-password",
         "getCurrentUserProfile": "/api/auth/users/{id}/current-user-profile",
         "updateCurrentUserProfile": "/api/auth/users/{id}/current-user-profile",
