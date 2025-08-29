@@ -183,7 +183,7 @@ const UserListApp = () => {
             <UsersFormApp
               mode={selectedUser ? "edit" : "add"}
               user={selectedUser}
-              handleClose={() => handleFormClose()}
+              handleClose={handleFormClose}
             />
           </ModelApp>
 
