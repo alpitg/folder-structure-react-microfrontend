@@ -7,15 +7,21 @@ import { useEffect, useState } from "react";
 import DeleteModelApp from "../../../../components/delete-model/delete-model";
 import type { IRolesData } from "../../interfaces/roles.model";
 import ModelApp from "../../../../components/ui/model/model";
+import { PERMISSION } from "../../../../routes/constants/permission.const";
 import PageHeaderApp from "../../../../components/header/page-header/page-header";
 import RolesFilterApp from "./filter/roles-filter";
 import RolesFormApp from "../form/roles-form";
 import { formattedDate } from "../../../../utils/date.util";
+import { hasPermission } from "../../../../utils/permission.util";
+import { useAuth } from "../../../../hooks/use-auth";
 import { useLocation } from "react-router";
 
 type sortType = "newest" | "oldest";
 
 const RoleListApp = () => {
+  const user = useAuth();
+  const userClaims = user?.user?.grantedRoles || [];
+
   const location = useLocation();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
@@ -72,16 +78,20 @@ const RoleListApp = () => {
         header="Roles"
         description="Use roles to group permissions."
       >
-        <button
-          className="btn btn-primary btn-sm"
-          onClick={() => {
-            setSelectedRole(null); // reset
-            setShowFormModel(true);
-          }}
-        >
-          <i className="bi bi-plus-lg fs-3"></i>
-          Add New Role
-        </button>
+        {hasPermission(userClaims, [
+          PERMISSION.PAGES.ADMINISTRATION.ROLES.CREATE,
+        ]) && (
+          <button
+            className="btn btn-primary btn-sm"
+            onClick={() => {
+              setSelectedRole(null); // reset
+              setShowFormModel(true);
+            }}
+          >
+            <i className="bi bi-plus-lg fs-3"></i>
+            Add New Role
+          </button>
+        )}
       </PageHeaderApp>
 
       <div className="card">
@@ -110,59 +120,64 @@ const RoleListApp = () => {
                 </tr>
               </thead>
               <tbody className="fw-semibold text-gray-600">
-                {roleData?.items?.map((role) => (
-                  <tr key={role?.id}>
-                    <td className="align-content-center">
-                      <span className="d-flex gap-5">
-                        <button
-                          className="btn btn-link text-gray-800 text-hover-primary fs-5 fw-bold p-0"
-                          onClick={() => {
-                            setSelectedRole(role);
-                            setShowFormModel(true);
-                          }}
-                        >
-                          {role?.displayName}
-                        </button>
+                {roleData?.items?.map((role) => {
+                  return (
+                    <tr key={role?.id}>
+                      <td className="align-content-center">
+                        <span className="d-flex gap-5">
+                          <button
+                            className="btn btn-link text-gray-800 text-hover-primary fs-5 fw-bold p-0"
+                            onClick={() => {
+                              setSelectedRole(role);
+                              setShowFormModel(true);
+                            }}
+                          >
+                            {role?.displayName}
+                          </button>
 
-                        <span>
-                          {role?.isActive && (
-                            <span className="badge badge-success me-2">
-                              Active
-                            </span>
-                          )}
-                          {role?.isStatic && (
-                            <span className="badge badge-primary me-2">
-                              Static
-                            </span>
-                          )}
-                          {role?.isDefault && (
-                            <span className="badge badge-dark me-2">
-                              Default
-                            </span>
-                          )}
+                          <span>
+                            {role?.isActive && (
+                              <span className="badge badge-success me-2">
+                                Active
+                              </span>
+                            )}
+                            {role?.isStatic && (
+                              <span className="badge badge-primary me-2">
+                                Static
+                              </span>
+                            )}
+                            {role?.isDefault && (
+                              <span className="badge badge-dark me-2">
+                                Default
+                              </span>
+                            )}
+                          </span>
                         </span>
-                      </span>
-                    </td>
-                    <td className="align-content-center">
-                      {formattedDate(role?.creationTime)}
-                    </td>
-                    <td className="align-content-center">
-                      {!role?.isStatic && (
-                        <button
-                          type="button"
-                          className="btn btn-light text-hover-danger btn-icon btn-sm"
-                          onClick={() => {
-                            setSelectedRole(role); // store which role to delete
-                            setShowDeleteConfirmationModel(true);
-                          }}
-                          aria-label="Delete role"
-                        >
-                          <i className="bi bi-trash3" />
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                ))}
+                      </td>
+                      <td className="align-content-center">
+                        {formattedDate(role?.creationTime)}
+                      </td>
+                      <td className="align-content-center">
+                        {!role?.isStatic &&
+                          hasPermission(userClaims, [
+                            PERMISSION.PAGES.ADMINISTRATION.ROLES.DELETE,
+                          ]) && (
+                            <button
+                              type="button"
+                              className="btn btn-light text-hover-danger btn-icon btn-sm"
+                              onClick={() => {
+                                setSelectedRole(role); // store which role to delete
+                                setShowDeleteConfirmationModel(true);
+                              }}
+                              aria-label="Delete role"
+                            >
+                              <i className="bi bi-trash3" />
+                            </button>
+                          )}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

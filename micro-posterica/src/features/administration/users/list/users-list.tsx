@@ -7,15 +7,21 @@ import { useEffect, useState } from "react";
 import DeleteModelApp from "../../../../components/delete-model/delete-model";
 import type { IUsersData } from "../../interfaces/users.model";
 import ModelApp from "../../../../components/ui/model/model";
+import { PERMISSION } from "../../../../routes/constants/permission.const";
 import PageHeaderApp from "../../../../components/header/page-header/page-header";
 import UsersFilterApp from "./filter/users-filter";
 import UsersFormApp from "../form/users-form";
 import { formattedDate } from "../../../../utils/date.util";
+import { hasPermission } from "../../../../utils/permission.util";
+import { useAuth } from "../../../../hooks/use-auth";
 import { useLocation } from "react-router";
 
 type sortType = "newest" | "oldest";
 
 const UserListApp = () => {
+  const user = useAuth();
+  const userClaims = user?.user?.grantedRoles || [];
+
   const location = useLocation();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
@@ -69,16 +75,20 @@ const UserListApp = () => {
   return (
     <div className="user-list-app">
       <PageHeaderApp header="Users" description="Manage users and permissions.">
-        <button
-          className="btn btn-primary btn-sm"
-          onClick={() => {
-            setSelectedUser(null); // reset
-            setShowFormModel(true);
-          }}
-        >
-          <i className="bi bi-plus-lg fs-3"></i>
-          Add New User
-        </button>
+        {hasPermission(userClaims, [
+          PERMISSION.PAGES.ADMINISTRATION.USERS.CREATE,
+        ]) && (
+          <button
+            className="btn btn-primary btn-sm"
+            onClick={() => {
+              setSelectedUser(null); // reset
+              setShowFormModel(true);
+            }}
+          >
+            <i className="bi bi-plus-lg fs-3"></i>
+            Add New User
+          </button>
+        )}
       </PageHeaderApp>
 
       <div className="card">
@@ -157,17 +167,21 @@ const UserListApp = () => {
                       {formattedDate(user?.creationTime)}
                     </td>
                     <td className="align-content-center">
-                      <button
-                        type="button"
-                        className="btn btn-light text-hover-danger btn-icon btn-sm"
-                        onClick={() => {
-                          setSelectedUser(user); // store which user to delete
-                          setShowDeleteConfirmationModel(true);
-                        }}
-                        aria-label="Delete user"
-                      >
-                        <i className="bi bi-trash3" />
-                      </button>
+                      {hasPermission(userClaims, [
+                        PERMISSION.PAGES.ADMINISTRATION.USERS.DELETE,
+                      ]) && (
+                        <button
+                          type="button"
+                          className="btn btn-light text-hover-danger btn-icon btn-sm"
+                          onClick={() => {
+                            setSelectedUser(user); // store which user to delete
+                            setShowDeleteConfirmationModel(true);
+                          }}
+                          aria-label="Delete user"
+                        >
+                          <i className="bi bi-trash3" />
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}

@@ -1,4 +1,4 @@
-import { hasPermission, hasRole } from "../utils/permission";
+import { hasPermission, hasRole } from "../utils/permission.util";
 
 import type { AppState } from "../app/store";
 import { useSelector } from "react-redux";

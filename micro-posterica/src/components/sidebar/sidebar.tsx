@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import type { IRoutes } from "../../interfaces/route.model";
 import { NavLink } from "react-router";
 import { ROUTE_URL } from "../../routes/constants/routes.const";
-import { hasPermission } from "../../utils/permission";
+import { hasPermission } from "../../utils/permission.util";
 import { useAuth } from "../../hooks/use-auth";
 
 const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
@@ -58,14 +58,18 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
     title: "Catalog",
     path: ROUTE_URL.CATALOG.BASE,
     icon: "bi bi-box fs-3",
-    claims: [],
+    claims: [
+      "Pages.Catalog",
+      "Pages.Catalog.Product",
+      "Pages.Catalog.ProductCategory",
+    ],
     subRoutes: [
       {
         id: "product-list",
         title: "Product Listing",
         path: ROUTE_URL.CATALOG.PRODUCT.LIST,
         icon: "bi bi-card-list fs-3",
-        claims: [],
+        claims: ["Pages.Catalog.Product"],
         subRoutes: [],
       },
       {
@@ -73,7 +77,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
         title: "Add Product",
         path: ROUTE_URL.CATALOG.PRODUCT.ADD,
         icon: "bi bi-plus-lg fs-3",
-        claims: [],
+        claims: ["Pages.Catalog.Product"],
         subRoutes: [],
       },
       {
@@ -81,7 +85,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
         title: "Category Listing",
         path: ROUTE_URL.CATALOG.CATEGORY.LIST,
         icon: "bi bi-list-nested fs-3",
-        claims: [],
+        claims: ["Pages.Catalog.ProductCategory"],
         subRoutes: [],
       },
       {
@@ -89,7 +93,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
         title: "Add Category",
         path: ROUTE_URL.CATALOG.CATEGORY.ADD,
         icon: "bi bi-plus-lg fs-3",
-        claims: [],
+        claims: ["Pages.Catalog.ProductCategory"],
         subRoutes: [],
       },
     ],
@@ -100,14 +104,14 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
     title: "Sales",
     path: ROUTE_URL.SALES.BASE,
     icon: "bi bi-journal-bookmark fs-3",
-    claims: [],
+    claims: ["Pages.Sales", "Pages.Sales.Order"],
     subRoutes: [
       {
         id: "order-list",
         title: "Order Listing",
         path: ROUTE_URL.SALES.ORDER.LIST,
         icon: "bi bi-card-checklist fs-3",
-        claims: [],
+        claims: ["Pages.Sales.Order"],
         subRoutes: [],
       },
       {
@@ -115,7 +119,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
         title: "Add Order",
         path: ROUTE_URL.SALES.ORDER.ADD,
         icon: "bi bi-plus-lg fs-3",
-        claims: [],
+        claims: ["Pages.Sales.Order"],
         subRoutes: [],
       },
     ],
