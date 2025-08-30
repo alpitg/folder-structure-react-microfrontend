@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import type { IRoutes } from "../../interfaces/route.model";
 import { NavLink } from "react-router";
+import { PERMISSION } from "../../routes/constants/permission.const";
 import { ROUTE_URL } from "../../routes/constants/routes.const";
 import { hasPermission } from "../../utils/permission.util";
 import { useAuth } from "../../hooks/use-auth";
@@ -20,10 +21,9 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
     path: ROUTE_URL.ADMINISTRATION.BASE,
     icon: "bi bi bi-sliders fs-3",
     claims: [
-      "Pages.Administration",
-      "Pages.Administration.OrganizationUnits",
-      "Pages.Administration.Roles",
-      "Pages.Administration.Users",
+      PERMISSION.PAGES.ADMINISTRATION.ORGANIZATION_UNITS.DEFAULT,
+      PERMISSION.PAGES.ADMINISTRATION.ROLES.DEFAULT,
+      PERMISSION.PAGES.ADMINISTRATION.USERS.DEFAULT,
     ],
     subRoutes: [
       {
@@ -31,7 +31,10 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
         title: "Organization Units",
         path: ROUTE_URL.ADMINISTRATION.ORGANIZATION_UNIT.BASE,
         icon: "bi bi-diagram-3 fs-3",
-        claims: ["Pages.Administration.OrganizationUnits"],
+        claims: [
+          PERMISSION.PAGES.ADMINISTRATION.ORGANIZATION_UNITS.DEFAULT,
+          PERMISSION.PAGES.ADMINISTRATION.ORGANIZATION_UNITS.DETAIL,
+        ],
         subRoutes: [],
       },
       {
@@ -39,7 +42,10 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
         title: "Roles",
         path: ROUTE_URL.ADMINISTRATION.ROLES.BASE,
         icon: "bi bi-suitcase-lg fs-3",
-        claims: ["Pages.Administration.Roles"],
+        claims: [
+          PERMISSION.PAGES.ADMINISTRATION.ROLES.DEFAULT,
+          PERMISSION.PAGES.ADMINISTRATION.ROLES.DETAIL,
+        ],
         subRoutes: [],
       },
       {
@@ -47,7 +53,10 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
         title: "Users",
         path: ROUTE_URL.ADMINISTRATION.USERS.BASE,
         icon: "bi bi-people fs-3",
-        claims: ["Pages.Administration.Users"],
+        claims: [
+          PERMISSION.PAGES.ADMINISTRATION.USERS.DEFAULT,
+          PERMISSION.PAGES.ADMINISTRATION.USERS.DETAIL,
+        ],
         subRoutes: [],
       },
     ],
@@ -59,9 +68,8 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
     path: ROUTE_URL.CATALOG.BASE,
     icon: "bi bi-box fs-3",
     claims: [
-      "Pages.Catalog",
-      "Pages.Catalog.Product",
-      "Pages.Catalog.ProductCategory",
+      PERMISSION.PAGES.CATALOG.PRODUCT.DEFAULT,
+      PERMISSION.PAGES.CATALOG.CATEGORY.DEFAULT,
     ],
     subRoutes: [
       {
@@ -69,7 +77,10 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
         title: "Product Listing",
         path: ROUTE_URL.CATALOG.PRODUCT.LIST,
         icon: "bi bi-card-list fs-3",
-        claims: ["Pages.Catalog.Product"],
+        claims: [
+          PERMISSION.PAGES.CATALOG.PRODUCT.DEFAULT,
+          PERMISSION.PAGES.CATALOG.PRODUCT.DETAIL,
+        ],
         subRoutes: [],
       },
       {
@@ -77,7 +88,10 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
         title: "Add Product",
         path: ROUTE_URL.CATALOG.PRODUCT.ADD,
         icon: "bi bi-plus-lg fs-3",
-        claims: ["Pages.Catalog.Product"],
+        claims: [
+          PERMISSION.PAGES.CATALOG.PRODUCT.CREATE,
+          PERMISSION.PAGES.CATALOG.PRODUCT.EDIT,
+        ],
         subRoutes: [],
       },
       {
@@ -85,7 +99,10 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
         title: "Category Listing",
         path: ROUTE_URL.CATALOG.CATEGORY.LIST,
         icon: "bi bi-list-nested fs-3",
-        claims: ["Pages.Catalog.ProductCategory"],
+        claims: [
+          PERMISSION.PAGES.CATALOG.CATEGORY.DEFAULT,
+          PERMISSION.PAGES.CATALOG.CATEGORY.DETAIL,
+        ],
         subRoutes: [],
       },
       {
@@ -93,7 +110,10 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
         title: "Add Category",
         path: ROUTE_URL.CATALOG.CATEGORY.ADD,
         icon: "bi bi-plus-lg fs-3",
-        claims: ["Pages.Catalog.ProductCategory"],
+        claims: [
+          PERMISSION.PAGES.CATALOG.CATEGORY.CREATE,
+          PERMISSION.PAGES.CATALOG.CATEGORY.EDIT,
+        ],
         subRoutes: [],
       },
     ],
@@ -104,14 +124,17 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
     title: "Sales",
     path: ROUTE_URL.SALES.BASE,
     icon: "bi bi-journal-bookmark fs-3",
-    claims: ["Pages.Sales", "Pages.Sales.Order"],
+    claims: [PERMISSION.PAGES.SALES.ORDER.DEFAULT],
     subRoutes: [
       {
         id: "order-list",
         title: "Order Listing",
         path: ROUTE_URL.SALES.ORDER.LIST,
         icon: "bi bi-card-checklist fs-3",
-        claims: ["Pages.Sales.Order"],
+        claims: [
+          PERMISSION.PAGES.SALES.ORDER.DEFAULT,
+          PERMISSION.PAGES.SALES.ORDER.DETAIL,
+        ],
         subRoutes: [],
       },
       {
@@ -119,7 +142,10 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
         title: "Add Order",
         path: ROUTE_URL.SALES.ORDER.ADD,
         icon: "bi bi-plus-lg fs-3",
-        claims: ["Pages.Sales.Order"],
+        claims: [
+          PERMISSION.PAGES.SALES.ORDER.CREATE,
+          PERMISSION.PAGES.SALES.ORDER.EDIT,
+        ],
         subRoutes: [],
       },
     ],
@@ -130,14 +156,17 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
     title: "Customers",
     path: ROUTE_URL.CUSTOMER.BASE,
     icon: "bi bi-person-workspace fs-3",
-    claims: [],
+    claims: [PERMISSION.PAGES.SALES.CUSTOMERS.DEFAULT],
     subRoutes: [
       {
         id: "customer-list",
         title: "Customer Listing",
         path: ROUTE_URL.CUSTOMER.LIST,
         icon: "bi bi-card-list fs-3",
-        claims: [],
+        claims: [
+          PERMISSION.PAGES.SALES.ORDER.DEFAULT,
+          PERMISSION.PAGES.SALES.ORDER.DETAIL,
+        ],
         subRoutes: [],
       },
       {
@@ -145,7 +174,10 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
         title: "Add Customer",
         path: ROUTE_URL.CUSTOMER.ADD,
         icon: "bi bi-plus-lg fs-3",
-        claims: [],
+        claims: [
+          PERMISSION.PAGES.SALES.ORDER.CREATE,
+          PERMISSION.PAGES.SALES.ORDER.EDIT,
+        ],
         subRoutes: [],
       },
     ],
@@ -156,14 +188,23 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
     title: "Masters",
     path: ROUTE_URL.MASTER.BASE,
     icon: "bi bi-database-check fs-3",
-    claims: [],
+    claims: [
+      PERMISSION.PAGES.MASTER.FRAME_TYPES.DEFAULT,
+      PERMISSION.PAGES.MASTER.GLASS_TYPES.DEFAULT,
+      PERMISSION.PAGES.MASTER.MISC_CHARGES.DEFAULT,
+    ],
     subRoutes: [
       {
         id: "frame-types",
         title: "Frame Types",
         path: ROUTE_URL.MASTER.FRAME_TYPES.BASE,
         icon: "bi bi-door-closed fs-3",
-        claims: [],
+        claims: [
+          PERMISSION.PAGES.MASTER.FRAME_TYPES.DEFAULT,
+          PERMISSION.PAGES.MASTER.FRAME_TYPES.CREATE,
+          PERMISSION.PAGES.MASTER.FRAME_TYPES.EDIT,
+          PERMISSION.PAGES.MASTER.FRAME_TYPES.DELETE,
+        ],
         subRoutes: [],
       },
       {
@@ -171,15 +212,25 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
         title: "Glass Types",
         path: ROUTE_URL.MASTER.GLASS_TYPES.BASE,
         icon: "bi bi-sunglasses fs-3",
-        claims: [],
+        claims: [
+          PERMISSION.PAGES.MASTER.GLASS_TYPES.DEFAULT,
+          PERMISSION.PAGES.MASTER.GLASS_TYPES.CREATE,
+          PERMISSION.PAGES.MASTER.GLASS_TYPES.EDIT,
+          PERMISSION.PAGES.MASTER.GLASS_TYPES.DELETE,
+        ],
         subRoutes: [],
       },
       {
         id: "mounting-types",
-        title: "Miscellaneous charges",
+        title: "Miscellaneous Charges",
         path: ROUTE_URL.MASTER.MISC_CHARGES.BASE,
         icon: "bi bi-currency-rupee fs-3",
-        claims: [],
+        claims: [
+          PERMISSION.PAGES.MASTER.MISC_CHARGES.DEFAULT,
+          PERMISSION.PAGES.MASTER.MISC_CHARGES.CREATE,
+          PERMISSION.PAGES.MASTER.MISC_CHARGES.EDIT,
+          PERMISSION.PAGES.MASTER.MISC_CHARGES.DELETE,
+        ],
         subRoutes: [],
       },
     ],

@@ -23,6 +23,43 @@ export const PERMISSION = {
         DELETE: "Pages.Administration.OrganizationUnits.Delete",
       },
     },
+    MASTER: {
+      FRAME_TYPES: {
+        DEFAULT: "Pages.Masters.FrameTypes",
+        DETAIL: "Pages.Masters.FrameTypes.Detail",
+        CREATE: "Pages.Masters.FrameTypes.Create",
+        EDIT: "Pages.Masters.FrameTypes.Edit",
+        DELETE: "Pages.Masters.FrameTypes.Delete",
+      },
+      GLASS_TYPES: {
+        DEFAULT: "Pages.Masters.GlassTypes",
+        DETAIL: "Pages.Masters.GlassTypes.Detail",
+        CREATE: "Pages.Masters.GlassTypes.Create",
+        EDIT: "Pages.Masters.GlassTypes.Edit",
+        DELETE: "Pages.Masters.GlassTypes.Delete",
+      },
+      MISC_CHARGES: {
+        DEFAULT: "Pages.Masters.MiscCharges",
+        DETAIL: "Pages.Masters.MiscCharges.Detail",
+        CREATE: "Pages.Masters.MiscCharges.Create",
+        EDIT: "Pages.Masters.MiscCharges.Edit",
+        DELETE: "Pages.Masters.MiscCharges.Delete",
+      },
+      UI_COMPONENT: {
+        DEFAULT: "Pages.Masters.UIComponent",
+        DETAIL: "Pages.Masters.UIComponent.Detail",
+        CREATE: "Pages.Masters.UIComponent.Create",
+        EDIT: "Pages.Masters.UIComponent.Edit",
+        DELETE: "Pages.Masters.UIComponent.Delete",
+      },
+      SETTINGS: {
+        DEFAULT: "Pages.Masters.Settings",
+        DETAIL: "Pages.Masters.Settings.Detail",
+        CREATE: "Pages.Masters.Settings.Create",
+        EDIT: "Pages.Masters.Settings.Edit",
+        DELETE: "Pages.Masters.Settings.Delete",
+      },
+    },
     CATALOG: {
       PRODUCT: {
         DEFAULT: "Pages.Catalog.Product",
