@@ -99,11 +99,11 @@ const UsersFormApp = ({ mode, user, handleClose }: UsersFormAppProps) => {
             })
           );
         })
-        .catch(() => {
+        .catch((error) => {
           dispatch(
             setToast({
               show: true,
-              message: "Server error! Failed to save.",
+              message: error?.data?.detail || "Server error! Failed to save.",
               variant: "danger",
             })
           );
@@ -120,11 +120,11 @@ const UsersFormApp = ({ mode, user, handleClose }: UsersFormAppProps) => {
             })
           );
         })
-        .catch(() => {
+        .catch((error) => {
           dispatch(
             setToast({
               show: true,
-              message: "Server error! Failed to save.",
+              message: error?.data?.detail || "Server error! Failed to save.",
               variant: "danger",
             })
           );

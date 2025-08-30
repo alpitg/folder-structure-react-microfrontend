@@ -1,5 +1,4 @@
 import type { IUserWithPermissionsForm } from "../../interfaces/users.model";
-import { generateRandomPassword } from "../../../../utils/auth.util";
 
 export const mapUsersForApi = (
   data: IUserWithPermissionsForm
@@ -12,9 +11,7 @@ export const mapUsersForApi = (
       surname: data?.user?.surname || "",
       emailAddress: data?.user?.emailAddress || "",
       isEmailConfirmed: data?.user?.isEmailConfirmed || false,
-      password: data?.user?.setRandomPassword
-        ? generateRandomPassword(5)
-        : data?.user?.password,
+      password: data?.user?.setRandomPassword ? null : data?.user?.password,
       isActive: data?.user?.isActive ?? true,
       phoneNumber: data?.user?.phoneNumber || null,
       profilePictureId: data?.user?.profilePictureId || null,

@@ -97,7 +97,10 @@ const UserListApp = () => {
             page={page}
             setPage={setPage}
             search={search}
-            setSearch={setSearch}
+            setSearch={(val) => {
+              setSearch(val);
+              setPage(1);
+            }}
             pages={userData?.pages || 1}
             onSearch={() => setPage(1)}
             pageSize={userData?.pageSize || 0}
