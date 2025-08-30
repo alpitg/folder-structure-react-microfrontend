@@ -185,7 +185,20 @@ app/
   workers/     # Celery tasks (emails, webhooks, exports)
 
 
-## PROMPT
+## PROMPTS
 ```shell
 want to create a React component similar to the Angular HTML you shared (for editing user info: First Name, Surname, Email, Username), and implement it using React Hook Form + Bootstrap + Bootstrap Icons, similar to your ChangePasswordApp component.
 ```
+
+```json
+{
+    "task": "provide me code to manage role & permissions in react app",
+    "response": "To manage roles and permissions in a React app, you can use a combination of context and higher-order components (HOCs) or hooks. Below is an example of how to implement a simple role and permission management system using React Context API. // Only allow users with // the 'admin' role to access this page",
+    "code": {
+      "private_route_component": "",
+  
+      "route.ts": ""
+    }
+  }
+  
+  ```

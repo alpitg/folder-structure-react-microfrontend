@@ -17,6 +17,9 @@ const ForgetPasswordApp = lazy(
 const ResetPasswordApp = lazy(
   () => import("../components/auth/reset-password/reset-password")
 );
+const ForbiddenApp = lazy(
+  () => import("../components/auth/forbidden/forbidden")
+);
 
 const LandingPageApp = lazy(
   () => import("../components/landing-page/landing-page")
@@ -63,6 +66,7 @@ const RoutesApp = () => {
               path={ROUTE_URL.RESET_PASSWORD}
               element={<ResetPasswordApp />}
             />
+            <Route path={ROUTE_URL.FORBIDDEN} element={<ForbiddenApp />} />
           </Route>
 
           {/* 🔒 Protected */}

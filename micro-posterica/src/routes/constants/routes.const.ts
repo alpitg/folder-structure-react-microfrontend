@@ -40,6 +40,7 @@ export const ROUTE_URL = {
   LOGIN: "/login",
   FORGET_PASSWORD: "/forget-password",
   RESET_PASSWORD: "/reset-password",
+  FORBIDDEN: "/forbidden",
   REGISTER: "/register",
   ABOUT: "/about",
   CONTACT: "/contact",

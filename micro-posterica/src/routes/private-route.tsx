@@ -1,21 +1,30 @@
 import { Navigate, Outlet } from "react-router";
 
+import LoadingApp from "../components/loading/loading";
+import { ROUTE_URL } from "./constants/routes.const";
 import { useAuth } from "../hooks/use-auth";
 
-const PrivateRoute = ({ requiredRole }: { requiredRole?: string }) => {
-  const { isAuthenticated, user, hydrated } = useAuth();
+interface PrivateRouteProps {
+  requiredRole?: string;
+  requiredPermission?: string;
+}
 
-  // ⏳ wait until rehydration finishes
-  if (!hydrated) {
-    return <div>Loading...</div>; // or your LoadingApp
+const PrivateRoute = ({
+  requiredRole,
+  requiredPermission,
+}: PrivateRouteProps) => {
+  const { isAuthenticated, hydrated, hasRole, hasPermission } = useAuth();
+
+  if (!hydrated) return <LoadingApp />;
+
+  if (!isAuthenticated) return <Navigate to={ROUTE_URL.LOGIN} replace />;
+
+  if (requiredRole && !hasRole(requiredRole)) {
+    return <Navigate to={ROUTE_URL.FORBIDDEN} replace />;
   }
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-
-  if (requiredRole && !user?.roles?.map((x) => x.name).includes(requiredRole)) {
-    return <Navigate to="/403" replace />;
+  if (requiredPermission && !hasPermission(requiredPermission)) {
+    return <Navigate to={ROUTE_URL.FORBIDDEN} replace />;
   }
 
   return <Outlet />;
