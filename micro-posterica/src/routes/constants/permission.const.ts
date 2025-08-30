@@ -1,5 +1,8 @@
 export const PERMISSION = {
   PAGES: {
+    DASHBOARD: {
+      DEFAULT: "Pages.Dashboard",
+    },
     ADMINISTRATION: {
       USERS: {
         DEFAULT: "Pages.Administration.Users",
@@ -45,20 +48,6 @@ export const PERMISSION = {
         EDIT: "Pages.Masters.MiscCharges.Edit",
         DELETE: "Pages.Masters.MiscCharges.Delete",
       },
-      UI_COMPONENT: {
-        DEFAULT: "Pages.Masters.UIComponent",
-        DETAIL: "Pages.Masters.UIComponent.Detail",
-        CREATE: "Pages.Masters.UIComponent.Create",
-        EDIT: "Pages.Masters.UIComponent.Edit",
-        DELETE: "Pages.Masters.UIComponent.Delete",
-      },
-      SETTINGS: {
-        DEFAULT: "Pages.Masters.Settings",
-        DETAIL: "Pages.Masters.Settings.Detail",
-        CREATE: "Pages.Masters.Settings.Create",
-        EDIT: "Pages.Masters.Settings.Edit",
-        DELETE: "Pages.Masters.Settings.Delete",
-      },
     },
     CATALOG: {
       PRODUCT: {
@@ -91,6 +80,13 @@ export const PERMISSION = {
         EDIT: "Pages.Sales.Customers.Edit",
         DELETE: "Pages.Sales.Customers.Delete",
       },
+    },
+    UIComponent: {
+      DEFAULT: "Pages.UIComponent",
+    },
+    SETTINGS: {
+      DEFAULT: "Pages.Settings",
+      EDIT: "Pages.Settings.Edit",
     },
   },
 };

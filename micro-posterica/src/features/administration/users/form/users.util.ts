@@ -1,10 +1,10 @@
-import type { IUserWithPermissions } from "../../interfaces/users.model";
+import type { IUserWithPermissionsForm } from "../../interfaces/users.model";
 import { generateRandomPassword } from "../../../../utils/auth.util";
 
 export const mapUsersForApi = (
-  data: IUserWithPermissions
-): IUserWithPermissions => {
-  const userWithPermissions: IUserWithPermissions = {
+  data: IUserWithPermissionsForm
+): IUserWithPermissionsForm => {
+  const userWithPermissions: IUserWithPermissionsForm = {
     user: {
       id: data?.user?.id || "",
       userName: data?.user?.userName || "",

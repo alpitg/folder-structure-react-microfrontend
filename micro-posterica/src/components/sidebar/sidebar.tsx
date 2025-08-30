@@ -242,7 +242,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
       title: "Dashboard",
       path: ROUTE_URL.DASHBOARD,
       icon: "bi bi-grid fs-3",
-      claims: [],
+      claims: [PERMISSION.PAGES.DASHBOARD.DEFAULT],
       subRoutes: [],
     },
     administration,
@@ -250,53 +250,12 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
     sales,
     customer,
     master,
-    // {
-    //   id: "invoice-manager",
-    //   title: "Invoice Manager",
-    //   path: ROUTE_URL.INVOICE_MANAGER.BASE,
-    //   icon: "bi bi-person-fill-gear",
-    //   claims: [],
-    //   subRoutes: [
-    //     {
-    //       id: "create-invoice",
-    //       title: "Create Invoice",
-    //       path: ROUTE_URL.INVOICE_MANAGER.CREATE,
-    //       icon: "bi bi-person-fill-gear",
-    //       claims: [],
-    //       subRoutes: [],
-    //     },
-    //     {
-    //       id: "view-invoice",
-    //       title: "View Invoice",
-    //       path: ROUTE_URL.INVOICE_MANAGER.VIEW,
-    //       icon: "bi bi-person-fill-gear",
-    //       claims: [],
-    //       subRoutes: [],
-    //     },
-    //   ],
-    // },
-    // {
-    //   id: "customers",
-    //   title: "Customers",
-    //   path: ROUTE_URL.CUSTOMERS,
-    //   icon: "bi bi-shield-check",
-    //   claims: [],
-    // subRoutes: [],
-    // },
-    // {
-    //   id: "bills",
-    //   title: "Bills",
-    //   path: ROUTE_URL.BILLS,
-    //   icon: "bi bi-shield-check",
-    //   claims: [],
-    // subRoutes: [],
-    // },
     {
       id: "ui",
       title: "UI Component",
       path: ROUTE_URL.UI,
       icon: "bi bi-easel fs-3",
-      claims: [],
+      claims: [PERMISSION.PAGES.UIComponent.DEFAULT],
       subRoutes: [],
     },
     {
@@ -304,10 +263,11 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
       title: "Settings",
       path: ROUTE_URL.APP_SETTINGS,
       icon: "bi bi-shield-check fs-3",
-      claims: [],
+      claims: [PERMISSION.PAGES.SETTINGS.DEFAULT],
       subRoutes: [],
     },
   ];
+
   //#endregion
 
   const [activeMenu, setActiveMenu] = useState<string | null>(null);

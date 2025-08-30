@@ -34,6 +34,16 @@ export interface IUserWithPermissions {
   permissions?: IRolePermission[];
 }
 
+export interface IUserWithPermissionsForm {
+  user: IUsersData;
+  grantedRoles: string[]; // string Array of role IDs
+  roles: IRolesData[];
+  memberedOrganisationUnits: string[];
+  allOrganizationUnits: IOrganizationUnitsData[];
+  grantedPermissionNames?: string[];
+  permissions?: IRolePermission[];
+}
+
 export interface GetUsersParams {
   page?: number;
   pageSize?: number;

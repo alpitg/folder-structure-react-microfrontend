@@ -37,7 +37,6 @@ const LoginApp = () => {
   const onSubmit: SubmitHandler<ILoginForm> = async (formData) => {
     try {
       const response = await login(formData).unwrap(); // unwrap to get raw response or throw error
-      console.log("Login successful:", response);
 
       dispatch(
         setCredentials({

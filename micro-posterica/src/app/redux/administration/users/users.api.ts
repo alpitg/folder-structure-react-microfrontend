@@ -1,6 +1,7 @@
 import type {
   GetUsersParams,
   IUserWithPermissions,
+  IUserWithPermissionsForm,
   PaginatedUsers,
 } from "../../../../features/administration/interfaces/users.model";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
@@ -25,10 +26,16 @@ export const usersApi = createApi({
     getUsersDetail: builder.query<IUserWithPermissions, string>({
       query: (id) =>
         GetEnvConfig()?.api?.baseUrl +
-        GetEnvConfig()?.api?.administration?.users?.getUserForEdit?.replace("{id}", id),
+        GetEnvConfig()?.api?.administration?.users?.getUserForEdit?.replace(
+          "{id}",
+          id
+        ),
     }),
 
-    addUsers: builder.mutation<IUserWithPermissions, IUserWithPermissions>({
+    addUsers: builder.mutation<
+      IUserWithPermissionsForm,
+      IUserWithPermissionsForm
+    >({
       query: (body) => ({
         url:
           GetEnvConfig()?.api?.baseUrl +
@@ -39,8 +46,8 @@ export const usersApi = createApi({
     }),
 
     updateUsers: builder.mutation<
-      IUserWithPermissions,
-      { id: string; data: IUserWithPermissions }
+      IUserWithPermissionsForm,
+      { id: string; data: IUserWithPermissionsForm }
     >({
       query: ({ id, data }) => ({
         url:

@@ -1,9 +1,11 @@
 import { Controller, useFormContext } from "react-hook-form";
-
-import type { IUserWithPermissions } from "../../../interfaces/users.model";
+import type {
+  IUserWithPermissions,
+  IUserWithPermissionsForm,
+} from "../../../interfaces/users.model";
 
 const UserRolesFormApp = ({ data }: { data?: IUserWithPermissions }) => {
-  const { control } = useFormContext<IUserWithPermissions>();
+  const { control } = useFormContext<IUserWithPermissionsForm>();
 
   return (
     <div className="users-form-app">

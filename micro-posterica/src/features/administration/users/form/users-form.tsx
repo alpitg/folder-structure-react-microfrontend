@@ -9,6 +9,7 @@ import {
 import type {
   IUsersData,
   IUserWithPermissions,
+  IUserWithPermissionsForm,
 } from "../../interfaces/users.model";
 import { mapUsersForApi } from "./users.util";
 import UserInfoFormApp from "./user-info/user-info-form";
@@ -50,7 +51,7 @@ const UsersFormApp = ({ mode, user, handleClose }: UsersFormAppProps) => {
   //#endregion
 
   //#region form
-  const methods = useForm<IUserWithPermissions>({
+  const methods = useForm<IUserWithPermissionsForm>({
     defaultValues: {
       user: {
         id: "",
@@ -72,6 +73,7 @@ const UsersFormApp = ({ mode, user, handleClose }: UsersFormAppProps) => {
         isLockoutEnabled: false,
         isDarkMode: false,
       },
+      grantedRoles: [],
       grantedPermissionNames: [],
       permissions: [],
     },
@@ -79,7 +81,7 @@ const UsersFormApp = ({ mode, user, handleClose }: UsersFormAppProps) => {
 
   const { reset } = methods;
 
-  const onSubmit: SubmitHandler<IUserWithPermissions> = (formData) => {
+  const onSubmit: SubmitHandler<IUserWithPermissionsForm> = (formData) => {
     const request = mapUsersForApi(formData);
 
     console.log(request);
@@ -147,6 +149,8 @@ const UsersFormApp = ({ mode, user, handleClose }: UsersFormAppProps) => {
           isLockoutEnabled: data?.user?.isLockoutEnabled || false,
           isDarkMode: data?.user?.isDarkMode || false,
         },
+        grantedRoles:
+          data?.roles?.filter((x) => x?.isAssigned)?.map((x) => x?.id) || [],
         grantedPermissionNames: data?.grantedPermissionNames || [],
         permissions: data?.permissions || [],
       });
