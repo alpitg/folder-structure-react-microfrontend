@@ -56,7 +56,10 @@ const CustomerListApp = () => {
             page={page}
             setPage={setPage}
             search={search}
-            setSearch={setSearch}
+            setSearch={(val) => {
+              setSearch(val);
+              setPage(1);
+            }}
             pages={data?.pages || 1}
             onSearch={() => setPage(1)}
             pageSize={data?.pageSize || 0}

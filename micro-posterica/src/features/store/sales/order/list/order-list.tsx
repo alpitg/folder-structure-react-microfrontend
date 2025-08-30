@@ -66,7 +66,10 @@ const OrderListApp = () => {
             page={page}
             setPage={setPage}
             search={search}
-            setSearch={setSearch}
+            setSearch={(val) => {
+              setSearch(val);
+              setPage(1);
+            }}
             pages={orderData?.pages || 1}
             onSearch={() => setPage(1)}
             pageSize={orderData?.pageSize || 0}
