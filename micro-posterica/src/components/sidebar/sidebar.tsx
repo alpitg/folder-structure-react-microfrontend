@@ -290,7 +290,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
   return (
     <div
       className={`app-sidebar flex-column ${
-        props?.isOpen ? "sidebar-open" : "sidebar-closed"
+        props?.isOpen ? "sidebar-open shadow" : "sidebar-closed"
       }`}
     >
       <div className="app-sidebar-menu overflow-hidden flex-column-fluid">

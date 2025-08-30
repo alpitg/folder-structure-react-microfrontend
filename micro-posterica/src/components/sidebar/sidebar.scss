@@ -7,7 +7,7 @@
   width: var(--bs-app-sidebar-width);
   transition: transform 0.3s ease-in-out;
   height: 100vh;
-  z-index: 110; // above content but below navbar
+  z-index: 110;
 
   // Default: visible on large screens
   transform: translateX(0);
@@ -20,7 +20,6 @@
   &.sidebar-open {
     top: 0;
     transform: translateX(0);
-    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
   }
 
   &.sidebar-closed {
