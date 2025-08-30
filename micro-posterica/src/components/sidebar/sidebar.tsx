@@ -10,7 +10,7 @@ import { useAuth } from "../../hooks/use-auth";
 
 const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
   const { user } = useAuth();
-  const userClaims = user?.roles || []; // 👈 adjust depending on your API (roles/permissions array)
+  const userClaims = user?.grantedRoles || []; // 👈 adjust depending on your API (roles/permissions array)
 
   //#region sidebar menu constant
 
@@ -19,7 +19,12 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
     title: "Administration",
     path: ROUTE_URL.ADMINISTRATION.BASE,
     icon: "bi bi bi-sliders fs-3",
-    claims: ["Pages.Administration"],
+    claims: [
+      "Pages.Administration",
+      "Pages.Administration.OrganizationUnits",
+      "Pages.Administration.Roles",
+      "Pages.Administration.Users",
+    ],
     subRoutes: [
       {
         id: "organization-units",
@@ -253,11 +258,11 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
 
   const filteredRoutes = routes
-    .filter((route) => hasPermission(userClaims, route.claims))
+    .filter((route) => hasPermission(userClaims, route?.claims))
     .map((route) => ({
       ...route,
-      subRoutes: route.subRoutes?.filter((sub) =>
-        hasPermission(userClaims, sub.claims)
+      subRoutes: route?.subRoutes?.filter((sub) =>
+        hasPermission(userClaims, sub?.claims)
       ),
     }));
 

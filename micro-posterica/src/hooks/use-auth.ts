@@ -20,10 +20,10 @@ export const useAuth = () => {
      */
     hydrated,
     hasRole(role: string) {
-      return hasRole(user?.roles || [], role);
+      return hasRole(user?.grantedRoles || [], role);
     },
     hasPermission(permission: string[]) {
-      return hasPermission(user?.roles || [], permission);
+      return hasPermission(user?.grantedRoles || [], permission);
     },
   };
 };

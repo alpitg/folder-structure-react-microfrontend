@@ -26,7 +26,7 @@ export interface IUsersData {
 
 export interface IUserWithPermissions {
   user: IUsersData;
-  grantedRoles: string[];
+  grantedRoles: IRolesData[];
   roles: IRolesData[];
   memberedOrganisationUnits: string[];
   allOrganizationUnits: IOrganizationUnitsData[];

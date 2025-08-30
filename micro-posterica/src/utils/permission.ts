@@ -10,6 +10,7 @@ export const hasPermission = (
   permissions?: string[]
 ): boolean => {
   if (!permissions || permissions.length === 0) return true; // no restriction
+  if (!roles) return false;
 
   return (
     roles?.some((r) =>
