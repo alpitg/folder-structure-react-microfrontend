@@ -8,7 +8,6 @@ import {
 } from "../../../../app/redux/administration/users/users.api";
 import type {
   IUsersData,
-  IUserWithPermissions,
   IUserWithPermissionsForm,
 } from "../../interfaces/users.model";
 import { mapUsersForApi } from "./users.util";
@@ -91,6 +90,15 @@ const UsersFormApp = ({ mode, user, handleClose }: UsersFormAppProps) => {
     if (isEditMode) {
       updateUsers({ id: id!, data: request })
         .unwrap()
+        .then(() => {
+          dispatch(
+            setToast({
+              show: true,
+              message: "User updated successfully.",
+              variant: "success",
+            })
+          );
+        })
         .catch(() => {
           dispatch(
             setToast({
@@ -103,6 +111,15 @@ const UsersFormApp = ({ mode, user, handleClose }: UsersFormAppProps) => {
     } else {
       addUsers(request)
         .unwrap()
+        .then(() => {
+          dispatch(
+            setToast({
+              show: true,
+              message: "User added successfully.",
+              variant: "success",
+            })
+          );
+        })
         .catch(() => {
           dispatch(
             setToast({
