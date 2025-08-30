@@ -1,4 +1,5 @@
-// hooks/use-auth.ts
+import { hasPermission, hasRole } from "../utils/permission";
+
 import type { AppState } from "../app/store";
 import { useSelector } from "react-redux";
 
@@ -9,12 +10,6 @@ export const useAuth = () => {
 
   const isAuthenticated = !!accessToken;
 
-  const hasRole = (role: string) =>
-    user?.roles?.some((r: any) => r.name === role) ?? false;
-
-  const hasPermission = (permission: string) =>
-    user?.roles?.some((r: any) => r.permissions?.includes(permission)) ?? false;
-
   return {
     isAuthenticated,
     accessToken,
@@ -24,7 +19,11 @@ export const useAuth = () => {
      * ➡️ Taking the persisted state (usually from localStorage, cookies, or server-rendered HTML) and rehydrating (restoring) it into your app’s in-memory state (Redux store)
      */
     hydrated,
-    hasRole,
-    hasPermission,
+    hasRole(role: string) {
+      return hasRole(user?.roles || [], role);
+    },
+    hasPermission(permission: string[]) {
+      return hasPermission(user?.roles || [], permission);
+    },
   };
 };

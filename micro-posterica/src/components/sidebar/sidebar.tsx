@@ -5,8 +5,13 @@ import { useEffect, useState } from "react";
 import type { IRoutes } from "../../interfaces/route.model";
 import { NavLink } from "react-router";
 import { ROUTE_URL } from "../../routes/constants/routes.const";
+import { hasPermission } from "../../utils/permission";
+import { useAuth } from "../../hooks/use-auth";
 
 const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
+  const { user } = useAuth();
+  const userClaims = user?.roles || []; // 👈 adjust depending on your API (roles/permissions array)
+
   //#region sidebar menu constant
 
   const administration: IRoutes = {
@@ -14,14 +19,14 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
     title: "Administration",
     path: ROUTE_URL.ADMINISTRATION.BASE,
     icon: "bi bi bi-sliders fs-3",
-    claims: [],
+    claims: ["Pages.Administration"],
     subRoutes: [
       {
         id: "organization-units",
         title: "Organization Units",
         path: ROUTE_URL.ADMINISTRATION.ORGANIZATION_UNIT.BASE,
         icon: "bi bi-diagram-3 fs-3",
-        claims: [],
+        claims: ["Pages.Administration.OrganizationUnits"],
         subRoutes: [],
       },
       {
@@ -29,7 +34,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
         title: "Roles",
         path: ROUTE_URL.ADMINISTRATION.ROLES.BASE,
         icon: "bi bi-suitcase-lg fs-3",
-        claims: [],
+        claims: ["Pages.Administration.Roles"],
         subRoutes: [],
       },
       {
@@ -37,7 +42,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
         title: "Users",
         path: ROUTE_URL.ADMINISTRATION.USERS.BASE,
         icon: "bi bi-people fs-3",
-        claims: [],
+        claims: ["Pages.Administration.Users"],
         subRoutes: [],
       },
     ],
@@ -247,6 +252,15 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
 
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
 
+  const filteredRoutes = routes
+    .filter((route) => hasPermission(userClaims, route.claims))
+    .map((route) => ({
+      ...route,
+      subRoutes: route.subRoutes?.filter((sub) =>
+        hasPermission(userClaims, sub.claims)
+      ),
+    }));
+
   const handleMenuClick = (menuId: string) => {
     setActiveMenu((prev) => (prev === menuId ? null : menuId));
   };
@@ -283,7 +297,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
               </div>
             </div>
             <div className="menu menu-column menu-rounded menu-sub-indention fw-semibold">
-              {routes.map((route) => (
+              {filteredRoutes?.map((route) => (
                 <div
                   key={route.id}
                   className={`menu-item menu-accordion ${

@@ -9,6 +9,7 @@ export interface IRolesData {
   isStatic: boolean; // If system/static role
   isActive: boolean;
   creationTime: string;
+  grantedPermissionNames?: string[] | null;
   isAssigned?: boolean;
 }
 

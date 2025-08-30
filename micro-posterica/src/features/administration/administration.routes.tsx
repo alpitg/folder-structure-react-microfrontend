@@ -1,5 +1,6 @@
 import OrganizationUnitApp from "./organization/organization-unit";
 import OrganizationUnitsListApp from "./organization/list/organization-units-list";
+import PrivateRoute from "../../routes/private-route";
 import { ROUTE_URL } from "../../routes/constants/routes.const";
 import RoleListApp from "./roles/list/role-list";
 import { Route } from "react-router";
@@ -18,23 +19,43 @@ export const AdministrationRoutes = () => {
         element={<OrganizationUnitApp />}
       >
         <Route
-          path={ROUTE_URL.ADMINISTRATION.ORGANIZATION_UNIT.LIST}
-          element={<OrganizationUnitsListApp />}
-        />
+          element={
+            <PrivateRoute
+              requiredPermission={["Pages.Administration.OrganizationUnits"]}
+            />
+          }
+        >
+          <Route
+            path={ROUTE_URL.ADMINISTRATION.ORGANIZATION_UNIT.LIST}
+            element={<OrganizationUnitsListApp />}
+          />
+        </Route>
       </Route>
 
       <Route path={ROUTE_URL.ADMINISTRATION.ROLES.BASE} element={<RolesApp />}>
         <Route
-          path={ROUTE_URL.ADMINISTRATION.ROLES.LIST}
-          element={<RoleListApp />}
-        />
+          element={
+            <PrivateRoute requiredPermission={["Pages.Administration.Roles"]} />
+          }
+        >
+          <Route
+            path={ROUTE_URL.ADMINISTRATION.ROLES.LIST}
+            element={<RoleListApp />}
+          />
+        </Route>
       </Route>
 
       <Route path={ROUTE_URL.ADMINISTRATION.USERS.BASE} element={<UsersApp />}>
         <Route
-          path={ROUTE_URL.ADMINISTRATION.USERS.LIST}
-          element={<UserListApp />}
-        />
+          element={
+            <PrivateRoute requiredPermission={["Pages.Administration.Users"]} />
+          }
+        >
+          <Route
+            path={ROUTE_URL.ADMINISTRATION.USERS.LIST}
+            element={<UserListApp />}
+          />
+        </Route>
       </Route>
     </Route>
   );

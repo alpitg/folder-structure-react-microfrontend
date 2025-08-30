@@ -6,7 +6,7 @@ import { useAuth } from "../hooks/use-auth";
 
 interface PrivateRouteProps {
   requiredRole?: string;
-  requiredPermission?: string;
+  requiredPermission?: string[];
 }
 
 const PrivateRoute = ({
