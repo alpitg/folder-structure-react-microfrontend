@@ -10,7 +10,7 @@ import { useAuth } from "../../hooks/use-auth";
 
 const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
   const { user } = useAuth();
-  const userClaims = user?.grantedRoles || []; // 👈 adjust depending on your API (roles/permissions array)
+  const userClaims = user?.grantedRoles || [];
 
   //#region sidebar menu constant
 
