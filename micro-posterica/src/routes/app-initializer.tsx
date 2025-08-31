@@ -38,7 +38,7 @@ const AppInitializer = () => {
 
   if (isError) {
     return (
-      <ErrorPage description=" We're sorry, the page you're looking for cannot be found." />
+      <ErrorPage description="Unable to load the application." />
     );
   }
 
