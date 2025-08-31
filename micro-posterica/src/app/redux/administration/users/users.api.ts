@@ -4,14 +4,15 @@ import type {
   IUserWithPermissionsForm,
   PaginatedUsers,
 } from "../../../../features/administration/interfaces/users.model";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { GetEnvConfig } from "../../../../app.config";
 import type { IRolePermission } from "../../../../features/administration/interfaces/role-permission.model";
+import { baseQuery } from "../../base.api";
+import { createApi } from "@reduxjs/toolkit/query/react";
 
 export const usersApi = createApi({
   reducerPath: "usersApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "" }), // Adjust base URL
+  baseQuery,
   endpoints: (builder) => ({
     getUsers: builder.query<PaginatedUsers, GetUsersParams>({
       query: (params) => ({

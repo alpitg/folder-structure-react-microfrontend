@@ -15,6 +15,8 @@ import PermissionTreeApp from "./permission/tree/permission-tree";
 import { buildPermissionTree, mapRolesForApi } from "./roles-tree.util";
 import SomethingWentWrongPage from "../../../../components/ui/error/something-went-wrong/something-went-wrong";
 import { useAutoFocus } from "../../../../hooks/use-auto-focus";
+import { useDispatch } from "react-redux";
+import { setToast } from "../../../../app/redux/core/app-settings/app-settings.slice";
 
 type RolesFormAppProps = {
   mode: "add" | "edit";
@@ -26,17 +28,27 @@ const RolesFormApp = ({ mode, role, handleClose }: RolesFormAppProps) => {
   const isEditMode = mode === "edit";
   const id = role?.id || null;
 
+  const dispatch = useDispatch();
+
   const inputRef = useAutoFocus<HTMLInputElement>();
 
   //#region RTK APIs
   const [
     updateRoles,
-    { isLoading: isUpdateRolesLoading, isSuccess: isAddSuccess },
+    {
+      isLoading: isUpdateRolesLoading,
+      isSuccess: isAddSuccess,
+      isError: isUpdateError,
+    },
   ] = useUpdateRolesMutation();
 
   const [
     addRoles,
-    { isLoading: isaddRolesLoading, isSuccess: isUpdateSuccess },
+    {
+      isLoading: isaddRolesLoading,
+      isSuccess: isUpdateSuccess,
+      isError: isAddError,
+    },
   ] = useAddRolesMutation();
 
   const {
@@ -92,6 +104,50 @@ const RolesFormApp = ({ mode, role, handleClose }: RolesFormAppProps) => {
       handleClose?.({ refresh: true });
     }
   }, [isSuccess]);
+
+  useEffect(() => {
+    if (isAddSuccess) {
+      dispatch(
+        setToast({
+          show: true,
+          message: "Role added successfully.",
+          variant: "success",
+        })
+      );
+    }
+
+    if (isUpdateSuccess) {
+      dispatch(
+        setToast({
+          show: true,
+          message: "Role updated successfully.",
+          variant: "success",
+        })
+      );
+    }
+  }, [isAddSuccess, isUpdateSuccess]);
+
+  useEffect(() => {
+    if (isAddError) {
+      dispatch(
+        setToast({
+          show: true,
+          message: "Server error! Failed to save.",
+          variant: "danger",
+        })
+      );
+    }
+
+    if (isUpdateError) {
+      dispatch(
+        setToast({
+          show: true,
+          message: "Server error! Failed to save.",
+          variant: "danger",
+        })
+      );
+    }
+  }, [isAddError, isUpdateError]);
 
   // ✅ Populate form in edit mode
   useEffect(() => {

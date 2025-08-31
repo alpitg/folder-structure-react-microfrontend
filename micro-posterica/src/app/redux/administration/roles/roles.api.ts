@@ -3,14 +3,15 @@ import type {
   IRoleWithPermissions,
   PaginatedRoles,
 } from "../../../../features/administration/interfaces/roles.model";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { GetEnvConfig } from "../../../../app.config";
 import type { IRolePermission } from "../../../../features/administration/interfaces/role-permission.model";
+import { baseQuery } from "../../base.api";
+import { createApi } from "@reduxjs/toolkit/query/react";
 
 export const rolesApi = createApi({
   reducerPath: "rolesApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "" }), // Adjust base URL
+  baseQuery,
   endpoints: (builder) => ({
     getRoles: builder.query<PaginatedRoles, GetRolesParams>({
       query: (params) => ({

@@ -3,13 +3,14 @@ import type {
   IProductData,
   PaginatedProducts,
 } from "../../../../features/store/catalog/interface/product/product.model";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { GetEnvConfig } from "../../../../app.config";
+import { baseQuery } from "../../base.api";
+import { createApi } from "@reduxjs/toolkit/query/react";
 
 export const productsApi = createApi({
   reducerPath: "productsApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "" }), // Adjust base URL
+  baseQuery,
   endpoints: (builder) => ({
     getProducts: builder.query<PaginatedProducts, GetProductsParams>({
       query: (params) => ({
@@ -47,10 +48,7 @@ export const productsApi = createApi({
       query: ({ id, data }) => ({
         url:
           GetEnvConfig()?.api?.baseUrl +
-          GetEnvConfig()?.api?.catalog?.product?.update?.replace(
-            "{id}",
-            id
-          ),
+          GetEnvConfig()?.api?.catalog?.product?.update?.replace("{id}", id),
         method: "PUT",
         body: data,
       }),

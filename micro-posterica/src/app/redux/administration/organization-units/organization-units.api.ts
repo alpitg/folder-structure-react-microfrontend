@@ -3,13 +3,14 @@ import type {
   IOrganizationUnitsData,
   PaginatedOrganizationUnits,
 } from "../../../../features/administration/interfaces/organization-units.model";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { GetEnvConfig } from "../../../../app.config";
+import { baseQuery } from "../../base.api";
+import { createApi } from "@reduxjs/toolkit/query/react";
 
 export const organizationUnitsApi = createApi({
   reducerPath: "organizationUnitsApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "" }), // Adjust base URL
+  baseQuery,
   endpoints: (builder) => ({
     getPaginatedOrganizationUnits: builder.query<
       PaginatedOrganizationUnits,
