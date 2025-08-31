@@ -1,11 +1,12 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLoginMutation } from "../../../app/redux/administration/auth/auth.api";
 import { NavLink, useNavigate } from "react-router";
 import { setCredentials } from "../../../app/redux/administration/auth/auth.slice";
 import { useDispatch } from "react-redux";
 import { useAutoFocus } from "../../../hooks/use-auto-focus";
 import { ROUTE_URL } from "../../../routes/constants/routes.const";
+import { useAuth } from "../../../hooks/use-auth";
 
 export interface ILoginForm {
   userName: string;
@@ -26,6 +27,7 @@ const LoginApp = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   // ✅ RTK Mutation hook
+  const { isAuthenticated } = useAuth();
   const [login, { isLoading, isError, isSuccess }] = useLoginMutation();
 
   const {
@@ -52,6 +54,12 @@ const LoginApp = () => {
       console.error("Login failed:", err);
     }
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate(ROUTE_URL.DASHBOARD);
+    }
+  }, [isAuthenticated]);
 
   return (
     <div className="login-app">
