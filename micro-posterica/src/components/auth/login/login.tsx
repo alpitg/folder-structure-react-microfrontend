@@ -49,7 +49,7 @@ const LoginApp = () => {
       );
 
       // ✅ Redirect to home
-      navigate("/");
+      navigate(ROUTE_URL.DASHBOARD);
     } catch (err) {
       console.error("Login failed:", err);
     }
