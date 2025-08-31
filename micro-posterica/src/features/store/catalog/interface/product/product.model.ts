@@ -26,7 +26,7 @@ export interface IProductInventory {
 
 export interface IProductVariation {
   name: string;
-  values: string[];
+  values: string;
 }
 
 export interface IProductShipping {
