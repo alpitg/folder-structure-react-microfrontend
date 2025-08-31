@@ -72,9 +72,9 @@ export const baseQuery = async (args: any, api: any, extraOptions: any) => {
             window.location.href = ROUTE_URL.LOGIN;
           }
         } else {
-          // // No refresh token → log out user
-          // localStorage.removeItem(LOCALSTORAGE_AUTH_KEY);
-          // window.location.href = ROUTE_URL.LOGIN;
+          // No refresh token → log out user
+          localStorage.removeItem(LOCALSTORAGE_AUTH_KEY);
+          window.location.href = ROUTE_URL.LOGIN;
         }
       } catch (err) {
         console.error("Token refresh failed", err);
