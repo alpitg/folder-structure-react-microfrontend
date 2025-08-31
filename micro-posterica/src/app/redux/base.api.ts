@@ -1,5 +1,6 @@
 import { GetEnvConfig } from "../../app.config";
 import { LOCALSTORAGE_AUTH_KEY } from "../../constants/global/global-key.const";
+import { ROUTE_URL } from "../../routes/constants/routes.const";
 import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const rawBaseQuery = fetchBaseQuery({
@@ -66,13 +67,17 @@ export const baseQuery = async (args: any, api: any, extraOptions: any) => {
           } else {
             // Refresh failed → log out user
             localStorage.removeItem(LOCALSTORAGE_AUTH_KEY);
-            window.location.href = "/login";
+            window.location.href = ROUTE_URL.LOGIN;
           }
+        } else {
+          // No refresh token → log out user
+          localStorage.removeItem(LOCALSTORAGE_AUTH_KEY);
+          window.location.href = ROUTE_URL.LOGIN;
         }
       } catch (err) {
         console.error("Token refresh failed", err);
         localStorage.removeItem(LOCALSTORAGE_AUTH_KEY);
-        window.location.href = "/login";
+        window.location.href = ROUTE_URL.LOGIN;
       }
     }
   }

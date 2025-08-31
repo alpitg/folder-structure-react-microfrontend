@@ -16,8 +16,7 @@ export interface ILoginForm {
 export interface ILoginResponse {
   tokenType: string;
   accessToken: string;
-  expiresIn?: number;
-  user: any;
+  refreshToken: string;
 }
 
 const LoginApp = () => {
@@ -41,9 +40,9 @@ const LoginApp = () => {
 
       dispatch(
         setCredentials({
-          accessToken: response.accessToken,
           tokenType: response.tokenType,
-          user: response.user,
+          accessToken: response.accessToken,
+          refreshToken: response.refreshToken,
         })
       );
 

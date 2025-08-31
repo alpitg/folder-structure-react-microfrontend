@@ -12,6 +12,7 @@ import type {
 } from "../../../../components/navbar/user-menu/user-setting/user-setting.model";
 
 import { GetEnvConfig } from "../../../../app.config";
+import type { IAppInitializer } from "../../../../components/app-initializer/app-initializer";
 import type { IUsersData } from "../../../../features/administration/interfaces/users.model";
 import { baseQuery } from "../../base.api";
 import { createApi } from "@reduxjs/toolkit/query/react";
@@ -32,7 +33,7 @@ export const authApi = createApi({
     }),
 
     // ✅ Get app initial data
-    getAppInitialData: builder.query<IUsersData, void>({
+    getAppInitialData: builder.query<IAppInitializer, void>({
       query: () => ({
         url:
           GetEnvConfig()?.api?.baseUrl +
