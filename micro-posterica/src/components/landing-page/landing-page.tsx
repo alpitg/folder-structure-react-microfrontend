@@ -20,38 +20,34 @@ const LandingPageApp = () => {
   };
 
   return (
-    <AppInitializer>
-      <div className="landing-page-app">
-        <div className="landing-page-container">
-          <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
-          <NavbarApp isOpen={isOpen} toggleSidebar={toggleSidebar} />
+    <div className="landing-page-app">
+      <div className="landing-page-container">
+        <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
+        <NavbarApp isOpen={isOpen} toggleSidebar={toggleSidebar} />
 
-          {/* Overlay for mobile */}
-          {isOpen && (
-            <div className="sidebar-overlay" onClick={toggleSidebar}></div>
-          )}
+        {/* Overlay for mobile */}
+        {isOpen && (
+          <div className="sidebar-overlay" onClick={toggleSidebar}></div>
+        )}
 
-          <div
-            className={`main-body-container ${
-              !isOpen
-                ? "landing-page-content"
-                : "landing-page-content-collapsed"
-            }`}
-          >
-            <div className="container-xxl">
-              <Outlet />
-            </div>
+        <div
+          className={`main-body-container ${
+            !isOpen ? "landing-page-content" : "landing-page-content-collapsed"
+          }`}
+        >
+          <div className="container-xxl">
+            <Outlet />
           </div>
         </div>
-
-        <ToastApp
-          show={toast.show}
-          message={toast.message}
-          variant={toast.variant}
-          onClose={() => dispatch(clearToast())}
-        />
       </div>
-    </AppInitializer>
+
+      <ToastApp
+        show={toast.show}
+        message={toast.message}
+        variant={toast.variant}
+        onClose={() => dispatch(clearToast())}
+      />
+    </div>
   );
 };
 

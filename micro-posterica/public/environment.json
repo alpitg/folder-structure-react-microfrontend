@@ -25,6 +25,7 @@
       },
       "users": {
         "login": "/api/auth/login",
+        "refreshToken": "/api/auth/refresh", 
         "appInit": "/api/auth/users/me/app-init",
         "forgotPassword": "/api/auth/forgot-password",
         "resetPassword": "/api/auth/reset-password",

@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { Suspense, lazy } from "react";
 
 import { AdministrationRoutes } from "../features/administration/administration.routes";
+import AppInitializer from "./app-initializer";
 import { CatalogRoutes } from "../features/store/catalog/routes/catalog.routes";
 import { CustomerRoutes } from "../features/store/customer/routes/customer.route";
 import LoadingApp from "../components/loading/loading";
@@ -70,48 +71,53 @@ const RoutesApp = () => {
           </Route>
 
           {/* 🔒 Protected */}
-          <Route element={<PrivateRoute />}>
-            <Route path={ROUTE_URL.DASHBOARD} element={<LandingPageApp />}>
-              <Route path={ROUTE_URL.DASHBOARD} element={<DashboardApp />} />
-              <Route path={ROUTE_URL.UI} element={<UIApp />} />
-              <Route path={ROUTE_URL.APP_SETTINGS} element={<SettingsApp />} />
+          <Route element={<AppInitializer />}>
+            <Route element={<PrivateRoute />}>
+              <Route path={ROUTE_URL.DASHBOARD} element={<LandingPageApp />}>
+                <Route path={ROUTE_URL.DASHBOARD} element={<DashboardApp />} />
+                <Route path={ROUTE_URL.UI} element={<UIApp />} />
+                <Route
+                  path={ROUTE_URL.APP_SETTINGS}
+                  element={<SettingsApp />}
+                />
 
-              <Route path={ROUTE_URL.SALES.BASE} element={<SalesApp />}>
-                <Route
-                  path={ROUTE_URL.SALES.ORDER.LIST}
-                  element={<OrderListApp />}
-                />
-                <Route
-                  path={ROUTE_URL.SALES.ORDER.ADD}
-                  element={<OrderFormApp />}
-                />
-                <Route
-                  path={ROUTE_URL.SALES.ORDER.EDIT}
-                  element={<OrderFormApp />}
-                />
-                <Route
-                  path={ROUTE_URL.SALES.ORDER.VIEW}
-                  element={<OrderViewApp />}
-                />
-              </Route>
+                <Route path={ROUTE_URL.SALES.BASE} element={<SalesApp />}>
+                  <Route
+                    path={ROUTE_URL.SALES.ORDER.LIST}
+                    element={<OrderListApp />}
+                  />
+                  <Route
+                    path={ROUTE_URL.SALES.ORDER.ADD}
+                    element={<OrderFormApp />}
+                  />
+                  <Route
+                    path={ROUTE_URL.SALES.ORDER.EDIT}
+                    element={<OrderFormApp />}
+                  />
+                  <Route
+                    path={ROUTE_URL.SALES.ORDER.VIEW}
+                    element={<OrderViewApp />}
+                  />
+                </Route>
 
-              {CatalogRoutes()}
-              {CustomerRoutes()}
-              {AdministrationRoutes()}
+                {CatalogRoutes()}
+                {CustomerRoutes()}
+                {AdministrationRoutes()}
 
-              <Route path={ROUTE_URL.MASTER.BASE} element={<MasterApp />}>
-                <Route
-                  path={ROUTE_URL.MASTER.FRAME_TYPES.BASE}
-                  element={<FrameTypesApp />}
-                />
-                <Route
-                  path={ROUTE_URL.MASTER.GLASS_TYPES.BASE}
-                  element={<GlassTypesApp />}
-                />
-                <Route
-                  path={ROUTE_URL.MASTER.MISC_CHARGES.BASE}
-                  element={<MiscChargesApp />}
-                />
+                <Route path={ROUTE_URL.MASTER.BASE} element={<MasterApp />}>
+                  <Route
+                    path={ROUTE_URL.MASTER.FRAME_TYPES.BASE}
+                    element={<FrameTypesApp />}
+                  />
+                  <Route
+                    path={ROUTE_URL.MASTER.GLASS_TYPES.BASE}
+                    element={<GlassTypesApp />}
+                  />
+                  <Route
+                    path={ROUTE_URL.MASTER.MISC_CHARGES.BASE}
+                    element={<MiscChargesApp />}
+                  />
+                </Route>
               </Route>
             </Route>
           </Route>

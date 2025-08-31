@@ -41,7 +41,9 @@ export const baseQuery = async (args: any, api: any, extraOptions: any) => {
           // Try refreshing token
           const refreshResult = await rawBaseQuery(
             {
-              url: "/auth/refresh",
+              url:
+                GetEnvConfig()?.api?.baseUrl +
+                GetEnvConfig()?.api?.administration?.users?.refreshToken,
               method: "POST",
               body: { refresh_token: refreshToken },
             },
@@ -70,9 +72,9 @@ export const baseQuery = async (args: any, api: any, extraOptions: any) => {
             window.location.href = ROUTE_URL.LOGIN;
           }
         } else {
-          // No refresh token → log out user
-          localStorage.removeItem(LOCALSTORAGE_AUTH_KEY);
-          window.location.href = ROUTE_URL.LOGIN;
+          // // No refresh token → log out user
+          // localStorage.removeItem(LOCALSTORAGE_AUTH_KEY);
+          // window.location.href = ROUTE_URL.LOGIN;
         }
       } catch (err) {
         console.error("Token refresh failed", err);

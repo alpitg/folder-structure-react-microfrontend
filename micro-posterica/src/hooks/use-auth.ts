@@ -1,12 +1,16 @@
 import { hasPermission, hasRole } from "../utils/permission.util";
 
 import type { AppState } from "../app/store";
+import { useGetAppInitialDataQuery } from "../app/redux/administration/auth/auth.api";
 import { useSelector } from "react-redux";
 
 export const useAuth = () => {
-  const { accessToken, tokenType, user, hydrated } = useSelector(
+  const { accessToken, tokenType, hydrated } = useSelector(
     (state: AppState) => state.core.auth
   );
+
+  const { data } = useGetAppInitialDataQuery();
+  const user = data?.user || null;
 
   const isAuthenticated = !!accessToken;
 

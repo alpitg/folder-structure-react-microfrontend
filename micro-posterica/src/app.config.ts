@@ -30,6 +30,7 @@ let environment = {
       },
       users: {
         login: "",
+        refreshToken: "",
         appInit: "",
         forgotPassword: "",
         resetPassword: "",
