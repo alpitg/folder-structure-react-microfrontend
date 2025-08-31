@@ -16,6 +16,7 @@ export interface ILoginForm {
 export interface ILoginResponse {
   tokenType: string;
   accessToken: string;
+  expiresIn?: number;
   user: any;
 }
 

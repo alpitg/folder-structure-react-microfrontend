@@ -10,15 +10,17 @@ import type {
   IUpdateUserSettingRequest,
   IUpdateUserSettingResponse,
 } from "../../../../components/navbar/user-menu/user-setting/user-setting.model";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { GetEnvConfig } from "../../../../app.config";
 import type { IUsersData } from "../../../../features/administration/interfaces/users.model";
+import { baseQuery } from "../../base.api";
+import { createApi } from "@reduxjs/toolkit/query/react";
 
 export const authApi = createApi({
   reducerPath: "authApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "" }),
+  baseQuery,
   endpoints: (builder) => ({
+    // ✅ Login
     login: builder.mutation<ILoginResponse, ILoginForm>({
       query: (credentials) => ({
         url:
@@ -26,6 +28,16 @@ export const authApi = createApi({
           GetEnvConfig()?.api?.administration?.users?.login,
         method: "POST",
         body: credentials,
+      }),
+    }),
+
+    // ✅ Get app initial data
+    getAppInitialData: builder.query<IUsersData, void>({
+      query: () => ({
+        url:
+          GetEnvConfig()?.api?.baseUrl +
+          GetEnvConfig()?.api?.administration?.users?.appInit,
+        method: "GET",
       }),
     }),
 
@@ -105,6 +117,7 @@ export const authApi = createApi({
 
 export const {
   useLoginMutation,
+  useGetAppInitialDataQuery,
   useForgotPasswordMutation,
   useResetPasswordMutation,
   useUpdatePasswordMutation,

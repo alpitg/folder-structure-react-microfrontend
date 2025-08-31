@@ -1,6 +1,6 @@
 import errorImage from "/static/media/img/svg/error-404.svg";
 
-const ErrorPage = () => {
+const ErrorPage = ({ description }: { description?: string }) => {
   return (
     <div
       style={{
@@ -16,9 +16,7 @@ const ErrorPage = () => {
       <h1 style={{ fontSize: "2rem", marginBottom: "10px" }}>
         Oops! Something went wrong.
       </h1>
-      <p style={{ color: "#6c757d" }}>
-        We're sorry, the page you're looking for cannot be found.
-      </p>
+      <p style={{ color: "#6c757d" }}>{description}</p>
 
       <img
         src={errorImage}
