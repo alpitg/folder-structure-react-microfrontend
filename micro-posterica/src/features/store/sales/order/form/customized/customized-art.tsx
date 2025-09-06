@@ -20,7 +20,6 @@ type CustomizedArtAppProps = {
   glassTypes: IGlassType[];
   frameTypes: IFrameType[];
   miscCharges: IMiscCharge[];
-  removeItem: (index: number) => void;
 };
 
 const CustomizedArtApp: React.FC<CustomizedArtAppProps> = ({
@@ -74,7 +73,7 @@ const CustomizedArtApp: React.FC<CustomizedArtAppProps> = ({
       frameTypes,
       glassTypes,
       miscCharges
-    ).unitPrice(item);
+    ).customArtUnitPrice(item);
 
     const currentUnitPrice = getValues(`order.items.${index}.unitPrice`) || 0;
 

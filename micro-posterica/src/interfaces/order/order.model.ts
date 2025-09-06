@@ -1,6 +1,13 @@
 //#region Master interfaces
 
 export type PaymentStatusType = "pending" | "paid" | "failed" | "refunded";
+export type DiscountType = "none" | "percentage" | "fixed";
+export type ProductType =
+  | "custom"
+  | "physical"
+  | "digital"
+  | "service"
+  | "subscription";
 
 export interface IAdditionalServices {
   varnish: boolean;
@@ -74,12 +81,15 @@ export interface ICustomizedDetails {
   additional: IAdditionalServices;
 }
 
-export interface IOrderItem {
+export interface IOrderItemBase {
   /**
    * NOTE: Only for frontend to maintain dynamic id.
    */
   _id: string;
   productId?: string;
+  productType?: ProductType;
+  name?: string;
+  description?: string;
   quantity: number;
   unitPrice: number;
   /**
@@ -120,7 +130,7 @@ export interface IOrder {
   discountAmount: number;
 
   invoiceId?: string | null;
-  items: IOrderItem[];
+  items: IOrderItemBase[];
 }
 
 export interface IBillParty {
@@ -181,8 +191,6 @@ export class Mounting implements IMounting {
     this.right = 0;
     this.bottom = 0;
     this.left = 0;
-    this.width = undefined;
-    this.height = undefined;
   }
 }
 
@@ -194,9 +202,6 @@ export class Frame implements IFrame {
 
   constructor() {
     this.type = "";
-    this.color = undefined;
-    this.width = undefined;
-    this.height = undefined;
   }
 }
 
@@ -209,8 +214,6 @@ export class Glass implements IGlass {
   constructor() {
     this.isEnabled = false;
     this.type = "";
-    this.width = undefined;
-    this.height = undefined;
   }
 }
 
@@ -252,9 +255,12 @@ export class InitializeCustomizedDetails implements ICustomizedDetails {
  * Item/Product class in a order.
  * @description When we add an item/product in order then while initiating the item we can use this.
  */
-export class InitializeOrderItem implements IOrderItem {
+export class InitializeOrderItem implements IOrderItemBase {
   _id: string;
-  productId?: string;
+  productId: string;
+  productType: ProductType;
+  name: string;
+  description?: string;
   quantity: number;
   unitPrice: number;
   discountedQuantity: number;
@@ -264,13 +270,23 @@ export class InitializeOrderItem implements IOrderItem {
 
   constructor() {
     this._id = crypto.randomUUID();
-    this.productId = "";
+    this.productId = this._id;
+    this.productType = "physical";
+    this.name = "";
+    this.description = "";
     this.quantity = 1;
     this.unitPrice = 0;
     this.discountedQuantity = 0;
     this.discountAmount = 0;
     this.cancelledQty = 0;
     this.customizedDetails = new InitializeCustomizedDetails();
+  }
+}
+
+export class InitializeCustomOrderItem extends InitializeOrderItem {
+  constructor() {
+    super();
+    this.productType = "custom";
   }
 }
 

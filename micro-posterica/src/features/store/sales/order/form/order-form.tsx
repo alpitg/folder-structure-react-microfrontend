@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import {
+  InitializeCustomOrderItem,
   InitializeOrderItem,
   type IOrderInvoiceData,
 } from "../../../../../interfaces/order/order.model";
@@ -22,6 +23,7 @@ import CustomizedArtApp from "./customized/customized-art";
 import OrderSummaryApp from "./order-summary/order-summary";
 import { mapOrderForApi } from "../../../catalog/product/utils/costing.util";
 import PageHeaderApp from "../../../../../components/header/page-header/page-header";
+import ProductApp from "./product/product";
 
 const OrderFormApp = () => {
   const { orderId } = useParams<{ orderId?: string }>();
@@ -67,7 +69,7 @@ const OrderFormApp = () => {
       order: {
         customerName: "",
         discountAmount: 0,
-        items: [new InitializeOrderItem()],
+        items: [],
       },
       invoice: {
         advancePaid: 0,
@@ -135,7 +137,7 @@ const OrderFormApp = () => {
           discountAmount: orderDetail.order?.discountAmount || 0,
           items:
             orderDetail.order?.items?.length > 0
-              ? orderDetail.order.items
+              ? orderDetail?.order?.items
               : [new InitializeOrderItem()],
           orderCode: orderDetail?.order?.orderCode,
           createdAt: orderDetail?.order?.createdAt,
@@ -281,6 +283,9 @@ const OrderFormApp = () => {
                 </div>
               </div>
 
+              {/* Inventory Products */}
+              <ProductApp />
+
               {/* Customized Products */}
               <div className="card py-4">
                 <div className="card-header border-0">
@@ -291,24 +296,28 @@ const OrderFormApp = () => {
                     <button
                       type="button"
                       className="btn btn-sm btn-flex btn-light-primary"
-                      onClick={() => appendItem(new InitializeOrderItem())}
+                      onClick={() =>
+                        appendItem(new InitializeCustomOrderItem())
+                      }
                     >
                       <i className="bi bi-plus fs-3"></i> Add Customized Product
                     </button>
                   </div>
                 </div>
                 <div className="card-body py-0">
-                  {itemFields.map((item, index) => (
-                    <CustomizedArtApp
-                      key={item.id}
-                      item={item}
-                      index={index}
-                      frameTypes={frameTypes}
-                      glassTypes={glassTypes}
-                      miscCharges={miscCharges}
-                      removeItem={removeItem}
-                    />
-                  ))}
+                  {itemFields.map(
+                    (item, index) =>
+                      item?.productType === "custom" && (
+                        <CustomizedArtApp
+                          key={item.id}
+                          item={item}
+                          index={index}
+                          frameTypes={frameTypes}
+                          glassTypes={glassTypes}
+                          miscCharges={miscCharges}
+                        />
+                      )
+                  )}
                 </div>
               </div>
             </div>

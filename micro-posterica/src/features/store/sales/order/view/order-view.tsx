@@ -289,9 +289,7 @@ const OrderViewApp = () => {
                           </div>
                         </div>
                       </td>
-                      <td className="text-end">
-                        {item?.customizedDetails && "Customized"}
-                      </td>
+                      <td className="text-end">{item?.productType}</td>
                       <td className="text-end">{item?.quantity}</td>
                       <td className="text-end">{item?.unitPrice}</td>
                       <td className="text-end">

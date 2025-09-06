@@ -1,15 +1,20 @@
+import type { DiscountType } from "../../../../../interfaces/order/order.model";
+
 export interface IProductMedia {
   url: string;
   alt: string;
 }
 
-export interface IProductPrice {
+export interface IProductPrice extends IDiscountType {
   basePrice: number | null;
-  discountType: "none" | "percentage" | "fixed";
-  discountPercentage: number | null;
-  fixedDiscountedPrice: number | null;
   taxClass: "tax_free" | "taxable_goods" | "non_taxable" | string;
   vatPercent: number | null;
+}
+
+export interface IDiscountType {
+  discountType: DiscountType;
+  discountPercentage: number | null;
+  fixedDiscountedPrice: number | null;
 }
 
 export interface IProductInventory {

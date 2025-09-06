@@ -3,12 +3,13 @@ import type {
   IMiscCharge,
   IOrder,
   IOrderInvoiceData,
-  IOrderItem,
+  IOrderItemBase,
 } from "../../../../../interfaces/order/order.model";
 
 import { ADDITIONAL_SERVICE_CODE } from "../../../../../constants/global/global-key.const";
 import type { IFrameType } from "../../../../../app/redux/master/frame-types/frame-types.slice";
 import type { IGlassType } from "../../../../../app/redux/master/glass-types/glass-types.slice";
+import type { IProductPrice } from "../../interface/product/product.model";
 
 export class BillCalculation {
   frameTypes: IFrameType[];
@@ -50,7 +51,7 @@ export class BillCalculation {
    * @param item
    * @returns
    */
-  unitPrice = (item: IOrderItem): number => {
+  customArtUnitPrice = (item: IOrderItemBase): number => {
     // Calculate area with mounting if enabled
     const area = this.totalItemArea(item?.customizedDetails);
 
@@ -120,6 +121,25 @@ export const calculateTotalAmount = (order: IOrder): number => {
   );
 };
 
+export const calculateDiscountAmount = (price: IProductPrice): number => {
+  const base = price.basePrice ?? 0;
+
+  switch (price.discountType) {
+    case "percentage": {
+      const percent = price.discountPercentage ?? 0;
+      return (base * percent) / 100; // money off
+    }
+    case "fixed": {
+      // if your fixedDiscountedPrice means “final price after discount”:
+      // return base - (price.fixedDiscountedPrice ?? base);
+      // if it means “discount amount itself”:
+      return price.fixedDiscountedPrice ?? 0;
+    }
+    default:
+      return 0;
+  }
+};
+
 export const mapOrderForApi = (
   item: IOrderInvoiceData
 ): IOrderInvoiceData | null => {
@@ -132,77 +152,97 @@ export const mapOrderForApi = (
     return null;
   }
 
+  const mappedItems: IOrderItemBase[] = item.order.items.map(
+    (orderItem, idx) => {
+      // Common fields
+      const base = {
+        _id: orderItem?._id,
+        productId: orderItem?.productId,
+        productType: orderItem?.productType || "physical",
+        name: orderItem?.name || `Item ${idx + 1}`,
+        description: orderItem?.description || "",
+        quantity: orderItem?.quantity || 1,
+        unitPrice: orderItem?.unitPrice || 0,
+        discountedQuantity: orderItem?.discountedQuantity || 0,
+        discountAmount: orderItem?.discountAmount || 0,
+        cancelledQty: orderItem?.cancelledQty || 0,
+      };
+
+      // Customized details
+      const cd = orderItem.customizedDetails;
+      if (orderItem.productType === "custom") {
+        base.productId = base?._id;
+        base.name = cd?.name || `Product ${idx + 1}`;
+        base.description =
+          cd?.description || `Product ${idx + 1}  is customized`;
+      }
+
+      return {
+        ...base,
+        customizedDetails: {
+          name: base?.name,
+          description: base?.description,
+          width: cd?.width || 0,
+          height: cd?.height || 0,
+          frame: {
+            type: cd?.frame?.type || "",
+            color: cd?.frame?.color || "",
+            width: cd?.frame?.width || 0,
+            height: cd?.frame?.height || 0,
+          },
+          glass: {
+            isEnabled: cd?.glass?.isEnabled || false,
+            type: cd?.glass?.type || "",
+            width: cd?.glass?.width || 0,
+            height: cd?.glass?.height || 0,
+          },
+          additional: {
+            varnish: cd?.additional?.varnish || false,
+            lamination: cd?.additional?.lamination || false,
+            routerCut: cd?.additional?.routerCut || false,
+          },
+          mounting: {
+            isEnabled: cd?.mounting?.isEnabled || false,
+            top: cd?.mounting?.top || 0,
+            right: cd?.mounting?.right || 0,
+            bottom: cd?.mounting?.bottom || 0,
+            left: cd?.mounting?.left || 0,
+            width: cd?.mounting?.width || 0,
+            height: cd?.mounting?.height || 0,
+          },
+        },
+      } as IOrderItemBase;
+    }
+  );
+
   const order: IOrderInvoiceData = {
     order: {
-      orderCode: "",
-      customerName: item?.order?.customerName,
-      customerId: item?.order?.customerId,
-      handledBy: item?.order?.handledBy,
-      createdAt: item?.order?.createdAt,
-      likelyDateOfDelivery: item?.order?.likelyDateOfDelivery,
-      invoiceId: item?.order?.invoiceId || null,
+      orderCode: "", // Or generate code here
+      customerName: item.order.customerName,
+      customerId: item.order.customerId,
+      handledBy: item.order.handledBy,
+      createdAt: item.order.createdAt,
+      likelyDateOfDelivery: item.order.likelyDateOfDelivery,
+      invoiceId: item.order.invoiceId || null,
       note: "Fresh order",
       orderStatus: "placed",
-      miscCharges: item?.order?.miscCharges,
-      discountAmount: item?.order?.discountAmount,
-
-      items: item?.order?.items?.map(
-        (product, idX) =>
-          ({
-            productId: product?.productId || null,
-            quantity: product?.quantity || 1,
-            unitPrice: product?.unitPrice || 0,
-            discountedQuantity: 0, // NOTE: Look for this later
-            discountAmount: product?.discountAmount || 0,
-            customizedDetails: {
-              name: product?.customizedDetails?.name || `"Art ${idX + 1}"}`,
-              description: product?.customizedDetails?.description || "",
-              width: product?.customizedDetails?.width || 0,
-              height: product?.customizedDetails?.height || 0,
-              frame: {
-                type: product?.customizedDetails?.frame?.type || "",
-                color: product?.customizedDetails?.frame?.color || "",
-                width: product?.customizedDetails?.frame?.width || 0,
-                height: product?.customizedDetails?.frame?.height || 0,
-              },
-              glass: {
-                type: product?.customizedDetails?.glass?.type || "",
-                isEnabled:
-                  product?.customizedDetails?.glass?.isEnabled || false,
-              },
-              additional: {
-                varnish:
-                  product?.customizedDetails?.additional?.varnish || false,
-                lamination:
-                  product?.customizedDetails?.additional?.lamination || false,
-                routerCut:
-                  product?.customizedDetails?.additional?.routerCut || false,
-              },
-              mounting: {
-                isEnabled:
-                  product?.customizedDetails?.mounting?.isEnabled || false,
-                top: product?.customizedDetails?.mounting?.top || 0,
-                right: product?.customizedDetails?.mounting?.right || 0,
-                bottom: product?.customizedDetails?.mounting?.bottom || 0,
-                left: product?.customizedDetails?.mounting?.left || 0,
-              },
-            },
-          } as IOrderItem)
-      ),
+      miscCharges: item.order.miscCharges,
+      discountAmount: item.order.discountAmount,
+      items: mappedItems,
     },
     invoice: {
-      id: item?.invoice?.id,
-      generateInvoice: true, // item?.invoice?.generateInvoice,
-      billDate: item?.invoice?.billDate,
-      billFrom: item?.invoice?.billFrom,
-      billTo: item?.invoice?.billTo,
-      orderIds: item?.invoice?.orderIds,
-      balanceAmount: item?.invoice?.balanceAmount,
-      createdAt: item?.invoice?.createdAt,
-      paymentMode: item?.invoice?.paymentMode || "cash",
-      paymentStatus: item?.invoice?.paymentStatus,
-      totalAmount: item?.invoice?.totalAmount,
-      advancePaid: item?.invoice?.advancePaid,
+      id: item.invoice.id,
+      generateInvoice: true,
+      billDate: item.invoice.billDate,
+      billFrom: item.invoice.billFrom,
+      billTo: item.invoice.billTo,
+      orderIds: item.invoice.orderIds,
+      balanceAmount: item.invoice.balanceAmount,
+      createdAt: item.invoice.createdAt,
+      paymentMode: item.invoice.paymentMode || "cash",
+      paymentStatus: item.invoice.paymentStatus,
+      totalAmount: item.invoice.totalAmount,
+      advancePaid: item.invoice.advancePaid,
     },
   };
 
