@@ -6,7 +6,7 @@ import type {
 import {
   useAddOrganizationUnitsMutation,
   useGetRolesFromOrganizationUnitQuery,
-  useRemoveRoleFromOrganizationUnitMutation
+  useRemoveRoleFromOrganizationUnitMutation,
 } from "../../../../app/redux/administration/organization-units/organization-units.api";
 import { useEffect, useState } from "react";
 
@@ -15,6 +15,7 @@ import ModelApp from "../../../../components/ui/model/model";
 import OrganizationTreeFormApp from "./form/organization-tree-form";
 import OrganizationTreeNodeApp from "./node/organization-tree-node";
 import OrganizationUnitRolesListApp from "../roles/organization-unit-roles-list";
+import RolesFilterApp from "../../roles/list/filter/roles-filter";
 import { buildOrganizationUnitTree } from "./organization-tree.util";
 import type { sortType } from "../../../../interfaces/sort";
 
@@ -161,13 +162,30 @@ const OrganizationTreeApp = ({
             </div>
 
             <div className="card-body pt-2">
+              <RolesFilterApp
+                page={page}
+                setPage={setPage}
+                search={search}
+                setSearch={(val) => {
+                  setSearch(val);
+                  setPage(1);
+                }}
+                pages={rolesData?.pages || 1}
+                onSearch={() => setPage(1)}
+                pageSize={rolesData?.pageSize || 0}
+                total={rolesData?.total || 0}
+                sort={sort}
+                // setSort={handleSortChange}
+                handleRefresh={refetch}
+              />
+
               {rolesLoading ? (
                 <div>Loading roles...</div>
               ) : rolesData?.items?.length ? (
                 <div className="table-responsive">
                   <table className="table table-row-dashed table-row-gray-300 align-middle text-center gy-4">
-                    <thead>
-                      <tr className="fw-bold fs-6 text-dark border-0 bg-light">
+                    <thead className="border-bottom border-dashed">
+                      <tr className="fw-bold fs-6 text-dark border-0">
                         <th className="min-w-140px">Delete</th>
                         <th className="min-w-140px">Role name</th>
                         <th className="min-w-120px rounded-end">

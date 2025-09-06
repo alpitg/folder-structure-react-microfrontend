@@ -40,7 +40,6 @@ const OrganizationUnitRolesListApp = ({
   );
 
   const [addRoleToOrgUnit] = useAddRoleToOrganizationUnitMutation();
-  const selectedRoleIds = watch("selectedRoles");
 
   const onSubmit = async (data: FormValues) => {
     if (!data.selectedRoles.length) return;

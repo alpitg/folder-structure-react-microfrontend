@@ -114,7 +114,7 @@ const RoleListApp = () => {
 
           <div className="table-responsive">
             <table className="table table-row-dashed table-row-gray-300 gy-7">
-              <thead>
+              <thead className="border-bottom border-dashed">
                 <tr className="fw-bold fs-6 text-gray-800">
                   <th>NAME</th>
                   <th>CREATED TIME</th>
