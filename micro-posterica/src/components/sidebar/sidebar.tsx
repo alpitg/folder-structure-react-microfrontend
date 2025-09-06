@@ -14,7 +14,6 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
   const userClaims = user?.grantedRoles || [];
 
   //#region sidebar menu constant
-
   const administration: IRoutes = {
     id: "administration",
     title: "Administration",
@@ -267,10 +266,9 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
       subRoutes: [],
     },
   ];
-
   //#endregion
 
-  const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  const [openMenus, setOpenMenus] = useState<string[]>([]);
 
   const filteredRoutes = routes
     .filter((route) => hasPermission(userClaims, route?.claims))
@@ -281,23 +279,30 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
       ),
     }));
 
+  // ✅ only add, never remove (so second click keeps open)
   const handleMenuClick = (menuId: string) => {
-    setActiveMenu((prev) => (prev === menuId ? null : menuId));
+    setOpenMenus((prev) =>
+      prev.includes(menuId) ? prev : [...prev, menuId]
+    );
   };
 
-  // ✅ open parent menu if current route matches subRoute
+  // ✅ auto open matching parent on refresh or path change
   useEffect(() => {
     routes.forEach((route) => {
       if (
         route.subRoutes?.some((sub) => location.pathname.startsWith(sub.path))
       ) {
-        setActiveMenu(route.id);
+        setOpenMenus((prev) =>
+          prev.includes(route.id) ? prev : [...prev, route.id]
+        );
       }
       if (
         location.pathname.startsWith(route.path) &&
         !route.subRoutes?.length
       ) {
-        setActiveMenu(route.id);
+        setOpenMenus((prev) =>
+          prev.includes(route.id) ? prev : [...prev, route.id]
+        );
       }
     });
   }, [location.pathname]);
@@ -321,7 +326,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
                 <div
                   key={route.id}
                   className={`menu-item menu-accordion ${
-                    activeMenu === route?.id ? "show" : ""
+                    openMenus.includes(route?.id) ? "show" : ""
                   }`}
                   onClick={() => handleMenuClick(route.id)}
                 >
@@ -335,10 +340,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
                         <span className="menu-arrow"></span>
                       </span>
                     ) : (
-                      <NavLink
-                        className="menu-link"
-                        to={route.path}
-                      >
+                      <NavLink className="menu-link" to={route.path}>
                         <span className="menu-icon">
                           <i className={route.icon}></i>
                         </span>
@@ -346,33 +348,27 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
                       </NavLink>
                     )}
                   </>
-
                   <div
                     className={`menu-sub menu-sub-accordion ${
-                      activeMenu === route.id ||
-                      route.subRoutes?.some(
-                        (subRoute) => subRoute.id === activeMenu
-                      )
-                        ? "show"
-                        : "collapse"
+                      openMenus.includes(route.id) ? "show" : "collapse"
                     }`}
                   >
                     {route?.subRoutes?.map((subRoute) => (
                       <div
                         className={"menu-item " + subRoute?.id}
                         key={subRoute?.id}
-                        onClick={() => {
-                          handleMenuClick(subRoute?.id);
-                        }}
+                        onClick={() => handleMenuClick(subRoute?.id)}
                       >
                         <NavLink
-                          className="menu-link hover-scale"
+                          className="menu-link"
                           to={subRoute?.path}
                         >
                           <span className="menu-icon">
                             <i className={subRoute?.icon}></i>
                           </span>
-                          <span className="menu-title">{subRoute?.title}</span>
+                          <span className="menu-title">
+                            {subRoute?.title}
+                          </span>
                         </NavLink>
                       </div>
                     ))}
@@ -383,19 +379,6 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
           </div>
         </div>
       </div>
-
-      {/* <div
-        className="app-sidebar-footer flex-column-auto pt-2 pb-6 px-6"
-        id="kt_app_sidebar_footer"
-      >
-        <a className="btn btn-flex flex-center btn-custom btn-primary overflow-hidden text-nowrap px-0 h-40px w-100">
-          <span className="btn-label">Docs &amp; Components</span>
-          <i className="ki-duotone ki-document btn-icon fs-2 m-0">
-            <span className="path1"></span>
-            <span className="path2"></span>
-          </i>
-        </a>
-      </div> */}
     </div>
   );
 };
