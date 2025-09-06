@@ -11,6 +11,7 @@ interface OrderFilterProps {
   total: number;
   sort?: "newest" | "oldest";
   setSort?: (sort: "newest" | "oldest") => void;
+  handleRefresh?: () => void;
 }
 
 const OrderFilterApp = ({
@@ -24,6 +25,7 @@ const OrderFilterApp = ({
   total,
   sort = "newest",
   setSort = () => {},
+  handleRefresh,
 }: OrderFilterProps) => {
   const inputRef = useAutoFocus<HTMLInputElement>();
 
@@ -119,6 +121,16 @@ const OrderFilterApp = ({
             tabIndex={3}
           >
             <i className="bi bi-chevron-right" />
+          </button>
+
+          <button
+            type="button"
+            className="btn btn-light btn-icon btn-sm"
+            onClick={handleRefresh}
+            aria-label="Previous page"
+            title="Refresh"
+          >
+            <i className="bi bi-arrow-repeat" />
           </button>
         </div>
       </div>

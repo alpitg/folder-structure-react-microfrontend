@@ -76,6 +76,7 @@ const OrderListApp = () => {
             total={orderData?.total || 0}
             sort={sort}
             setSort={handleSortChange}
+            handleRefresh={refetch}
           />
 
           <div className="table-responsive">
