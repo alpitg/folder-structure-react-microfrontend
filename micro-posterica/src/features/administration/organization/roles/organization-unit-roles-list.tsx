@@ -173,7 +173,7 @@ const OrganizationUnitRolesListApp = ({
           </table>
         </div>
 
-        <div className="modal-footer d-flex justify-content-end gap-4 mt-3">
+        <div className="d-flex justify-content-end gap-4 mt-3">
           <button
             type="button"
             className="btn btn-secondary btn-sm"
