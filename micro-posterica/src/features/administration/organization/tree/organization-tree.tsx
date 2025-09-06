@@ -91,6 +91,11 @@ const OrganizationTreeApp = ({
     }
   };
 
+  const handleSortChange = (newSort: sortType) => {
+    setSort(newSort);
+    setPage(1);
+  };
+
   return (
     <div className="organization-tree-app container-fluid">
       <div className="row g-4">
@@ -162,22 +167,24 @@ const OrganizationTreeApp = ({
             </div>
 
             <div className="card-body pt-2">
-              <RolesFilterApp
-                page={page}
-                setPage={setPage}
-                search={search}
-                setSearch={(val) => {
-                  setSearch(val);
-                  setPage(1);
-                }}
-                pages={rolesData?.pages || 1}
-                onSearch={() => setPage(1)}
-                pageSize={rolesData?.pageSize || 0}
-                total={rolesData?.total || 0}
-                sort={sort}
-                // setSort={handleSortChange}
-                handleRefresh={refetch}
-              />
+              <div className="mb-5">
+                <RolesFilterApp
+                  page={page}
+                  setPage={setPage}
+                  search={search}
+                  setSearch={(val) => {
+                    setSearch(val);
+                    setPage(1);
+                  }}
+                  pages={rolesData?.pages || 1}
+                  onSearch={() => setPage(1)}
+                  pageSize={rolesData?.pageSize || 0}
+                  total={rolesData?.total || 0}
+                  sort={sort}
+                  setSort={handleSortChange}
+                  handleRefresh={refetch}
+                />
+              </div>
 
               {rolesLoading ? (
                 <div>Loading roles...</div>
