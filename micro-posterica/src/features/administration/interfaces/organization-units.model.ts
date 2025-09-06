@@ -92,3 +92,9 @@ export interface IOrganizationUnitTree {
   roles: number;
   children: IOrganizationUnitTree[];
 }
+
+export interface GetOrganizationUnitsParamsAssignRole
+  extends GetOrganizationUnitsParams {
+  id: string;
+  isAssigned: boolean;
+}

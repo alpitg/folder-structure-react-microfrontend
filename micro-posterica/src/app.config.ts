@@ -19,6 +19,11 @@ let environment = {
         add: "",
         update: "",
         delete: "",
+        roles: {
+          list: "",
+          add: "",
+          remove: "",
+        }
       },
       roles: {
         list: "",

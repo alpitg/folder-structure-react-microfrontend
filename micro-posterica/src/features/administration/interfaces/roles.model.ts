@@ -10,6 +10,7 @@ export interface IRolesData {
   isActive: boolean;
   creationTime: string;
   grantedPermissionNames?: string[] | null;
+  organisationUnitIds?: string[] | null;
   isAssigned?: boolean;
 }
 

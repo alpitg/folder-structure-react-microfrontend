@@ -13,10 +13,9 @@ import RolesFilterApp from "./filter/roles-filter";
 import RolesFormApp from "../form/roles-form";
 import { formattedDate } from "../../../../utils/date.util";
 import { hasPermission } from "../../../../utils/permission.util";
+import type { sortType } from "../../../../interfaces/sort";
 import { useAuth } from "../../../../hooks/use-auth";
 import { useLocation } from "react-router";
-
-type sortType = "newest" | "oldest";
 
 const RoleListApp = () => {
   const user = useAuth();

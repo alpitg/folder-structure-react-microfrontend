@@ -9,7 +9,13 @@ import OrganizationTreeFormApp from "../form/organization-tree-form";
 import { useGetOrganizationUnitsQuery } from "../../../../../app/redux/administration/organization-units/organization-units.api";
 import { useState } from "react";
 
-const OrganizationTreeNodeApp = (props: IOrganizationUnitTree) => {
+/** Extend the props so parent can pass selectedId + onSelect */
+interface OrganizationTreeNodeProps extends IOrganizationUnitTree {
+  onSelect?: (node: IOrganizationUnitTree) => void;
+  selectedId?: string | null;
+}
+
+const OrganizationTreeNodeApp = (props: OrganizationTreeNodeProps) => {
   const { refetch } = useGetOrganizationUnitsQuery();
 
   const [expanded, setExpanded] = useState(false);
@@ -18,10 +24,23 @@ const OrganizationTreeNodeApp = (props: IOrganizationUnitTree) => {
 
   const hasChildren = props?.children && props?.children.length > 0;
 
+  /** Highlight if this node is the selected one */
+  const isSelected = props.selectedId === props.id;
+
+  /** handle selecting a node */
+  const handleSelect = () => {
+    props.onSelect?.(props); // pass node back to parent
+  };
+
   return (
     <div>
       <li className="list-unstyled">
-        <div className="d-flex align-items-center py-2 gap-3">
+        <div
+          className={`d-flex align-items-center py-2 gap-3 ${
+            isSelected ? "bg-light border-start border-4 border-primary" : ""
+          }`}
+          onClick={handleSelect}
+        >
           {/* Chevron */}
           {hasChildren ? (
             expanded ? (
@@ -29,14 +48,20 @@ const OrganizationTreeNodeApp = (props: IOrganizationUnitTree) => {
                 className={`bi bi-chevron-down text-muted ${
                   hasChildren ? "cursor-pointer" : "cursor-default"
                 }`}
-                onClick={() => hasChildren && setExpanded(!expanded)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setExpanded(!expanded);
+                }}
               />
             ) : (
               <i
                 className={`bi bi-chevron-right text-muted ${
                   hasChildren ? "cursor-pointer" : "cursor-default"
                 }`}
-                onClick={() => hasChildren && setExpanded(!expanded)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setExpanded(!expanded);
+                }}
               />
             )
           ) : (
@@ -60,7 +85,10 @@ const OrganizationTreeNodeApp = (props: IOrganizationUnitTree) => {
 
           <i
             className="bi bi-plus-lg text-muted cursor-pointer"
-            onClick={() => setShowAddModel(!showAddModel)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowAddModel(!showAddModel);
+            }}
           />
         </div>
 
@@ -68,7 +96,12 @@ const OrganizationTreeNodeApp = (props: IOrganizationUnitTree) => {
         {hasChildren && expanded && (
           <ul className="ms-4 mt-1 list-unstyled">
             {props?.children.map((child, index) => (
-              <OrganizationTreeNodeApp key={index} {...child} />
+              <OrganizationTreeNodeApp
+                key={index}
+                {...child}
+                onSelect={props.onSelect}
+                selectedId={props.selectedId}
+              />
             ))}
           </ul>
         )}

@@ -327,7 +327,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
                 >
                   <>
                     {route?.subRoutes && route?.subRoutes?.length > 0 ? (
-                      <span className="menu-link hover-scale">
+                      <span className="menu-link">
                         <span className="menu-icon">
                           <i className={route.icon}></i>
                         </span>
@@ -336,7 +336,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
                       </span>
                     ) : (
                       <NavLink
-                        className="menu-link hover-scale"
+                        className="menu-link"
                         to={route.path}
                       >
                         <span className="menu-icon">

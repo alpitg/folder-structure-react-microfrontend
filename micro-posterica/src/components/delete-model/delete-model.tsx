@@ -2,12 +2,14 @@ const deleteIcon = "/static/media/img/svg/delete-1.svg";
 
 interface DeleteModelAppProps {
   show: boolean;
+  isLoading?: boolean;
   handleConfirm: () => void;
   handleCancel: () => void;
 }
 
 const DeleteModelApp: React.FC<DeleteModelAppProps> = ({
   show,
+  isLoading = false,
   handleConfirm,
   handleCancel,
 }) => {
@@ -35,6 +37,7 @@ const DeleteModelApp: React.FC<DeleteModelAppProps> = ({
                     type="button"
                     className="btn btn-danger fw-bold"
                     onClick={handleConfirm}
+                    disabled={isLoading}
                   >
                     Yes
                   </button>
@@ -43,6 +46,7 @@ const DeleteModelApp: React.FC<DeleteModelAppProps> = ({
                     className="btn btn-light fw-bold"
                     data-bs-dismiss="modal"
                     onClick={handleCancel}
+                    disabled={isLoading}
                   >
                     No
                   </button>

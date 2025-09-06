@@ -1,5 +1,6 @@
 import type {
   GetOrganizationUnitsParams,
+  GetOrganizationUnitsParamsAssignRole,
   IOrganizationUnitsData,
   PaginatedOrganizationUnits,
 } from "../../../../features/administration/interfaces/organization-units.model";
@@ -12,6 +13,7 @@ export const organizationUnitsApi = createApi({
   reducerPath: "organizationUnitsApi",
   baseQuery,
   endpoints: (builder) => ({
+    // ---------- Organisation Units ----------
     getPaginatedOrganizationUnits: builder.query<
       PaginatedOrganizationUnits,
       GetOrganizationUnitsParams
@@ -34,15 +36,6 @@ export const organizationUnitsApi = createApi({
       }),
     }),
 
-    // getOrganizationUnitsDetail: builder.query<IOrganizationUnitsData, string>({
-    //   query: (productId) =>
-    //     GetEnvConfig()?.api?.baseUrl +
-    //     GetEnvConfig()?.api?.catalog?.product?.detail?.replace(
-    //       "{id}",
-    //       productId
-    //     ),
-    // }),
-
     addOrganizationUnits: builder.mutation<
       IOrganizationUnitsData,
       IOrganizationUnitsData
@@ -56,28 +49,62 @@ export const organizationUnitsApi = createApi({
       }),
     }),
 
-    //   updateOrganizationUnits: builder.mutation<
-    //     IOrganizationUnitsData,
-    //     { id: string; data: IOrganizationUnitsData }
-    //   >({
-    //     query: ({ id, data }) => ({
-    //       url:
-    //         GetEnvConfig()?.api?.baseUrl +
-    //         GetEnvConfig()?.api?.catalog?.product?.update?.replace(
-    //           "{id}",
-    //           id
-    //         ),
-    //       method: "PUT",
-    //       body: data,
-    //     }),
-    //   }),
+    // ---------- Roles inside Org Unit ----------
+
+    // ⬇️ Get all roles tagged to an org unit (paginated)
+    getRolesFromOrganizationUnit: builder.query<
+      PaginatedOrganizationUnits,
+      GetOrganizationUnitsParamsAssignRole
+    >({
+      query: (params) => ({
+        url:
+          GetEnvConfig()?.api?.baseUrl +
+          GetEnvConfig()?.api?.administration?.organizationUnits?.roles?.list?.replace(
+            "{id}",
+            params.id
+          ),
+        method: "POST",
+        body: params,
+      }),
+    }),
+
+    // ⬇️ Add a role to an org unit
+    addRoleToOrganizationUnit: builder.mutation<
+      { message: string },
+      { organizationUnitId: string; roleIds: string[] }
+    >({
+      query: (body) => ({
+        url:
+          GetEnvConfig()?.api?.baseUrl +
+          GetEnvConfig()?.api?.administration?.organizationUnits?.roles?.add,
+        method: "POST",
+        body,
+      }),
+    }),
+
+    // ⬇️ Remove a role from an org unit
+    removeRoleFromOrganizationUnit: builder.mutation<
+      { message: string },
+      { organizationUnitId: string; roleId: string }
+    >({
+      query: (body) => ({
+        url:
+          GetEnvConfig()?.api?.baseUrl +
+          GetEnvConfig()?.api?.administration?.organizationUnits?.roles?.remove,
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
 export const {
   useGetPaginatedOrganizationUnitsQuery,
   useGetOrganizationUnitsQuery,
-  // useGetOrganizationUnitsDetailQuery,
   useAddOrganizationUnitsMutation,
-  // useUpdateOrganizationUnitsMutation,
+
+  // new hooks for roles:
+  useGetRolesFromOrganizationUnitQuery,
+  useAddRoleToOrganizationUnitMutation,
+  useRemoveRoleFromOrganizationUnitMutation,
 } = organizationUnitsApi;

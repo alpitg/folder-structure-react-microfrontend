@@ -13,7 +13,12 @@
         "detail": "/api/organization-units/{id}",
         "add": "/api/organization-units",
         "update": "/api/organization-units/{id}",
-        "delete": "/api/organization-units/{id}"
+        "delete": "/api/organization-units/{id}",
+        "roles": {
+          "list": "/api/organization-units/{id}/roles/search",
+          "add": "/api/organization-units/roles/add",
+          "remove": "/api/organization-units/roles/remove"
+        }
       },
       "roles": {
         "list": "/api/roles/search",
@@ -25,7 +30,7 @@
       },
       "users": {
         "login": "/api/auth/login",
-        "refreshToken": "/api/auth/refresh", 
+        "refreshToken": "/api/auth/refresh",
         "appInit": "/api/auth/users/me/app-init",
         "forgotPassword": "/api/auth/forgot-password",
         "resetPassword": "/api/auth/reset-password",
