@@ -2,14 +2,15 @@ import type {
   GetOrdersParams,
   PaginatedOrders,
 } from "../../../../features/store/sales/order/list/order-list.model";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { GetEnvConfig } from "../../../../app.config";
 import type { IOrderInvoiceData } from "../../../../interfaces/order/order.model";
+import { baseQuery } from "../../base.api";
+import { createApi } from "@reduxjs/toolkit/query/react";
 
 export const ordersApi = createApi({
   reducerPath: "ordersApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "" }), // Adjust base URL
+  baseQuery,
   endpoints: (builder) => ({
     getOrders: builder.query<PaginatedOrders, GetOrdersParams>({
       query: (params) => ({
@@ -41,10 +42,7 @@ export const ordersApi = createApi({
       query: ({ orderId, data }) => ({
         url:
           GetEnvConfig()?.api?.baseUrl +
-          GetEnvConfig()?.api?.order?.update?.replace(
-            "{orderId}",
-            orderId
-          ),
+          GetEnvConfig()?.api?.order?.update?.replace("{orderId}", orderId),
         method: "PUT",
         body: data,
       }),

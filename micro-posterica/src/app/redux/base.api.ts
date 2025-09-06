@@ -29,7 +29,7 @@ const rawBaseQuery = fetchBaseQuery({
 export const baseQuery = async (args: any, api: any, extraOptions: any) => {
   let result = await rawBaseQuery(args, api, extraOptions);
 
-  if (result.error && result.error.status === 401) {
+  if (result?.error && result?.error?.status === 401) {
     const userDetailStr = localStorage.getItem(LOCALSTORAGE_AUTH_KEY);
 
     if (userDetailStr) {

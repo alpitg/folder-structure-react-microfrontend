@@ -3,13 +3,14 @@ import type {
   ICustomer,
   PaginatedCustomers,
 } from "../../../features/store/customer/interface/customer.model";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { GetEnvConfig } from "../../../app.config";
+import { baseQuery } from "../base.api";
+import { createApi } from "@reduxjs/toolkit/query/react";
 
 export const customersApi = createApi({
   reducerPath: "customersApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "" }), // Adjust base URL
+  baseQuery,
   tagTypes: ["Customer"], // 👈 important
   endpoints: (builder) => ({
     getPaginatedCustomers: builder.query<
