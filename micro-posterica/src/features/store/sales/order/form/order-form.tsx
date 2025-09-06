@@ -137,7 +137,10 @@ const OrderFormApp = () => {
           discountAmount: orderDetail.order?.discountAmount || 0,
           items:
             orderDetail.order?.items?.length > 0
-              ? orderDetail?.order?.items
+              ? orderDetail?.order?.items?.map((item) => ({
+                  ...item,
+                  _id: item?._id || item?.productId, // for customized product
+                }))
               : [new InitializeOrderItem()],
           orderCode: orderDetail?.order?.orderCode,
           createdAt: orderDetail?.order?.createdAt,

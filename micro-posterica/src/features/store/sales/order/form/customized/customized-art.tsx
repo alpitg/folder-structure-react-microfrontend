@@ -56,7 +56,7 @@ const CustomizedArtApp: React.FC<CustomizedArtAppProps> = ({
     const currentItems = getValues("order.items");
 
     // Step 2: Filter out the item you want to remove
-    const updatedItems = currentItems.filter((item) => item._id !== _id);
+    const updatedItems = currentItems.filter((item) => item?._id !== _id);
 
     // Step 3: Set the updated array back to the form
     setValue("order.items", updatedItems, {
