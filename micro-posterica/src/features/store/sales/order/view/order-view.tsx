@@ -23,8 +23,11 @@ const OrderViewApp = () => {
     );
   };
 
-  const getGrandTotal = () =>
+  const getGrossTotal = () =>
     getSubTotal() - (data?.order?.discountAmount || 0);
+
+  const getGrandAmount = () =>
+    (getGrossTotal() || 0) - (data?.invoice?.advancePaid || 0);
 
   const handlePrint = () => {
     if (!printRef.current) return;
@@ -297,6 +300,7 @@ const OrderViewApp = () => {
                     </tr>
                   ))}
 
+                  {/* Subtotal */}
                   <tr>
                     <td colSpan={4} className="text-end">
                       Subtotal
@@ -304,35 +308,59 @@ const OrderViewApp = () => {
                     <td className="text-end">{getSubTotal()?.toFixed(2)}</td>
                   </tr>
 
+                  {/* Discount */}
                   <tr>
                     <td colSpan={4} className="text-end text-danger">
                       Discount
                     </td>
                     <td className="text-end text-danger">
-                      {data?.order?.discountAmount?.toFixed(2) || 0}
+                      {data?.order?.discountAmount?.toFixed(2) || "0.00"}
                     </td>
                   </tr>
 
+                  {/* Taxes */}
                   <tr>
                     <td colSpan={4} className="text-end">
-                      VAT (0%)
+                      VAT / GST (0%)
                     </td>
                     <td className="text-end">0.00</td>
                   </tr>
 
+                  {/* Shipping */}
                   <tr>
                     <td colSpan={4} className="text-end">
-                      Shipping Rate
+                      Shipping Charges
                     </td>
                     <td className="text-end">0.00</td>
                   </tr>
 
+                  {/* Gross Total / Invoice Total */}
+                  <tr>
+                    <td colSpan={4} className="text-end fs-5 fw-semibold">
+                      Invoice Total
+                    </td>
+                    <td className="text-end fs-5 fw-bold">
+                      {getGrossTotal()?.toFixed(2)}
+                    </td>
+                  </tr>
+
+                  {/* Advance Paid */}
+                  <tr>
+                    <td colSpan={4} className="text-end">
+                      Advance Paid
+                    </td>
+                    <td className="text-end">
+                      {data?.invoice?.advancePaid?.toFixed(2) || "0.00"}
+                    </td>
+                  </tr>
+
+                  {/* Balance Due */}
                   <tr>
                     <td colSpan={4} className="fs-3 text-gray-900 text-end">
-                      Grand Total
+                      Balance Due
                     </td>
                     <td className="text-gray-900 fs-3 fw-bolder text-end">
-                      {getGrandTotal()?.toFixed(2)}
+                      {getGrandAmount()?.toFixed(2)}
                     </td>
                   </tr>
                 </tbody>
