@@ -3,8 +3,7 @@ import {
   useAddRoleToOrganizationUnitMutation,
   useGetRolesFromOrganizationUnitQuery,
 } from "../../../../app/redux/administration/organization-units/organization-units.api";
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface OrganizationUnitRolesListAppProps {
   orgUnitId: string;
@@ -21,9 +20,11 @@ const OrganizationUnitRolesListApp = ({
   onClose,
   refetchRoles,
 }: OrganizationUnitRolesListAppProps) => {
-  const { control, handleSubmit, watch, reset } = useForm<FormValues>({
-    defaultValues: { selectedRoles: [] },
-  });
+  const { control, handleSubmit, watch, reset, setValue } = useForm<FormValues>(
+    {
+      defaultValues: { selectedRoles: [] },
+    }
+  );
 
   const [saving, setSaving] = useState(false);
 
@@ -41,19 +42,35 @@ const OrganizationUnitRolesListApp = ({
 
   const [addRoleToOrgUnit] = useAddRoleToOrganizationUnitMutation();
 
+  const selectedRoles = watch("selectedRoles");
+
+  // ✅ Toggle all selection
+  const allIds: string[] =
+    rolesData?.items?.map((r) => r.id).filter((id): id is string => !!id) || [];
+
+  const allSelected =
+    allIds.length > 0 && selectedRoles.length === allIds.length;
+
+  const toggleSelectAll = (checked: boolean) => {
+    if (checked) {
+      setValue("selectedRoles", allIds); // select all
+    } else {
+      setValue("selectedRoles", []); // deselect all
+    }
+  };
+
   const onSubmit = async (data: FormValues) => {
     if (!data.selectedRoles.length) return;
 
     setSaving(true);
 
     try {
-      // Call the mutation to add roles to the org unit
       await addRoleToOrgUnit({
-        roleIds: data.selectedRoles, // assuming API accepts { roleIds: string[], orgUnitId: string }
+        roleIds: data.selectedRoles,
         organizationUnitId: orgUnitId,
       }).unwrap();
 
-      if (refetchRoles) refetchRoles(); // refresh parent list if provided
+      if (refetchRoles) refetchRoles();
       reset();
       onClose();
     } catch (error) {
@@ -73,7 +90,13 @@ const OrganizationUnitRolesListApp = ({
         <table className="table table-row-dashed table-row-gray-300 gy-7">
           <thead>
             <tr className="fw-bold fs-6 text-gray-800">
-              <th style={{ width: "40px" }}>Select</th>
+              <th style={{ width: "40px" }}>
+                <input
+                  type="checkbox"
+                  checked={allSelected}
+                  onChange={(e) => toggleSelectAll(e.target.checked)}
+                />
+              </th>
               <th>NAME</th>
               <th>CREATED TIME</th>
             </tr>
@@ -89,7 +112,7 @@ const OrganizationUnitRolesListApp = ({
                       <input
                         type="checkbox"
                         value={role.id}
-                        // checked={field.value.includes(role?.id)}
+                        checked={field.value.includes(role.id ?? "")}
                         onChange={(e) => {
                           if (e.target.checked) {
                             field.onChange([...field.value, role.id]);

@@ -186,10 +186,10 @@ const OrganizationTreeApp = ({
                   <table className="table table-row-dashed table-row-gray-300 align-middle text-center gy-4">
                     <thead className="border-bottom border-dashed">
                       <tr className="fw-bold fs-6 text-dark border-0">
-                        <th className="min-w-140px">Delete</th>
-                        <th className="min-w-140px">Role name</th>
+                        <th className="min-w-140px">DELETE</th>
+                        <th className="min-w-140px">ROLE NAME</th>
                         <th className="min-w-120px rounded-end">
-                          Addition time
+                          ADDITION TIME
                         </th>
                       </tr>
                     </thead>
