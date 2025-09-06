@@ -5,4 +5,5 @@ export interface IRoutes {
   icon: string;
   claims: string[];
   subRoutes?: IRoutes[];
+  isSelected?: boolean;
 }
