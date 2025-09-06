@@ -221,7 +221,7 @@ const ProductFormApp = ({ mode }: ProductFormAppProps) => {
 
           <div className="form d-flex flex-column flex-lg-row">
             <div className="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10">
-              <ProductThumbnailApp />
+              {/* <ProductThumbnailApp /> */}
 
               <ProductStatusApp />
 
