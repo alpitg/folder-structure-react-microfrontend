@@ -50,103 +50,105 @@ const SecuritySettingApp = () => {
           </div>
         </div>
         <div className="card-body">
-          <div>
-            <h5 className="mb-5">Password complexity </h5>
+          <div className="row">
+            <div className="col-sm-12">
+              <h5 className="mb-5">Password complexity </h5>
 
-            <label className="form-check form-check-custom form-check-solid py-1">
-              <input
-                {...register("useDefaultSettings")}
-                type="checkbox"
-                className="form-check-input"
-              />
-              <span className="form-check-label">Use default settings</span>
-            </label>
-            <div className="px-5">
               <label className="form-check form-check-custom form-check-solid py-1">
                 <input
-                  {...register("requireDigit")}
+                  {...register("useDefaultSettings")}
                   type="checkbox"
                   className="form-check-input"
                 />
-                <span className="form-check-label">Require digit</span>
+                <span className="form-check-label">Use default settings</span>
               </label>
+              <div className="px-5">
+                <label className="form-check form-check-custom form-check-solid py-1">
+                  <input
+                    {...register("requireDigit")}
+                    type="checkbox"
+                    className="form-check-input"
+                  />
+                  <span className="form-check-label">Require digit</span>
+                </label>
 
-              <label className="form-check form-check-custom form-check-solid py-1">
-                <input
-                  {...register("requireLowercase")}
-                  type="checkbox"
-                  className="form-check-input"
-                />
-                <span className="form-check-label">Require lowercase</span>
-              </label>
+                <label className="form-check form-check-custom form-check-solid py-1">
+                  <input
+                    {...register("requireLowercase")}
+                    type="checkbox"
+                    className="form-check-input"
+                  />
+                  <span className="form-check-label">Require lowercase</span>
+                </label>
 
-              <label className="form-check form-check-custom form-check-solid py-1">
+                <label className="form-check form-check-custom form-check-solid py-1">
+                  <input
+                    {...register("requireNonAlphanumeric")}
+                    type="checkbox"
+                    className="form-check-input"
+                  />
+                  <span className="form-check-label">
+                    Require non-alphanumeric
+                  </span>
+                </label>
+
+                <label className="form-check form-check-custom form-check-solid py-1">
+                  <input
+                    {...register("requireUppercase")}
+                    type="checkbox"
+                    className="form-check-input"
+                  />
+                  <span className="form-check-label">Require uppercase</span>
+                </label>
+
+                <div className="mb-5">
+                  <label className="form-label">Required length</label>
+                  <input
+                    {...register("requiredLength")}
+                    type="number"
+                    className="form-control"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h5 className="mb-5"> User Lock Out </h5>
+              <label className="form-check form-check-custom form-check-solid py-1 mb-5">
                 <input
-                  {...register("requireNonAlphanumeric")}
+                  {...register("isEnabled")}
                   type="checkbox"
                   className="form-check-input"
                 />
                 <span className="form-check-label">
-                  Require non-alphanumeric
+                  Enable user account locking on failed login attempts
                 </span>
               </label>
 
-              <label className="form-check form-check-custom form-check-solid py-1">
-                <input
-                  {...register("requireUppercase")}
-                  type="checkbox"
-                  className="form-check-input"
-                />
-                <span className="form-check-label">Require uppercase</span>
-              </label>
-
               <div className="mb-5">
-                <label className="form-label">Required length</label>
+                <label className="form-label">
+                  Maximum number of failed login attempt count before locking
+                  the account
+                </label>
                 <input
-                  {...register("requiredLength")}
+                  {...register("maxFailedAccessAttemptsBeforeLockout")}
                   type="number"
                   className="form-control"
+                  required
                 />
               </div>
-            </div>
-          </div>
 
-          <div>
-            <h5 className="mb-5"> User Lock Out </h5>
-            <label className="form-check form-check-custom form-check-solid py-1 mb-5">
-              <input
-                {...register("isEnabled")}
-                type="checkbox"
-                className="form-check-input"
-              />
-              <span className="form-check-label">
-                Enable user account locking on failed login attempts
-              </span>
-            </label>
-
-            <div className="mb-5">
-              <label className="form-label">
-                Maximum number of failed login attempt count before locking the
-                account
-              </label>
-              <input
-                {...register("maxFailedAccessAttemptsBeforeLockout")}
-                type="number"
-                className="form-control"
-                required
-              />
-            </div>
-
-            <div className="mb-5">
-              <label className="form-label">
-                Account locking duration (as seconds)
-              </label>
-              <input
-                {...register("defaultAccountLockoutSeconds")}
-                type="number"
-                className="form-control"
-                required
-              />
+              <div className="mb-5">
+                <label className="form-label">
+                  Account locking duration (as seconds)
+                </label>
+                <input
+                  {...register("defaultAccountLockoutSeconds")}
+                  type="number"
+                  className="form-control"
+                  required
+                />
+              </div>
             </div>
           </div>
         </div>

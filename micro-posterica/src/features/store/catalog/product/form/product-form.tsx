@@ -70,7 +70,7 @@ const ProductFormApp = ({ mode }: ProductFormAppProps) => {
         discountPercentage: null,
         fixedDiscountedPrice: null,
         taxClass: "tax_free",
-        vatPercent: null,
+        taxPercent: null,
       },
       totalWishlistedCount: 0,
       inventory: {
@@ -146,7 +146,7 @@ const ProductFormApp = ({ mode }: ProductFormAppProps) => {
           discountPercentage: data?.price?.discountPercentage,
           fixedDiscountedPrice: data?.price?.fixedDiscountedPrice,
           taxClass: data?.price?.taxClass,
-          vatPercent: data?.price?.vatPercent,
+          taxPercent: data?.price?.taxPercent,
         },
         totalWishlistedCount: data?.totalWishlistedCount,
         inventory: {

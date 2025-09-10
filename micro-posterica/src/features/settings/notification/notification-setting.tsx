@@ -200,10 +200,13 @@ const NotificationSettingApp = () => {
           </div>
 
           <div className="card-footer d-flex justify-content-end py-6 px-9">
-            <button className="btn btn-light btn-active-light-primary me-2">
+            <button className="btn btn-light btn-sm btn-active-light-primary me-2">
               Discard
             </button>
-            <button className="btn btn-primary px-6">Save Changes</button>
+            <button className="btn btn-primary btn-sm px-6">
+              <i className="bi bi-check2 fs-3 me-2" />
+              Save Changes
+            </button>
           </div>
         </form>
       </div>

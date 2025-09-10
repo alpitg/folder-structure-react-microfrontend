@@ -1,5 +1,6 @@
 import CustomSliderApp from "../../../../../../components/ui/slider/slider";
 import type { IProductData } from "../../../interface/product/product.model";
+import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
 const ProductPricing = () => {
@@ -29,27 +30,46 @@ const ProductPricing = () => {
     },
   ];
 
+  // Combine GST and VAT options in one unified list
   const taxClasses = [
+    // Generic / default
+    { id: 1, value: "tax_free", displayName: "Tax Free / Exempt", rate: 0 },
+
+    // --- GST (India) ---
+    { id: 2, value: "gst_5", displayName: "GST 5%", rate: 5 },
+    { id: 3, value: "gst_12", displayName: "GST 12%", rate: 12 },
+    { id: 4, value: "gst_18", displayName: "GST 18%", rate: 18 },
+    { id: 5, value: "gst_28", displayName: "GST 28%", rate: 28 },
+
+    // --- VAT (Global) ---
+    { id: 6, value: "vat_5", displayName: "VAT 5%", rate: 5 },
+    { id: 7, value: "vat_10", displayName: "VAT 10%", rate: 10 },
+    { id: 8, value: "vat_15", displayName: "VAT 15%", rate: 15 },
+    { id: 9, value: "vat_20", displayName: "VAT 20%", rate: 20 },
+    { id: 10, value: "vat_25", displayName: "VAT 25%", rate: 25 },
+
+    // --- Special ---
     {
-      id: 1,
-      value: "tax_free",
-      displayName: "Tax Free",
-    },
-    {
-      id: 2,
-      value: "taxable_goods",
-      displayName: "Taxable Goods",
-    },
-    {
-      id: 3,
-      value: "downloadable_product",
-      displayName: "Downloadable Product",
+      id: 11,
+      value: "luxury_40",
+      displayName: "Luxury/Sin Goods 40%",
+      rate: 40,
     },
   ];
 
   const setDiscountPercentage = (value: number) => {
     setValue("price.discountPercentage", value);
   };
+
+  const selectedTaxClass = watch("price.taxClass");
+
+  // auto update tax percentage field when tax class changes
+  useEffect(() => {
+    const selected = taxClasses.find((x) => x.value === selectedTaxClass);
+    if (selected && typeof selected.rate === "number") {
+      setValue("price.taxPercent", selected.rate); // auto set VAT %
+    }
+  }, [selectedTaxClass, setValue]);
 
   return (
     <div className="card card-flush py-4">
@@ -189,34 +209,37 @@ const ProductPricing = () => {
               data-hide-search="true"
               data-placeholder="Select an option"
             >
-              {taxClasses?.map((x) => {
-                return (
-                  <option key={`tax-classes- ${x?.id}`} value={x?.value}>
-                    {x?.displayName}
-                  </option>
-                );
-              })}
+              {taxClasses?.map((x) => (
+                <option key={x?.value} value={x?.value}>
+                  {x?.displayName}
+                </option>
+              ))}
             </select>
             <div className="text-muted fs-7">Set the product tax class.</div>
-            <div className="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
           </div>
           <div className="fv-row w-100 flex-md-root">
             <label htmlFor="vat_amount" className="form-label">
-              VAT Amount (%)
+              Tax Amount (%)
             </label>
             <input
               id="vat_amount"
+              className={`form-control mb-2 ${
+                errors.price?.taxPercent ? "is-invalid" : ""
+              }`}
               type="number"
               min={0}
               max={100}
-              {...register("price.vatPercent", {
+              {...register("price.taxPercent", {
                 valueAsNumber: true,
                 min: 0,
                 max: 100,
               })}
-              className="form-control mb-2"
+              disabled={true} 
             />
-            <div className="text-muted fs-7">Set the product VAT amount.</div>
+            <div className="text-muted fs-7">
+              This is auto-filled from the selected tax class. You can override
+              if needed.
+            </div>
           </div>
         </div>
       </div>

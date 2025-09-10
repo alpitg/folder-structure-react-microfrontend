@@ -103,28 +103,28 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
           ],
           subRoutes: [],
         },
-        {
-          id: "product-category-list",
-          title: "Category Listing",
-          path: ROUTE_URL.CATALOG.CATEGORY.LIST,
-          icon: "bi bi-list-nested fs-3",
-          claims: [
-            PERMISSION.PAGES.CATALOG.CATEGORY.DEFAULT,
-            PERMISSION.PAGES.CATALOG.CATEGORY.DETAIL,
-          ],
-          subRoutes: [],
-        },
-        {
-          id: "product-category-add",
-          title: "Add Category",
-          path: ROUTE_URL.CATALOG.CATEGORY.ADD,
-          icon: "bi bi-plus-lg fs-3",
-          claims: [
-            PERMISSION.PAGES.CATALOG.CATEGORY.CREATE,
-            PERMISSION.PAGES.CATALOG.CATEGORY.EDIT,
-          ],
-          subRoutes: [],
-        },
+        // {
+        //   id: "product-category-list",
+        //   title: "Category Listing",
+        //   path: ROUTE_URL.CATALOG.CATEGORY.LIST,
+        //   icon: "bi bi-list-nested fs-3",
+        //   claims: [
+        //     PERMISSION.PAGES.CATALOG.CATEGORY.DEFAULT,
+        //     PERMISSION.PAGES.CATALOG.CATEGORY.DETAIL,
+        //   ],
+        //   subRoutes: [],
+        // },
+        // {
+        //   id: "product-category-add",
+        //   title: "Add Category",
+        //   path: ROUTE_URL.CATALOG.CATEGORY.ADD,
+        //   icon: "bi bi-plus-lg fs-3",
+        //   claims: [
+        //     PERMISSION.PAGES.CATALOG.CATEGORY.CREATE,
+        //     PERMISSION.PAGES.CATALOG.CATEGORY.EDIT,
+        //   ],
+        //   subRoutes: [],
+        // },
       ],
     },
     {

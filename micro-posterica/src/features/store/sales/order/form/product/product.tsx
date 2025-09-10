@@ -93,7 +93,7 @@ const ProductApp: React.FC<ProductAppProps> = () => {
         {/* Add Products Section */}
         <div className="mb-5">
           <label className="form-label">Add products to this order</label>
-          <div className="row row-cols-1 row-cols-xl-3 row-cols-md-2 border border-dashed rounded pt-1 pb-1 px-2 mb-5 min-h-100px overflow-scroll">
+          <div className="row row-cols-1 row-cols-xl-3 row-cols-md-1 border border-dashed rounded pt-1 pb-1 px-2 mb-5 min-h-100px overflow-scroll">
             {orderItems?.filter((x) => x?.productType !== "custom").length ===
               0 && (
               <div className="w-100 d-flex justify-content-center align-items-center py-5">

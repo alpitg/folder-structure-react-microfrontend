@@ -8,7 +8,7 @@ export interface IProductMedia {
 export interface IProductPrice extends IDiscountType {
   basePrice: number | null;
   taxClass: "tax_free" | "taxable_goods" | "non_taxable" | string;
-  vatPercent: number | null;
+  taxPercent: number | null;
 }
 
 export interface IDiscountType {

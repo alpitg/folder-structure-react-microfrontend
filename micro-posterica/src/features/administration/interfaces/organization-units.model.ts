@@ -8,8 +8,8 @@ export interface IOrganizationUnitsPrice {
   discountType: "none" | "percentage" | "fixed";
   discountPercentage: number | null;
   fixedDiscountedPrice: number | null;
-  taxClass: "tax_free" | "taxable_goods" | "non_taxable" | string;
-  vatPercent: number | null;
+  taxClass: string;
+  taxPercent: number | null;
 }
 
 export interface IOrganizationUnitsInventory {
