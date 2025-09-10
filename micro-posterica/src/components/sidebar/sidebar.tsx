@@ -253,7 +253,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
       id: "settings",
       title: "Settings",
       path: ROUTE_URL.APP_SETTINGS,
-      icon: "bi bi-shield-check fs-3",
+      icon: "bi bi-gear fs-3",
       claims: [PERMISSION.PAGES.SETTINGS.DEFAULT],
       subRoutes: [],
     },
