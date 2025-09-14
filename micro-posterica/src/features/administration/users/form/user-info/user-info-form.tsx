@@ -58,6 +58,7 @@ const UserInfoFormApp: React.FC<UserInfoFormAppProps> = ({ mode }) => {
           {/* First Name */}
           <div className="mb-5">
             <label htmlFor="Name" className="form-label required">
+              <i className="bi bi-person me-2"></i>
               First Name
             </label>
             <input
@@ -82,6 +83,7 @@ const UserInfoFormApp: React.FC<UserInfoFormAppProps> = ({ mode }) => {
           {/* Surname */}
           <div className="mb-5">
             <label htmlFor="Surname" className="form-label required">
+              <i className="bi bi-person me-2"></i>
               Surname
             </label>
             <input
@@ -123,6 +125,7 @@ const UserInfoFormApp: React.FC<UserInfoFormAppProps> = ({ mode }) => {
       {/* Email */}
       <div className="mb-5">
         <label htmlFor="EmailAddress" className="form-label required">
+          <i className="bi bi-envelope me-2"></i>
           Email address
         </label>
         <input
@@ -151,6 +154,7 @@ const UserInfoFormApp: React.FC<UserInfoFormAppProps> = ({ mode }) => {
       {/* Phone Number */}
       <div className="mb-5">
         <label htmlFor="PhoneNumber" className="form-label">
+          <i className="bi bi-phone me-2"></i>
           Phone number
         </label>
         <input
@@ -166,6 +170,7 @@ const UserInfoFormApp: React.FC<UserInfoFormAppProps> = ({ mode }) => {
       {/* Username with Icon */}
       <div className="mb-5">
         <label htmlFor="UserName" className="form-label required">
+          <i className="bi bi-person me-2"></i>
           User name
         </label>
         <input
