@@ -151,23 +151,7 @@ const UserInfoFormApp: React.FC<UserInfoFormAppProps> = ({ mode }) => {
         )}
       </div>
 
-      {/* Phone Number */}
-      <div className="mb-5">
-        <label htmlFor="PhoneNumber" className="form-label">
-          <i className="bi bi-phone me-2"></i>
-          Phone number
-        </label>
-        <input
-          id="PhoneNumber"
-          type="text"
-          maxLength={32}
-          className="form-control form-control-solid"
-          placeholder="e.g. +123456789"
-          {...register("user.phoneNumber")}
-        />
-      </div>
-
-      {/* Username with Icon */}
+      {/* Username */}
       <div className="mb-5">
         <label htmlFor="UserName" className="form-label required">
           <i className="bi bi-person me-2"></i>
@@ -190,6 +174,22 @@ const UserInfoFormApp: React.FC<UserInfoFormAppProps> = ({ mode }) => {
             {errors.user.userName.message}
           </div>
         )}
+      </div>
+
+      {/* Phone Number */}
+      <div className="mb-5">
+        <label htmlFor="PhoneNumber" className="form-label">
+          <i className="bi bi-phone me-2"></i>
+          Phone number
+        </label>
+        <input
+          id="PhoneNumber"
+          type="text"
+          maxLength={32}
+          className="form-control form-control-solid"
+          placeholder="e.g. +123456789"
+          {...register("user.phoneNumber")}
+        />
       </div>
 
       {/* Checkboxes */}
