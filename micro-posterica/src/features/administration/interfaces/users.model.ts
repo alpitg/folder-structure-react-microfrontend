@@ -11,6 +11,7 @@ export interface IUsersData {
   emailAddress: string;
   isEmailConfirmed: boolean;
   password: string | null;
+  gender: string | null;
   isActive: boolean;
   phoneNumber: string | null;
   profilePictureId: string | null;

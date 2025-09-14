@@ -12,6 +12,7 @@ export const mapUsersForApi = (
       emailAddress: data?.user?.emailAddress || "",
       isEmailConfirmed: data?.user?.isEmailConfirmed || false,
       password: data?.user?.setRandomPassword ? null : data?.user?.password,
+      gender: data?.user?.gender || null,
       isActive: data?.user?.isActive ?? true,
       phoneNumber: data?.user?.phoneNumber || null,
       profilePictureId: data?.user?.profilePictureId || null,

@@ -1,3 +1,5 @@
+const maleAvatar = "../../../../../static/media/img/svg/avatar-male.svg";
+
 import React, { useState } from "react";
 
 import type { IUserWithPermissions } from "../../../interfaces/users.model";
@@ -12,14 +14,30 @@ type UserInfoFormAppProps = {
 const UserInfoFormApp: React.FC<UserInfoFormAppProps> = ({ mode }) => {
   const inputRef = useAutoFocus<HTMLInputElement>();
   const [showPassword, setShowPassword] = useState(false);
+  const genders = [
+    {
+      icon: "bi bi-gender-male",
+      type: "Male",
+    },
+    {
+      icon: "bi bi-gender-female",
+      type: "Female",
+    },
+    {
+      icon: "bi bi-gender-ambiguous",
+      type: "Other",
+    },
+  ];
 
   const {
     watch,
     register,
+    setValue,
     formState: { errors },
   } = useFormContext<IUserWithPermissions>();
   // Watch the checkbox to determine if password input should be disabled
   const setRandomPassword = watch("user.setRandomPassword", false);
+  const gender = watch("user.gender", null);
 
   return (
     <div className="user-info-form-app">
@@ -30,7 +48,7 @@ const UserInfoFormApp: React.FC<UserInfoFormAppProps> = ({ mode }) => {
             width="128"
             height="128"
             className="img-thumbnail rounded-circle"
-            src="https://demo.aspnetzero.com/assets/common/images/default-profile-picture.png"
+            src={maleAvatar}
             alt="Profile"
           />
         </div>
@@ -83,6 +101,23 @@ const UserInfoFormApp: React.FC<UserInfoFormAppProps> = ({ mode }) => {
             )}
           </div>
         </div>
+      </div>
+
+      <div className="d-flex flex-stack gap-5 mb-3">
+        {genders?.map((x) => {
+          return (
+            <button
+              type="button"
+              className={`btn btn-outline btn-outline-dashed btn-active-light-primary text-start w-100 ${
+                x?.type === gender ? "active" : ""
+              }`}
+              onClick={() => setValue("user.gender", x?.type)}
+            >
+              <i className={`${x?.icon} me-2`}></i>
+              {x?.type}
+            </button>
+          );
+        })}
       </div>
 
       {/* Email */}
