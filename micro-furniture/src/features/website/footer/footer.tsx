@@ -75,7 +75,11 @@ export default function Footer() {
 
             <ul className="list-unstyled custom-social">
               <li>
-                <a href="#">
+                <a
+                  href={`https://www.instagram.com/${appSettings?.homePage?.contactDetails?.instagram}/`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <span className="bi bi-instagram"></span>
                   {appSettings?.homePage?.contactDetails?.instagram}
                 </a>
