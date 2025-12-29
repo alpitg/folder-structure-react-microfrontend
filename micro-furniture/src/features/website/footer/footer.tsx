@@ -158,11 +158,11 @@ export default function Footer() {
 
         <div className="border-top copyright">
           <div className="row pt-4">
-            <div className="col-lg-6">
+            <div className="col-lg-8">
               <p className="mb-2 text-center text-lg-start">
                 Copyright &copy;
                 {new Date().getFullYear()}. All Rights Reserved. &mdash;
-                Designed with love by <a href="https://untree.co">Untree.co</a>
+                Designed with love by <a href="https://cloudmatrixlabs.com">cloudmatrixlabs.com</a>
               </p>
             </div>
 
