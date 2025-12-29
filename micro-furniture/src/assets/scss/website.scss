@@ -24,6 +24,10 @@ $xxl: 1400px;
 
 $font-family: "Inter", sans-serif;
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   overflow-x: hidden;
   position: relative;
