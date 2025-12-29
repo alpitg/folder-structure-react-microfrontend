@@ -79,8 +79,8 @@ const WebsiteApp = () => {
         </div>
       </nav>
 
-      <div className="website-body">
-        <div className="hero" id="home">
+      <div className="website-body" id="home">
+        <div className="hero">
           <div className="container">
             <div className="row justify-content-between">
               <div className="col-lg-5">
