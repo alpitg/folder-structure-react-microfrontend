@@ -14,6 +14,10 @@ let environment = {
       contactnumber: "+1234567890",
       email: "email@domain",
       instagram: "instagram_handle",
+      whatsapp: {
+        number: "+1234567890",
+        message: "Hello, I would like to inquire about your services.",
+      },
     },
     whyChooseUs: {
       title: "Why Choose Us",

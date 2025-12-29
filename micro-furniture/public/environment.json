@@ -13,7 +13,11 @@
     "contactDetails": {
       "contactnumber": "+1234567890",
       "email": "email@domain",
-      "instagram": "yash_furnitures"
+      "instagram": "yash_furnitures",
+      "whatsapp": {
+        "number": "+1234567890",
+        "message": "Hello, I would like to inquire about your furniture and transportation services."
+      }
     },
     "whyChooseUs": {
       "title": "Why Choose Us",

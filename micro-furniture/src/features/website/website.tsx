@@ -37,7 +37,7 @@ const WebsiteApp = () => {
             <div className="collapse navbar-collapse" id="navbarsFurni">
               <ul className="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
                 <li className="nav-item active">
-                  <a className="nav-link" href="index.html">
+                  <a className="nav-link" href="#home">
                     Home
                   </a>
                 </li>
@@ -80,7 +80,7 @@ const WebsiteApp = () => {
           </div>
         </nav>
 
-        <div className="hero">
+        <div className="hero" id="home">
           <div className="container">
             <div className="row justify-content-between">
               <div className="col-lg-5">

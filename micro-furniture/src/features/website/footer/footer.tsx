@@ -77,14 +77,21 @@ export default function Footer() {
               <li>
                 <a href="#">
                   <span className="bi bi-instagram"></span>
+                  {appSettings?.homePage?.contactDetails?.instagram}
                 </a>
-                {appSettings?.homePage?.contactDetails?.instagram}
               </li>
               <li>
-                <a href="#">
+                <a
+                  href={
+                    `https://wa.me/${appSettings?.homePage?.contactDetails?.whatsapp?.number}?text=` +
+                    appSettings?.homePage?.contactDetails?.whatsapp?.message
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <span className="bi bi-whatsapp"></span>
+                  {appSettings?.homePage?.contactDetails?.contactnumber}
                 </a>
-                {appSettings?.homePage?.contactDetails?.contactnumber}
               </li>
             </ul>
           </div>
@@ -162,7 +169,8 @@ export default function Footer() {
               <p className="mb-2 text-center text-lg-start">
                 Copyright &copy;
                 {new Date().getFullYear()}. All Rights Reserved. &mdash;
-                Designed with love by <a href="https://cloudmatrixlabs.com">cloudmatrixlabs.com</a>
+                Designed with love by{" "}
+                <a href="https://cloudmatrixlabs.com">cloudmatrixlabs.com</a>
               </p>
             </div>
 
