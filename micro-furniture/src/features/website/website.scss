@@ -1,6 +1,18 @@
 .website-app {
   height: 100vh;
 
+  // start: Navbar styles
+  .custom-navbar {
+    position: fixed;
+    z-index: 9;
+    width: 100%;
+  }
+
+  .website-body {
+    padding-top: 70px;
+  }
+  // end: Navbar styles
+
   a {
     text-decoration: none;
 
