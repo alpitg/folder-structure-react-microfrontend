@@ -1,0 +1,10 @@
+[
+  {
+    "CustomerID": 1,
+    "Name": "Alice Smith",
+    "Contact": "alice@example.com",
+    "LoyaltyTier": "Silver",
+    "LoyaltyDiscountPct": 5.0,
+    "TotalSpent": 2150.0
+  }
+]

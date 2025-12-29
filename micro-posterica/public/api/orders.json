@@ -1,0 +1,69 @@
+{
+  "totalCount": 1,
+  "data": [
+    {
+      "advancePayment": 100,
+      "artDetails": [
+        {
+          "additional": {
+            "varnish": true,
+            "lamination": true,
+            "routerCut": false
+          },
+          "artDescription": "refram description",
+          "artName": "Art 1 - reframe",
+          "cost": 3945.86,
+          "frame": {
+            "color": "red",
+            "height": null,
+            "type": "1.25 inch moulding ordinary/plain0",
+            "width": null
+          },
+          "glass": {
+            "height": null,
+            "isEnabled": true,
+            "type": "Acrylic",
+            "width": null
+          },
+          "mounting": {
+            "bottom": "12",
+            "height": null,
+            "isEnabled": true,
+            "left": "12",
+            "right": "12",
+            "top": "12",
+            "width": null
+          },
+          "quantity": "2",
+          "width": "11",
+          "length": 1
+        }
+      ],
+      "balanceAmount": 3745.86,
+      "cost": 3945.86,
+      "createdAt": "2025-08-06T13:52:53.967Z",
+      "customerName": "",
+      "discountAmount": 100,
+      "finalAmount": 3945.86,
+      "invoice": {
+        "billDate": "Wed Aug 06 2025",
+        "billFrom": {
+          "detail": "Shop number 12, R K Lifespaces Shopping Complex, Green Dr Rd, Wakad, Pune, Maharashtra 411057",
+          "name": "Posterica Wall Krafts",
+          "phone": "093703 19247"
+        },
+        "billTo": {
+          "detail": "",
+          "name": "",
+          "phone": ""
+        }
+      },
+      "handledBy": "",
+      "paymentMode": "cash",
+      "paymentStatus": "",
+      "likelyDateOfDelivery": "",
+      "miscCharges": [],
+      "miscChargesAmount": 0
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+.app-sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  padding: 0;
+  width: var(--bs-app-sidebar-width);
+  transition: transform 0.3s ease-in-out;
+  height: 100vh;
+  z-index: 110;
+
+  // Default: visible on large screens
+  transform: translateX(0);
+
+  @media (max-width: 992px) {
+    // Hide sidebar on small screens
+    transform: translateX(-100%);
+  }
+
+  &.sidebar-open {
+    top: 0;
+    transform: translateX(0);
+  }
+
+  &.sidebar-closed {
+    margin-left: 0;
+    display: none;
+  }
+}

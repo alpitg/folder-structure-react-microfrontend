@@ -17,12 +17,14 @@
 ### For fresh start
 #### usefull commands
 ```shell
+# [1]
 npm create vite@latest host-app --template react-ts
 cd host-app                                       
 npm install                                                
 npm run dev      
 npm install @originjs/vite-plugin-federation --save-dev                                          
 
+# [2]
 npm create vite@latest micro-widget --template react-ts
 cd micro-widget                                       
 npm install                                                
@@ -31,6 +33,28 @@ npm install @originjs/vite-plugin-federation --save-dev
 
 npm run build
 npm run preview
+
+# [3]
+npm create vite@latest micro-ss-construction --template react-ts
+cd micro-ss-construction                                       
+npm install                                                
+npm run dev                                                
+npm install @originjs/vite-plugin-federation --save-dev
+
+npm run build
+npm run preview
+
+# [4]
+npm create vite@latest micro-posterica --template react-ts
+cd micro-posterica                                       
+npm install                                                
+npm run dev                                                
+npm install @originjs/vite-plugin-federation --save-dev
+
+npm run build
+npm run preview
+
+
 ```
 
 ##### micro frontend setting

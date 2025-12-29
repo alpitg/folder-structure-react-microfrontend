@@ -1,0 +1,53 @@
+.navbar-app {
+  height: var(--bs-app-header-height);
+  position: fixed;
+  top: 0;
+  // left: 0;
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  z-index: 100;
+  background-color: var(--bs-app-header-base-bg-color);
+  box-shadow: var(--bs-app-header-base-box-shadow);
+  border-bottom: var(--bs-app-header-base-border-bottom);
+  transition: left 0.3s ease, width 0.3s ease;
+
+  .navbar-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    padding: 0 1rem;
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+
+      h2 {
+        font-size: 1.25rem;
+        margin: 0;
+        font-weight: 600;
+      }
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+  }
+
+  // ✅ remove manual dropdown toggle
+  .dropdown .dropdown-menu {
+    display: none;
+  }
+  .dropdown:hover .dropdown-menu {
+    display: block;
+    right: 0;
+  }
+
+  .sidebar-open {
+    margin-left: var(--bs-app-sidebar-width);
+  }
+}
