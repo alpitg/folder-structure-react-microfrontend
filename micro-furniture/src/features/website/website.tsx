@@ -41,7 +41,7 @@ const WebsiteApp = () => {
                     Home
                   </a>
                 </li>
-               
+
                 <li>
                   <a className="nav-link" href="#whyUs">
                     Why us
@@ -95,11 +95,12 @@ const WebsiteApp = () => {
                       className="btn btn-white-outline"
                       onClick={() =>
                         navigator.clipboard.writeText(
-                          appSettings?.homePage?.contactnumber || ""
+                          appSettings?.homePage?.contactDetails
+                            ?.contactnumber || ""
                         )
                       }
                     >
-                      {appSettings?.homePage?.contactnumber}
+                      {appSettings?.homePage?.contactDetails?.contactnumber}
                     </a>
                   </p>
                 </div>
