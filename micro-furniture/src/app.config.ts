@@ -10,7 +10,11 @@ let environment = {
     title: "title here",
     subtitle: "subtitle here",
     description: "description here",
-    contactnumber: "+1234567890",
+    contactDetails: {
+      contactnumber: "+1234567890",
+      email: "email@domain",
+      instagram: "instagram_handle",
+    },
     whyChooseUs: {
       title: "Why Choose Us",
       description: "description here",

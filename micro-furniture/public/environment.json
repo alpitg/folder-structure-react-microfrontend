@@ -10,7 +10,11 @@
     "title": "Welcome to Yash Furnitures",
     "subtitle": "Your one-stop shop for quality furniture and reliable transportation services.",
     "description": "At Yash Furnitures, we pride ourselves on offering a wide range of furniture options to suit every style and budget. Whether you're looking for modern, classic, or custom pieces, we have something for everyone. Our transportation services ensure that your furniture is delivered safely and on time.",
-    "contactnumber": "+91 823609980",
+    "contactDetails": {
+      "contactnumber": "+1234567890",
+      "email": "email@domain",
+      "instagram": "yash_furnitures"
+    },
     "whyChooseUs": {
       "title": "Why Choose Us",
       "description": "We provide the best furniture and transportation services with utmost care and professionalism.",

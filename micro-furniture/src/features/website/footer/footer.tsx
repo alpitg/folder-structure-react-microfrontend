@@ -14,7 +14,7 @@ export default function Footer() {
           />
         </div>
 
-        <div className="row">
+        {/* <div className="row">
           <div className="col-lg-8">
             <div className="subscription-form">
               <h3 className="d-flex align-items-center">
@@ -51,6 +51,16 @@ export default function Footer() {
               </form>
             </div>
           </div>
+        </div> */}
+
+        <div className="row">
+          <div className="col-lg-8">
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+          </div>
         </div>
 
         <div className="row g-5 mb-5">
@@ -68,6 +78,13 @@ export default function Footer() {
                 <a href="#">
                   <span className="bi bi-instagram"></span>
                 </a>
+                {appSettings?.homePage?.contactDetails?.instagram}
+              </li>
+              <li>
+                <a href="#">
+                  <span className="bi bi-whatsapp"></span>
+                </a>
+                {appSettings?.homePage?.contactDetails?.contactnumber}
               </li>
             </ul>
           </div>
