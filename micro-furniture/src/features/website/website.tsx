@@ -58,7 +58,7 @@ const WebsiteApp = () => {
                   </a>
                 </li>
                 <li>
-                  <a className="nav-link" href="#contact">
+                  <a className="nav-link" href="#contactus">
                     Contact us
                   </a>
                 </li>
@@ -124,7 +124,7 @@ const WebsiteApp = () => {
                 <p className="mb-4">
                   Donec vitae odio quis nisl dapibus malesuada. Nullam ac
                   aliquet velit. Aliquam vulputate velit imperdiet dolor tempor
-                  tristique.{" "}
+                  tristique.
                 </p>
                 <p>
                   <a href="shop.html" className="btn">

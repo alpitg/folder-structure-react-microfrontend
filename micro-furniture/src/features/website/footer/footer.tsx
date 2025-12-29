@@ -63,7 +63,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="row g-5 mb-5">
+        <div className="row g-5 mb-5" id="contactus">
           <div className="col-lg-4">
             <div className="mb-4 footer-logo-wrap">
               <a href="#" className="footer-logo">
