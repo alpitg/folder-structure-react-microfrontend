@@ -1,0 +1,11 @@
+.website-app {
+  height: 100vh;
+
+  a {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
