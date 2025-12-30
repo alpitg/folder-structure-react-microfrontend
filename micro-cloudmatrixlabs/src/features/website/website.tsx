@@ -4,7 +4,6 @@ import "../../assets/scss/website.scss";
 import AboutApp from "./about/about";
 import FeaturesApp from "./features/features";
 import Footer from "./footer/footer";
-import { GetEnvConfig } from "../../app.config";
 import HeaderApp from "./header/header";
 import HowWeWorkApp from "./how-we-work/how-we-work";
 import PricingApp from "./pricing/pricing";
@@ -12,8 +11,6 @@ import ServicesApp from "./services/services";
 import TeamApp from "./team/team";
 
 const WebsiteApp = () => {
-  const appSettings = GetEnvConfig();
-
   return (
     <div className="website-app" id="home">
       <HeaderApp />
