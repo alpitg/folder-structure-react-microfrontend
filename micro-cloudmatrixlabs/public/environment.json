@@ -1,0 +1,154 @@
+{
+  "version": "1.0",
+  "apiUrl": "http://localhost:3000/api",
+  "name": "Cloud Matrix Labs",
+  "description": "Furniture & transportation",
+  "author": "Yash Yadav",
+  "logo": "/static/media/img/logo.png",
+  "debugMode": false,
+  "homePage": {
+    "title": "Welcome to Yash Furnitures",
+    "subtitle": "Your one-stop shop for quality furniture and reliable transportation services.",
+    "description": "At Yash Furnitures, we pride ourselves on offering a wide range of furniture options to suit every style and budget. Whether you're looking for modern, classic, or custom pieces, we have something for everyone. Our transportation services ensure that your furniture is delivered safely and on time.",
+    "contactDetails": {
+      "contactnumber": "+91 8237609980",
+      "email": "email@domain",
+      "instagram": "yash_furnitures",
+      "whatsapp": {
+        "number": "+918237609980",
+        "message": "Hello, I would like to inquire about your furniture and transportation services."
+      }
+    },
+    "whyChooseUs": {
+      "title": "Why Choose Us",
+      "description": "We provide the best furniture and transportation services with utmost care and professionalism.",
+      "services": [
+        {
+          "title": "Fast & Free Shipping",
+          "description": "Description 1",
+          "icon": "static/media/img/truck.svg"
+        },
+        {
+          "title": "Easy to Shop",
+          "description": "Description 2",
+          "icon": "static/media/img/bag.svg"
+        },
+        {
+          "title": "24/7 Support",
+          "description": "Description 3",
+          "icon": "static/media/img/support.svg"
+        },
+        {
+          "title": "Hassle Free Returns",
+          "description": "Description 4",
+          "icon": "static/media/img/return.svg"
+        }
+      ]
+    },
+
+    "whyChooseUs2": {
+      "title": "We Help You Make Modern Interior Design",
+      "description": "We help you to create your dream interior design with our expert furniture and transportation services.",
+      "services": [
+        {
+          "title": "On time Delivery",
+          "description": "...",
+          "icon": "static/media/img/bag.svg"
+        },
+        {
+          "title": "Easy to Shop",
+          "description": "Description 2",
+          "icon": "static/media/img/bag.svg"
+        },
+        {
+          "title": "24/7 Support",
+          "description": "Description 3",
+          "icon": "static/media/img/bag.svg"
+        },
+        {
+          "title": "Hassle Free Returns",
+          "description": "Description 4",
+          "icon": "static/media/img/bag.svg"
+        }
+      ]
+    }
+  },
+  "api": {
+    "baseUrl": "http://localhost:8000",
+    "apiVersion": "v1",
+    "administration": {
+      "organizationUnits": {
+        "list": "/api/organization-units",
+        "detail": "/api/organization-units/{id}",
+        "add": "/api/organization-units",
+        "update": "/api/organization-units/{id}",
+        "delete": "/api/organization-units/{id}",
+        "roles": {
+          "list": "/api/organization-units/{id}/roles/search",
+          "add": "/api/organization-units/roles/add",
+          "remove": "/api/organization-units/roles/remove"
+        }
+      },
+      "roles": {
+        "list": "/api/roles/search",
+        "detail": "/api/roles/{id}",
+        "add": "/api/roles",
+        "update": "/api/roles/{id}",
+        "delete": "/api/roles/{id}",
+        "permissions": "/api/roles-permissions"
+      },
+      "users": {
+        "login": "/api/auth/login",
+        "refreshToken": "/api/auth/refresh",
+        "appInit": "/api/auth/users/me/app-init",
+        "forgotPassword": "/api/auth/forgot-password",
+        "resetPassword": "/api/auth/reset-password",
+        "updatePassword": "/api/auth/users/{id}/change-password",
+        "getCurrentUserProfile": "/api/auth/users/{id}/current-user-profile",
+        "updateCurrentUserProfile": "/api/auth/users/{id}/current-user-profile",
+        "list": "/api/users/search",
+        "detail": "/api/users/{id}",
+        "add": "/api/users/create",
+        "update": "/api/users/{id}",
+        "delete": "/api/users/{id}",
+        "getUserForEdit": "/api/users/get-user-for-edit?id={id}",
+        "permissions": "/api/users/permissions"
+      }
+    },
+    "profile": {
+      "posterica": "/api/profile/frame-types"
+    },
+    "master": {
+      "frameTypes": "/api/master/frame-types",
+      "glassTypes": "/api/master/glass-types",
+      "miscCharges": "/api/master/misc-charges"
+    },
+    "order": {
+      "list": "/api/orders/search",
+      "detail": "/api/orders/{orderId}",
+      "placeOrder": "/api/orders/place-order",
+      "update": "/api/orders/{orderId}"
+    },
+    "catalog": {
+      "product": {
+        "list": "/api/products/search",
+        "detail": "/api/products/{id}",
+        "add": "/api/products",
+        "update": "/api/products/{id}"
+      },
+      "category": {
+        "list": "/api/products/category/search",
+        "detail": "/api/products/category/{id}",
+        "add": "/api/products/category",
+        "update": "/api/products/category/{id}"
+      }
+    },
+    "customer": {
+      "list": "/api/customer/search",
+      "detail": "/api/customer/{id}",
+      "add": "/api/customer",
+      "update": "/api/customer/{id}",
+      "delete": "/api/customer/delete"
+    }
+  }
+}
