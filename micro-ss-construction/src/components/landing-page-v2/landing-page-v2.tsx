@@ -10,12 +10,26 @@ const LandingPageV2 = () => {
   const [detail, setDetail] = useState<CompanyDetailsModel>();
 
   const handleDownload = () => {
-    const link = document.createElement("a");
-    link.href = "files/Brochure.pdf"; // Path to the PDF file in the public folder
-    link.download = "SS_Construction_Brochure.pdf";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    fetch("files/Brochure.pdf")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch the file.");
+        }
+        return response.blob();
+      })
+      .then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "SS_Construction_Brochure.pdf";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url); // Clean up the object URL
+      })
+      .catch((error) => {
+        console.error("Error downloading the file:", error);
+      });
   };
 
   useEffect(() => {
