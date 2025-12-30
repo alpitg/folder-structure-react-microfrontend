@@ -1,0 +1,75 @@
+a {
+  text-decoration: none;
+  outline: none;
+  color: var(--black-color);
+}
+a:hover {
+  text-decoration: underline;
+}
+
+p {
+  color: var(--paragraph-color);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+h1 a,
+h2 a,
+h3 a,
+h4 a,
+h5 a,
+h6 a {
+  color: var(--black-color);
+  transition: opacity 0.3s ease 0s;
+  opacity: 1;
+}
+h1 a:hover,
+h2 a:hover,
+h3 a:hover,
+h4 a:hover,
+h5 a:hover,
+h6 a:hover {
+  opacity: 0.6;
+  text-decoration: none;
+}
+h1 {
+  font-size: 22px;
+  line-height: 34px;
+}
+h2 {
+  font-size: 29px;
+  line-height: 40px;
+}
+h3 {
+  font-size: 22px;
+  line-height: 34px;
+}
+h4 {
+  font-size: 18px;
+  line-height: 28px;
+}
+h5 {
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 700;
+}
+h6 {
+  font-size: 15px;
+  line-height: 24px;
+  font-weight: 500;
+  letter-spacing: normal;
+}
+h2.box-header {
+  text-align: center;
+}
+h2.box-header.align-left {
+  text-align: left;
+}

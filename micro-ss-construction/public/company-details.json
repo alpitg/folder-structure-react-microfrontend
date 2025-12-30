@@ -1,0 +1,268 @@
+{
+  "name": "SS Construction",
+  "website": "https://www.ssconstruction.com",
+  "logo": "https://www.ssconstruction.com/logo.png",
+  "startedInYear": "1990",
+  "description": "SS Construction is a full-service construction company that specializes in residential and commercial construction projects. We offer a wide range of services, including new construction, remodeling, and renovation. Our team of experienced professionals is dedicated to providing high-quality workmanship and exceptional customer service. Contact us today to learn more about our services and how we can help you with your next project.",
+  "about": "SS Construction is a leading construction company specializing in luxury residential bungalows and commercial complexes. We boast highly equipped infrastructure in the construction sector, meeting all client and architect requirements in terms of machinery and necessary infrastructure. Starting with small projects in 1990, we have grown to handle projects worth lakhs of square feet. We fulfill all design and quality requirements within a time-bound manner, backed by over 30 years of experience.",
+  "ourMission": {
+    "title": "Our Mission",
+    "description": "Our mission is to provide high-quality construction services that exceed our clients' expectations and deliver exceptional results. We are committed to building long-lasting relationships with our clients and partners, based on trust, integrity, and professionalism.",
+    "values": [
+      "High-Quality Services",
+      "Exceed Client Expectations",
+      "Exceptional Results",
+      "Long-Lasting Relationships"
+    ]
+  },
+  "ourVision": {
+    "title": "Our Vision",
+    "description": "Our vision is to be the premier construction company in the region, known for our commitment to quality, innovation, and customer satisfaction. We strive to be the first choice for clients seeking high-quality construction services and to set the standard for excellence in the industry.",
+    "values": [
+      "Customer Satisfaction",
+      "First Choice for Clients",
+      "Industry Excellence Standard"
+    ]
+  },
+  "ourValue": {
+    "title": "Our Values",
+    "description": "At SS Construction, we are guided by a set of core values that define who we are and how we operate. These values include integrity, excellence, teamwork, and customer focus. We believe in doing the right thing, delivering the best possible results, working together to achieve our goals, and putting our clients' needs first.",
+    "values": ["Quality", "Integrity", "Innovation", "Customer Satisfaction"]
+  },
+  "services": [
+    {
+      "name": "New Construction",
+      "description": "We specialize in new construction projects, including residential homes, commercial buildings, and industrial facilities. Our team of experienced professionals will work with you to design and build a custom space that meets your needs and exceeds your expectations."
+    },
+    {
+      "name": "Remodeling",
+      "description": "We offer a wide range of remodeling services, including kitchen and bathroom renovations, basement finishing, and home additions. Whether you're looking to update your space or add more square footage, we can help you achieve your goals."
+    },
+    {
+      "name": "Renovation",
+      "description": "Our renovation services include restoring and updating existing structures to improve their appearance and functionality. From historic homes to modern office buildings, we have the expertise to transform any space into a beautiful and functional environment."
+    },
+    {
+      "name": "Design-Build",
+      "description": "Our design-build services combine the design and construction phases of a project into one seamless process. This approach allows for greater collaboration between the client, architect, and builder, resulting in a more efficient and cost-effective project."
+    }
+  ],
+  "projects": [
+    {
+      "name": "Luxury Residential Bungalow",
+      "description": "This luxury residential bungalow features a modern design with high-end finishes and amenities. The open-concept floor plan includes a spacious living room, gourmet kitchen, and master suite with a spa-like bathroom. The outdoor living space is perfect for entertaining, with a covered patio, pool, and lush landscaping."
+    },
+    {
+      "name": "Commercial Complex",
+      "description": "This commercial complex is a mixed-use development that includes office space, retail shops, and restaurants. The modern design features a sleek glass facade, open floor plans, and high ceilings. The landscaped courtyard provides a welcoming outdoor space for tenants and visitors."
+    },
+    {
+      "name": "Industrial Facility",
+      "description": "This industrial facility is a state-of-the-art manufacturing plant that features a high-bay warehouse, production floor, and office space. The building is designed for efficiency and productivity, with advanced systems for heating, cooling, and lighting. The site includes ample parking and loading docks for easy access."
+    }
+  ],
+  "testimonials": [
+    {
+      "name": "John Doe",
+      "title": "Homeowner",
+      "quote": "SS Construction did an amazing job on our home renovation project. They were professional, reliable, and easy to work with. The finished product exceeded our expectations, and we couldn't be happier with the results. I would highly recommend them to anyone looking for a quality construction company."
+    },
+    {
+      "name": "Jane Smith",
+      "title": "Business Owner",
+      "quote": "We hired SS Construction to build our new office building, and they did an outstanding job. The project was completed on time and within budget, and the quality of workmanship was top-notch. The team was responsive and communicative throughout the process, and we were impressed with their attention to detail. We would definitely work with them again in the future."
+    }
+  ],
+  "team": [
+    {
+      "name": "John Smith",
+      "title": "Founder & CEO",
+      "bio": "John Smith is the founder and CEO of SS Construction. With over 30 years of experience in the construction industry, he has built a reputation for delivering high-quality work and exceptional customer service. John oversees all aspects of the business, from project management to client relations, and is committed to providing the best possible experience for every customer."
+    },
+    {
+      "name": "Sarah Johnson",
+      "title": "Project Manager",
+      "bio": "Sarah Johnson is a project manager at SS Construction. She has a background in architecture and design, with a keen eye for detail and a passion for creating beautiful spaces. Sarah works closely with clients to bring their vision to life, managing every aspect of the construction process from start to finish. Her dedication to quality and craftsmanship ensures that every project is completed to the highest standards."
+    },
+    {
+      "name": "Michael Williams",
+      "title": "Lead Carpenter",
+      "bio": "Michael Williams is the lead carpenter at SS Construction. With over 20 years of experience in the construction industry, he has a wealth of knowledge and expertise in all aspects of building and remodeling. Michael oversees the construction crew, ensuring that every project is completed on time and to the highest standards. His attention to detail and commitment to quality make him an invaluable member of the team."
+    }
+  ],
+  "awards": [
+    {
+      "name": "Best Construction Company",
+      "year": "2020",
+      "description": "SS Construction was awarded Best Construction Company in 2020 by the National Association of Home Builders. This prestigious award recognizes excellence in the construction industry and is a testament to our commitment to quality and craftsmanship."
+    },
+    {
+      "name": "Top Builder",
+      "year": "2019",
+      "description": "SS Construction was named a Top Builder in 2019 by Builder Magazine. This award honors the top construction companies in the country and highlights our dedication to innovation and customer satisfaction."
+    }
+  ],
+  "partners": [
+    {
+      "name": "ABC Architects",
+      "logo": "https://www.abcarchitects.com/logo.png",
+      "description": "ABC Architects is a leading architecture firm specializing in residential and commercial design. With a focus on sustainable and innovative design solutions, they have collaborated with SS Construction on numerous projects, creating beautiful and functional spaces for clients."
+    },
+    {
+      "name": "XYZ Engineering",
+      "logo": "https://www.xyzengineering.com/logo.png",
+      "description": "XYZ Engineering is a full-service engineering firm that provides structural, mechanical, and electrical engineering services. They have partnered with SS Construction on a variety of projects, ensuring that every building meets the highest standards of safety and efficiency."
+    }
+  ],
+  "whyChooseUs": [
+    {
+      "title": "Locally Owned",
+      "description": "SS Construction is a locally owned and operated company that has been serving the community for over 30 years. We take pride in our work and are committed to providing the highest quality construction services",
+      "src": "images/samples/icon-service-1.svg"
+    },
+    {
+      "title": "Experienced Professionals",
+      "description": "Our team of experienced professionals has the knowledge and expertise to handle projects of any size and complexity. From new construction to remodeling and renovation, we have the skills and resources to deliver exceptional results that exceed our clients' expectations.",
+      "src": "images/samples/icon-service-2.svg"
+    },
+    {
+      "title": "Timely Completion",
+      "description": "We understand the importance of completing projects on time and on budget. Our team works efficiently and effectively to meet deadlines and deliver results that exceed our clients' expectations. We take pride in our ability to complete projects in a timely manner without sacrificing quality.",
+      "src": "images/samples/icon-service-3.svg"
+    },
+    {
+      "title": "Quality Assurance",
+      "description": "We have a rigorous quality assurance process in place to ensure that every project meets our high standards of quality and craftsmanship. From the initial design phase to the final inspection, we are committed to delivering the best possible results for our clients.",
+      "src": "images/samples/icon-service-4.svg"
+    }
+  ],
+  "projectSteps": [
+    {
+      "title": "Requirement Gathering",
+      "description": "We begin by thoroughly understanding your project requirements and vision to ensure we meet your expectations.",
+      "src": "images/samples/icon-service-1.svg"
+    },
+    {
+      "title": "Planning and Design",
+      "description": "Our team creates detailed plans and designs, ensuring all aspects of the project are covered.",
+      "src": "images/samples/icon-service-2.svg"
+    },
+    {
+      "title": "Initial Consultation",
+      "description": " We begin with an initial consultation to understand your project requirements and vision.",
+      "src": "images/samples/icon-service-1.svg"
+    },
+    {
+      "title": "Construction Phase",
+      "description": " We commence construction, adhering to the highest standards of quality and safety.",
+      "src": "images/samples/icon-service-3.svg"
+    },
+    {
+      "title": "Final Inspection and Handover",
+      "description": " After completion, we conduct a final inspection and hand over the project to you, ensuring your satisfaction.",
+      "src": "images/samples/icon-service-4.svg"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "How do you price your services?",
+      "answer": "Our pricing is based on the scope of the project, materials required, and labor involved. We provide a detailed estimate after an initial requirement gathering."
+    },
+    {
+      "question": "How long does a typical job take?",
+      "answer": "The duration of a job depends on its complexity and size. We provide an estimated timeline during the initial consultation."
+    },
+    {
+      "question": "What areas do you service?",
+      "answer": "We service the Nagpur, Pune, and Amravati areas. Please contact us to confirm if we can service your location."
+    },
+    {
+      "question": "What is the process for starting a new construction project?",
+      "answer": "The process starts with an requirement gathering  to understand your needs, followed by a detailed proposal, design phase, obtaining necessary permits, and then the construction phase."
+    },
+    {
+      "question": "Do you offer custom home designs?",
+      "answer": "Yes, we offer custom home designs tailored to your specific needs and preferences. Our team works closely with you to create your dream home."
+    },
+    {
+      "question": "What materials do you use for construction?",
+      "answer": "We use high-quality, durable materials sourced from reputable suppliers. The choice of materials can be customized based on your preferences and budget."
+    },
+    {
+      "question": "Can you help with obtaining permits and approvals?",
+      "answer": "Yes, we assist with obtaining all necessary permits and approvals required for your construction project."
+    },
+    {
+      "question": "Do you provide a warranty for your work?",
+      "answer": "Yes, we provide a warranty for our construction work to ensure your peace of mind and satisfaction."
+    }
+  ],
+  "workWith": [
+    {
+      "title": "Ultratech Cement",
+      "description": "",
+      "src": "https://upload.wikimedia.org/wikipedia/en/thumb/9/96/Ultratech_Cement_Logo.svg/1200px-Ultratech_Cement_Logo.svg.png"
+    },
+    {
+      "title": "Ultratech Cement",
+      "description": "",
+      "src": "images/samples/award-1.svg"
+    },
+    {
+      "title": "Ultratech Cement",
+      "description": "",
+      "src": "images/samples/award-2.svg"
+    },
+    {
+      "title": "Ultratech Cement",
+      "description": "",
+      "src": "images/samples/award-3.svg"
+    },
+    {
+      "title": "Ultratech Cement",
+      "description": "",
+      "src": "images/samples/award-4.svg"
+    },
+    {
+      "title": "Ultratech Cement",
+      "description": "",
+      "src": "images/samples/award-5.svg"
+    }
+  ],
+  "contact": {
+    "name": "Chaitanya Suryawanshi",
+    "title": "Founder & CEO",
+    "phone": "+91 8149403097",
+    "email": "vivaanassociates01@gmail.com",
+    "address": "Plot No: 17 Balaji Nagar west Opposite Rahul medical store, Manewada road, Nagpur 440027",
+    "hours": "Mon-Fri: 8am-5pm",
+    "map": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.0000000000005!2d-89.6501776846036!3d39.79999999999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x887c6d5b7b7b7b7b%3A0x7b7b7b7b7b7b7b7b!2s1234%20Main%20St%2C%20Springfield%2C%20IL%2062701!5e0!3m2!1sen!2sus!4v1632212345678!5m2!1sen!2sus",
+    "social": [
+      {
+        "name": "Facebook",
+        "url": "https://www.facebook.com/ssconstruction",
+        "icon": "fab fa-facebook-f"
+      },
+      {
+        "name": "Twitter",
+        "url": "https://www.twitter.com/ssconstruction",
+        "icon": "fab fa-twitter"
+      },
+      {
+        "name": "Instagram",
+        "url": "https://www.instagram.com/ssconstruction",
+        "icon": "fab fa-instagram"
+      },
+      {
+        "name": "LinkedIn",
+        "url": "https://www.linkedin.com/ssconstruction",
+        "icon": "fab fa-linkedin-in"
+      }
+    ]
+  },
+  "numberOfEmployees": "30",
+  "numberOfProjectsCompleted": "50",
+  "clientSatisfaction": "100",
+  "revenue": "20101010",
+  "certifications": ["sds", "sd"]
+}
