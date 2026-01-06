@@ -86,7 +86,7 @@ const OrderFormApp = () => {
 
   const {
     fields: itemFields,
-    remove: removeItem,
+    // remove: removeItem,
     append: appendItem,
   } = useFieldArray({
     control,

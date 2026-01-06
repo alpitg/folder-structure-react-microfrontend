@@ -291,7 +291,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
     setMenuState(buildMenuState());
   }, [location.pathname, userClaims]);
 
-  const handleMenuClick = (menu: IRoutes, parent?: IRoutes) => {
+  const handleMenuClick = (menu: IRoutes) => {
     // only parents with subRoutes toggle
     if (!menu.subRoutes || menu.subRoutes.length === 0) return;
 
@@ -368,7 +368,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
                           key={sub.id}
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleMenuClick(sub, route);
+                            handleMenuClick(sub);
                           }}
                         >
                           <NavLink

@@ -1,6 +1,5 @@
 import "./landing-page.scss";
 
-import AppInitializer from "../app-initializer/app-initializer";
 import NavbarApp from "../navbar/navbar";
 import { Outlet } from "react-router";
 import Sidebar from "../sidebar/sidebar";

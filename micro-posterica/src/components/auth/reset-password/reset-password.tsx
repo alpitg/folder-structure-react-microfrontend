@@ -2,8 +2,6 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { useResetPasswordMutation } from "../../../app/redux/administration/auth/auth.api";
 import { ROUTE_URL } from "../../../routes/constants/routes.const";
 import { NavLink, useNavigate } from "react-router";
-import { useState } from "react";
-import type { ToastAppProps } from "../../ui/toast/toast";
 import { useDispatch } from "react-redux";
 import { setToast } from "../../../app/redux/core/app-settings/app-settings.slice";
 

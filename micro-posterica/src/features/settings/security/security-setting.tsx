@@ -17,13 +17,13 @@ interface SecuritySettingsForm {
 }
 
 const SecuritySettingApp = () => {
-  const { register, handleSubmit, formState } = useForm<SecuritySettingsForm>();
-  const [isSaving, setIsSaving] = useState(false);
+  const { register, handleSubmit } = useForm<SecuritySettingsForm>();
+  const [, setIsSaving] = useState(false);
   //   const [updateSecuritySettings, { isLoading }] =
   //     useUpdateSecuritySettingsMutation();
   const dispatch = useDispatch();
 
-  const onSubmit = async (data: SecuritySettingsForm) => {
+  const onSubmit = async () => {
     setIsSaving(true);
     try {
       //   await updateSecuritySettings(data).unwrap();
