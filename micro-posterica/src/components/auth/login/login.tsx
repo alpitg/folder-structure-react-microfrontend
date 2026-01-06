@@ -195,7 +195,7 @@ const LoginApp = () => {
       </form>
 
       {/* Sign up */}
-      <div className="mt-4 text-center">
+      {/* <div className="mt-4 text-center">
         <p className="mb-1">Not a member yet?</p>
         <div>
           <a
@@ -212,7 +212,7 @@ const LoginApp = () => {
             Email activation
           </a>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

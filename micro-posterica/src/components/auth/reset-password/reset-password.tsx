@@ -98,9 +98,10 @@ const ResetPasswordFormApp = () => {
                 errors.code ? "is-invalid" : ""
               }`}
               placeholder="Reset code *"
-              {...register("code", {
+                {...register("code", {
                 required: "Reset code is required",
-              })}
+                })}
+                defaultValue={new URLSearchParams(window.location.search).get("token") || ""}
             />
             {errors.code && (
               <div className="invalid-feedback">{errors.code.message}</div>

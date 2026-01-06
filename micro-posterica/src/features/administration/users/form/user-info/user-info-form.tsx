@@ -199,6 +199,7 @@ const UserInfoFormApp: React.FC<UserInfoFormAppProps> = ({ mode }) => {
           className="form-check-input"
           id="SetRandomPassword"
           {...register("user.setRandomPassword")}
+          disabled={mode === "edit"}
         />
         <label className="form-check-label" htmlFor="SetRandomPassword">
           Set random password.

@@ -90,6 +90,7 @@ const UsersFormApp = ({ mode, user, handleClose }: UsersFormAppProps) => {
     if (!request) return;
 
     if (isEditMode) {
+      request.user.setRandomPassword = false; // Ensure this is false when updating
       updateUsers({ id: id!, data: request })
         .unwrap()
         .then(() => {
