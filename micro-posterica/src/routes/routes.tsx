@@ -5,6 +5,7 @@ import { AdministrationRoutes } from "../features/administration/administration.
 import AppInitializer from "./app-initializer";
 import { CatalogRoutes } from "../features/store/catalog/routes/catalog.routes";
 import { CustomerRoutes } from "../features/store/customer/routes/customer.route";
+import { InvoiceRoutes } from "../features/finance/invoice/invoice.routes";
 import LoadingApp from "../components/loading/loading";
 import PrivateRoute from "./private-route";
 import { ROUTE_URL } from "./constants/routes.const";
@@ -103,6 +104,7 @@ const RoutesApp = () => {
                 {CatalogRoutes()}
                 {CustomerRoutes()}
                 {AdministrationRoutes()}
+                {InvoiceRoutes()}
 
                 <Route path={ROUTE_URL.MASTER.BASE} element={<MasterApp />}>
                   <Route

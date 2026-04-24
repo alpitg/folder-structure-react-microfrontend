@@ -156,6 +156,17 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
           ],
           subRoutes: [],
         },
+        {
+          id: "invoice-list",
+          title: "Invoices",
+          path: ROUTE_URL.INVOICE_MANAGER.BASE,
+          icon: "bi bi-receipt fs-3",
+          claims: [
+            PERMISSION.PAGES.SALES.ORDER.DEFAULT,
+            PERMISSION.PAGES.SALES.ORDER.DETAIL,
+          ],
+          subRoutes: [],
+        },
       ],
     },
     {

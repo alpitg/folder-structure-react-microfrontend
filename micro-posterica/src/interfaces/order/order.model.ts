@@ -40,6 +40,13 @@ export interface IBillParty {
   phone?: string;
 }
 
+export interface IInvoiceItem {
+  description: string;
+  quantity: number;
+  price: number;
+  total: number;
+}
+
 export interface IFrame {
   type: string;
   color?: string;
@@ -141,18 +148,23 @@ export interface IBillParty {
 
 export interface IInvoice {
   id?: string;
+  invoiceNumber?: string;
   generateInvoice?: boolean;
   billDate?: string;
   billFrom?: IBillParty;
   billTo?: IBillParty;
   orderIds?: string[];
-  createdAt?: string;
-  paymentMode?: string;
-  paymentStatus?: PaymentStatusType;
-
+  items?: IInvoiceItem[];
+  subtotal?: number;
+  discount?: number;
+  tax?: number;
   totalAmount?: number;
-  advancePaid: number;
+  advancePaid?: number;
   balanceAmount?: number;
+  paymentMode?: string;
+  paymentStatus?: 'pending' | 'partial' | 'paid';
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 //#endregion
