@@ -49,6 +49,21 @@ export const organizationUnitsApi = createApi({
       }),
     }),
 
+    deleteOrganizationUnit: builder.mutation<
+      { message: string },
+      string
+    >({
+      query: (id) => ({
+        url:
+          GetEnvConfig()?.api?.baseUrl +
+          GetEnvConfig()?.api?.administration?.organizationUnits?.delete?.replace(
+            "{id}",
+            id
+          ),
+        method: "DELETE",
+      }),
+    }),
+
     // ---------- Roles inside Org Unit ----------
 
     // ⬇️ Get all roles tagged to an org unit (paginated)
@@ -102,6 +117,7 @@ export const {
   useGetPaginatedOrganizationUnitsQuery,
   useGetOrganizationUnitsQuery,
   useAddOrganizationUnitsMutation,
+  useDeleteOrganizationUnitMutation,
 
   // new hooks for roles:
   useGetRolesFromOrganizationUnitQuery,
