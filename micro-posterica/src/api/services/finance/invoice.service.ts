@@ -6,8 +6,14 @@ export default class InvoiceService {
     return GetEnvConfig()?.api?.baseUrl || "";
   }
 
-  static fetchAll = () => {
-    return axiosInstance.get(`${this.getBaseUrl()}/api/invoices`);
+  static fetchAll = (params?: { search?: string; page?: number; limit?: number }) => {
+    const queryParams = new URLSearchParams();
+    if (params?.search) queryParams.append('search', params.search);
+    if (params?.page) queryParams.append('page', params.page.toString());
+    if (params?.limit) queryParams.append('limit', params.limit.toString());
+    const queryString = queryParams.toString();
+    const url = `${this.getBaseUrl()}/api/invoices${queryString ? `?${queryString}` : ''}`;
+    return axiosInstance.get(url);
   };
 
   static fetchById = (invoiceId: string) => {
