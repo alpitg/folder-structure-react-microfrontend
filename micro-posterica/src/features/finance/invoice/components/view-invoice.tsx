@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { useParams } from 'react-router';
+import InvoiceService from '../../../../api/services/finance/invoice.service';
 
 interface Invoice {
   id: string;
@@ -50,9 +51,8 @@ const ViewInvoice: React.FC = () => {
 
   const fetchInvoice = async (invoiceId: string) => {
     try {
-      const response = await fetch(`/api/invoices/${invoiceId}`);
-      const data = await response.json();
-      setInvoice(data);
+      const response = await InvoiceService.fetchById(invoiceId);
+      setInvoice(response.data);
     } catch (error) {
       console.error('Error fetching invoice:', error);
     } finally {
@@ -64,26 +64,20 @@ const ViewInvoice: React.FC = () => {
     if (!invoice) return;
 
     try {
-      const response = await fetch(`/api/invoices/${invoice.id}/payment`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ advancePaid: invoice.advancePaid + paymentAmount }),
-      });
-
-      if (response.ok) {
-        const updatedInvoice = await response.json();
-        setInvoice(updatedInvoice);
-        setPaymentAmount(0);
-      }
+      const response = await InvoiceService.updatePayment(
+        invoice.id,
+        invoice.advancePaid + paymentAmount,
+      );
+      setInvoice(response.data);
+      setPaymentAmount(0);
     } catch (error) {
       console.error('Error updating payment:', error);
     }
   };
 
   const handleDownloadPDF = () => {
-    window.open(`/api/invoices/${id}/pdf`, '_blank');
+    if (!id) return;
+    window.open(InvoiceService.getPdfUrl(id), '_blank');
   };
 
   if (loading) return <div>Loading...</div>;
