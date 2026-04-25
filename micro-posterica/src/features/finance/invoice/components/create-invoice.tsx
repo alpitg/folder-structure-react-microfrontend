@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router";
+import { useGetOrdersFilteredQuery } from "../../../../app/redux/sales/order/order.api";
 
 interface Order {
   id: string;
-  orderNumber: string;
+  orderCode: string;
   customerName: string;
-  totalAmount: number;
+  total: number;
   invoiceId?: string;
 }
 
@@ -16,23 +17,13 @@ const CreateInvoice: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const alreadyInvoicedCount = orders.filter((order) => !!order.invoiceId).length;
+  const { data } = useGetOrdersFilteredQuery({ status: "complete", invoiceId: "null" });
 
   useEffect(() => {
-    fetchOrders();
-  }, []);
+    setOrders(data?.items || []);
+  }, [data]);
 
-  const fetchOrders = async () => {
-    try {
-      const response = await fetch(
-        "/api/orders?status=completed&invoiceId=null",
-      );
-      const data = await response.json();
-      setOrders(data);
-    } catch (error) {
-      console.error("Error fetching orders:", error);
-    }
-  };
+  const alreadyInvoicedCount = orders.filter((order) => !!order.invoiceId).length;
 
   const handleSelectOrder = (orderId: string) => {
     setSelectedOrders((prev) =>
@@ -87,7 +78,7 @@ const CreateInvoice: React.FC = () => {
               onChange={() => handleSelectOrder(order.id)}
               disabled={!!order.invoiceId}
             />
-            {order.orderNumber} - {order.customerName} - ${order.totalAmount}
+            {order.orderCode} - {order.customerName} - ${order.total}
             {order.invoiceId && " (Already invoiced)"}
           </div>
         ))}

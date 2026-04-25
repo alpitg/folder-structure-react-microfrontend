@@ -58,6 +58,7 @@ let environment = {
     },
     order: {
       list: "",
+      listGet: "",
       detail: "",
       placeOrder: "",
       update: "",

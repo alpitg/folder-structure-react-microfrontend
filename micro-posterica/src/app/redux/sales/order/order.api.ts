@@ -20,6 +20,13 @@ export const ordersApi = createApi({
       }),
     }),
 
+    getOrdersFiltered: builder.query<PaginatedOrders, { status?: string; invoiceId?: string; page?: number; pageSize?: number; sort?: string }>({
+      query: (params) => ({
+        url: GetEnvConfig()?.api?.baseUrl + GetEnvConfig()?.api?.order?.listGet,
+        params,
+      }),
+    }),
+
     getDetail: builder.query<IOrderInvoiceData, string>({
       query: (orderId) =>
         GetEnvConfig()?.api?.baseUrl +
@@ -52,6 +59,7 @@ export const ordersApi = createApi({
 
 export const {
   useGetOrdersQuery,
+  useGetOrdersFilteredQuery,
   useGetDetailQuery,
   usePlaceOrderMutation,
   useUpdateOrderMutation,

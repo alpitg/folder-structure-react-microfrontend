@@ -223,7 +223,7 @@ export const mapOrderForApi = (
       handledBy: item.order.handledBy,
       createdAt: item.order.createdAt,
       likelyDateOfDelivery: item.order.likelyDateOfDelivery,
-      invoiceId: item.order.invoiceId || null,
+      invoiceId: null,
       note: "Fresh order",
       orderStatus: "placed",
       miscCharges: item.order.miscCharges,

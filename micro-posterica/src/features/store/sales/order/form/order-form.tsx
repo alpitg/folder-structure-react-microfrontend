@@ -70,6 +70,7 @@ const OrderFormApp = () => {
         customerName: "",
         discountAmount: 0,
         items: [],
+        invoiceId: null,
       },
       invoice: {
         advancePaid: 0,
@@ -145,7 +146,7 @@ const OrderFormApp = () => {
           orderCode: orderDetail?.order?.orderCode,
           createdAt: orderDetail?.order?.createdAt,
           handledBy: orderDetail?.order?.handledBy,
-          invoiceId: orderDetail?.order?.invoiceId,
+          invoiceId: null, // orderDetail?.order?.invoiceId,
           id: orderDetail?.order?.id,
           likelyDateOfDelivery: orderDetail?.order?.likelyDateOfDelivery,
           miscCharges: orderDetail?.order?.miscCharges,

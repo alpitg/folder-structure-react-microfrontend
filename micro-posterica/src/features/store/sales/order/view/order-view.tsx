@@ -1,17 +1,49 @@
 import { NavLink, useParams } from "react-router";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import {
+  useGetDetailQuery,
+  useUpdateOrderMutation,
+} from "../../../../../app/redux/sales/order/order.api";
 
 import ErrorPage from "../../../../../components/ui/error/error-page";
 import NoRecordApp from "../list/no-record/no-record";
 import PageHeaderApp from "../../../../../components/header/page-header/page-header";
 import { ROUTE_URL } from "../../../../../routes/constants/routes.const";
-import { useGetDetailQuery } from "../../../../../app/redux/sales/order/order.api";
 
 const OrderViewApp = () => {
   const { orderId } = useParams(); //
   const printRef = useRef<HTMLDivElement>(null);
+  const [isMarkingCompleted, setIsMarkingCompleted] = useState(false);
 
   const { data, isLoading, error, refetch } = useGetDetailQuery(orderId || "");
+  const [updateOrder] = useUpdateOrderMutation();
+
+  const handleMarkAsCompleted = async () => {
+    if (!data?.order || isMarkingCompleted) return;
+
+    setIsMarkingCompleted(true);
+    try {
+      const updatedData = {
+        ...data.order,
+        orderStatus: "fulfilled",
+      };
+      const payloadData: any = {
+        order: updatedData,
+      };
+      if (data.invoice) {
+        payloadData.invoice = data.invoice;
+      }
+      await updateOrder({
+        orderId: orderId!,
+        data: payloadData,
+      });
+      refetch();
+    } catch (error) {
+      console.error("Error marking order as completed:", error);
+    } finally {
+      setIsMarkingCompleted(false);
+    }
+  };
 
   const getSubTotal = () => {
     return (
@@ -90,19 +122,36 @@ const OrderViewApp = () => {
         </NavLink>
 
         {data?.order?.id && (
-          <NavLink
-            to={ROUTE_URL.SALES.ORDER.EDIT?.replace(
-              ":orderId",
-              data?.order?.id
+          <>
+            {data?.order?.orderStatus !== "fulfilled" && (
+              <button
+                type="button"
+                className="btn btn-success btn-sm me-3"
+                onClick={handleMarkAsCompleted}
+                disabled={isMarkingCompleted}
+              >
+                <i className="bi bi-check-circle"></i>
+                {isMarkingCompleted ? "Marking..." : "Mark as Completed"}
+              </button>
             )}
-          >
-            <span className="btn btn-primary btn-sm">
-              <i className="bi bi-pencil-square"></i>
-              Edit Order
-            </span>
-          </NavLink>
+            <NavLink
+              to={ROUTE_URL.SALES.ORDER.EDIT?.replace(
+                ":orderId",
+                data?.order?.id,
+              )}
+            >
+              <span className="btn btn-primary btn-sm">
+                <i className="bi bi-pencil-square"></i>
+                Edit Order
+              </span>
+            </NavLink>
+          </>
         )}
       </PageHeaderApp>
+
+      <div className="py-4 flex-row-fluid">
+        <h2>Order #{data?.order?.orderCode}</h2>
+      </div>
 
       <div className="d-flex flex-column gap-7 gap-lg-10">
         <div className="d-flex flex-column flex-xl-row gap-7 gap-lg-10">
