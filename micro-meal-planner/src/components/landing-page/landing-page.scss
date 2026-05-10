@@ -1,0 +1,33 @@
+.landing-page-app {
+  height: 100vh;
+
+  .sidebar-overlay {
+    display: none;
+
+    @media (max-width: 991.98px) {
+      display: block;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 105;
+    }
+  }
+
+  .main-body-container {
+    display: flex;
+    margin-top: var(--bs-app-header-height);
+    padding: 2rem;
+    transition: margin-left 0.3s ease;
+
+    &.landing-page-content-collapsed {
+      margin-left: var(--bs-app-sidebar-width);
+    }
+
+    // Ignore margin-left on small screens
+    @media (max-width: 991.98px) {
+      &.landing-page-content-collapsed {
+        margin-left: 0;
+      }
+    }
+  }
+}
