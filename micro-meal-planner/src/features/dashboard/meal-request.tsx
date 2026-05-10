@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 
+import { Link } from "react-router";
 import MealPlannerApp from "./meal-planner";
+import { ROUTE_URL } from "../../routes/constants/routes.const";
 
 type PlanOption = "today" | "breakfast" | "lunch" | "dinner";
 
@@ -49,7 +51,7 @@ const MealRequestApp = () => {
   };
 
   const handleOptionChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const target = e.target as HTMLInputElement | HTMLSelectElement;
     const name = target.name;
@@ -89,10 +91,23 @@ const MealRequestApp = () => {
 
   return (
     <div>
-      <h1 className="fw-semibold text-gray-800 mb-2">Meal Request</h1>
-      <p className="fs-6 fw-semibold text-gray-600 mb-8">
-        Submit your meal request and view a plan tailored to your choice.
-      </p>
+      <div className="d-flex flex-column flex-md-row justify-content-between align-items-start gap-4 mb-8">
+        <div>
+          <h1 className="fw-semibold text-gray-800 mb-2">Meal Request</h1>
+
+          <p className="fs-6 fw-semibold text-gray-600 mb-8">
+            Submit your meal request and view a plan tailored to your choice.
+          </p>
+        </div>
+        <div className="d-flex flex-wrap gap-3">
+          <Link
+            to={ROUTE_URL.MEAL_PLANNER.DASHBOARD}
+            className="btn btn-light btn-sm"
+          >
+            Go to Dashboard
+          </Link>
+        </div>
+      </div>
 
       {!showPlanner ? (
         <div className="row gy-5">
@@ -266,7 +281,10 @@ const MealRequestApp = () => {
                   </div>
 
                   <div className="d-flex flex-wrap gap-3">
-                    <button type="submit" className="btn btn-primary btn-sm fw-semibold">
+                    <button
+                      type="submit"
+                      className="btn btn-primary btn-sm fw-semibold"
+                    >
                       Submit Request
                     </button>
                     <button
@@ -294,13 +312,19 @@ const MealRequestApp = () => {
                   </span>
                 </div>
                 <div className="mb-4">
-                  <h6 className="fw-semibold text-gray-800">Optional filters</h6>
+                  <h6 className="fw-semibold text-gray-800">
+                    Optional filters
+                  </h6>
                   <div className="d-flex flex-column gap-2 mt-3">
                     <span className="badge bg-light-info text-info">
-                      {options.vegNonVeg === "veg" ? "Vegetarian" : "Non-Vegetarian"}
+                      {options.vegNonVeg === "veg"
+                        ? "Vegetarian"
+                        : "Non-Vegetarian"}
                     </span>
                     <span className="badge bg-light-success text-success">
-                      {options.region === "north" ? "North Indian" : "South Indian"}
+                      {options.region === "north"
+                        ? "North Indian"
+                        : "South Indian"}
                     </span>
                     {options.highProtein && (
                       <span className="badge bg-light-warning text-warning">
@@ -319,7 +343,9 @@ const MealRequestApp = () => {
                     )}
                     {options.maidVoiceLanguage !== "none" && (
                       <span className="badge bg-light-dark text-gray-700">
-                        {options.maidVoiceLanguage === "hindi" ? "Hindi voice" : "Marathi voice"}
+                        {options.maidVoiceLanguage === "hindi"
+                          ? "Hindi voice"
+                          : "Marathi voice"}
                       </span>
                     )}
                     {options.maidLessSpicy && (
@@ -332,11 +358,13 @@ const MealRequestApp = () => {
                         Easy to cook today
                       </span>
                     )}
-                    {!options.highProtein && !options.quickCooking && !options.maidModeEnabled && (
-                      <span className="text-gray-500 fs-7">
-                        No optional filters selected
-                      </span>
-                    )}
+                    {!options.highProtein &&
+                      !options.quickCooking &&
+                      !options.maidModeEnabled && (
+                        <span className="text-gray-500 fs-7">
+                          No optional filters selected
+                        </span>
+                      )}
                   </div>
                 </div>
                 <div className="rounded border border-dashed border-gray-300 p-4 bg-light">
@@ -355,11 +383,18 @@ const MealRequestApp = () => {
             <div className="col-12">
               <div className="card shadow-sm border-dashed border-gray-300">
                 <div className="card-body d-flex flex-column align-items-center justify-content-center py-12">
-                  <div className="spinner-border text-primary mb-4" role="status">
+                  <div
+                    className="spinner-border text-primary mb-4"
+                    role="status"
+                  >
                     <span className="visually-hidden">Loading...</span>
                   </div>
-                  <h5 className="fw-bold text-gray-800 mb-2">Preparing your meal plan</h5>
-                  <p className="text-gray-600 mb-0">This will take just a moment.</p>
+                  <h5 className="fw-bold text-gray-800 mb-2">
+                    Preparing your meal plan
+                  </h5>
+                  <p className="text-gray-600 mb-0">
+                    This will take just a moment.
+                  </p>
                 </div>
               </div>
             </div>
@@ -371,15 +406,29 @@ const MealRequestApp = () => {
             <div className="card-body">
               <div className="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3">
                 <div>
-                  <h4 className="fw-bold text-gray-800 mb-2">Your Meal Planner is ready</h4>
+                  <h4 className="fw-bold text-gray-800 mb-2">
+                    Your Meal Planner is ready
+                  </h4>
                   <p className="fs-6 text-gray-600 mb-0">
-                    Requested: {planOption === "today" ? "Today’s plan" : planOption} • {options.vegNonVeg === "veg" ? "Veg" : "Non-Veg"} • {options.region === "north" ? "North Indian" : "South Indian"}{" "}
-                    {options.highProtein ? "• High protein" : ""} {options.quickCooking ? "• Quick cooking" : ""}
-                    {options.maidModeEnabled ? ` • Maid Mode (${options.maidVoiceLanguage !== "none" ? options.maidVoiceLanguage === "hindi" ? "Hindi" : "Marathi" : "voice optional"})` : ""}
-                    {options.maidLessSpicy ? " • Less spicy" : ""} {options.maidEasyCook ? " • Easy to cook" : ""}
+                    Requested:{" "}
+                    {planOption === "today" ? "Today’s plan" : planOption} •{" "}
+                    {options.vegNonVeg === "veg" ? "Veg" : "Non-Veg"} •{" "}
+                    {options.region === "north"
+                      ? "North Indian"
+                      : "South Indian"}{" "}
+                    {options.highProtein ? "• High protein" : ""}{" "}
+                    {options.quickCooking ? "• Quick cooking" : ""}
+                    {options.maidModeEnabled
+                      ? ` • Maid Mode (${options.maidVoiceLanguage !== "none" ? (options.maidVoiceLanguage === "hindi" ? "Hindi" : "Marathi") : "voice optional"})`
+                      : ""}
+                    {options.maidLessSpicy ? " • Less spicy" : ""}{" "}
+                    {options.maidEasyCook ? " • Easy to cook" : ""}
                   </p>
                 </div>
-                <button onClick={handleReset} className="btn btn-light btn-sm fw-semibold">
+                <button
+                  onClick={handleReset}
+                  className="btn btn-light btn-sm fw-semibold"
+                >
                   Create new request
                 </button>
               </div>
