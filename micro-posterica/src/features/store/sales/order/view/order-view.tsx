@@ -151,6 +151,9 @@ const OrderViewApp = () => {
 
       <div className="py-4 flex-row-fluid">
         <h2>Order #{data?.order?.orderCode}</h2>
+        <span className="badge badge-light-success">
+          {data?.order?.orderStatus}
+        </span>
       </div>
 
       <div className="d-flex flex-column gap-7 gap-lg-10">
@@ -264,7 +267,9 @@ const OrderViewApp = () => {
                   </div>
                   <div className="fw-bold text-gray-600 text-end">
                     <a
-                      href="/keen/demo1/apps/invoices/view/invoice-3.html"
+                      href={
+                        data?.invoice ? `/invoice/view/${data.invoice.id}` : "#"
+                      }
                       className="text-hover-primary"
                     >
                       # {data?.invoice?.id}
