@@ -10,11 +10,7 @@ const DashboardApp = () => {
         <div>
           <h1 className="fw-bold text-gray-800 mb-3">Meal Planner Dashboard</h1>
           <p className="text-gray-600 mb-0">
-            Track weekly meal planning, ingredient inventory, maid-friendly
-            recipes, and estimated grocery cost all from one view.
-          </p>
-          <p className="text-gray-600 mb-0">
-            Daily cooking assistant for Indian homes
+            Daily cooking assistant for Indian homes.
           </p>
         </div>
         <div className="d-flex flex-wrap gap-3">
