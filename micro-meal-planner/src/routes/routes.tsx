@@ -54,6 +54,9 @@ const MealRequest = lazy(() => import("../features/dashboard/meal-request"));
 const AvailableIngredients = lazy(
   () => import("../features/dashboard/available-ingredients"),
 );
+const WeeklyMealPlanner = lazy(
+  () => import("../features/dashboard/weekly-planner/weekly-meal-planner"),
+);
 
 const RoutesApp = () => {
   useAuthInit(); // run once at app start
@@ -76,6 +79,10 @@ const RoutesApp = () => {
             <Route
               path={ROUTE_URL.MEAL_PLANNER.AVAILABLE_INGREDIENTS}
               element={<AvailableIngredients />}
+            />
+            <Route
+              path={ROUTE_URL.MEAL_PLANNER.WEEKLY_PLAN}
+              element={<WeeklyMealPlanner />}
             />
           </Route>
           {/* 🔓 Public */}

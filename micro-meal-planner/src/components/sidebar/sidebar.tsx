@@ -45,6 +45,14 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
       subRoutes: [],
     },
     {
+      id: "weekly-plan",
+      title: "Weekly Plan",
+      path: ROUTE_URL.MEAL_PLANNER.WEEKLY_PLAN,
+      icon: "bi bi-cart-check fs-3",
+      claims: [],
+      subRoutes: [],
+    },
+    {
       id: "administration",
       title: "Administration",
       path: ROUTE_URL.ADMINISTRATION.BASE,
