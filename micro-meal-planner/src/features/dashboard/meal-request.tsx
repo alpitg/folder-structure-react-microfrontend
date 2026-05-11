@@ -102,7 +102,7 @@ const MealRequestApp = () => {
 
   return (
     <div>
-      <div className="d-flex flex-column flex-md-row justify-content-between align-items-start gap-4 mb-8">
+      <div className="d-flex flex-column flex-md-row justify-content-between align-items-start gap-4 mb-2">
         <div>
           <h1 className="fw-semibold text-gray-800 mb-2">Meal Request</h1>
 

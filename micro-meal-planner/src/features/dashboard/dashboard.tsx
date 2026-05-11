@@ -6,7 +6,7 @@ import { ROUTE_URL } from "../../routes/constants/routes.const";
 const DashboardApp = () => {
   return (
     <div>
-      <div className="d-flex flex-column flex-md-row justify-content-between align-items-start gap-4 mb-8">
+      <div className="d-flex flex-column flex-md-row justify-content-between align-items-start gap-4 mb-2">
         <div>
           <h1 className="fw-bold text-gray-800 mb-3">Meal Planner Dashboard</h1>
           <p className="text-gray-600 mb-0">

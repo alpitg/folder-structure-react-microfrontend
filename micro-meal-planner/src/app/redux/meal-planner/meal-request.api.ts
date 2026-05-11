@@ -18,8 +18,8 @@ export const mealRequestApi = createApi({
     >({
       query: (body) => ({
         url:
-          // GetEnvConfig()?.api?.baseUrl + // TODO: use this for real backend, currently frontendBaseUrl is same as baseUrl
-          GetEnvConfig()?.api?.frontendBaseUrl +
+          GetEnvConfig()?.api?.baseUrl + // TODO: use this for real backend, currently frontendBaseUrl is same as baseUrl
+          // GetEnvConfig()?.api?.frontendBaseUrl +
           GetEnvConfig()?.api?.mealPlanner?.mealRequest,
         method: "POST",
         body,

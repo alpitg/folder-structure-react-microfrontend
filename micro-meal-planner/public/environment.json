@@ -9,7 +9,7 @@
     "frontendBaseUrl": "",
     "apiVersion": "v1",
     "mealPlanner": {
-      "mealRequest": "/api/meal-planner/meal-requests.json",
+      "mealRequest": "/api/meal-planner/meal-request",
       "availableIngredients": "/api/meal-planner/available-ingredients",
       "weeklyPlan": "/api/meal-planner/weekly-plans"
     },
