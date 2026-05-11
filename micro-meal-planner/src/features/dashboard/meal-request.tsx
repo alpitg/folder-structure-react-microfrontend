@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Link } from "react-router";
 import MealPlannerApp from "./meal-planner";
-import { ROUTE_URL } from "../../routes/constants/routes.const";
 
 type PlanOption = "today" | "breakfast" | "lunch" | "dinner";
 
@@ -411,7 +409,7 @@ const MealRequestApp = () => {
                   </h4>
                   <p className="fs-6 text-gray-600 mb-0">
                     Requested:{" "}
-                    {planOption === "today" ? "Today’s plan" : planOption} •{" "}
+                    {planOption === "today" ? "Today's plan" : planOption} •{" "}
                     {options.vegNonVeg === "veg" ? "Veg" : "Non-Veg"} •{" "}
                     {options.region === "north"
                       ? "North Indian"
