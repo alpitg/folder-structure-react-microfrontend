@@ -5,7 +5,8 @@
   "author": "Meal Planner Team",
   "logo": "/static/media/img/logo.png",
   "api": {
-    "baseUrl": "http://localhost:8000",
+    "localBaseUrl": "http://localhost:8000",
+    "baseUrl": "https://crm-api-python-vqiy.onrender.com",
     "frontendBaseUrl": "",
     "apiVersion": "v1",
     "mealPlanner": {
