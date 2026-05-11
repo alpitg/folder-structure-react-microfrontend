@@ -16,4 +16,5 @@ export interface MaidModeOptions {
 
 export interface MealPlannerProps {
   maidMode?: MaidModeOptions;
+  meals?: Meal[];
 }

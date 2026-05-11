@@ -5,6 +5,7 @@ import type {
 } from "../meal-planner/interfaces/meal-request.model";
 import { useEffect, useState } from "react";
 
+import type { Meal } from "../meal-planner/interfaces/meal-planner.model";
 import MealPlannerApp from "./meal-planner";
 import { useCreateMealRequestMutation } from "../../app/redux/meal-planner/meal-request.api";
 
@@ -26,6 +27,7 @@ const MealRequestApp = () => {
 
   const [submitted, setSubmitted] = useState(false);
   const [showPlanner, setShowPlanner] = useState(false);
+  const [meals, setMeals] = useState<Meal[]>([]);
 
   const handlePlanChange = (value: PlanOption) => {
     setPlanOption(value);
@@ -72,8 +74,9 @@ const MealRequestApp = () => {
       // additional 2 second loader
       await wait(2000);
 
-      setShowPlanner(true);
       console.log("Meal Request Success:", response);
+      setMeals(response || []);
+      setShowPlanner(true);
     } catch (error) {
       console.error("Meal Request Error:", error);
 
@@ -450,6 +453,7 @@ const MealRequestApp = () => {
               lessSpicy: options.maidLessSpicy,
               easyCook: options.maidEasyCook,
             }}
+            meals={meals}
           />
         </div>
       )}

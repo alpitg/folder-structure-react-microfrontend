@@ -13,7 +13,7 @@ export const mealRequestApi = createApi({
 
   endpoints: (builder) => ({
     createMealRequest: builder.mutation<
-      IMealResponse,
+      IMealResponse[],
       IMealRequest
     >({
       query: (body) => ({
