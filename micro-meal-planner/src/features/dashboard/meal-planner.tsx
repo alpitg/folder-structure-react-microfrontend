@@ -67,7 +67,14 @@ const meals: Meal[] = [
   },
 ];
 
-const MealPlannerApp = ({ maidMode = { enabled: false, language: "none", lessSpicy: false, easyCook: false }, }: MealPlannerProps) => {
+const MealPlannerApp = ({
+  maidMode = {
+    enabled: false,
+    language: "none",
+    lessSpicy: false,
+    easyCook: false,
+  },
+}: MealPlannerProps) => {
   const maidModeEnabled = maidMode.enabled;
 
   const formatRecipeStep = (step: string) => {
@@ -78,19 +85,20 @@ const MealPlannerApp = ({ maidMode = { enabled: false, language: "none", lessSpi
 
   return (
     <div>
-      <h1 className="fw-semibold text-gray-800 mb-2">Meal Planner</h1>
-
-      <p className="fs-6 fw-semibold text-gray-600 mb-8">
-        Daily meal plan using available ingredients: Potato, Onion, Rice,
-        Paneer, Tomato
-      </p>
-
       {maidModeEnabled && (
         <div className="mb-6 rounded-3 border border-success bg-light-success p-4">
           <div className="d-flex flex-column gap-2">
             <span className="badge bg-success">Maid Mode</span>
             <p className="mb-0 text-gray-700">
-              Simple cooking steps, {maidMode.language === "hindi" ? "Hindi" : maidMode.language === "marathi" ? "Marathi" : "Voice"} instructions, {maidMode.lessSpicy ? "less spicy" : "normal spice"} and {maidMode.easyCook ? "easy to cook today" : "balanced cooking"}.
+              Simple cooking steps,{" "}
+              {maidMode.language === "hindi"
+                ? "Hindi"
+                : maidMode.language === "marathi"
+                  ? "Marathi"
+                  : "Voice"}{" "}
+              instructions, {maidMode.lessSpicy ? "less spicy" : "normal spice"}{" "}
+              and{" "}
+              {maidMode.easyCook ? "easy to cook today" : "balanced cooking"}.
             </p>
           </div>
         </div>
@@ -103,7 +111,9 @@ const MealPlannerApp = ({ maidMode = { enabled: false, language: "none", lessSpi
               <div className="card-header border-0 bg-light">
                 <div className="d-flex align-items-center">
                   <div>
-                    <span className="badge bg-primary me-2">{meal.type}</span>
+                    <span className="badge bg-light-success text-success fw-semibold me-2">
+                      {meal.type}
+                    </span>
                     <h5 className="fw-bold text-gray-800 mb-0">{meal.name}</h5>
                   </div>
                 </div>
@@ -167,13 +177,18 @@ const MealPlannerApp = ({ maidMode = { enabled: false, language: "none", lessSpi
                 <div className="p-3 bg-light-success rounded">
                   <div className="d-flex align-items-center flex-wrap gap-2">
                     <span className="badge bg-success me-2">
-                      {maidModeEnabled && maidMode.easyCook ? "Easy to cook today" : "Easy"}
+                      {maidModeEnabled && maidMode.easyCook
+                        ? "Easy to cook today"
+                        : "Easy"}
                     </span>
                     <span className="fs-7 fw-semibold text-success">
-                      Perfect for home cooking{maidModeEnabled ? " with maid-friendly steps" : ""}
+                      Perfect for home cooking
+                      {maidModeEnabled ? " with maid-friendly steps" : ""}
                     </span>
                     {maidModeEnabled && maidMode.lessSpicy && (
-                      <span className="badge bg-warning text-dark">Less spicy</span>
+                      <span className="badge bg-warning text-dark">
+                        Less spicy
+                      </span>
                     )}
                   </div>
                 </div>

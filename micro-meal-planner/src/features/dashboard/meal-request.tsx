@@ -95,18 +95,18 @@ const MealRequestApp = () => {
         <div>
           <h1 className="fw-semibold text-gray-800 mb-2">Meal Request</h1>
 
-          <p className="fs-6 fw-semibold text-gray-600 mb-8">
+          <p className="fs-6 fw-semibold text-gray-600 mb-2">
             Submit your meal request and view a plan tailored to your choice.
           </p>
         </div>
-        <div className="d-flex flex-wrap gap-3">
+        {/* <div className="d-flex flex-wrap gap-3">
           <Link
             to={ROUTE_URL.MEAL_PLANNER.DASHBOARD}
             className="btn btn-light btn-sm"
           >
             Go to Dashboard
           </Link>
-        </div>
+        </div> */}
       </div>
 
       {!showPlanner ? (
@@ -429,6 +429,7 @@ const MealRequestApp = () => {
                   onClick={handleReset}
                   className="btn btn-light btn-sm fw-semibold"
                 >
+                  <i className="bi bi-plus-lg me-1"></i>
                   Create new request
                 </button>
               </div>

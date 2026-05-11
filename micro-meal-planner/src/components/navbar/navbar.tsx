@@ -3,19 +3,21 @@ import "./navbar.scss";
 import SwitchThemeApp from "./switch-theme/switch-theme";
 import UserMenuApp from "./user-menu/user-menu";
 
-const NavbarApp = ({ isOpen, toggleSidebar }: any) => {
+const NavbarApp = ({ isOpen, enableToggle, toggleSidebar }: any) => {
   return (
     <div className="navbar-app">
       <nav className={`navbar-content ${isOpen ? `sidebar-open` : ""}`}>
         <div className="nav-left">
           <div className="d-flex align-items-center">
-            <button
-              className="btn btn-icon"
-              onClick={toggleSidebar}
-              data-kt-drawer-toggle="#kt_app_sidebar_mobile_toggle"
-            >
-              <i className="bi bi-list fs-1"></i>
-            </button>
+            {enableToggle && (
+              <button
+                className="btn btn-icon"
+                onClick={toggleSidebar}
+                data-kt-drawer-toggle="#kt_app_sidebar_mobile_toggle"
+              >
+                <i className="bi bi-list fs-1"></i>
+              </button>
+            )}
 
             <h2 className="m-0 d-lg-none">Meal Planner</h2>
           </div>

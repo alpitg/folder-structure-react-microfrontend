@@ -1,5 +1,6 @@
 import "./landing-page.scss";
 
+import MealFooterApp from "../../features/dashboard/meal-footer/meal-footer";
 import NavbarApp from "../navbar/navbar";
 import { Outlet } from "react-router";
 import Sidebar from "../sidebar/sidebar";
@@ -12,41 +13,50 @@ import { useToast } from "../../hooks/use-toast";
 const LandingPageApp = () => {
   const { toast } = useToast();
   const dispatch = useDispatch();
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
 
   return (
-    <div className="landing-page-app">
-      <div className="landing-page-container">
-        <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
-        <NavbarApp isOpen={isOpen} toggleSidebar={toggleSidebar} />
+    <>
+      <div className="landing-page-app">
+        <div className="landing-page-container">
+          {/* <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} /> */}
+          <NavbarApp
+            isOpen={isOpen}
+            enableToggle={false}
+            toggleSidebar={toggleSidebar}
+          />
 
-        {/* Overlay for mobile */}
-        {isOpen && (
-          <div className="sidebar-overlay" onClick={toggleSidebar}></div>
-        )}
+          {/* Overlay for mobile */}
+          {isOpen && (
+            <div className="sidebar-overlay" onClick={toggleSidebar}></div>
+          )}
 
-        <div
-          className={`main-body-container ${
-            !isOpen ? "landing-page-content" : "landing-page-content-collapsed"
-          }`}
-        >
-          <div className="container-xxl">
-            <Outlet />
+          <div
+            className={`main-body-container ${
+              !isOpen
+                ? "landing-page-content"
+                : "landing-page-content-collapsed"
+            }`}
+          >
+            <div className="container-xxl">
+              <Outlet />
+            </div>
           </div>
         </div>
-      </div>
 
-      <ToastApp
-        show={toast.show}
-        message={toast.message}
-        variant={toast.variant}
-        onClose={() => dispatch(clearToast())}
-      />
-    </div>
+        <ToastApp
+          show={toast.show}
+          message={toast.message}
+          variant={toast.variant}
+          onClose={() => dispatch(clearToast())}
+        />
+      </div>
+      <MealFooterApp />
+    </>
   );
 };
 
