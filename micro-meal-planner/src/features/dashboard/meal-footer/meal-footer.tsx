@@ -79,11 +79,6 @@ const MealFooterApp = () => {
       <div className="app-footer-menu overflow-hidden flex-column-fluid">
         <div className="app-footer-wrapper">
           <div className="hover-scroll-y my-5 mx-3">
-            <div className="footer-header mb-5">
-              <div className="d-flex align-items-center justify-content-between p-5">
-                <h2 className="m-0">Meal Planner</h2>
-              </div>
-            </div>
             <div className="menu menu-column menu-rounded menu-sub-indention fw-semibold">
               {menuState.map((route) => (
                 <div
@@ -96,7 +91,11 @@ const MealFooterApp = () => {
                   }
                 >
                   {route.subRoutes && (
-                    <NavLink className="menu-link" to={route.path} title={route.title}>
+                    <NavLink
+                      className="menu-link"
+                      to={route.path}
+                      title={route.title}
+                    >
                       <span className="menu-icon">
                         <i className={route.icon}></i>
                       </span>
