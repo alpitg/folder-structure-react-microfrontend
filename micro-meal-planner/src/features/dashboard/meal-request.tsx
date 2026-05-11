@@ -120,7 +120,7 @@ const MealRequestApp = () => {
         </div> */}
       </div>
 
-      {true? (
+      {submitted && !showPlanner ? (
         <div className="col-12">
           <div className="card shadow-sm border-dashed border-gray-300">
             <div className="card-body d-flex flex-column align-items-center justify-content-center py-20">
