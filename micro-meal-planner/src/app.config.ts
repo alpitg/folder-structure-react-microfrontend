@@ -8,9 +8,15 @@ let environment = {
   logo: "/static/media/img/logo.png",
   api: {
     baseUrl: "",
+    frontendBaseUrl: "",
     apiVersion: "",
     profile: {
       mealPlanner: "",
+    },
+    mealPlanner: {
+      mealRequest: "",
+      availableIngredients: "",
+      weeklyPlan: "",
     },
     administration: {
       organizationUnits: {
@@ -23,7 +29,7 @@ let environment = {
           list: "",
           add: "",
           remove: "",
-        }
+        },
       },
       roles: {
         list: "",

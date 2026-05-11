@@ -1,22 +1,7 @@
-interface Meal {
-  name: string;
-  type: string;
-  servings: number;
-  cookingTime: number;
-  ingredients: string[];
-  recipe: string[];
-}
-
-interface MaidModeOptions {
-  enabled: boolean;
-  language: "none" | "hindi" | "marathi";
-  lessSpicy: boolean;
-  easyCook: boolean;
-}
-
-interface MealPlannerProps {
-  maidMode?: MaidModeOptions;
-}
+import type {
+  Meal,
+  MealPlannerProps,
+} from "../meal-planner/interfaces/meal-planner.model";
 
 const meals: Meal[] = [
   {

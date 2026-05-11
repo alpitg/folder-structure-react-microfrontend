@@ -1,23 +1,16 @@
+import type {
+  IMealRequest,
+  IMealRequestOptions,
+  PlanOption,
+} from "../meal-planner/interfaces/meal-request.model";
 import { useEffect, useState } from "react";
 
 import MealPlannerApp from "./meal-planner";
-
-type PlanOption = "today" | "breakfast" | "lunch" | "dinner";
-
-interface RequestOptions {
-  vegNonVeg: "veg" | "non-veg";
-  region: "south" | "north";
-  highProtein: boolean;
-  quickCooking: boolean;
-  maidModeEnabled: boolean;
-  maidVoiceLanguage: "none" | "hindi" | "marathi";
-  maidLessSpicy: boolean;
-  maidEasyCook: boolean;
-}
+import { useCreateMealRequestMutation } from "../../app/redux/meal-planner/meal-request.api";
 
 const MealRequestApp = () => {
   const [planOption, setPlanOption] = useState<PlanOption>("today");
-  const [options, setOptions] = useState<RequestOptions>({
+  const [options, setOptions] = useState<IMealRequestOptions>({
     vegNonVeg: "veg",
     region: "north",
     highProtein: false,
@@ -27,22 +20,12 @@ const MealRequestApp = () => {
     maidLessSpicy: false,
     maidEasyCook: false,
   });
+
+  const [createMealRequest, { isLoading: isPlanLoading }] =
+    useCreateMealRequestMutation();
+
   const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [showPlanner, setShowPlanner] = useState(false);
-
-  useEffect(() => {
-    if (!loading) return;
-
-    const timer = window.setTimeout(() => {
-      setLoading(false);
-      setShowPlanner(true);
-    }, 2000);
-
-    return () => {
-      window.clearTimeout(timer);
-    };
-  }, [loading]);
 
   const handlePlanChange = (value: PlanOption) => {
     setPlanOption(value);
@@ -63,16 +46,43 @@ const MealRequestApp = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setSubmitted(true);
+  //   setShowPlanner(false);
+  //   setLoading(true);
+  // };
+
+  const wait = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setShowPlanner(false);
-    setLoading(true);
+
+    try {
+      setSubmitted(true);
+      setShowPlanner(false);
+
+      const payload: IMealRequest = {
+        planOption,
+        ...options,
+      };
+
+      const response = await createMealRequest(payload).unwrap();
+      // additional 2 second loader
+      await wait(2000);
+
+      setShowPlanner(true);
+      console.log("Meal Request Success:", response);
+    } catch (error) {
+      console.error("Meal Request Error:", error);
+
+      setSubmitted(false);
+    }
   };
 
   const handleReset = () => {
     setSubmitted(false);
-    setLoading(false);
     setShowPlanner(false);
     setPlanOption("today");
     setOptions({
@@ -107,7 +117,7 @@ const MealRequestApp = () => {
         </div> */}
       </div>
 
-      {!showPlanner ? (
+      {!showPlanner || isPlanLoading ? (
         <div className="row gy-5">
           <div className="col-xl-7">
             <div className="card shadow-sm">
@@ -377,7 +387,7 @@ const MealRequestApp = () => {
             </div>
           </div>
 
-          {submitted && loading && (
+          {submitted && !showPlanner && (
             <div className="col-12">
               <div className="card shadow-sm border-dashed border-gray-300">
                 <div className="card-body d-flex flex-column align-items-center justify-content-center py-12">

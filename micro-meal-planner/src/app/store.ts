@@ -3,14 +3,15 @@ import catalogReducer from "./redux/catalog/catalog.reducer";
 import { configureStore } from "@reduxjs/toolkit";
 import coreReducer from "./redux/core/core.reducer";
 import { customersApi } from "./redux/customer/customer.api";
+import invoiceReducer from "./redux/finance/invoice/invoice.slice";
 import masterReducer from "./redux/master/master.reducer";
+import { mealRequestApi } from "./redux/meal-planner/meal-request.api";
 import { ordersApi } from "./redux/sales/order/order.api";
 import { organizationUnitsApi } from "./redux/administration/organization-units/organization-units.api";
 import { productsApi } from "./redux/catalog/product/product.api";
 import { rolesApi } from "./redux/administration/roles/roles.api";
 import salesReducer from "./redux/sales/sales.reducer";
 import { usersApi } from "./redux/administration/users/users.api";
-import invoiceReducer from "./redux/finance/invoice/invoice.slice";
 
 const store = configureStore({
   reducer: {
@@ -18,6 +19,8 @@ const store = configureStore({
     master: masterReducer,
     sales: salesReducer,
     catalog: catalogReducer,
+
+    [mealRequestApi.reducerPath]: mealRequestApi.reducer,
 
     // administration
     [authApi.reducerPath]: authApi.reducer,
@@ -35,6 +38,9 @@ const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: false, // Disable serializable check for non-serializable data
     }).concat(
+      // meal planner
+      mealRequestApi.middleware,
+
       // administration
       authApi.middleware,
       organizationUnitsApi.middleware,
@@ -43,7 +49,7 @@ const store = configureStore({
 
       productsApi.middleware,
       ordersApi.middleware,
-      customersApi.middleware
+      customersApi.middleware,
     ),
 
   devTools: process.env.NODE_ENV !== "production", // Enable Redux DevTools in development mode

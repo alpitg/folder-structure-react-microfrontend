@@ -6,7 +6,13 @@
   "logo": "/static/media/img/logo.png",
   "api": {
     "baseUrl": "http://localhost:8000",
+    "frontendBaseUrl": "",
     "apiVersion": "v1",
+    "mealPlanner": {
+      "mealRequest": "/api/meal-planner/meal-requests.json",
+      "availableIngredients": "/api/meal-planner/available-ingredients",
+      "weeklyPlan": "/api/meal-planner/weekly-plans"
+    },
     "administration": {
       "organizationUnits": {
         "list": "/api/organization-units",
