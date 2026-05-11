@@ -311,7 +311,7 @@ const MealRequestApp = () => {
             </div>
           </div>
 
-          <div className="col-xl-5">
+          <div className="col-xl-5 d-none d-md-block">
             <div className="card shadow-sm h-100">
               <div className="card-header border-0 bg-light">
                 <h5 className="fw-bold text-gray-800 mb-0">Preview</h5>

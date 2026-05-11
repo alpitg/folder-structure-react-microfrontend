@@ -78,7 +78,7 @@ const MealFooterApp = () => {
     <div className="meal-footer-app">
       <div className="app-footer-menu overflow-hidden flex-column-fluid">
         <div className="app-footer-wrapper">
-          <div className="hover-scroll-y my-5 mx-3">
+          <div className="hover-scroll-y my-2 mx-2">
             <div className="menu menu-column menu-rounded menu-sub-indention fw-semibold">
               {menuState.map((route) => (
                 <div
