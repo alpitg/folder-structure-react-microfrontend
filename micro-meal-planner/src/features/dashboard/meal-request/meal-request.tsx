@@ -430,17 +430,15 @@ const MealRequestApp = () => {
                       <p className="fs-6 text-gray-600 mb-0">
                         Requested:{" "}
                         {planOption === "today" ? "Today's plan" : planOption} •{" "}
-                        {options.vegNonVeg === "veg" ? "Veg" : "Non-Veg"} •{" "}
-                        {options.region === "north"
-                          ? "North Indian"
-                          : "South Indian"}{" "}
-                        {options.highProtein ? "• High protein" : ""}{" "}
-                        {options.quickCooking ? "• Quick cooking" : ""}
-                        {options.maidModeEnabled
-                          ? ` • Maid Mode (${options.maidVoiceLanguage !== "none" ? (options.maidVoiceLanguage === "hindi" ? "Hindi" : "Marathi") : "voice optional"})`
+                        {options?.vegNonVeg === "veg" ? "Veg" : "Non-Veg"} •{" "}
+                        {options?.region}
+                        {options?.highProtein ? "• High protein" : ""}
+                        {options?.quickCooking ? "• Quick cooking" : ""}
+                        {options?.maidModeEnabled
+                          ? ` • Maid Mode (${options?.maidVoiceLanguage !== "none" ? (options?.maidVoiceLanguage === "hindi" ? "Hindi" : "Marathi") : "voice optional"})`
                           : ""}
-                        {options.maidLessSpicy ? " • Less spicy" : ""}{" "}
-                        {options.maidEasyCook ? " • Easy to cook" : ""}
+                        {options?.maidLessSpicy ? " • Less spicy" : ""}
+                        {options?.maidEasyCook ? " • Easy to cook" : ""}
                       </p>
                     </div>
                     <button
