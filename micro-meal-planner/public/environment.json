@@ -1,5 +1,5 @@
 {
-  "version": "1.0",
+  "version": "1.0.0",
   "name": "Micro Meal Planner",
   "description": "A microservice for managing meal-planner data",
   "author": "Meal Planner Team",
