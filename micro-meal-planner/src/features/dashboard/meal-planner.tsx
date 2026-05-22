@@ -49,13 +49,13 @@ const MealPlannerApp = ({
               <div className="card-header border-0 bg-light">
                 <div className="d-flex align-items-center">
                   <div>
-                    <span className="badge bg-light-success text-success fw-semibold me-2">
+                    <span className="badge bg-light-primary text-primary fw-semibold me-2">
                       {meal.type}
                     </span>
                     <h5 className="fw-bold text-gray-800 mb-0">{meal.name}</h5>
                   </div>
                 </div>
-                <button
+                {/* <button
                   type="button"
                   className={`btn btn-sm ${
                     meal?.isPinned ? "btn-warning" : "btn-outline-secondary"
@@ -64,7 +64,7 @@ const MealPlannerApp = ({
                 >
                   <i className="bi bi-pin-angle-fill me-1"></i>
                   {meal?.isPinned ? "Pinned" : "Pin"}
-                </button>
+                </button> */}
               </div>
 
               <div className="card-body">

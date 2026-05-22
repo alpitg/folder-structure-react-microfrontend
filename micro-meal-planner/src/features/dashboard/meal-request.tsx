@@ -162,11 +162,12 @@ const MealRequestApp = () => {
         ...options,
       };
 
-      // const response = await createMealRequest(payload).unwrap();
+      const response = await createMealRequest(payload).unwrap();
+      // const response = sampleMeals; // NOTE: use this for testing without backend
+
       // additional 2 second loader
       await wait(2000);
 
-      const response = sampleMeals;
 
       console.log("Meal Request Success:", response);
       setMeals(response || []);
