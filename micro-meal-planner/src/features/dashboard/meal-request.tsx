@@ -11,95 +11,6 @@ import { useCreateMealRequestMutation } from "../../app/redux/meal-planner/meal-
 import { useCreateStickyNoteMutation } from "../../app/redux/meal-planner/sticky-notes.api";
 
 const MealRequestApp = () => {
-  const sampleMeals: Meal[] = [
-    {
-      name: "Besan Chilla",
-      type: "Breakfast",
-      servings: 2,
-      cookingTime: 25,
-      ingredients: [
-        "besan (gram flour) - 1 cup",
-        "water - as needed",
-        "salt - to taste",
-        "turmeric powder - 1/4 tsp",
-        "carom seeds (ajwain) - 1/4 tsp",
-        "finely chopped onion - 1 small",
-        "finely chopped green chili - 1 (optional)",
-        "oil - 1 tbsp",
-      ],
-      recipe: [
-        "Mix besan, salt, turmeric, and ajwain in a bowl.",
-        "Add water gradually to make a smooth batter of pouring consistency.",
-        "Add chopped onions and green chili to the batter and mix well.",
-        "Heat a non-stick pan and grease with oil.",
-        "Pour a ladle of batter and spread it like a pancake.",
-        "Cook on medium heat until golden brown on both sides.",
-        "Serve hot with green chutney or yogurt.",
-      ],
-      youtubeLink: [
-        "https://www.youtube.com/watch?v=example1",
-        "https://www.youtube.com/watch?v=example2",
-      ],
-    },
-    {
-      name: "Dal Tadka with Jeera Rice",
-      type: "Lunch",
-      servings: 2,
-      cookingTime: 45,
-      ingredients: [
-        "toor dal - 1 cup",
-        "turmeric powder - 1/2 tsp",
-        "salt - to taste",
-        "ghee - 1 tbsp",
-        "cumin seeds - 1 tsp",
-        "garlic cloves (chopped) - 3",
-        "red chili - 1",
-        "onion (optional) - 1 small",
-        "tomato - 1 medium",
-        "basmati rice - 1 cup",
-        "cumin seeds (for rice) - 1 tsp",
-        "water - as needed",
-      ],
-      recipe: [
-        "Wash and soak toor dal for 15 minutes.",
-        "Pressure cook dal with turmeric powder, salt and water until soft.",
-        "Heat ghee in a pan, add cumin seeds, garlic, red chili and chopped onion.",
-        "Add chopped tomato and cook until soft.",
-        "Pour this tadka over cooked dal and mix well.",
-        "Wash rice and cook with cumin seeds and water until fluffy.",
-        "Serve dal tadka with jeera rice.",
-      ],
-      youtubeLink: [
-        "https://www.youtube.com/watch?v=example1",
-        "https://www.youtube.com/watch?v=example2",
-      ],
-    },
-    {
-      name: "Aloo Methi with Roti",
-      type: "Dinner",
-      servings: 2,
-      cookingTime: 40,
-      ingredients: [
-        "fresh fenugreek leaves (methi) - 1 cup chopped",
-        "potatoes - 2 medium, peeled and diced",
-        "oil - 2 tbsp",
-        "cumin seeds - 1 tsp",
-        "turmeric powder - 1/2 tsp",
-        "red chili powder - 1/2 tsp",
-        "salt - to taste",
-        "whole wheat flour - 2 cups",
-        "water - as needed",
-      ],
-      recipe: [
-        "Heat oil in a pan, add cumin seeds and let them splutter.",
-        "Add diced potatoes and turmeric powder, sauté for 5 minutes.",
-        "Add chopped methi leaves, salt and red chili powder, cook covered on low heat until potatoes are tender.",
-        "For roti, knead whole wheat flour with water to make a soft dough.",
-        "Divide dough into balls, roll into thin circles, and cook on hot tawa until brown spots appear on both sides.",
-        "Serve aloo methi with hot roti.",
-      ],
-    },
-  ];
 
   const [planOption, setPlanOption] = useState<PlanOption>("today");
   const [options, setOptions] = useState<IMealRequestOptions>({
@@ -163,7 +74,6 @@ const MealRequestApp = () => {
       };
 
       const response = await createMealRequest(payload).unwrap();
-      // const response = sampleMeals; // NOTE: use this for testing without backend
 
       // additional 2 second loader
       await wait(2000);

@@ -11,7 +11,7 @@ const MealPlannerApp = ({
     easyCook: false,
   },
   meals = [],
-    handlePin = () => {},
+  handlePin = () => {},
 }: MealPlannerProps) => {
   const maidModeEnabled = maidMode.enabled;
 
@@ -55,7 +55,7 @@ const MealPlannerApp = ({
                     <h5 className="fw-bold text-gray-800 mb-0">{meal.name}</h5>
                   </div>
                 </div>
-                {/* <button
+                <button
                   type="button"
                   className={`btn btn-sm ${
                     meal?.isPinned ? "btn-warning" : "btn-outline-secondary"
@@ -64,7 +64,7 @@ const MealPlannerApp = ({
                 >
                   <i className="bi bi-pin-angle-fill me-1"></i>
                   {meal?.isPinned ? "Pinned" : "Pin"}
-                </button> */}
+                </button>
               </div>
 
               <div className="card-body">
