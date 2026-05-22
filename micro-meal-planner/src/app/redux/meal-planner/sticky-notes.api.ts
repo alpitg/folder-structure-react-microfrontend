@@ -12,15 +12,28 @@ export const stickyNotesApi = createApi({
   reducerPath: "stickyNotesApi",
   baseQuery,
   endpoints: (builder) => ({
+    // ✅ GET STICKY NOTE
     getStickyNotes: builder.query<StickyNote[], void>({
       query: () => ({
         url:
           GetEnvConfig()?.api?.baseUrl +
-          GetEnvConfig()?.api?.mealPlanner?.stickyNotes, // Adjust path as needed
+          GetEnvConfig()?.api?.mealPlanner?.stickyNotes,
         method: "GET",
+      }),
+    }),
+
+    // ✅ CREATE STICKY NOTE
+    createStickyNote: builder.mutation<StickyNote, Partial<StickyNote>>({
+      query: (newNote) => ({
+        url:
+          GetEnvConfig()?.api?.baseUrl +
+          GetEnvConfig()?.api?.mealPlanner?.stickyNotes,
+        method: "POST",
+        body: newNote,
       }),
     }),
   }),
 });
 
-export const { useGetStickyNotesQuery } = stickyNotesApi;
+export const { useGetStickyNotesQuery, useCreateStickyNoteMutation } =
+  stickyNotesApi;

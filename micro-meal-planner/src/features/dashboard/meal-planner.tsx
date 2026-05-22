@@ -11,6 +11,7 @@ const MealPlannerApp = ({
     easyCook: false,
   },
   meals = [],
+    handlePin = () => {},
 }: MealPlannerProps) => {
   const maidModeEnabled = maidMode.enabled;
 
@@ -45,7 +46,6 @@ const MealPlannerApp = ({
         {meals.map((meal, index) => (
           <div key={index} className="col-lg-4">
             <div className="card h-100 shadow-sm">
-
               <div className="card-header border-0 bg-light">
                 <div className="d-flex align-items-center">
                   <div>
@@ -55,15 +55,17 @@ const MealPlannerApp = ({
                     <h5 className="fw-bold text-gray-800 mb-0">{meal.name}</h5>
                   </div>
                 </div>
+                <button
+                  type="button"
+                  className={`btn btn-sm ${
+                    meal?.isPinned ? "btn-warning" : "btn-outline-secondary"
+                  }`}
+                  onClick={() => handlePin(meal)}
+                >
+                  <i className="bi bi-pin-angle-fill me-1"></i>
+                  {meal?.isPinned ? "Pinned" : "Pin"}
+                </button>
               </div>
-
-              {/* Show soak daal info for chilla recipes */}
-              {meal.type && meal.type.toLowerCase().includes("chilla") && (
-                <div className="alert alert-warning d-flex align-items-center gap-2 m-3">
-                  <i className="bi bi-info-circle-fill text-warning"></i>
-                  <span className="fs-7">Soak mixed daals for 6 hours before making chilla for best texture.</span>
-                </div>
-              )}
 
               <div className="card-body">
                 {/* Cooking Info */}
@@ -99,51 +101,71 @@ const MealPlannerApp = ({
                     {meal.ingredients.map((ingredient, idx) => (
                       <span
                         key={idx}
-                        className="badge bg-light-info text-info fw-semibold"
+                        className="badge bg-light-success text-success fw-semibold"
                       >
                         {ingredient}
                       </span>
                     ))}
                   </div>
                 </div>
-
-                {/* Recipe Steps */}
-                <div className="mb-4">
-                  <h6 className="fw-bold text-gray-800 mb-3">Recipe Steps</h6>
-                  <div className="fs-7 text-gray-600 lh-lg">
-                    {meal.recipe.map((step, idx) => (
-                      <div key={idx} className="mb-2">
-                        {formatRecipeStep(step)}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Easy to Cook Badge */}
-                <div className="p-3 bg-light-success rounded">
-                  <div className="d-flex align-items-center flex-wrap gap-2">
-                    <span className="badge bg-success me-2">
-                      {maidModeEnabled && maidMode.easyCook
-                        ? "Easy to cook today"
-                        : "Easy"}
-                    </span>
-                    <span className="fs-7 fw-semibold text-success">
-                      Perfect for home cooking
-                      {maidModeEnabled ? " with maid-friendly steps" : ""}
-                    </span>
-                    {maidModeEnabled && maidMode.lessSpicy && (
-                      <span className="badge bg-warning text-dark">
-                        Less spicy
-                      </span>
-                    )}
-                  </div>
-                </div>
               </div>
-
               <div className="card-footer border-0 pt-0">
-                <button className="btn btn-sm btn-primary w-100">
-                  View Recipe Details
-                </button>
+                <div className="row g-3">
+                  {meal?.youtubeLink?.map((link, idx) => (
+                    <div
+                      key={idx}
+                      className="col-12 col-sm-6 col-lg-6 col-xl-6"
+                    >
+                      <div className="p-3 border rounded h-100 d-flex align-items-start gap-2">
+                        <div className="flex-shrink-0">
+                          <div className="avatar-sm">
+                            <span className="avatar-title bg-light text-danger rounded">
+                              <i className="bi bi-youtube font-16 text-danger"></i>
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Content */}
+                        <div className="flex-grow-1">
+                          <a
+                            href={link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-muted text-decoration-none d-block"
+                          >
+                            Watch Recipe {idx + 1}
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="recipe-details mt-3">
+                  <button
+                    className="btn btn-sm btn-primary w-100"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target={`#recipeCollapse-${index}`}
+                    aria-expanded="false"
+                    aria-controls={`recipeCollapse-${index}`}
+                  >
+                    View Recipe Details
+                  </button>
+
+                  {/* Recipe Steps */}
+                  <div className="collapse" id={`recipeCollapse-${index}`}>
+                    <div className="mb-4 mt-3">
+                      <div className="fs-7 text-gray-600 lh-lg">
+                        {meal.recipe.map((step, idx) => (
+                          <div key={idx} className="mb-2">
+                            {formatRecipeStep(step)}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

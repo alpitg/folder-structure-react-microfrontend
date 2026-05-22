@@ -5,6 +5,8 @@ export interface Meal {
   cookingTime: number;
   ingredients: string[];
   recipe: string[];
+  youtubeLink?: string[];
+  isPinned?: boolean;
 }
 
 export interface MaidModeOptions {
@@ -17,4 +19,5 @@ export interface MaidModeOptions {
 export interface MealPlannerProps {
   maidMode?: MaidModeOptions;
   meals?: Meal[];
+  handlePin?: (meal: Meal) => void;
 }
