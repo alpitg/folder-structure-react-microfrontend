@@ -5,8 +5,13 @@ export interface Meal {
   cookingTime: number;
   ingredients: string[];
   recipe?: string[];
-  youtubeLink?: string[];
+  youtubeLink?: YoutubeLink[];
   isPinned?: boolean;
+}
+
+export interface YoutubeLink {
+  title?: string;
+  url?: string;
 }
 
 export interface MaidModeOptions {

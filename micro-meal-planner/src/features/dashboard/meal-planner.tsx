@@ -111,7 +111,7 @@ const MealPlannerApp = ({
               </div>
               <div className="card-footer border-0 pt-0">
                 <div className="row g-3">
-                  {meal?.youtubeLink?.map((link, idx) => (
+                  {meal?.youtubeLink?.map((yt, idx) => (
                     <div
                       key={idx}
                       className="col-12 col-sm-6 col-lg-6 col-xl-6"
@@ -128,12 +128,12 @@ const MealPlannerApp = ({
                         {/* Content */}
                         <div className="flex-grow-1">
                           <a
-                            href={link}
+                            href={yt?.url}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-muted text-decoration-none d-block"
                           >
-                            Watch Recipe {idx + 1}
+                            {yt?.title}
                           </a>
                         </div>
                       </div>
