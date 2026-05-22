@@ -1,14 +1,16 @@
+import "./meal-request.scss";
+
 import type {
   IMealRequest,
   IMealRequestOptions,
   PlanOption,
-} from "../meal-planner/interfaces/meal-request.model";
+} from "../../meal-planner/interfaces/meal-request.model";
 import { useEffect, useState } from "react";
 
-import type { Meal } from "../meal-planner/interfaces/meal-planner.model";
-import MealPlannerApp from "./meal-planner";
-import { useCreateMealRequestMutation } from "../../app/redux/meal-planner/meal-request.api";
-import { useCreateStickyNoteMutation } from "../../app/redux/meal-planner/sticky-notes.api";
+import type { Meal } from "../../meal-planner/interfaces/meal-planner.model";
+import MealPlannerApp from "../meal-planner";
+import { useCreateMealRequestMutation } from "../../../app/redux/meal-planner/meal-request.api";
+import { useCreateStickyNoteMutation } from "../../../app/redux/meal-planner/sticky-notes.api";
 
 const MealRequestApp = () => {
   const cuisinePreferences = [
@@ -124,7 +126,7 @@ const MealRequestApp = () => {
   };
 
   return (
-    <div>
+    <div className="meal-request-app">
       <div className="d-flex flex-column flex-md-row justify-content-between align-items-start gap-4 mb-2">
         <div>
           <h1 className="fw-semibold text-gray-800 mb-2">Meal Request</h1>
@@ -144,8 +146,8 @@ const MealRequestApp = () => {
       </div>
 
       {submitted && !showPlanner ? (
-        <div className="col-12">
-          <div className="card shadow-sm border-dashed border-gray-300">
+        <div className="col-12 ai-border-wrap">
+          <div className="card ai-loading-card border-0">
             <div className="card-body d-flex flex-column align-items-center justify-content-center py-20">
               <div className="spinner-border text-primary mb-4" role="status">
                 <span className="visually-hidden">Loading...</span>

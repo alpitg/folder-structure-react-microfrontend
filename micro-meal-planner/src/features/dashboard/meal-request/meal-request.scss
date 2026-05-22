@@ -1,0 +1,42 @@
+.meal-request-app {
+  .ai-border-wrap {
+    position: relative;
+    border-radius: 20px;
+    padding: 2px;
+    overflow: hidden;
+  }
+
+  /* Rotating small glow border */
+  .ai-border-wrap::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+
+    background: conic-gradient(
+      transparent 0deg,
+      transparent 320deg,
+      #0d6efd 340deg,
+      #4dabff 350deg,
+      transparent 360deg
+    );
+
+    animation: rotateBorder 2s linear infinite;
+  }
+
+  /* Inner card */
+  .ai-loading-card {
+    position: relative;
+    z-index: 1;
+    border-radius: 18px;
+    background: #fff;
+  }
+
+  @keyframes rotateBorder {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}

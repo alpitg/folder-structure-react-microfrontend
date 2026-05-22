@@ -50,7 +50,7 @@ const OrderViewApp = lazy(
   () => import("../features/store/sales/order/view/order-view"),
 );
 
-const MealRequest = lazy(() => import("../features/dashboard/meal-request"));
+const MealRequest = lazy(() => import("../features/dashboard/meal-request/meal-request"));
 const AvailableIngredients = lazy(
   () => import("../features/dashboard/available-ingredients"),
 );
