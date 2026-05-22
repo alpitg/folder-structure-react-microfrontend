@@ -116,7 +116,7 @@ const MealPlannerApp = ({
                       key={idx}
                       className="col-12 col-sm-6 col-lg-6 col-xl-6"
                     >
-                      <div className="p-3 border rounded h-100 d-flex align-items-start gap-2">
+                      <div className="p-3 h-100 d-flex align-items-start gap-2">
                         <div className="flex-shrink-0">
                           <div className="avatar-sm">
                             <span className="avatar-title bg-light text-danger rounded">
