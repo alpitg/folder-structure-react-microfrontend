@@ -201,137 +201,182 @@ const MealRequestApp = () => {
                         </div>
                       </div>
 
-                      <div className="mb-6">
-                        <label className="form-label fw-semibold text-gray-800 mb-3 d-block">
-                          Customize request (optional)
-                        </label>
-                        <div className="row gx-3 gy-3">
-                          <div className="col-md-6">
-                            <label className="form-label fw-semibold text-gray-700 mb-2">
-                              Veg / Non-Veg
-                            </label>
-                            <select
-                              name="vegNonVeg"
-                              value={options.vegNonVeg}
-                              onChange={handleOptionChange}
-                              className="form-select form-select-solid"
+                      <div
+                        className="accordion mb-6"
+                        id="mealCustomizationAccordion"
+                      >
+                        <div className="accordion-item border rounded">
+                          {/* Accordion Header */}
+                          <h2
+                            className="accordion-header"
+                            id="customizationHeading"
+                          >
+                            <button
+                              className="accordion-button collapsed text-gray-800"
+                              type="button"
+                              data-bs-toggle="collapse"
+                              data-bs-target="#customizationCollapse"
+                              aria-expanded="false"
+                              aria-controls="customizationCollapse"
                             >
-                              <option value="veg">Veg</option>
-                              <option value="non-veg">Non-Veg</option>
-                            </select>
-                          </div>
-                          <div className="col-md-6">
-                            <label className="form-label fw-semibold text-gray-700 mb-2">
-                              Cuisine Preference
-                            </label>
-                            <select
-                              name="region"
-                              value={options.region}
-                              onChange={handleOptionChange}
-                              className="form-select form-select-solid"
-                            >
-                              {cuisinePreferences?.map((cuisine) => (
-                                <option key={cuisine} value={cuisine}>
-                                  {cuisine}
-                                </option>
-                              ))}
-                            </select>
+                              Customize Request (Optional)
+                            </button>
+                          </h2>
+
+                          {/* Accordion Body */}
+                          <div
+                            id="customizationCollapse"
+                            className="accordion-collapse collapse"
+                            aria-labelledby="customizationHeading"
+                            data-bs-parent="#mealCustomizationAccordion"
+                          >
+                            <div className="accordion-body">
+                              {/* Veg / Cuisine */}
+                              <div className="row gx-3 gy-3">
+                                <div className="col-md-6">
+                                  <label className="form-label fw-semibold text-gray-700 mb-2">
+                                    Veg / Non-Veg
+                                  </label>
+
+                                  <select
+                                    name="vegNonVeg"
+                                    value={options.vegNonVeg}
+                                    onChange={handleOptionChange}
+                                    className="form-select form-select-solid"
+                                  >
+                                    <option value="veg">Veg</option>
+                                    <option value="non-veg">Non-Veg</option>
+                                  </select>
+                                </div>
+
+                                <div className="col-md-6">
+                                  <label className="form-label fw-semibold text-gray-700 mb-2">
+                                    Cuisine Preference
+                                  </label>
+
+                                  <select
+                                    name="region"
+                                    value={options.region}
+                                    onChange={handleOptionChange}
+                                    className="form-select form-select-solid"
+                                  >
+                                    {cuisinePreferences?.map((cuisine) => (
+                                      <option key={cuisine} value={cuisine}>
+                                        {cuisine}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                              </div>
+
+                              {/* Protein / Quick */}
+                              <div className="row gx-3 gy-3 mt-3">
+                                <div className="col-md-6">
+                                  <label className="form-check form-check-custom form-check-solid">
+                                    <input
+                                      className="form-check-input"
+                                      type="checkbox"
+                                      name="highProtein"
+                                      checked={options.highProtein}
+                                      onChange={handleOptionChange}
+                                    />
+
+                                    <span className="form-check-label ms-3">
+                                      High protein
+                                    </span>
+                                  </label>
+                                </div>
+
+                                <div className="col-md-6">
+                                  <label className="form-check form-check-custom form-check-solid">
+                                    <input
+                                      className="form-check-input"
+                                      type="checkbox"
+                                      name="quickCooking"
+                                      checked={options.quickCooking}
+                                      onChange={handleOptionChange}
+                                    />
+
+                                    <span className="form-check-label ms-3">
+                                      Quick cooking
+                                    </span>
+                                  </label>
+                                </div>
+                              </div>
+
+                              {/* Maid Mode */}
+                              <div className="mt-4">
+                                <label className="form-check form-check-custom form-check-solid">
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="maidModeEnabled"
+                                    checked={options.maidModeEnabled}
+                                    onChange={handleOptionChange}
+                                  />
+
+                                  <span className="form-check-label ms-3">
+                                    Enable Maid Mode
+                                  </span>
+                                </label>
+                              </div>
+
+                              {/* Maid Mode Options */}
+                              {options.maidModeEnabled && (
+                                <div className="row gx-3 gy-4 mt-4">
+                                  <div className="col-md-6">
+                                    <label className="form-label fw-semibold text-gray-700 mb-2">
+                                      Voice instructions
+                                    </label>
+
+                                    <select
+                                      name="maidVoiceLanguage"
+                                      value={options.maidVoiceLanguage}
+                                      onChange={handleOptionChange}
+                                      className="form-select form-select-solid"
+                                    >
+                                      <option value="none">No voice</option>
+                                      <option value="hindi">Hindi</option>
+                                      <option value="marathi">Marathi</option>
+                                    </select>
+                                  </div>
+
+                                  <div className="col-md-6">
+                                    <label className="form-check form-check-custom form-check-solid d-flex align-items-center justify-content-between h-100">
+                                      <span className="form-check-label">
+                                        Less spicy option
+                                      </span>
+
+                                      <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        name="maidLessSpicy"
+                                        checked={options.maidLessSpicy}
+                                        onChange={handleOptionChange}
+                                      />
+                                    </label>
+                                  </div>
+
+                                  <div className="col-12">
+                                    <label className="form-check form-check-custom form-check-solid">
+                                      <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        name="maidEasyCook"
+                                        checked={options.maidEasyCook}
+                                        onChange={handleOptionChange}
+                                      />
+
+                                      <span className="form-check-label ms-3">
+                                        Easy to cook today
+                                      </span>
+                                    </label>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </div>
-
-                        <div className="row gx-3 gy-3 mt-4">
-                          <div className="col-md-6">
-                            <label className="form-check form-check-custom form-check-solid">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="highProtein"
-                                checked={options.highProtein}
-                                onChange={handleOptionChange}
-                              />
-                              <span className="form-check-label ms-3">
-                                High protein
-                              </span>
-                            </label>
-                          </div>
-                          <div className="col-md-6">
-                            <label className="form-check form-check-custom form-check-solid">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="quickCooking"
-                                checked={options.quickCooking}
-                                onChange={handleOptionChange}
-                              />
-                              <span className="form-check-label ms-3">
-                                Quick cooking
-                              </span>
-                            </label>
-                          </div>
-                        </div>
-
-                        <div className="mt-5">
-                          <label className="form-check form-check-custom form-check-solid">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              name="maidModeEnabled"
-                              checked={options.maidModeEnabled}
-                              onChange={handleOptionChange}
-                            />
-                            <span className="form-check-label ms-3">
-                              Enable Maid Mode
-                            </span>
-                          </label>
-                        </div>
-
-                        {options.maidModeEnabled && (
-                          <div className="row gx-3 gy-4 mt-4">
-                            <div className="col-md-6">
-                              <label className="form-label fw-semibold text-gray-700 mb-2">
-                                Voice instructions
-                              </label>
-                              <select
-                                name="maidVoiceLanguage"
-                                value={options.maidVoiceLanguage}
-                                onChange={handleOptionChange}
-                                className="form-select form-select-solid"
-                              >
-                                <option value="none">No voice</option>
-                                <option value="hindi">Hindi</option>
-                                <option value="marathi">Marathi</option>
-                              </select>
-                            </div>
-                            <div className="col-md-6">
-                              <label className="form-check form-check-custom form-check-solid d-flex align-items-center justify-content-between">
-                                <span className="form-check-label ms-3">
-                                  Less spicy option
-                                </span>
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  name="maidLessSpicy"
-                                  checked={options.maidLessSpicy}
-                                  onChange={handleOptionChange}
-                                />
-                              </label>
-                            </div>
-                            <div className="col-12">
-                              <label className="form-check form-check-custom form-check-solid">
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  name="maidEasyCook"
-                                  checked={options.maidEasyCook}
-                                  onChange={handleOptionChange}
-                                />
-                                <span className="form-check-label ms-3">
-                                  Easy to cook today
-                                </span>
-                              </label>
-                            </div>
-                          </div>
-                        )}
                       </div>
 
                       <div className="d-flex flex-wrap gap-3">
@@ -355,7 +400,7 @@ const MealRequestApp = () => {
                 </div>
               </div>
 
-              <div className="col-xl-5 d-none d-md-block">
+              <div className="col-xl-5">
                 <div className="h-100">
                   <div className="card-body">
                     <div className="rounded p-4 bg-light">
