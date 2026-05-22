@@ -141,28 +141,15 @@ const MealPlannerApp = ({
                   ))}
                 </div>
 
+                {/* Recipe Steps */}
                 <div className="recipe-details mt-3">
-                  <button
-                    className="btn btn-sm btn-primary w-100"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target={`#recipeCollapse-${index}`}
-                    aria-expanded="false"
-                    aria-controls={`recipeCollapse-${index}`}
-                  >
-                    View Recipe Details
-                  </button>
-
-                  {/* Recipe Steps */}
-                  <div className="collapse" id={`recipeCollapse-${index}`}>
-                    <div className="mb-4 mt-3">
-                      <div className="fs-7 text-gray-600 lh-lg">
-                        {meal?.recipe?.map((step, idx) => (
-                          <div key={idx} className="mb-2">
-                            {formatRecipeStep(step)}
-                          </div>
-                        ))}
-                      </div>
+                  <div className="mb-4 mt-3">
+                    <div className="fs-7 text-gray-600 lh-lg">
+                      {meal?.recipe?.map((step, idx) => (
+                        <div key={idx} className="mb-2">
+                          {formatRecipeStep(step)}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
