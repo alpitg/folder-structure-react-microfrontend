@@ -167,9 +167,6 @@ const MealRequestApp = () => {
             <div className="row gy-5">
               <div className="col-xl-7">
                 <div className="card shadow-sm">
-                  <div className="card-header border-0 bg-light">
-                    <h5 className="fw-bold text-gray-800 mb-0">Request Form</h5>
-                  </div>
                   <div className="card-body">
                     <form onSubmit={handleSubmit}>
                       <div className="mb-6">
@@ -342,7 +339,8 @@ const MealRequestApp = () => {
                           type="submit"
                           className="btn btn-primary btn-sm fw-semibold"
                         >
-                          Submit Request
+                          <i className="bi bi-magic me-1"></i>
+                          Get Meal plan
                         </button>
                         <button
                           type="button"
@@ -358,80 +356,17 @@ const MealRequestApp = () => {
               </div>
 
               <div className="col-xl-5 d-none d-md-block">
-                <div className="card shadow-sm h-100">
-                  <div className="card-header border-0 bg-light">
-                    <h5 className="fw-bold text-gray-800 mb-0">Preview</h5>
-                  </div>
+                <div className="h-100">
                   <div className="card-body">
-                    <div className="mb-4">
-                      <span className="badge bg-primary me-2 text-uppercase">
-                        {planOption === "today" ? "Today’s plan" : planOption}
-                      </span>
-                    </div>
-                    <div className="mb-4">
-                      <h6 className="fw-semibold text-gray-800">
-                        Optional filters
-                      </h6>
-                      <div className="d-flex flex-column gap-2 mt-3">
-                        <span className="badge bg-light-info text-info">
-                          {options.vegNonVeg === "veg"
-                            ? "Vegetarian"
-                            : "Non-Vegetarian"}
-                        </span>
-                        <span className="badge bg-light-success text-success">
-                          {options.region === "north"
-                            ? "North Indian"
-                            : "South Indian"}
-                        </span>
-                        {options.highProtein && (
-                          <span className="badge bg-light-warning text-warning">
-                            High protein
-                          </span>
-                        )}
-                        {options.quickCooking && (
-                          <span className="badge bg-light-primary text-primary">
-                            Quick cooking
-                          </span>
-                        )}
-                        {options.maidModeEnabled && (
-                          <span className="badge bg-light-success text-success">
-                            Maid Mode enabled
-                          </span>
-                        )}
-                        {options.maidVoiceLanguage !== "none" && (
-                          <span className="badge bg-light-dark text-gray-700">
-                            {options.maidVoiceLanguage === "hindi"
-                              ? "Hindi voice"
-                              : "Marathi voice"}
-                          </span>
-                        )}
-                        {options.maidLessSpicy && (
-                          <span className="badge bg-light-warning text-warning">
-                            Less spicy
-                          </span>
-                        )}
-                        {options.maidEasyCook && (
-                          <span className="badge bg-light-primary text-primary">
-                            Easy to cook today
-                          </span>
-                        )}
-                        {!options.highProtein &&
-                          !options.quickCooking &&
-                          !options.maidModeEnabled && (
-                            <span className="text-gray-500 fs-7">
-                              No optional filters selected
-                            </span>
-                          )}
-                      </div>
-                    </div>
-                    <div className="rounded border border-dashed border-gray-300 p-4 bg-light">
+                    <div className="rounded p-4 bg-light">
                       <p className="fs-7 text-gray-600 mb-2">
                         What happens next?
                       </p>
                       <ul className="list-unstyled mb-0">
-                        <li className="mb-2">• Submit your meal request</li>
-                        <li className="mb-2">• Show loader for 2 seconds</li>
-                        <li className="mb-0">• Display the Meal Planner</li>
+                        <li className="mb-2">⚡ Create your meal request</li>
+                        <li className="mb-0">
+                          🥗 Instantly receive your personalized meal plan
+                        </li>
                       </ul>
                     </div>
                   </div>
