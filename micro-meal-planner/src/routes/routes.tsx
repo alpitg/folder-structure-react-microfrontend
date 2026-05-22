@@ -57,6 +57,9 @@ const AvailableIngredients = lazy(
 const WeeklyMealPlanner = lazy(
   () => import("../features/dashboard/weekly-planner/weekly-meal-planner"),
 );
+const StickyNotes = lazy(
+  () => import("../features/dashboard/sticky-notes/sticky-notes"),
+);
 
 const RoutesApp = () => {
   useAuthInit(); // run once at app start
@@ -69,6 +72,10 @@ const RoutesApp = () => {
             <Route
               path={ROUTE_URL.MEAL_PLANNER.BASE}
               element={<DashboardApp />}
+            />
+            <Route
+              path={ROUTE_URL.MEAL_PLANNER.STICKY_NOTES}
+              element={<StickyNotes />}
             />
             <Route path={ROUTE_URL.UI} element={<UIApp />} />
             <Route path={ROUTE_URL.APP_SETTINGS} element={<SettingsApp />} />

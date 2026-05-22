@@ -15,6 +15,7 @@ let environment = {
     },
     mealPlanner: {
       mealRequest: "",
+      stickyNotes: "",
       availableIngredients: "",
       weeklyPlan: "",
     },

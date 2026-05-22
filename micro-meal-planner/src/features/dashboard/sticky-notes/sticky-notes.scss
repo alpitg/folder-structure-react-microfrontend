@@ -1,0 +1,46 @@
+.sticky-notes-app {
+  .sticky-note {
+    width: 320px;
+    min-height: 120px;
+
+    background: #fff8a6;
+    border: 1px solid #f0e68c;
+    border-radius: 12px;
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease;
+  }
+
+  .sticky-note:hover {
+    transform: scale(1.03);
+  }
+
+  .rotate-left {
+    transform: rotate(-2deg);
+  }
+
+  .rotate-right {
+    transform: rotate(2deg);
+  }
+
+  .pin {
+    width: 18px;
+    height: 18px;
+
+    background: #ff5c5c;
+    border-radius: 50%;
+
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  .sticky-text {
+    font-size: 18px;
+    color: #4a4a4a;
+    line-height: 1.5;
+  }
+}

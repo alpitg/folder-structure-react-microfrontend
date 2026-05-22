@@ -1,6 +1,6 @@
 import type { Meal } from "./meal-planner.model";
 
-export type PlanOption = "today" | "breakfast" | "lunch" | "dinner";
+export type PlanOption = "today" | "breakfast" | "lunch" | "dinner" | "chilla";
 
 export interface IMealRequestOptions {
   vegNonVeg: "veg" | "non-veg";

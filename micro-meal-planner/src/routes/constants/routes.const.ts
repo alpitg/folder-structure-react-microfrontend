@@ -53,6 +53,7 @@ export const ROUTE_URL = {
   MEAL_PLANNER: {
     BASE: "",
     DASHBOARD: "/dashboard",
+    STICKY_NOTES: "/sticky-notes",
     AVAILABLE_INGREDIENTS: "/available-ingredients",
     MEAL_REQUEST: "/meal-request",
     WEEKLY_PLAN: "/weekly-plan",

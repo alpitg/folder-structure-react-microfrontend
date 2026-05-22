@@ -11,6 +11,14 @@ const MealFooterApp = () => {
 
   const routes: IRoutes[] = [
     {
+      id: "stickyNotes",
+      title: "Sticky Notes",
+      path: ROUTE_URL.MEAL_PLANNER.STICKY_NOTES,
+      icon: "bi bi-journal-text fs-3",
+      claims: [],
+      subRoutes: [],
+    },
+    {
       id: "dashboard",
       title: "Dashboard",
       path: ROUTE_URL.DASHBOARD,
@@ -19,15 +27,15 @@ const MealFooterApp = () => {
       subRoutes: [],
     },
     {
-      id: "meal-request",
+      id: "mealRequest",
       title: "Meal Request",
       path: ROUTE_URL.MEAL_PLANNER.MEAL_REQUEST,
-      icon: "bi bi-plus-square-fill fs-3",
+      icon: "bi bi-fork-knife fs-3",
       claims: [],
       subRoutes: [],
     },
     {
-      id: "available-ingredients",
+      id: "availableIngredients",
       title: "Available Ingredients",
       path: ROUTE_URL.MEAL_PLANNER.AVAILABLE_INGREDIENTS,
       icon: "bi bi-bag-check-fill fs-3",
@@ -35,10 +43,10 @@ const MealFooterApp = () => {
       subRoutes: [],
     },
     {
-      id: "weekly-plan",
+      id: "weeklyPlan",
       title: "Weekly Plan",
       path: ROUTE_URL.MEAL_PLANNER.WEEKLY_PLAN,
-      icon: "bi bi-fork-knife fs-3",
+      icon: "bi bi-cart-check fs-3",
       claims: [],
       subRoutes: [],
     },

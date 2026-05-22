@@ -11,6 +11,7 @@ import { organizationUnitsApi } from "./redux/administration/organization-units/
 import { productsApi } from "./redux/catalog/product/product.api";
 import { rolesApi } from "./redux/administration/roles/roles.api";
 import salesReducer from "./redux/sales/sales.reducer";
+import { stickyNotesApi } from "./redux/meal-planner/sticky-notes.api";
 import { usersApi } from "./redux/administration/users/users.api";
 
 const store = configureStore({
@@ -21,6 +22,7 @@ const store = configureStore({
     catalog: catalogReducer,
 
     [mealRequestApi.reducerPath]: mealRequestApi.reducer,
+    [stickyNotesApi.reducerPath]: stickyNotesApi.reducer,
 
     // administration
     [authApi.reducerPath]: authApi.reducer,
@@ -40,6 +42,7 @@ const store = configureStore({
     }).concat(
       // meal planner
       mealRequestApi.middleware,
+      stickyNotesApi.middleware,
 
       // administration
       authApi.middleware,

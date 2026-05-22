@@ -45,6 +45,7 @@ const MealPlannerApp = ({
         {meals.map((meal, index) => (
           <div key={index} className="col-lg-4">
             <div className="card h-100 shadow-sm">
+
               <div className="card-header border-0 bg-light">
                 <div className="d-flex align-items-center">
                   <div>
@@ -55,6 +56,14 @@ const MealPlannerApp = ({
                   </div>
                 </div>
               </div>
+
+              {/* Show soak daal info for chilla recipes */}
+              {meal.type && meal.type.toLowerCase().includes("chilla") && (
+                <div className="alert alert-warning d-flex align-items-center gap-2 m-3">
+                  <i className="bi bi-info-circle-fill text-warning"></i>
+                  <span className="fs-7">Soak mixed daals for 6 hours before making chilla for best texture.</span>
+                </div>
+              )}
 
               <div className="card-body">
                 {/* Cooking Info */}
