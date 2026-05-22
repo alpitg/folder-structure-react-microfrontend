@@ -403,7 +403,7 @@ const MealRequestApp = () => {
               <div className="col-xl-5">
                 <div className="h-100">
                   <div className="card-body">
-                    <div className="rounded p-4 bg-light">
+                    <div className="rounded p-4">
                       <p className="fs-7 text-gray-600 mb-2">
                         What happens next?
                       </p>
