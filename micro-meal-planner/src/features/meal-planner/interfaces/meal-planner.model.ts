@@ -4,7 +4,7 @@ export interface Meal {
   servings: number;
   cookingTime: number;
   ingredients: string[];
-  recipe: string[];
+  recipe?: string[];
   youtubeLink?: string[];
   isPinned?: boolean;
 }

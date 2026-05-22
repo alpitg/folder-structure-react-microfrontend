@@ -4,7 +4,7 @@ export type PlanOption = "today" | "breakfast" | "lunch" | "dinner" | "chilla";
 
 export interface IMealRequestOptions {
   vegNonVeg: "veg" | "non-veg";
-  region: "south" | "north";
+  region: string;
   highProtein: boolean;
   quickCooking: boolean;
   maidModeEnabled: boolean;

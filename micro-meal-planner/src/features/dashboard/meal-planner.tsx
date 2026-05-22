@@ -157,7 +157,7 @@ const MealPlannerApp = ({
                   <div className="collapse" id={`recipeCollapse-${index}`}>
                     <div className="mb-4 mt-3">
                       <div className="fs-7 text-gray-600 lh-lg">
-                        {meal.recipe.map((step, idx) => (
+                        {meal?.recipe?.map((step, idx) => (
                           <div key={idx} className="mb-2">
                             {formatRecipeStep(step)}
                           </div>

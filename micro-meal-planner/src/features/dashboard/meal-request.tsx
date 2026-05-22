@@ -11,11 +11,20 @@ import { useCreateMealRequestMutation } from "../../app/redux/meal-planner/meal-
 import { useCreateStickyNoteMutation } from "../../app/redux/meal-planner/sticky-notes.api";
 
 const MealRequestApp = () => {
+  const cuisinePreferences = [
+    "North Indian",
+    "South Indian",
+    "Gujarati",
+    "Punjabi",
+    "Maharashtrian",
+    "Bengali",
+    "Rajasthani",
+  ];
 
   const [planOption, setPlanOption] = useState<PlanOption>("today");
   const [options, setOptions] = useState<IMealRequestOptions>({
     vegNonVeg: "veg",
-    region: "north",
+    region: "Maharashtrian",
     highProtein: false,
     quickCooking: false,
     maidModeEnabled: false,
@@ -78,7 +87,6 @@ const MealRequestApp = () => {
       // additional 2 second loader
       await wait(2000);
 
-
       console.log("Meal Request Success:", response);
       setMeals(response || []);
       setShowPlanner(true);
@@ -95,7 +103,7 @@ const MealRequestApp = () => {
     setPlanOption("today");
     setOptions({
       vegNonVeg: "veg",
-      region: "north",
+      region: "Maharashtrian",
       highProtein: false,
       quickCooking: false,
       maidModeEnabled: false,
@@ -223,8 +231,11 @@ const MealRequestApp = () => {
                               onChange={handleOptionChange}
                               className="form-select form-select-solid"
                             >
-                              <option value="north">North Indian</option>
-                              <option value="south">South Indian</option>
+                              {cuisinePreferences?.map((cuisine) => (
+                                <option key={cuisine} value={cuisine}>
+                                  {cuisine}
+                                </option>
+                              ))}
                             </select>
                           </div>
                         </div>
