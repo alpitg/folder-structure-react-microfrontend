@@ -50,7 +50,9 @@ const OrderViewApp = lazy(
   () => import("../features/store/sales/order/view/order-view"),
 );
 
-const MealRequest = lazy(() => import("../features/dashboard/meal-request/meal-request"));
+const MealRequest = lazy(
+  () => import("../features/dashboard/meal-request/meal-request"),
+);
 const AvailableIngredients = lazy(
   () => import("../features/dashboard/available-ingredients"),
 );
@@ -75,7 +77,7 @@ const RoutesApp = () => {
           <Route path={ROUTE_URL.DASHBOARD} element={<LandingPageApp />}>
             <Route
               path={ROUTE_URL.MEAL_PLANNER.BASE}
-              element={<DashboardApp />}
+              element={<MealScheduler />}
             />
             <Route
               path={ROUTE_URL.MEAL_PLANNER.STICKY_NOTES}
@@ -94,10 +96,6 @@ const RoutesApp = () => {
             <Route
               path={ROUTE_URL.MEAL_PLANNER.WEEKLY_PLAN}
               element={<WeeklyMealPlanner />}
-            />
-            <Route
-              path={ROUTE_URL.MEAL_PLANNER.MEAL_SCHEDULER}
-              element={<MealScheduler />}
             />
           </Route>
           {/* 🔓 Public */}

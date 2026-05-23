@@ -29,7 +29,7 @@ const MealFooterApp = () => {
     {
       id: "mealScheduler",
       title: "Meal Scheduler",
-      path: ROUTE_URL.MEAL_PLANNER.MEAL_SCHEDULER,
+      path: ROUTE_URL.DASHBOARD,
       icon: "bi bi-clock fs-3",
       claims: [],
       subRoutes: [],
