@@ -2,26 +2,81 @@ import "./meal-scheduler.scss";
 
 import React, { useState } from "react";
 
-type MealType = "Tea" | "Coffee" | "Breakfast" | "Lunch" | "Snacks" | "Dinner";
+export interface Meal {
+  name: string;
+  type: string;
+  servings: number;
+  cookingTime: number;
+  ingredients: string[];
+  recipe?: string[];
+  youtubeLink?: YoutubeLink[];
+  isPinned?: boolean;
+}
 
-interface MealItem {
-  id: number;
-  title: string;
-  type: MealType;
+export interface YoutubeLink {
+  title?: string;
+  url?: string;
 }
 
 interface DayMeals {
   day: string;
-  meals: MealItem[];
+  meals: Meal[];
 }
 
-const mealOptions: MealItem[] = [
-  { id: 1, title: "Masala Tea", type: "Tea" },
-  { id: 2, title: "Filter Coffee", type: "Coffee" },
-  { id: 3, title: "Moong Dal Chilla", type: "Breakfast" },
-  { id: 4, title: "Paneer Bhurji", type: "Lunch" },
-  { id: 5, title: "Fruit Bowl", type: "Snacks" },
-  { id: 6, title: "Dal Khichdi", type: "Dinner" },
+const mealOptions: Meal[] = [
+  {
+    name: "Moong Dal Chilla with Mint Curd",
+    type: "Breakfast",
+    servings: 2,
+    cookingTime: 20,
+    ingredients: ["Moong dal", "Curd", "Mint chutney"],
+    youtubeLink: [
+      {
+        title: "Moong Dal Chilla Recipe",
+        url: "https://www.youtube.com/results?search_query=moong+dal+chilla+recipe",
+      },
+    ],
+    isPinned: true,
+  },
+  {
+    name: "Paneer Bhurji with Multigrain Roti",
+    type: "Lunch",
+    servings: 2,
+    cookingTime: 30,
+    ingredients: ["Paneer", "Tomato", "Onion", "Multigrain flour"],
+    youtubeLink: [
+      {
+        title: "Paneer Bhurji Healthy Recipe",
+        url: "https://www.youtube.com/results?search_query=paneer+bhurji+healthy+recipe",
+      },
+    ],
+  },
+  {
+    name: "Fruit and Nut Yogurt Bowl",
+    type: "Snacks",
+    servings: 1,
+    cookingTime: 5,
+    ingredients: ["Curd", "Banana", "Apple", "Almonds"],
+    youtubeLink: [
+      {
+        title: "Healthy Yogurt Fruit Bowl",
+        url: "https://www.youtube.com/results?search_query=healthy+yogurt+fruit+bowl",
+      },
+    ],
+  },
+  {
+    name: "Vegetable Millet Pulao",
+    type: "Dinner",
+    servings: 2,
+    cookingTime: 30,
+    ingredients: ["Millet", "Beans", "Carrot", "Peas"],
+    youtubeLink: [
+      {
+        title: "Healthy Millet Pulao",
+        url: "https://www.youtube.com/results?search_query=healthy+millet+pulao+recipe",
+      },
+    ],
+  },
 ];
 
 const initialWeek: DayMeals[] = [
@@ -45,7 +100,6 @@ const MealScheduler = () => {
 
     updated[dayIndex].meals.push({
       ...randomMeal,
-      id: Date.now(),
     });
 
     setWeekMeals(updated);
@@ -60,41 +114,108 @@ const MealScheduler = () => {
               key={dayData.day}
               className="col-11 col-sm-8 col-md-6 col-lg-4 col-xl-3"
             >
-              <div className="card day-card h-100">
-                {/* Day Header */}
-                <div className="card-header border-0 pb-0">
-                  <h5 className="fw-bold mb-0 text-center">{dayData.day}</h5>
+              <div className="card day-card h-100 border-0 shadow-sm">
+                {/* Header */}
+                <div className="card-header border-0 bg-white pb-0">
+                  <h5 className="fw-bold text-center mb-0">{dayData.day}</h5>
                 </div>
 
-                {/* Meals */}
+                {/* Body */}
                 <div className="card-body">
-                  {dayData.meals.map((meal) => (
+                  {/* Meals */}
+                  {dayData.meals.map((meal, idx) => (
                     <div
-                      key={meal.id}
-                      className="hover-lift card border-0 shadow-sm mb-3"
+                      key={`${meal.name}-${idx}`}
+                      className="meal-item hover-lift card border-0 shadow-sm mb-3"
                     >
-                      <div className="card-body py-3">
-                        <span className="badge bg-light-primary text-primary mb-2">
-                          {meal.type}
-                        </span>
+                      <div className="card-body">
+                        {/* Top */}
+                        <div className="d-flex justify-content-between align-items-start mb-3">
+                          <div>
+                            <span className="badge bg-light-primary text-primary mb-2">
+                              {meal.type}
+                            </span>
 
-                        <h6 className="mb-0 fw-semibold">{meal.title}</h6>
+                            <h6 className="fw-bold mb-1">{meal.name}</h6>
+                          </div>
+
+                          {meal.isPinned && (
+                            <span className="badge bg-warning text-dark">
+                              <i className="bi bi-pin-angle-fill me-1"></i>
+                              Pinned
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Meta */}
+                        <div className="d-flex flex-wrap gap-2 mb-3">
+                          <span className="badge bg-light text-dark border">
+                            👥 {meal.servings} Servings
+                          </span>
+
+                          <span className="badge bg-light text-dark border">
+                            ⏱️ {meal.cookingTime} mins
+                          </span>
+                        </div>
+
+                        {/* Ingredients */}
+                        <div className="mb-3">
+                          <small className="text-muted fw-semibold d-block mb-2">
+                            Ingredients
+                          </small>
+
+                          <div className="d-flex flex-wrap gap-2">
+                            {meal.ingredients.map((ingredient, index) => (
+                              <span
+                                key={index}
+                                className="badge bg-light-success text-success"
+                              >
+                                {ingredient}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Youtube */}
+                        {meal.youtubeLink && meal.youtubeLink.length > 0 && (
+                          <div>
+                            <small className="text-muted fw-semibold d-block mb-2">
+                              Videos
+                            </small>
+
+                            {meal.youtubeLink.map((video, index) => (
+                              <a
+                                key={index}
+                                href={video.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="youtube-link d-flex align-items-center text-decoration-none mb-2"
+                              >
+                                <i className="bi bi-youtube text-danger me-2"></i>
+
+                                <span className="small text-dark">
+                                  {video.title}
+                                </span>
+                              </a>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}
 
-                  {/* Add Meal Section */}
+                  {/* Add Meal */}
                   <div
                     className="add-meal-box"
                     onClick={() => handleAddMeal(dayIndex)}
                   >
                     <div className="text-center">
-                      <i className="bi bi-plus-lg"></i>
+                      <i className="bi bi-plus-lg add-icon mb-2"></i>
 
                       <div className="fw-semibold">Add Meal</div>
 
                       <small className="text-muted">
-                        Tea, Breakfast, Lunch, Snacks...
+                        Breakfast, Lunch, Snacks...
                       </small>
                     </div>
                   </div>
