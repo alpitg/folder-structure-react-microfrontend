@@ -1,0 +1,48 @@
+.meal-scheduler-app {
+//   min-height: 100vh;
+
+  .meal-scheduler-scroll {
+    overflow-x: auto;
+    padding-bottom: 10px;
+
+    &::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 20px;
+    }
+  }
+
+  .day-card {
+    border-radius: 18px;
+    min-height: 600px;
+  }
+
+  .meal-item {
+    border-radius: 14px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  .add-meal-box {
+    min-height: 100px;
+    border: 2px dashed var(--bs-secondary);
+    border-radius: 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    transition: all 0.25s ease;
+
+    &:hover {
+      border-color: var(--bs-primary);
+      transform: translateY(-2px);
+    }
+  }
+}

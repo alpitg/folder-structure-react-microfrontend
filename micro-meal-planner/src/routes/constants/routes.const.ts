@@ -57,6 +57,7 @@ export const ROUTE_URL = {
     AVAILABLE_INGREDIENTS: "/available-ingredients",
     MEAL_REQUEST: "/meal-request",
     WEEKLY_PLAN: "/weekly-plan",
+    MEAL_SCHEDULER: "/meal-scheduler",
   },
   ADMINISTRATION: {
     BASE: "/admin",

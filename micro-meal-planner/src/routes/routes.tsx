@@ -61,6 +61,10 @@ const StickyNotes = lazy(
   () => import("../features/dashboard/sticky-notes/sticky-notes"),
 );
 
+const MealScheduler = lazy(
+  () => import("../features/dashboard/meal-scheduler/meal-scheduler"),
+);
+
 const RoutesApp = () => {
   useAuthInit(); // run once at app start
 
@@ -90,6 +94,10 @@ const RoutesApp = () => {
             <Route
               path={ROUTE_URL.MEAL_PLANNER.WEEKLY_PLAN}
               element={<WeeklyMealPlanner />}
+            />
+            <Route
+              path={ROUTE_URL.MEAL_PLANNER.MEAL_SCHEDULER}
+              element={<MealScheduler />}
             />
           </Route>
           {/* 🔓 Public */}
