@@ -62,7 +62,7 @@ const MealScheduler = () => {
               >
                 <div className="card day-card border-0 shadow-sm h-100">
                   {/* Header */}
-                  <div className="card-header border-0 bg-white pb-0">
+                  <div className="card-header border-0 pb-0">
                     <div className="d-flex align-items-center justify-content-between">
                       <h5 className="fw-bold mb-0">{dayData.day}</h5>
 
