@@ -42,7 +42,7 @@ const LandingPageApp = () => {
                 : "landing-page-content-collapsed"
             }`}
           >
-            <div className="container-xxl">
+            <div className="container-xxl p-0">
               <Outlet />
             </div>
           </div>

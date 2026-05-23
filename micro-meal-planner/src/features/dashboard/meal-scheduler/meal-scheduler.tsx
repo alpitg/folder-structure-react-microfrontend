@@ -81,7 +81,7 @@ const MealScheduler = () => {
   };
 
   return (
-    <div className="meal-scheduler-app container-fluid py-4">
+    <div className="meal-scheduler-app container-fluid px-0 py-0">
       {/* Loading */}
       {(isLoading || isFetching) && (
         <div className="text-center py-10">
@@ -115,7 +115,7 @@ const MealScheduler = () => {
                   </div>
 
                   {/* Body */}
-                  <div className="card-body">
+                  <div className="card-body p-4 pt-0">
                     {/* Meals */}
                     {dayData.meals?.map((meal, mealIndex) => (
                       <div
