@@ -38,8 +38,15 @@ const MealScheduler = () => {
     setWeekMeals(weeklyMeals as DayMeals[]);
   }, [weeklyMeals]);
 
-  /* Share Meal */
   const handleShareMeal = async (meal: any) => {
+    const videoLinks =
+      meal.youtubeLink
+        ?.map(
+          (video: any, index: number) =>
+            `${index + 1}. ${video.title}\n${video.url}`,
+        )
+        .join("\n\n") || "";
+
     const shareText = `
         🍽️ ${meal.name}
 
@@ -50,7 +57,7 @@ const MealScheduler = () => {
         Ingredients:
         ${meal.ingredients?.join(", ")}
 
-        ${meal.youtubeLink?.[0]?.url ? `Video: ${meal.youtubeLink[0].url}` : ""}
+        ${videoLinks ? `Videos:\n${videoLinks}` : ""}
     `.trim();
 
     try {
@@ -64,7 +71,7 @@ const MealScheduler = () => {
         return;
       }
 
-      /* Fallback Copy */
+      /* Desktop Fallback */
       await navigator.clipboard.writeText(shareText);
 
       alert("Meal copied to clipboard");
