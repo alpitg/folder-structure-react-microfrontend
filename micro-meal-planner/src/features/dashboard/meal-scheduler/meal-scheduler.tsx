@@ -60,7 +60,7 @@ const MealScheduler = () => {
               key={dayData.day}
               className="col-11 col-sm-8 col-md-6 col-lg-4 col-xl-3"
             >
-              <div className="card shadow-sm border-0 day-card h-100">
+              <div className="card day-card h-100">
                 {/* Day Header */}
                 <div className="card-header border-0 pb-0">
                   <h5 className="fw-bold mb-0 text-center">{dayData.day}</h5>
