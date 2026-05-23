@@ -38,6 +38,41 @@ const MealScheduler = () => {
     setWeekMeals(weeklyMeals as DayMeals[]);
   }, [weeklyMeals]);
 
+  /* Share Meal */
+  const handleShareMeal = async (meal: any) => {
+    const shareText = `
+        🍽️ ${meal.name}
+
+        Type: ${meal.type}
+        Cooking Time: ${meal.cookingTime} mins
+        Servings: ${meal.servings}
+
+        Ingredients:
+        ${meal.ingredients?.join(", ")}
+
+        ${meal.youtubeLink?.[0]?.url ? `Video: ${meal.youtubeLink[0].url}` : ""}
+    `.trim();
+
+    try {
+      /* Mobile Native Share */
+      if (navigator.share) {
+        await navigator.share({
+          title: meal.name,
+          text: shareText,
+        });
+
+        return;
+      }
+
+      /* Fallback Copy */
+      await navigator.clipboard.writeText(shareText);
+
+      alert("Meal copied to clipboard");
+    } catch (error) {
+      console.error("Share failed", error);
+    }
+  };
+
   return (
     <div className="meal-scheduler-app container-fluid py-4">
       {/* Loading */}
@@ -91,6 +126,12 @@ const MealScheduler = () => {
                               <h6 className="fw-semibold mb-1">{meal.name}</h6>
                             </div>
 
+                            <span
+                              className="badge cursor-pointer"
+                              onClick={() => handleShareMeal(meal)}
+                            >
+                              <i className="bi bi-share me-1"></i>
+                            </span>
                             <span className="badge bg-light border ms-2 fw-semibold">
                               ⏱️ {meal.cookingTime} mins
                             </span>
