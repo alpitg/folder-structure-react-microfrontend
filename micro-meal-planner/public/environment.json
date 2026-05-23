@@ -13,7 +13,8 @@
       "mealRequest": "/api/meal-planner/meal-request",
       "stickyNotes": "/api/meal-planner/sticky-notes",
       "availableIngredients": "/api/meal-planner/available-ingredients",
-      "weeklyPlan": "/api/meal-planner/weekly-plans"
+      "weeklyPlan": "/api/meal-planner/weekly-plans",
+      "weeklyMeals": "/api/meal-planner/weekly-meals"
     },
     "administration": {
       "organizationUnits": {

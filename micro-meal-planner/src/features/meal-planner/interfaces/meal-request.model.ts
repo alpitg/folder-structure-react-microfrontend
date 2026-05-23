@@ -17,3 +17,13 @@ export interface IMealRequestOptions {
 export interface IMealRequest extends IMealRequestOptions {}
 
 export interface IMealResponse extends Meal {}
+
+export interface YoutubeLink {
+  title?: string;
+  url?: string;
+}
+
+export interface DayMeals {
+  day: string;
+  meals: Meal[];
+}

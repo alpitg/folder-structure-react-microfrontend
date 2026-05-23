@@ -1,4 +1,5 @@
 import type {
+  DayMeals,
   IMealRequest,
   IMealResponse,
 } from "../../../features/meal-planner/interfaces/meal-request.model";
@@ -11,11 +12,11 @@ export const mealRequestApi = createApi({
   reducerPath: "mealRequestApi",
   baseQuery,
 
+  tagTypes: ["WeeklyMeals"],
+
   endpoints: (builder) => ({
-    createMealRequest: builder.mutation<
-      IMealResponse[],
-      IMealRequest
-    >({
+    /* Create Meal Request */
+    createMealRequest: builder.mutation<IMealResponse[], IMealRequest>({
       query: (body) => ({
         url:
           GetEnvConfig()?.api?.baseUrl + // TODO: use this for real backend, currently frontendBaseUrl is same as baseUrl
@@ -24,8 +25,27 @@ export const mealRequestApi = createApi({
         method: "POST",
         body,
       }),
+
+      invalidatesTags: ["WeeklyMeals"],
+    }),
+
+    /* Get Weekly Meals */
+    getWeeklyMeals: builder.query<DayMeals[], void>({
+      query: () => ({
+        url:
+          GetEnvConfig()?.api?.frontendBaseUrl +
+          GetEnvConfig()?.api?.mealPlanner?.weeklyMeals +
+          ".json",
+
+        // GetEnvConfig()?.api?.baseUrl +
+        // GetEnvConfig()?.api?.mealPlanner?.weeklyMeals,
+        method: "GET",
+      }),
+
+      providesTags: ["WeeklyMeals"],
     }),
   }),
 });
 
-export const { useCreateMealRequestMutation } = mealRequestApi;
+export const { useCreateMealRequestMutation, useGetWeeklyMealsQuery } =
+  mealRequestApi;

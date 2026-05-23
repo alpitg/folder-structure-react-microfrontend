@@ -18,6 +18,7 @@ let environment = {
       stickyNotes: "",
       availableIngredients: "",
       weeklyPlan: "",
+      weeklyMeals: "",
     },
     administration: {
       organizationUnits: {
