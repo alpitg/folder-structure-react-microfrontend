@@ -126,27 +126,30 @@ const MealScheduler = () => {
                           {/* Top */}
                           <div className="d-flex justify-content-between align-items-start mb-3">
                             <div>
+                                  {meal.isPinned && (
+                                <span className="badge">
+                                  <i className="bi bi-pin-angle-fill me-1"></i>
+                                </span>
+                              )}
                               <span className="badge bg-light-primary text-primary mb-2">
                                 {meal.type}
                               </span>
 
                               <h6 className="fw-semibold mb-1">{meal.name}</h6>
                             </div>
-
-                            <span
-                              className="badge cursor-pointer"
-                              onClick={() => handleShareMeal(meal)}
-                            >
-                              <i className="bi bi-share me-1"></i>
-                            </span>
-                            <span className="badge bg-light border ms-2 fw-semibold">
-                              ⏱️ {meal.cookingTime} mins
-                            </span>
-                            {meal.isPinned && (
-                              <span className="badge">
-                                <i className="bi bi-pin-angle-fill me-1"></i>
+                            <div className="d-flex gap-2">
+                              <span className="badge bg-light border ms-2 fw-semibold">
+                                ⏱️ {meal.cookingTime} mins
                               </span>
-                            )}
+
+                              <span
+                                className="badge cursor-pointer"
+                                onClick={() => handleShareMeal(meal)}
+                              >
+                                <i className="bi bi-share me-1"></i>
+                              </span>
+                            
+                            </div>
                           </div>
 
                           {/* Ingredients */}
