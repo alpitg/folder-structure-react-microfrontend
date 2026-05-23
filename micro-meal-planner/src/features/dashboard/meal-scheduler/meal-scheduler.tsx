@@ -71,7 +71,7 @@ const MealScheduler = () => {
                   {dayData.meals.map((meal) => (
                     <div
                       key={meal.id}
-                      className="meal-item card border-0 shadow-sm mb-3"
+                      className="hover-lift card border-0 shadow-sm mb-3"
                     >
                       <div className="card-body py-3">
                         <span className="badge bg-light-primary text-primary mb-2">

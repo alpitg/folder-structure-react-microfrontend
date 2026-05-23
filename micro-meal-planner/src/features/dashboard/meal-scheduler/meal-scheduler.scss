@@ -1,5 +1,5 @@
 .meal-scheduler-app {
-//   min-height: 100vh;
+  //   min-height: 100vh;
 
   .meal-scheduler-scroll {
     overflow-x: auto;
@@ -15,17 +15,7 @@
   }
 
   .day-card {
-    border-radius: 18px;
-    min-height: 600px;
-  }
-
-  .meal-item {
-    border-radius: 14px;
-    transition: all 0.2s ease;
-
-    &:hover {
-      transform: translateY(-2px);
-    }
+    min-height: 300px;
   }
 
   .add-meal-box {
