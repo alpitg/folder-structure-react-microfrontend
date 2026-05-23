@@ -66,7 +66,7 @@ const MealScheduler = () => {
                     <div className="d-flex align-items-center justify-content-between">
                       <h5 className="fw-bold mb-0">{dayData.day}</h5>
 
-                      <span className="badge bg-light-primary text-primary">
+                      <span className="badge bg-light-primary text-primary ms-2 fw-semibold">
                         {dayData.meals?.length || 0} Meals
                       </span>
                     </div>
@@ -78,9 +78,9 @@ const MealScheduler = () => {
                     {dayData.meals?.map((meal, mealIndex) => (
                       <div
                         key={`${meal.name}-${mealIndex}`}
-                        className="meal-item hover-lift card border-0 shadow-sm mb-3"
+                        className="card meal-item hover-lift shadow-sm mb-3"
                       >
-                        <div className="card-body">
+                        <div className="card-body p-6">
                           {/* Top */}
                           <div className="d-flex justify-content-between align-items-start mb-3">
                             <div>
@@ -88,34 +88,21 @@ const MealScheduler = () => {
                                 {meal.type}
                               </span>
 
-                              <h6 className="fw-bold mb-1">{meal.name}</h6>
+                              <h6 className="fw-semibold mb-1">{meal.name}</h6>
                             </div>
 
+                            <span className="badge bg-light border ms-2 fw-semibold">
+                              ⏱️ {meal.cookingTime} mins
+                            </span>
                             {meal.isPinned && (
-                              <span className="badge bg-warning">
+                              <span className="badge">
                                 <i className="bi bi-pin-angle-fill me-1"></i>
-                                Pinned
                               </span>
                             )}
                           </div>
 
-                          {/* Meta */}
-                          <div className="d-flex flex-wrap gap-2 mb-3">
-                            <span className="badge bg-light border">
-                              👥 {meal.servings} Servings
-                            </span>
-
-                            <span className="badge bg-light border">
-                              ⏱️ {meal.cookingTime} mins
-                            </span>
-                          </div>
-
                           {/* Ingredients */}
                           <div className="mb-3">
-                            <small className="text-muted fw-semibold d-block mb-2">
-                              Ingredients
-                            </small>
-
                             <div className="d-flex flex-wrap gap-2">
                               {meal.ingredients?.map(
                                 (ingredient, ingredientIndex) => (
@@ -153,10 +140,6 @@ const MealScheduler = () => {
                           {/* YouTube */}
                           {meal.youtubeLink && meal.youtubeLink.length > 0 && (
                             <div>
-                              <small className="text-muted fw-semibold d-block mb-2">
-                                Videos
-                              </small>
-
                               <div className="row g-2">
                                 {meal.youtubeLink.map((video, videoIndex) => (
                                   <div key={videoIndex} className="col-12">
@@ -164,7 +147,7 @@ const MealScheduler = () => {
                                       href={video.url}
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      className="youtube-link d-flex align-items-center text-decoration-none p-2 border rounded"
+                                      className="youtube-link d-flex align-items-center text-decoration-none p-2"
                                     >
                                       <i className="bi bi-youtube text-danger me-2 fs-5"></i>
 
