@@ -126,8 +126,8 @@ const MealScheduler = () => {
                           {/* Top */}
                           <div className="d-flex justify-content-between align-items-start mb-3">
                             <div>
-                                  {meal.isPinned && (
-                                <span className="badge">
+                              {meal.isPinned && (
+                                <span className="badge cursor-pointer">
                                   <i className="bi bi-pin-angle-fill me-1"></i>
                                 </span>
                               )}
@@ -148,7 +148,6 @@ const MealScheduler = () => {
                               >
                                 <i className="bi bi-share me-1"></i>
                               </span>
-                            
                             </div>
                           </div>
 
