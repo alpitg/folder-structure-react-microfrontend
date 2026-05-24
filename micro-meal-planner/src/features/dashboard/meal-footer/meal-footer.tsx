@@ -10,14 +10,14 @@ const MealFooterApp = () => {
   // full static routes as before
 
   const routes: IRoutes[] = [
-    {
-      id: "stickyNotes",
-      title: "Sticky Notes",
-      path: ROUTE_URL.MEAL_PLANNER.STICKY_NOTES,
-      icon: "bi bi-journal-text fs-3",
-      claims: [],
-      subRoutes: [],
-    },
+    // {
+    //   id: "stickyNotes",
+    //   title: "Sticky Notes",
+    //   path: ROUTE_URL.MEAL_PLANNER.STICKY_NOTES,
+    //   icon: "bi bi-journal-text fs-3",
+    //   claims: [],
+    //   subRoutes: [],
+    // },
     // {
     //   id: "dashboard",
     //   title: "Dashboard",
