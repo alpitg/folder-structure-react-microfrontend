@@ -14,7 +14,10 @@
       "stickyNotes": "/api/meal-planner/sticky-notes",
       "availableIngredients": "/api/meal-planner/available-ingredients",
       "weeklyPlan": "/api/meal-planner/weekly-plans",
-      "weeklyMeals": "/api/meal-planner/weekly-meals"
+      "weeklyMeals": "/api/meal-planner/weekly-meals",
+      "createMeal": "/api/meal-planner/meals",
+      "deleteMeal": "/api/meal-planner/meals/{id}",
+      "generateMeal": "/api/meal-planner/meals/generate"
     },
     "administration": {
       "organizationUnits": {
