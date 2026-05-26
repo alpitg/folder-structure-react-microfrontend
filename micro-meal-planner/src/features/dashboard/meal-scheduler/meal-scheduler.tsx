@@ -142,10 +142,7 @@ const MealScheduler = () => {
     try {
       setIsGenerating(true);
 
-      const response = await generateMeal({
-        type: mealForm.type,
-        prompt: mealForm.name,
-      }).unwrap();
+      const response = await generateMeal().unwrap();
 
       setMealForm({
         name: response.name || "",

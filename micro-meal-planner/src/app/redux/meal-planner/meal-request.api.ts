@@ -75,13 +75,13 @@ export const mealRequestApi = createApi({
 
     /* AI Generate Meal */
     generateMeal: builder.mutation<any, any>({
-      query: (body) => ({
+      query: () => ({
         url:
           GetEnvConfig()?.api?.baseUrl +
           GetEnvConfig()?.api?.mealPlanner?.generateMeal,
 
         method: "POST",
-        body,
+        // body: null,
       }),
     }),
   }),
