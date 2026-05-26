@@ -1,9 +1,16 @@
 import "./meal-scheduler.scss";
 
 import React, { useEffect, useState } from "react";
+import {
+  useCreateMealMutation,
+  useDeleteMealMutation,
+  useGenerateMealMutation,
+  useGetWeeklyMealsQuery,
+} from "../../../app/redux/meal-planner/meal-request.api";
 
 import type { DayMeals } from "../../meal-planner/interfaces/meal-request.model";
-import { useGetWeeklyMealsQuery } from "../../../app/redux/meal-planner/meal-request.api";
+import type { Meal } from "../../meal-planner/interfaces/meal-planner.model";
+import ModelApp from "../../../components/ui/model/model";
 
 const initialWeek: DayMeals[] = [
   { day: "Monday", meals: [] },
@@ -20,6 +27,24 @@ const MealScheduler = () => {
 
   /* API */
   const { data: weeklyMeals, isLoading, isFetching } = useGetWeeklyMealsQuery();
+  const [generateMeal, { isLoading: isMealGenerating }] =
+    useGenerateMealMutation();
+  const [createMeal, { isLoading: isMealCreating }] = useCreateMealMutation();
+
+  const [showModal, setShowModal] = useState(false);
+  const [selectedDay, setSelectedDay] = useState("");
+
+  const [mealForm, setMealForm] = useState<any>({
+    name: "",
+    type: "",
+    cookingTime: "",
+    servings: "",
+    ingredients: "",
+    recipe: "",
+    youtubeLink: "",
+  });
+
+  const [isGenerating, setIsGenerating] = useState(false);
 
   /* Populate Week Meals */
   useEffect(() => {
@@ -77,6 +102,100 @@ const MealScheduler = () => {
       alert("Meal copied to clipboard");
     } catch (error) {
       console.error("Share failed", error);
+    }
+  };
+
+  const handleRemoveMeal = async (meal: Meal) => {
+    try {
+      //   await deleteMeal(mealId).unwrap();
+
+      setWeekMeals((prev) =>
+        prev.map((day) => ({
+          ...day,
+          meals: day.meals.filter((meal: any) => meal.id !== meal?.id),
+        })),
+      );
+    } catch (error) {
+      console.error("Failed to remove meal", error);
+    }
+  };
+
+  const handleOpenAddMeal = (day: string) => {
+    setSelectedDay(day);
+
+    setMealForm({
+      name: "",
+      type: "",
+      cookingTime: "",
+      servings: "",
+      ingredients: "",
+      recipe: "",
+      youtubeLink: "",
+    });
+
+    setShowModal(true);
+  };
+
+  const handleGenerateMeal = async () => {
+    try {
+      setIsGenerating(true);
+
+      const response = await generateMeal({
+        type: mealForm.type,
+        prompt: mealForm.name,
+      }).unwrap();
+
+      setMealForm({
+        name: response.name || "",
+        type: response.type || "",
+        cookingTime: response.cookingTime || "",
+        servings: response.servings || "",
+        ingredients: response.ingredients?.join(", ") || "",
+        recipe: response.recipe?.join("\n") || "",
+        youtubeLink:
+          response.youtubeLink?.map((v: any) => v.url).join(", ") || "",
+      });
+    } catch (error) {
+      console.error("AI generation failed", error);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleSaveMeal = async () => {
+    try {
+      const payload = {
+        day: selectedDay,
+        name: mealForm.name,
+        type: mealForm.type,
+        cookingTime: Number(mealForm.cookingTime),
+        servings: Number(mealForm.servings),
+        ingredients: mealForm.ingredients
+          .split(",")
+          .map((i: string) => i.trim()),
+        recipe: mealForm.recipe.split("\n").map((r: string) => r.trim()),
+        youtubeLink: mealForm.youtubeLink.split(",").map((url: string) => ({
+          title: "Recipe Video",
+          url: url.trim(),
+        })),
+      };
+
+      const createdMeal = await createMeal(payload).unwrap();
+
+      setWeekMeals((prev) =>
+        prev.map((day) =>
+          day.day === selectedDay
+            ? {
+                ...day,
+                meals: [...day.meals, createdMeal],
+              }
+            : day,
+        ),
+      );
+
+      setShowModal(false);
+    } catch (error) {
+      console.error("Failed to save meal", error);
     }
   };
 
@@ -147,6 +266,13 @@ const MealScheduler = () => {
                                 onClick={() => handleShareMeal(meal)}
                               >
                                 <i className="bi bi-share me-1"></i>
+                              </span>
+
+                              <span
+                                className="badge cursor-pointer"
+                                onClick={() => handleRemoveMeal(meal)}
+                              >
+                                <i className="bi bi-x fs-1 text-danger"></i>
                               </span>
                             </div>
                           </div>
@@ -228,12 +354,160 @@ const MealScheduler = () => {
                         </div>
                       </div>
                     )}
+
+                    <div
+                      className="add-meal-box mt-3"
+                      onClick={() => handleOpenAddMeal(dayData.day)}
+                    >
+                      <div className="text-center">
+                        <i className="bi bi-plus-circle fs-1 text-primary"></i>
+
+                        <div className="fw-semibold mt-2">Add Meal</div>
+
+                        <small className="text-muted">
+                          Generate or create a new meal
+                        </small>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
+      )}
+
+      {showModal && (
+        <ModelApp onClose={() => setShowModal(false)} show={showModal}>
+          <div className="card-body p-4">
+            <div className="d-flex justify-content-between align-items-center mb-4">
+              <h5 className="fw-bold mb-0">Add Meal</h5>
+            </div>
+
+            <div className="row g-3">
+              <div className="col-md-6">
+                <input
+                  className="form-control"
+                  placeholder="Meal Name"
+                  value={mealForm.name}
+                  onChange={(e) =>
+                    setMealForm({
+                      ...mealForm,
+                      name: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div className="col-md-6">
+                <input
+                  className="form-control"
+                  placeholder="Type"
+                  value={mealForm.type}
+                  onChange={(e) =>
+                    setMealForm({
+                      ...mealForm,
+                      type: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div className="col-md-6">
+                <input
+                  className="form-control"
+                  placeholder="Cooking Time"
+                  value={mealForm.cookingTime}
+                  onChange={(e) =>
+                    setMealForm({
+                      ...mealForm,
+                      cookingTime: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div className="col-md-6">
+                <input
+                  className="form-control"
+                  placeholder="Servings"
+                  value={mealForm.servings}
+                  onChange={(e) =>
+                    setMealForm({
+                      ...mealForm,
+                      servings: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div className="col-12">
+                <textarea
+                  className="form-control"
+                  rows={3}
+                  placeholder="Ingredients comma separated"
+                  value={mealForm.ingredients}
+                  onChange={(e) =>
+                    setMealForm({
+                      ...mealForm,
+                      ingredients: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div className="col-12">
+                <textarea
+                  className="form-control"
+                  rows={4}
+                  placeholder="Recipe steps line separated"
+                  value={mealForm.recipe}
+                  onChange={(e) =>
+                    setMealForm({
+                      ...mealForm,
+                      recipe: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div className="col-12">
+                <input
+                  className="form-control"
+                  placeholder="Youtube Links comma separated"
+                  value={mealForm.youtubeLink}
+                  onChange={(e) =>
+                    setMealForm({
+                      ...mealForm,
+                      youtubeLink: e.target.value,
+                    })
+                  }
+                />
+              </div>
+            </div>
+
+            <div className="d-flex justify-content-between mt-4">
+              <button
+                className="btn btn-light-primary"
+                onClick={handleGenerateMeal}
+                disabled={isGenerating}
+              >
+                {isGenerating ? (
+                  <>
+                    <span className="spinner-border spinner-border-sm me-2"></span>
+                    Generating...
+                  </>
+                ) : (
+                  <>✨ Magic Generate</>
+                )}
+              </button>
+
+              <button className="btn btn-primary" onClick={handleSaveMeal}>
+                Save Meal
+              </button>
+            </div>
+          </div>
+        </ModelApp>
       )}
     </div>
   );

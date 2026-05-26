@@ -33,19 +33,64 @@ export const mealRequestApi = createApi({
     getWeeklyMeals: builder.query<DayMeals[], void>({
       query: () => ({
         url:
-          GetEnvConfig()?.api?.frontendBaseUrl +
-          GetEnvConfig()?.api?.mealPlanner?.weeklyMeals +
-          ".json",
+          // GetEnvConfig()?.api?.frontendBaseUrl +
+          // GetEnvConfig()?.api?.mealPlanner?.weeklyMeals +
+          // ".json",
 
-        // GetEnvConfig()?.api?.baseUrl +
-        // GetEnvConfig()?.api?.mealPlanner?.weeklyMeals,
+          GetEnvConfig()?.api?.baseUrl +
+          GetEnvConfig()?.api?.mealPlanner?.weeklyMeals,
         method: "GET",
       }),
 
       providesTags: ["WeeklyMeals"],
     }),
+
+    /* Delete Meal */
+    deleteMeal: builder.mutation<{ success: boolean }, string>({
+      query: (mealId) => ({
+        url:
+          GetEnvConfig()?.api?.baseUrl +
+          GetEnvConfig()?.api?.mealPlanner?.deleteMeal +
+          `/${mealId}`,
+
+        method: "DELETE",
+      }),
+
+      invalidatesTags: ["WeeklyMeals"],
+    }),
+
+    /* Create Single Meal */
+    createMeal: builder.mutation<any, any>({
+      query: (body) => ({
+        url:
+          GetEnvConfig()?.api?.baseUrl +
+          GetEnvConfig()?.api?.mealPlanner?.createMeal,
+
+        method: "POST",
+        body,
+      }),
+
+      invalidatesTags: ["WeeklyMeals"],
+    }),
+
+    /* AI Generate Meal */
+    generateMeal: builder.mutation<any, any>({
+      query: (body) => ({
+        url:
+          GetEnvConfig()?.api?.baseUrl +
+          GetEnvConfig()?.api?.mealPlanner?.generateMeal,
+
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useCreateMealRequestMutation, useGetWeeklyMealsQuery } =
-  mealRequestApi;
+export const {
+  useCreateMealRequestMutation,
+  useGetWeeklyMealsQuery,
+  useDeleteMealMutation,
+  useCreateMealMutation,
+  useGenerateMealMutation,
+} = mealRequestApi;

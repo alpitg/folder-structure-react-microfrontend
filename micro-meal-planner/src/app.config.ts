@@ -19,6 +19,9 @@ let environment = {
       availableIngredients: "",
       weeklyPlan: "",
       weeklyMeals: "",
+      createMeal: "/meal",
+      deleteMeal: "/meal",
+      generateMeal: "/meal/generate",
     },
     administration: {
       organizationUnits: {
