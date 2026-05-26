@@ -299,17 +299,18 @@ const MealScheduler = () => {
                           </div>
 
                           {/* Recipe */}
-                          {meal.recipe && meal.recipe.length > 0 && (
+                          {meal?.recipe && meal?.recipe?.length > 0 && (
                             <div className="mb-3">
                               <small className="text-muted fw-semibold d-block mb-2">
                                 Recipe
                               </small>
 
                               <ol className="ps-3 mb-0">
-                                {meal.recipe.map((step, stepIndex) => (
+                                {meal?.recipe?.map((step, stepIndex) => (
                                   <li
                                     key={stepIndex}
                                     className="small text-gray-700 mb-1"
+                                    style={{ listStyleType: "none" }}
                                   >
                                     {step}
                                   </li>
