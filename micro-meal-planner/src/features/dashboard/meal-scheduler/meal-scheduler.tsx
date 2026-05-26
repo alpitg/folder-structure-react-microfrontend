@@ -107,9 +107,9 @@ const MealScheduler = () => {
     }
   };
 
-  const handleRemoveMeal = async (meal: Meal) => {
+  const handleRemoveMeal = async (meal: Meal, day: string) => {
     try {
-      await deleteMeal(meal?.id ?? "").unwrap();
+      await deleteMeal({ mealId: meal?.id ?? "", day }).unwrap();
 
       setWeekMeals((prev) =>
         prev.map((day) => ({
@@ -165,18 +165,22 @@ const MealScheduler = () => {
     try {
       const payload = {
         day: selectedDay,
-        name: mealForm.name,
-        type: mealForm.type,
-        cookingTime: Number(mealForm.cookingTime),
-        servings: Number(mealForm.servings),
-        ingredients: mealForm.ingredients
-          .split(",")
-          .map((i: string) => i.trim()),
-        recipe: mealForm.recipe.split("\n").map((r: string) => r.trim()),
-        youtubeLink: mealForm.youtubeLink.split(",").map((url: string) => ({
-          title: "Recipe Video",
-          url: url.trim(),
-        })),
+        meals: [
+          {
+            name: mealForm.name,
+            type: mealForm.type,
+            cookingTime: Number(mealForm.cookingTime),
+            servings: Number(mealForm.servings),
+            ingredients: mealForm.ingredients
+              .split(",")
+              .map((i: string) => i.trim()),
+            recipe: mealForm.recipe.split("\n").map((r: string) => r.trim()),
+            youtubeLink: mealForm.youtubeLink.split(",").map((url: string) => ({
+              title: "Recipe Video",
+              url: url.trim(),
+            })),
+          },
+        ],
       };
 
       const createdMeal = await createMeal(payload).unwrap();
@@ -269,7 +273,9 @@ const MealScheduler = () => {
 
                               <span
                                 className="badge cursor-pointer"
-                                onClick={() => handleRemoveMeal(meal)}
+                                onClick={() =>
+                                  handleRemoveMeal(meal, dayData.day)
+                                }
                               >
                                 <i className="bi bi-x fs-1 text-danger"></i>
                               </span>

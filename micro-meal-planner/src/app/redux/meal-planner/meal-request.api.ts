@@ -46,12 +46,18 @@ export const mealRequestApi = createApi({
     }),
 
     /* Delete Meal */
-    deleteMeal: builder.mutation<{ success: boolean }, string>({
-      query: (mealId) => ({
+    deleteMeal: builder.mutation<
+      { success: boolean },
+      { mealId: string; day: string }
+    >({
+      query: ({ mealId, day }) => ({
         url:
           GetEnvConfig()?.api?.baseUrl +
-          GetEnvConfig()?.api?.mealPlanner?.deleteMeal +
-          `/${mealId}`,
+          GetEnvConfig()?.api?.mealPlanner?.deleteMeal?.replace(
+            "{id}",
+            mealId,
+          ) +
+          `?day=${encodeURIComponent(day)}`,
 
         method: "DELETE",
       }),
