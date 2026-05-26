@@ -1,4 +1,5 @@
 export interface Meal {
+  id?: string;
   name: string;
   type: string;
   servings: number;

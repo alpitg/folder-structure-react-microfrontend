@@ -31,6 +31,8 @@ const MealScheduler = () => {
     useGenerateMealMutation();
   const [createMeal, { isLoading: isMealCreating }] = useCreateMealMutation();
 
+  const [deleteMeal] = useDeleteMealMutation();
+
   const [showModal, setShowModal] = useState(false);
   const [selectedDay, setSelectedDay] = useState("");
 
@@ -107,7 +109,7 @@ const MealScheduler = () => {
 
   const handleRemoveMeal = async (meal: Meal) => {
     try {
-      //   await deleteMeal(mealId).unwrap();
+      await deleteMeal(meal?.id ?? "").unwrap();
 
       setWeekMeals((prev) =>
         prev.map((day) => ({
