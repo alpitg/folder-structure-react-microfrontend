@@ -31,31 +31,28 @@ const CarouselApp = () => {
 
         <div className="col-lg-5 mb-5 mb-lg-0">
           <span className="badge bg-light rounded-pill px-3 py-2">
+            <i className="bi bi-stars me-2"></i>
             Premium Furniture
           </span>
-
           <h1 className="display-4 fw-bold mt-3">Crafted Luxury Furniture</h1>
-
           <p className="text-muted mt-4">
             Elegant furniture designed with timeless craftsmanship, luxurious
             materials and modern aesthetics.
           </p>
 
-          <button
+          <a
             className="btn btn-dark rounded-pill px-4 mt-3"
-            title="Copy to clipboard"
-            onClick={() =>
-              navigator.clipboard.writeText(
-                appSettings?.homePage?.contactDetails?.contactnumber || "",
-              )
+            href={
+              `https://wa.me/${appSettings?.homePage?.contactDetails?.whatsapp?.number}?text=` +
+              appSettings?.homePage?.contactDetails?.whatsapp?.message
             }
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            Contact Us:
-            <span className="ms-2">
-              {appSettings?.homePage?.contactDetails?.contactnumber}
-            </span>
-          </button>
-
+            <span className="me-2"> Contact us: </span>
+            <span className="bi bi-whatsapp me-2" />
+            {appSettings?.homePage?.contactDetails?.contactnumber}
+          </a>
           <h2 className="floating-text">Luxury</h2>
         </div>
 
