@@ -48554,11 +48554,11 @@ code:not([class*="language-"]).code-dark {
   min-height: inherit;
 }
 
-.table:not(.table-bordered) td:first-child,
-.table:not(.table-bordered) th:first-child,
-.table:not(.table-bordered) tr:first-child {
-  padding-left: 0;
-}
+// .table:not(.table-bordered) td:first-child,
+// .table:not(.table-bordered) th:first-child,
+// .table:not(.table-bordered) tr:first-child {
+//   padding-left: 0;
+// }
 
 .table:not(.table-bordered) td:last-child,
 .table:not(.table-bordered) th:last-child,

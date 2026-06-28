@@ -42,6 +42,7 @@ export const ROUTE_URL = {
     CONTACT: "/contact",
     PRODUCTS: "/products",
     PRODUCT_DETAILS: "/products/:id",
+    CART: "/cart",
   },
 
   DASHBOARD: "/",

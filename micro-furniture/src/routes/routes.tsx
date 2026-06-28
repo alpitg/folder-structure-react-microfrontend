@@ -12,6 +12,8 @@ const ProductDetailsApp = lazy(
   () => import("../features/website/products/details/product-details"),
 );
 
+const CartApp = lazy(() => import("../features/website/cart/cart"));
+
 const RoutesApp = () => {
   useAuthInit(); // run once at app start
 
@@ -29,6 +31,7 @@ const RoutesApp = () => {
               path={ROUTE_URL.WEBSITE.PRODUCT_DETAILS}
               element={<ProductDetailsApp />}
             />
+            <Route path="/cart" element={<CartApp />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/" replace />} />

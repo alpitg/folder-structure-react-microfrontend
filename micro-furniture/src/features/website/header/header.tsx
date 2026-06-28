@@ -55,14 +55,9 @@ const HeaderApp = () => {
 
           <ul className="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
             <li>
-              <a className="nav-link" href="#">
-                <img src="/static/media/img/user.svg" />
-              </a>
-            </li>
-            <li>
-              <a className="nav-link" href="cart.html">
+              <NavLink className="nav-link" to={ROUTE_URL.WEBSITE.CART}>
                 <img src="/static/media/img/cart.svg" />
-              </a>
+              </NavLink>
             </li>
           </ul>
         </div>
