@@ -103,6 +103,12 @@ a {
           }
         }
       }
+      a.active {
+        opacity: 1;
+        &:before {
+          width: calc(100% - 16px);
+        }
+      }
     }
   }
   .custom-navbar-cta {
