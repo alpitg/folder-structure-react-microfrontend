@@ -1,0 +1,15 @@
+.empty-cart-app {
+  min-height: 500px;
+
+  .empty-cart-icon {
+    font-size: 10rem; // 160px
+    color: var(--bs-dark);
+  }
+
+  h4 {
+    font-size: 1.25rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+  }
+
+}
