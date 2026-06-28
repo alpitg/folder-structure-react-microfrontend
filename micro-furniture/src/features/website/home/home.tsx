@@ -35,7 +35,7 @@ const HomeApp = () => {
             </div>
             <div className="col-lg-7">
               <div className="hero-img-wrap">
-                <img src="static/media/img/couch.png" className="img-fluid" />
+                <img src="/static/media/img/couch.png" className="img-fluid" />
               </div>
             </div>
           </div>
@@ -70,7 +70,7 @@ const HomeApp = () => {
                 <strong className="product-price">$50.00</strong>
 
                 <span className="icon-cross">
-                  <img src="static/media/img/cross.svg" className="img-fluid" />
+                  <img src="/static/media/img/cross.svg" className="img-fluid" />
                 </span>
               </a>
             </div>
@@ -85,7 +85,7 @@ const HomeApp = () => {
                 <strong className="product-price">$78.00</strong>
 
                 <span className="icon-cross">
-                  <img src="static/media/img/cross.svg" className="img-fluid" />
+                  <img src="/static/media/img/cross.svg" className="img-fluid" />
                 </span>
               </a>
             </div>
@@ -100,7 +100,7 @@ const HomeApp = () => {
                 <strong className="product-price">$43.00</strong>
 
                 <span className="icon-cross">
-                  <img src="static/media/img/cross.svg" className="img-fluid" />
+                  <img src="/static/media/img/cross.svg" className="img-fluid" />
                 </span>
               </a>
             </div>
@@ -158,13 +158,13 @@ const HomeApp = () => {
             <div className="col-lg-7 mb-5 mb-lg-0">
               <div className="imgs-grid">
                 <div className="grid grid-1">
-                  <img src="static/media/img/img-grid-1.jpg" alt="Untree.co" />
+                  <img src="/static/media/img/img-grid-1.jpg" alt="Untree.co" />
                 </div>
                 <div className="grid grid-2">
-                  <img src="static/media/img/img-grid-2.jpg" alt="Untree.co" />
+                  <img src="/static/media/img/img-grid-2.jpg" alt="Untree.co" />
                 </div>
                 <div className="grid grid-3">
-                  <img src="static/media/img/img-grid-3.jpg" alt="Untree.co" />
+                  <img src="/static/media/img/img-grid-3.jpg" alt="Untree.co" />
                 </div>
               </div>
             </div>

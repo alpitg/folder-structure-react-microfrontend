@@ -42,11 +42,6 @@ const WebsiteApp = () => {
               </li>
 
               <li>
-                <a className="nav-link" href="#whyUs">
-                  Why us
-                </a>
-              </li>
-              <li>
                 <NavLink className="nav-link" to="/products">
                   Products
                 </NavLink>
@@ -66,12 +61,12 @@ const WebsiteApp = () => {
             <ul className="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
               <li>
                 <a className="nav-link" href="#">
-                  <img src="static/media/img/user.svg" />
+                  <img src="/static/media/img/user.svg" />
                 </a>
               </li>
               <li>
                 <a className="nav-link" href="cart.html">
-                  <img src="static/media/img/cart.svg" />
+                  <img src="/static/media/img/cart.svg" />
                 </a>
               </li>
             </ul>
