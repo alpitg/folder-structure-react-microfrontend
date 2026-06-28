@@ -8,7 +8,7 @@ const FooterApp = () => {
       <div className="container relative">
         <div className="sofa-img">
           <img
-            src="static/media/img/sofa.png"
+            src="/static/media/img/sofa.png"
             alt="Image"
             className="img-fluid"
           />

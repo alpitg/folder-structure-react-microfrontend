@@ -73,7 +73,7 @@ const NewArrivals = () => {
       </div>
 
       <div className="product-carousel-wrapper position-relative">
-        <div className="product-carousel d-flex gap-4 overflow-auto pb-3">
+        <div className="product-carousel d-flex gap-4 overflow-auto hide-scrollbar pb-3">
           {products.map((p) => (
             <div key={p.id} className="product-slide flex-shrink-0">
               <div className="product-card card border-0 shadow-sm h-100 position-relative overflow-hidden">

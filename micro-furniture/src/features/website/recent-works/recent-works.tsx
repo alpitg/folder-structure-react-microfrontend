@@ -18,7 +18,7 @@ const RecentWorksApp = () => {
             <div className="post-entry">
               <a href="#" className="post-thumbnail">
                 <img
-                  src="static/media/img/post-1.jpg"
+                  src="/static/media/img/post-1.jpg"
                   alt="Image"
                   className="img-fluid"
                 />
@@ -43,7 +43,7 @@ const RecentWorksApp = () => {
             <div className="post-entry">
               <a href="#" className="post-thumbnail">
                 <img
-                  src="static/media/img/post-2.jpg"
+                  src="/static/media/img/post-2.jpg"
                   alt="Image"
                   className="img-fluid"
                 />
@@ -68,7 +68,7 @@ const RecentWorksApp = () => {
             <div className="post-entry">
               <a href="#" className="post-thumbnail">
                 <img
-                  src="static/media/img/post-3.jpg"
+                  src="/static/media/img/post-3.jpg"
                   alt="Image"
                   className="img-fluid"
                 />

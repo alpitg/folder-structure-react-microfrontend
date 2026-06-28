@@ -40,7 +40,7 @@ const TestimoniApp = () => {
                         <div className="author-info">
                           <div className="author-pic">
                             <img
-                              src="static/media/img/person-1.png"
+                              src="/static/media/img/person-1.png"
                               alt="Maria Jones"
                               className="img-fluid"
                             />
@@ -74,7 +74,7 @@ const TestimoniApp = () => {
                         <div className="author-info">
                           <div className="author-pic">
                             <img
-                              src="static/media/img/person-1.png"
+                              src="/static/media/img/person-1.png"
                               alt="Maria Jones"
                               className="img-fluid"
                             />
@@ -108,7 +108,7 @@ const TestimoniApp = () => {
                         <div className="author-info">
                           <div className="author-pic">
                             <img
-                              src="static/media/img/person-1.png"
+                              src="/static/media/img/person-1.png"
                               alt="Maria Jones"
                               className="img-fluid"
                             />

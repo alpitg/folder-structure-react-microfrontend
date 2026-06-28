@@ -1,6 +1,6 @@
 import CategoryBanner from "../category-banner/category-banner";
 import { GetEnvConfig } from "../../../app.config";
-import RecentWorksApp from "../recent-works/rectent-works";
+import RecentWorksApp from "../recent-works/recent-works";
 const HomeApp = () => {
   const appSettings = GetEnvConfig();
 
@@ -62,14 +62,17 @@ const HomeApp = () => {
             <div className="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
               <a className="product-item" href="cart.html">
                 <img
-                  src="static/media/img/product-1.png"
+                  src="/static/media/img/product-1.png"
                   className="img-fluid product-thumbnail"
                 />
                 <h3 className="product-title">Nordic Chair</h3>
                 <strong className="product-price">$50.00</strong>
 
                 <span className="icon-cross">
-                  <img src="/static/media/img/cross.svg" className="img-fluid" />
+                  <img
+                    src="/static/media/img/cross.svg"
+                    className="img-fluid"
+                  />
                 </span>
               </a>
             </div>
@@ -77,14 +80,17 @@ const HomeApp = () => {
             <div className="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
               <a className="product-item" href="cart.html">
                 <img
-                  src="static/media/img/product-2.png"
+                  src="/static/media/img/product-2.png"
                   className="img-fluid product-thumbnail"
                 />
                 <h3 className="product-title">Kruzo Aero Chair</h3>
                 <strong className="product-price">$78.00</strong>
 
                 <span className="icon-cross">
-                  <img src="/static/media/img/cross.svg" className="img-fluid" />
+                  <img
+                    src="/static/media/img/cross.svg"
+                    className="img-fluid"
+                  />
                 </span>
               </a>
             </div>
@@ -92,14 +98,17 @@ const HomeApp = () => {
             <div className="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
               <a className="product-item" href="cart.html">
                 <img
-                  src="static/media/img/product-3.png"
+                  src="/static/media/img/product-3.png"
                   className="img-fluid product-thumbnail"
                 />
                 <h3 className="product-title">Ergonomic Chair</h3>
                 <strong className="product-price">$43.00</strong>
 
                 <span className="icon-cross">
-                  <img src="/static/media/img/cross.svg" className="img-fluid" />
+                  <img
+                    src="/static/media/img/cross.svg"
+                    className="img-fluid"
+                  />
                 </span>
               </a>
             </div>
@@ -125,7 +134,7 @@ const HomeApp = () => {
                       <div className="feature">
                         <div className="icon">
                           <img
-                            src={service.icon || "static/media/img/truck.svg"}
+                            src={service.icon || "/static/media/img/truck.svg"}
                             alt="Image"
                             className="imf-fluid"
                           />
@@ -142,7 +151,7 @@ const HomeApp = () => {
             <div className="col-lg-5">
               <div className="img-wrap">
                 <img
-                  src="static/media/img/why-choose-us-img.jpg"
+                  src="/static/media/img/why-choose-us-img.jpg"
                   alt="Image"
                   className="img-fluid"
                 />
@@ -193,7 +202,7 @@ const HomeApp = () => {
               <div className="product-item-sm d-flex">
                 <div className="thumbnail">
                   <img
-                    src="static/media/img/product-1.png"
+                    src="/static/media/img/product-1.png"
                     alt="Image"
                     className="img-fluid"
                   />
@@ -215,7 +224,7 @@ const HomeApp = () => {
               <div className="product-item-sm d-flex">
                 <div className="thumbnail">
                   <img
-                    src="static/media/img/product-2.png"
+                    src="/static/media/img/product-2.png"
                     alt="Image"
                     className="img-fluid"
                   />
@@ -237,7 +246,7 @@ const HomeApp = () => {
               <div className="product-item-sm d-flex">
                 <div className="thumbnail">
                   <img
-                    src="static/media/img/product-3.png"
+                    src="/static/media/img/product-3.png"
                     alt="Image"
                     className="img-fluid"
                   />
@@ -246,7 +255,7 @@ const HomeApp = () => {
                   <h3>Ergonomic Chair</h3>
                   <p>
                     Donec facilisis quam ut purus rutrum lobortis. Donec vitae
-                    odio{" "}
+                    odio
                   </p>
                   <p>
                     <a href="#">Read More</a>
