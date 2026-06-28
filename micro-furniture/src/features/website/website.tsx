@@ -5,6 +5,7 @@ import { NavLink, Outlet } from "react-router";
 
 import Footer from "./footer/footer";
 import { GetEnvConfig } from "../../app.config";
+import { ROUTE_URL } from "../../routes/constants/routes.const";
 
 const WebsiteApp = () => {
   const appSettings = GetEnvConfig();
@@ -36,13 +37,13 @@ const WebsiteApp = () => {
           <div className="collapse navbar-collapse" id="navbarsFurni">
             <ul className="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
               <li className="nav-item active">
-                <a className="nav-link" href="#home">
+                <NavLink className="nav-link" to={ROUTE_URL.WEBSITE.BASE}>
                   Home
-                </a>
+                </NavLink>
               </li>
 
               <li>
-                <NavLink className="nav-link" to="/products">
+                <NavLink className="nav-link" to={ROUTE_URL.WEBSITE.PRODUCTS}>
                   Products
                 </NavLink>
               </li>
