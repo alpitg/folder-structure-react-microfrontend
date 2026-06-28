@@ -1,3 +1,4 @@
+import CarouselApp from "./carousel/carousel";
 import CategoryBanner from "../category-banner/category-banner";
 import { GetEnvConfig } from "../../../app.config";
 import RecentWorksApp from "../recent-works/recent-works";
@@ -6,40 +7,8 @@ const HomeApp = () => {
 
   return (
     <section className="home-app">
-      {" "}
-      <div className="hero">
-        <div className="container">
-          <div className="row justify-content-between">
-            <div className="col-lg-5">
-              <div className="intro-excerpt">
-                <h1>{appSettings?.homePage?.title}</h1>
-                <p className="mb-4">{appSettings?.homePage?.description}</p>
-                <p>
-                  <b>Contact us:</b>
-                  <a
-                    href="#"
-                    title="Copy to clipboard"
-                    className="btn btn-white-outline"
-                    onClick={() =>
-                      navigator.clipboard.writeText(
-                        appSettings?.homePage?.contactDetails?.contactnumber ||
-                          "",
-                      )
-                    }
-                  >
-                    {appSettings?.homePage?.contactDetails?.contactnumber}
-                  </a>
-                </p>
-              </div>
-            </div>
-            <div className="col-lg-7">
-              <div className="hero-img-wrap">
-                <img src="/static/media/img/couch.png" className="img-fluid" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <CarouselApp />
+
       <CategoryBanner />
       <div className="product-section">
         <div className="container">
