@@ -1,6 +1,7 @@
 import "./website.scss";
 import "../../assets/scss/website.scss";
 
+import CategoryBanner from "./category-banner/category-banner";
 import Footer from "./footer/footer";
 import { GetEnvConfig } from "../../app.config";
 import RecentWorksApp from "./recent-works/rectent-works";
@@ -96,7 +97,7 @@ const WebsiteApp = () => {
                       onClick={() =>
                         navigator.clipboard.writeText(
                           appSettings?.homePage?.contactDetails
-                            ?.contactnumber || ""
+                            ?.contactnumber || "",
                         )
                       }
                     >
@@ -113,6 +114,8 @@ const WebsiteApp = () => {
             </div>
           </div>
         </div>
+
+        <CategoryBanner />
 
         <div className="product-section">
           <div className="container">
@@ -218,7 +221,7 @@ const WebsiteApp = () => {
                           <p>{service.description}</p>
                         </div>
                       </div>
-                    )
+                    ),
                   )}
                 </div>
               </div>
@@ -273,7 +276,7 @@ const WebsiteApp = () => {
                       <li key={`why-choose-us-2-service-${index}`}>
                         {service.title}
                       </li>
-                    )
+                    ),
                   )}
                 </ul>
               </div>

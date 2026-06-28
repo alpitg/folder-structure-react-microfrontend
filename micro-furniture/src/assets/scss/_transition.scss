@@ -1,0 +1,16 @@
+/* Common Hover Animation */
+.hover-lift {
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.hover-ease-out {
+  transition: all 0.2s ease-out;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
