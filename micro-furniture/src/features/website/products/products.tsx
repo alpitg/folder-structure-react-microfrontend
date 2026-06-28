@@ -153,16 +153,14 @@ const Products = () => {
           <div key={product.id} className="col-sm-6 col-md-4 col-lg-4 p-3">
             <div className="product-card position-relative d-flex flex-column">
               {/* KEEP BOOTSTRAP STRETCHED LINK */}
-              <a href={product.link} className="stretched-link"></a>
+              {/* <a href={product.link} className="stretched-link"></a> */}
 
               <div className="product-img position-relative overflow-hidden rounded-4 p-6">
-                <a href={product.link} className="d-block">
-                  <img
-                    src={product.image}
-                    alt={product.title}
-                    className="img-fluid w-100 product-image"
-                  />
-                </a>
+                <img
+                  src={product.image}
+                  alt={product.title}
+                  className="img-fluid w-100 product-image"
+                />
 
                 {product.isNewArrival && (
                   <div className="badge">
