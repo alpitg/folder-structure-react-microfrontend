@@ -1,5 +1,3 @@
-import "./category-banner.scss";
-
 const CategoryBanner = () => {
   const banners = [
     {
