@@ -42,21 +42,16 @@ const HeaderApp = () => {
               </NavLink>
             </li>
             <li>
-              <a className="nav-link" href="#recentWorks">
-                Blog
-              </a>
-            </li>
-            <li>
               <a className="nav-link" href="#contactus">
                 Contact us
               </a>
             </li>
           </ul>
 
-          <ul className="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+          <ul className="custom-navbar-nav navbar-nav mb-2 mb-md-0 ms-5">
             <li>
               <NavLink className="nav-link" to={ROUTE_URL.WEBSITE.CART}>
-                <i className="bi bi-cart3 fs-xl me-1"></i> 
+                <i className="bi bi-cart3 fs-xl me-1"></i>
                 Cart
               </NavLink>
             </li>
