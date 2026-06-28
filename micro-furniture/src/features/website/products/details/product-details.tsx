@@ -26,13 +26,13 @@ const ProductDetails = () => {
   ];
 
   return (
-    <div className="container py-5">
+    <div className="product-details-app container py-5">
       <div className="row">
         <div className="col-sm-6">
           <ProductGallery />
         </div>
         <div className="col-sm-6">
-          <div className="sticky-top" style={{ top: "1rem" }}>
+          <div>
             {/* Breadcrumb */}
             <nav aria-label="breadcrumb" className="mb-3">
               <ol className="breadcrumb small mb-2">
