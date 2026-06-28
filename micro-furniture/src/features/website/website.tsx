@@ -4,6 +4,7 @@ import "../../assets/scss/website.scss";
 import CategoryBanner from "./category-banner/category-banner";
 import Footer from "./footer/footer";
 import { GetEnvConfig } from "../../app.config";
+import { NavLink } from "react-router";
 import RecentWorksApp from "./recent-works/rectent-works";
 import TestimoniApp from "./testimoni/testimoni";
 
@@ -48,9 +49,9 @@ const WebsiteApp = () => {
                 </a>
               </li>
               <li>
-                <a className="nav-link" href="#services">
-                  Services
-                </a>
+                <NavLink className="nav-link" to="/products">
+                  Products
+                </NavLink>
               </li>
               <li>
                 <a className="nav-link" href="#recentWorks">

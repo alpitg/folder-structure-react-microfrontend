@@ -6,6 +6,10 @@ import { ROUTE_URL } from "./constants/routes.const";
 import { useAuthInit } from "../hooks/use-auth-init";
 
 const WebsiteApp = lazy(() => import("../features/website/website"));
+const ProductsApp = lazy(() => import("../features/website/products/products"));
+const ProductDetailsApp = lazy(
+  () => import("../features/website/products/details/product-details"),
+);
 
 const RoutesApp = () => {
   useAuthInit(); // run once at app start
@@ -15,6 +19,11 @@ const RoutesApp = () => {
       <BrowserRouter>
         <Routes>
           <Route path={ROUTE_URL.WEBSITE.BASE} element={<WebsiteApp />} />
+          <Route path={ROUTE_URL.WEBSITE.PRODUCTS} element={<ProductsApp />} />
+          <Route
+            path={ROUTE_URL.WEBSITE.PRODUCT_DETAILS}
+            element={<ProductDetailsApp />}
+          />
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

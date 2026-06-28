@@ -1,0 +1,106 @@
+@import "../../../assets/scss/website_variables";
+
+.products-app {
+  .tab-menu {
+    .btn-link {
+      position: relative;
+      color: #555;
+      font-weight: 500;
+      margin-left: 18px;
+
+      &:hover,
+      &.active {
+        color: #000;
+      }
+
+      &:not(:first-child)::before {
+        content: "|";
+        position: absolute;
+        left: -12px;
+        color: #333;
+      }
+    }
+  }
+
+  .product-card {
+    position: relative;
+    cursor: pointer;
+
+    .product-img {
+      position: relative;
+      background: $lighter;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .product-image {
+      transition: transform 0.4s ease;
+    }
+
+    /* IMAGE HOVER ZOOM */
+    &:hover .product-image {
+      transform: scale(1.08);
+    }
+
+    /* BADGE */
+    .badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--bs-white);
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      z-index: 2;
+    }
+
+    /* ACTION BUTTONS */
+    .product-actions {
+      i {
+        justify-content: center;
+      }
+      position: absolute;
+      left: 50%;
+      bottom: 15px;
+      width: 100%;
+      justify-content: center;
+
+      transform: translate(-50%, 20px);
+      opacity: 0;
+      visibility: hidden;
+
+      display: flex;
+      gap: 10px;
+
+      transition: all 0.3s ease;
+      z-index: 5;
+    }
+
+    /* SHOW ON HOVER */
+    &:hover .product-actions {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, 0);
+    }
+
+    /* COLOR DOTS */
+    .color-dot {
+      width: 14px;
+      height: 14px;
+      cursor: pointer;
+    }
+
+    /* PRICE */
+    .price {
+      font-size: x-large;
+      color: var(--bs-success);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+      i {
+        font-size: x-large;
+        color: var(--bs-success);
+      }
+    }
+  }
+}

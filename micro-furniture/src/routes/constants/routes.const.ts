@@ -40,6 +40,8 @@ export const ROUTE_URL = {
     BASE: "",
     ABOUT: "/about",
     CONTACT: "/contact",
+    PRODUCTS: "/products",
+    PRODUCT_DETAILS: "/products/:id",
   },
 
   DASHBOARD: "/",

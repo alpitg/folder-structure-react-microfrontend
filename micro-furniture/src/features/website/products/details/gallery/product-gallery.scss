@@ -1,0 +1,36 @@
+.product-gallery-app {
+  .product-main,
+  .product-thumb {
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+    background: var(--bs-light);
+  }
+
+  /* IMPORTANT: controls ANY oversized image */
+  .product-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; // prevents stretching
+    display: block;
+    transition:
+      transform 0.3s ease,
+      filter 0.3s ease;
+  }
+
+  /* Hover effect */
+  .product-img:hover {
+    transform: scale(1.03);
+    filter: brightness(0.95);
+  }
+
+  /* MAIN IMAGE LIMIT */
+  .product-main {
+    max-height: 520px; // prevents huge images
+  }
+
+  /* THUMBNAILS LIMIT */
+  .product-thumb {
+    max-height: 180px;
+  }
+}
