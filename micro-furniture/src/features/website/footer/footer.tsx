@@ -1,6 +1,6 @@
 import { GetEnvConfig } from "../../../app.config";
 
-export default function Footer() {
+const FooterApp = () => {
   const appSettings = GetEnvConfig();
 
   return (
@@ -194,4 +194,6 @@ export default function Footer() {
       </div>
     </footer>
   );
-}
+};
+
+export default FooterApp;

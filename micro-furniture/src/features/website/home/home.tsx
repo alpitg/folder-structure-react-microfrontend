@@ -1,7 +1,6 @@
 import CategoryBanner from "../category-banner/category-banner";
 import { GetEnvConfig } from "../../../app.config";
 import RecentWorksApp from "../recent-works/rectent-works";
-import TestimoniApp from "../testimoni/testimoni";
 const HomeApp = () => {
   const appSettings = GetEnvConfig();
 
@@ -258,7 +257,6 @@ const HomeApp = () => {
           </div>
         </div>
       </div>
-      <TestimoniApp />
       <RecentWorksApp />
     </section>
   );

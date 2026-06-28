@@ -2,26 +2,26 @@
   "version": "1.0",
   "apiUrl": "http://localhost:3000/api",
   "name": "Artisan Studio",
-  "description": "Furniture & transportation",
+  "description": "Modern, classic & aesthetic Furniture",
   "author": "Chaitanya Suryawanshi",
   "logo": "/static/media/img/logo.png",
   "debugMode": false,
   "homePage": {
     "title": "Welcome to Artisan Studio",
-    "subtitle": "Your one-stop shop for quality furniture and reliable transportation services.",
-    "description": "At Artisan Studio, we pride ourselves on offering a wide range of furniture options to suit every style and budget. Whether you're looking for modern, classic, or custom pieces, we have something for everyone. Our transportation services ensure that your furniture is delivered safely and on time.",
+    "subtitle": "Your one-stop shop for quality furniture.",
+    "description": "At Artisan Studio, we pride ourselves on offering a wide range of furniture options to suit every style and budget. Whether you're looking for modern, classic, or custom pieces, we have something for everyone.",
     "contactDetails": {
       "contactnumber": "+91 8149403097",
       "email": "email@domain",
       "instagram": "artisan_studio_in",
       "whatsapp": {
         "number": "+918149403097",
-        "message": "Hello, I would like to inquire about your furniture and transportation services."
+        "message": "Hello, I would like to inquire about your furniture options."
       }
     },
     "whyChooseUs": {
       "title": "Why Choose Us",
-      "description": "We provide the best furniture and transportation services with utmost care and professionalism.",
+      "description": "We provide the best furniture with utmost care and professionalism.",
       "services": [
         {
           "title": "Fast & Free Shipping",
@@ -48,7 +48,7 @@
 
     "whyChooseUs2": {
       "title": "We Help You Make Modern Interior Design",
-      "description": "We help you to create your dream interior design with our expert furniture and transportation services.",
+      "description": "We help you to create your dream interior design with our expert furniture.",
       "services": [
         {
           "title": "On time Delivery",
