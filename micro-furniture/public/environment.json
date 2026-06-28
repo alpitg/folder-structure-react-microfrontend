@@ -1,21 +1,21 @@
 {
   "version": "1.0",
   "apiUrl": "http://localhost:3000/api",
-  "name": "Yash Furnitures",
+  "name": "Artisan Studio",
   "description": "Furniture & transportation",
-  "author": "Yash Yadav",
+  "author": "Chaitanya Suryawanshi",
   "logo": "/static/media/img/logo.png",
   "debugMode": false,
   "homePage": {
-    "title": "Welcome to Yash Furnitures",
+    "title": "Welcome to Artisan Studio",
     "subtitle": "Your one-stop shop for quality furniture and reliable transportation services.",
-    "description": "At Yash Furnitures, we pride ourselves on offering a wide range of furniture options to suit every style and budget. Whether you're looking for modern, classic, or custom pieces, we have something for everyone. Our transportation services ensure that your furniture is delivered safely and on time.",
+    "description": "At Artisan Studio, we pride ourselves on offering a wide range of furniture options to suit every style and budget. Whether you're looking for modern, classic, or custom pieces, we have something for everyone. Our transportation services ensure that your furniture is delivered safely and on time.",
     "contactDetails": {
-      "contactnumber": "+91 8237609980",
+      "contactnumber": "+91 8149403097",
       "email": "email@domain",
-      "instagram": "yash_furnitures",
+      "instagram": "artisan_studio_in",
       "whatsapp": {
-        "number": "+918237609980",
+        "number": "+918149403097",
         "message": "Hello, I would like to inquire about your furniture and transportation services."
       }
     },
