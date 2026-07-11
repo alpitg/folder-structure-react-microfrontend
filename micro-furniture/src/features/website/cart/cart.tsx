@@ -1,6 +1,7 @@
 import "./cart.scss";
 
 import EmptyCartApp from "./empty-cart/empty-cart";
+import { GetEnvConfig } from "../../../app.config";
 import { NavLink } from "react-router";
 import { ROUTE_URL } from "../../../routes/constants/routes.const";
 import { useState } from "react";
@@ -14,6 +15,7 @@ interface CartItem {
 }
 
 const CartApp = () => {
+  const appSettings = GetEnvConfig();
   const [items, setItems] = useState<CartItem[]>([
     {
       id: 1,
@@ -63,6 +65,27 @@ const CartApp = () => {
     0,
   );
 
+  const handleCheckout = () => {
+    if (items.length === 0) return;
+
+    const message = [
+      "Hello! I would like to place an order for the following items:",
+      ...items.map(
+        (item) =>
+          `- ${item.name} x${item.quantity} @ ₹${item.price.toFixed(2)} each = ₹${(item.price * item.quantity).toFixed(2)}`,
+      ),
+      "",
+      `Subtotal: ₹${subtotal.toFixed(2)}`,
+    ].join("\n");
+
+    const whatsappNumber = appSettings?.homePage?.contactDetails?.whatsapp?.number;
+    const whatsappUrl = whatsappNumber
+      ? `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`
+      : `https://wa.me/?text=${encodeURIComponent(message)}`;
+
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+  };
+
   return (
     <section className="cart-app py-5">
       {items?.length === 0 ? (
@@ -96,7 +119,7 @@ const CartApp = () => {
                       </div>
                     </td>
 
-                    <td>${item.price.toFixed(2)}</td>
+                    <td>₹{item.price.toFixed(2)}</td>
 
                     <td>
                       <div className="quantity-box">
@@ -118,7 +141,7 @@ const CartApp = () => {
                       </div>
                     </td>
 
-                    <td>${(item.price * item.quantity).toFixed(2)}</td>
+                    <td>₹{(item.price * item.quantity).toFixed(2)}</td>
 
                     <td className="text-end">
                       {/* <button
@@ -172,17 +195,20 @@ const CartApp = () => {
                 <div className="d-flex justify-content-between border-bottom pb-3">
                   <strong>Subtotal</strong>
 
-                  <span>${subtotal.toFixed(2)}</span>
+                  <span>₹{subtotal.toFixed(2)}</span>
                 </div>
 
                 <div className="d-flex justify-content-between pt-3">
                   <strong>Total</strong>
 
-                  <strong>${subtotal.toFixed(2)}</strong>
+                  <strong>₹{subtotal.toFixed(2)}</strong>
                 </div>
 
-                <button className="btn btn-dark w-100 mt-4">
-                  Proceed to Checkout
+                <button
+                  className="btn btn-dark w-100 mt-4"
+                  onClick={handleCheckout}
+                >
+                  Send Order by WhatsApp
                 </button>
               </div>
             </div>
