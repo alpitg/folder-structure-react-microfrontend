@@ -1,5 +1,13 @@
 import "./products.scss";
 
+import {
+  addItemToBag,
+  decreaseBagItemQuantity,
+  removeBagItem,
+} from "../../../app/redux/core/shopping-bag/shopping-bag.slice";
+import { useDispatch, useSelector } from "react-redux";
+
+import type { AppState } from "../../../app/store";
 import { useNavigate } from "react-router";
 
 const products = [
@@ -140,6 +148,8 @@ const products = [
 
 const Products = () => {
   const route = useNavigate();
+  const dispatch = useDispatch();
+  const bagItems = useSelector((state: AppState) => state.core.shoppingBag.items);
 
   const handleQuickView = () => {
     // Implement quick view functionality here
@@ -175,9 +185,65 @@ const Products = () => {
 
                 {/* Hover actions */}
                 <div className="product-actions d-flex gap-2">
-                  <button className="btn btn-dark btn-sm rounded-pill shadow px-3">
-                    <i className="bi bi-cart"></i> Add to bag
-                  </button>
+                  {(() => {
+                    const quantity =
+                      bagItems.find((item) => item.id === product.id)?.quantity ?? 0;
+
+                    if (quantity === 0) {
+                      return (
+                        <button
+                          className="btn btn-dark btn-sm rounded-pill shadow px-3"
+                          onClick={() =>
+                            dispatch(
+                              addItemToBag({
+                                id: product.id,
+                                name: product.title,
+                                image: product.image,
+                                price: product.price,
+                                quantity: 1,
+                              }),
+                            )
+                          }
+                        >
+                          <i className="bi bi-cart"></i> Add to bag
+                        </button>
+                      );
+                    }
+
+                    return (
+                      <div className="d-flex align-items-center justify-content-between bg-dark rounded-pill px-3 py-1 shadow" style={{ minWidth: 96 }}>
+                        <button
+                          className="btn btn-link p-0 d-flex align-items-center justify-content-center rounded-circle border border-light qty-control-btn"
+                          style={{ width: 28, height: 28 }}
+                          onClick={() =>
+                            quantity > 1
+                              ? dispatch(decreaseBagItemQuantity(product.id))
+                              : dispatch(removeBagItem(product.id))
+                          }
+                        >
+                          -
+                        </button>
+                        <span className="fw-semibold text-light">{quantity}</span>
+                        <button
+                          className="btn btn-link p-0 d-flex align-items-center justify-content-center rounded-circle border border-light qty-control-btn"
+                          style={{ width: 28, height: 28 }}
+                          onClick={() =>
+                            dispatch(
+                              addItemToBag({
+                                id: product.id,
+                                name: product.title,
+                                image: product.image,
+                                price: product.price,
+                                quantity: 1,
+                              }),
+                            )
+                          }
+                        >
+                          +
+                        </button>
+                      </div>
+                    );
+                  })()}
                   <button
                     className="btn btn-light btn-sm rounded-pill shadow px-3"
                     onClick={() => handleQuickView()}

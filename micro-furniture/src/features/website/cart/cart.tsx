@@ -1,64 +1,37 @@
 import "./cart.scss";
 
+import {
+  clearBag,
+  decreaseBagItemQuantity,
+  increaseBagItemQuantity,
+  removeBagItem,
+} from "../../../app/redux/core/shopping-bag/shopping-bag.slice";
+import { useDispatch, useSelector } from "react-redux";
+
+import type { AppState } from "../../../app/store";
 import EmptyCartApp from "./empty-cart/empty-cart";
 import { GetEnvConfig } from "../../../app.config";
 import { NavLink } from "react-router";
 import { ROUTE_URL } from "../../../routes/constants/routes.const";
-import { useState } from "react";
-
-interface CartItem {
-  id: number;
-  name: string;
-  image: string;
-  price: number;
-  quantity: number;
-}
 
 const CartApp = () => {
   const appSettings = GetEnvConfig();
-  const [items, setItems] = useState<CartItem[]>([
-    {
-      id: 1,
-      name: "Art Deco Home",
-      image: "/static/media/img/product-1.png",
-      price: 30,
-      quantity: 6,
-    },
-    {
-      id: 2,
-      name: "Art Deco Home",
-      image: "/static/media/img/product-1.png",
-      price: 30,
-      quantity: 6,
-    },
-  ]);
+  const dispatch = useDispatch();
+  const items = useSelector((state: AppState) => state.core.shoppingBag.items);
 
   const increase = (id: number) => {
-    setItems((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity + 1 } : item,
-      ),
-    );
+    dispatch(increaseBagItemQuantity(id));
   };
 
   const decrease = (id: number) => {
-    setItems((prev) =>
-      prev.map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              quantity: Math.max(1, item.quantity - 1),
-            }
-          : item,
-      ),
-    );
+    dispatch(decreaseBagItemQuantity(id));
   };
 
   const remove = (id: number) => {
-    setItems((prev) => prev.filter((item) => item.id !== id));
+    dispatch(removeBagItem(id));
   };
 
-  const clearCart = () => setItems([]);
+  const clearCart = () => dispatch(clearBag());
 
   const subtotal = items.reduce(
     (sum, item) => sum + item.price * item.quantity,
