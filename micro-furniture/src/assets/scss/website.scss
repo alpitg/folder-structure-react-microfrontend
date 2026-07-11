@@ -631,8 +631,21 @@ a {
     top: -150px;
     z-index: 1;
     right: 0;
+
+    @media (max-width: 767px) {
+      top: -150px;
+      right: 0;
+      opacity: 0.9;
+    }
+
     img {
       max-width: 380px;
+      // width: 100%;
+      height: auto;
+
+      @media (max-width: 767px) {
+        max-width: 150px;
+      }
     }
   }
 
