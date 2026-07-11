@@ -101,7 +101,7 @@ let environment = {
     },
     catalog: {
       product: {
-        list: "",
+        list: "/api/catalog/products.json",
         detail: "",
         add: "",
         update: "",

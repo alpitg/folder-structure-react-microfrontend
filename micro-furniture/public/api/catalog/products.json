@@ -1,0 +1,57 @@
+{
+  "total": 4,
+  "page": 1,
+  "pageSize": 10,
+  "pages": 1,
+  "items": [
+    {
+      "id": "1",
+      "name": "Nordic Chair",
+      "description": "Minimal Scandinavian design",
+      "price": 50,
+      "image": "/static/media/img/product-1.png",
+      "rating": 4.5,
+      "reviews": 87,
+      "status": "published",
+      "isNewArrival": true,
+      "category": "furniture",
+      "colors": ["#000000", "#ffffff", "#ff0000", "#00ff00", "#0000ff"]
+    },
+    {
+      "id": "2",
+      "name": "Kruzo Aero Chair",
+      "description": "Lightweight ergonomic build",
+      "price": 78,
+      "image": "/static/media/img/product-2.png",
+      "rating": 4.2,
+      "reviews": 54,
+      "status": "published",
+      "isNewArrival": false,
+      "category": "furniture"
+    },
+    {
+      "id": "3",
+      "name": "Ergonomic Chair",
+      "description": "Comfort-focused seating",
+      "price": 43,
+      "image": "/static/media/img/product-3.png",
+      "rating": 4.6,
+      "reviews": 102,
+      "status": "published",
+      "isNewArrival": true,
+      "category": "furniture"
+    },
+    {
+      "id": "4",
+      "name": "Modern Wooden Chair",
+      "description": "Premium wood finish",
+      "price": 65,
+      "image": "/static/media/img/product-1.png",
+      "rating": 4.3,
+      "reviews": 61,
+      "status": "published",
+      "isNewArrival": false,
+      "category": "furniture"
+    }
+  ]
+}

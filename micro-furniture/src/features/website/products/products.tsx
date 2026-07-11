@@ -8,148 +8,41 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 
 import type { AppState } from "../../../app/store";
+import { useGetProductsQuery } from "../../../app/redux/catalog/product/product.api";
 import { useNavigate } from "react-router";
-
-const products = [
-  {
-    id: 1,
-    title: "Nordic Chair",
-    price: 50,
-    image: "/static/media/img/product-1.png",
-    link: "/cart",
-    category: "furniture",
-    rating: 4.5,
-    reviews: 87,
-    subtitle: "Minimal Scandinavian design",
-    isNewArrival: true,
-    colors: ["#000000", "#ffffff", "#ff0000", "#00ff00", "#0000ff"],
-  },
-  {
-    id: 2,
-    title: "Kruzo Aero Chair",
-    price: 78,
-    image: "/static/media/img/product-2.png",
-    link: "/cart",
-    category: "furniture",
-    rating: 4.2,
-    reviews: 54,
-    isNewArrival: false,
-    subtitle: "Lightweight ergonomic build",
-  },
-  {
-    id: 3,
-    title: "Ergonomic Chair",
-    price: 43,
-    image: "/static/media/img/product-3.png",
-    link: "/cart",
-    category: "furniture",
-    rating: 4.6,
-    reviews: 102,
-    isNewArrival: true,
-    subtitle: "Comfort-focused seating",
-  },
-  {
-    id: 4,
-    title: "Modern Wooden Chair",
-    price: 65,
-    image: "/static/media/img/product-1.png",
-    link: "/cart",
-    category: "furniture",
-    rating: 4.3,
-    reviews: 61,
-    isNewArrival: false,
-    subtitle: "Premium wood finish",
-  },
-  {
-    id: 5,
-    title: "Ergonomic Chair Pro",
-    price: 43,
-    image: "/static/media/img/product-3.png",
-    link: "/cart",
-    category: "furniture",
-    rating: 4.1,
-    reviews: 39,
-    isNewArrival: false,
-    subtitle: "Advanced lumbar support",
-  },
-  {
-    id: 6,
-    title: "Modern Wooden Chair",
-    price: 65,
-    image: "/static/media/img/product-1.png",
-    link: "/cart",
-    category: "furniture",
-    rating: 4.0,
-    reviews: 28,
-    isNewArrival: false,
-    subtitle: "Natural oak finish",
-  },
-  {
-    id: 7,
-    title: "Classic Wooden Chair",
-    price: 65,
-    image: "/static/media/img/product-1.png",
-    link: "/cart",
-    category: "furniture",
-    rating: 4.4,
-    reviews: 72,
-    isNewArrival: false,
-    subtitle: "Timeless design",
-  },
-  {
-    id: 8,
-    title: "Ergonomic Office Chair",
-    price: 43,
-    image: "/static/media/img/product-3.png",
-    link: "/cart",
-    category: "furniture",
-    rating: 4.7,
-    reviews: 118,
-    isNewArrival: false,
-    subtitle: "Best for long hours",
-  },
-  {
-    id: 9,
-    title: "Nordic Lounge Chair",
-    price: 50,
-    image: "/static/media/img/product-1.png",
-    link: "/cart",
-    category: "furniture",
-    rating: 4.5,
-    reviews: 90,
-    isNewArrival: true,
-    subtitle: "Relaxed seating comfort",
-  },
-  {
-    id: 10,
-    title: "Ergonomic Mesh Chair",
-    price: 43,
-    image: "/static/media/img/product-3.png",
-    link: "/cart",
-    category: "furniture",
-    rating: 4.2,
-    reviews: 64,
-    isNewArrival: false,
-    subtitle: "Breathable mesh support",
-  },
-  {
-    id: 11,
-    title: "Modern Pine Chair",
-    price: 65,
-    image: "/static/media/img/product-1.png",
-    link: "/cart",
-    category: "furniture",
-    rating: 4.3,
-    reviews: 58,
-    isNewArrival: true,
-    subtitle: "Solid pine wood build",
-  },
-];
 
 const Products = () => {
   const route = useNavigate();
   const dispatch = useDispatch();
   const bagItems = useSelector((state: AppState) => state.core.shoppingBag.items);
+  const { data: productsResponse, isLoading, isError } = useGetProductsQuery({
+    page: 1,
+    pageSize: 10,
+  });
+  const productsFromStore = useSelector(
+    (state: AppState) => state.catalog.products.products,
+  );
+
+  const products = (productsFromStore.length > 0
+    ? productsFromStore
+    : productsResponse?.items ?? []) as Array<any>;
+
+  const mappedProducts = products.map((product: any) => ({
+    id: Number(product.id),
+    title: product.name ?? product.title ?? "Product",
+    price: Number(product.price ?? product.basePrice ?? 0),
+    image:
+      product.image ??
+      product.media?.[0]?.url ??
+      "/static/media/img/product-1.png",
+    link: "/cart",
+    category: product.category ?? "furniture",
+    rating: Number(product.rating ?? 4.5),
+    reviews: Number(product.reviews ?? 50),
+    subtitle: product.description ?? product.subtitle ?? "Premium quality",
+    isNewArrival: Boolean(product.isNewArrival ?? product.status === "published"),
+    colors: product.colors ?? ["#000000", "#ffffff"],
+  }));
 
   const handleQuickView = () => {
     // Implement quick view functionality here
@@ -158,8 +51,14 @@ const Products = () => {
 
   return (
     <section className="products-app container py-5 mb-20">
+      {isLoading && <div className="text-center py-5">Loading products...</div>}
+      {isError && (
+        <div className="text-center py-5 text-danger">
+          Unable to load products right now.
+        </div>
+      )}
       <div className="row">
-        {products.map((product) => (
+        {mappedProducts.map((product) => (
           <div key={product.id} className="col-sm-6 col-md-4 col-lg-4 p-3">
             <div className="product-card position-relative d-flex flex-column">
               {/* KEEP BOOTSTRAP STRETCHED LINK */}

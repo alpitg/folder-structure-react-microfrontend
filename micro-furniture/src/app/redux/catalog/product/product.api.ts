@@ -15,10 +15,11 @@ export const productsApi = createApi({
     getProducts: builder.query<PaginatedProducts, GetProductsParams>({
       query: (params) => ({
         url:
-          GetEnvConfig()?.api?.baseUrl +
-          GetEnvConfig()?.api?.catalog?.product?.list,
-        method: "POST", // your backend search is POST
-        body: params,
+          "/api/catalog/products.json",
+          // GetEnvConfig()?.api?.baseUrl +
+          // GetEnvConfig()?.api?.catalog?.product?.list,
+        method: "GET",
+        params,
       }),
     }),
 
