@@ -44,9 +44,8 @@ const Products = () => {
     colors: product.colors ?? ["#000000", "#ffffff"],
   }));
 
-  const handleQuickView = () => {
-    // Implement quick view functionality here
-    route("/products/1"); // Navigate to the product details page for product with id 1
+  const handleQuickView = (productId: number) => {
+    route(`/products/${productId}`);
   };
 
   return (
@@ -145,7 +144,7 @@ const Products = () => {
                   })()}
                   <button
                     className="btn btn-light btn-sm rounded-pill shadow px-3"
-                    onClick={() => handleQuickView()}
+                    onClick={() => handleQuickView(product.id)}
                   >
                     <i className="bi bi-arrows-fullscreen"></i> Quick view
                   </button>

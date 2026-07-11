@@ -1,0 +1,27 @@
+@import "../../../../assets/scss/website_variables";
+
+.product-details-app {
+  .product-details-actions {
+    .detail-bag-btn {
+      transition: all 0.2s ease;
+
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.16);
+      }
+    }
+
+    .quantity-pill {
+      .qty-control-btn {
+        color: var(--bs-light);
+        background: transparent;
+        transition: all 0.2s ease;
+      }
+
+      .qty-control-btn:hover {
+        color: var(--bs-dark);
+        background: var(--bs-light);
+      }
+    }
+  }
+}

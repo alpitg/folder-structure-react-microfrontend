@@ -1,231 +1,220 @@
+import "./product-details.scss";
+
+import {
+  addItemToBag,
+  decreaseBagItemQuantity,
+  removeBagItem,
+} from "../../../../app/redux/core/shopping-bag/shopping-bag.slice";
+import { useDispatch, useSelector } from "react-redux";
+
+import type { AppState } from "../../../../app/store";
+import type { IProductData } from "../../../../features/store/catalog/interface/product/product.model";
 import NewArrivals from "./new-arrivals/new-arrivals";
 import ProductGallery from "./gallery/product-gallery";
+import { useGetProductsQuery } from "../../../../app/redux/catalog/product/product.api";
+import { useMemo } from "react";
+import { useParams } from "react-router";
+
+interface ProductDetailsItem extends IProductData {
+  image?: string;
+  images?: string[];
+  reviews?: number;
+  colors?: string[];
+}
 
 const ProductDetails = () => {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const bagItems = useSelector(
+    (state: AppState) => state.core.shoppingBag.items,
+  );
+
+  const {
+    data: productsResponse,
+    isLoading,
+    isError,
+  } = useGetProductsQuery({
+    page: 1,
+    pageSize: 10,
+  });
+
+  const productsFromStore = useSelector(
+    (state: AppState) => state.catalog.products.products,
+  );
+
+  const product = useMemo(() => {
+    const products = (
+      productsFromStore.length > 0
+        ? productsFromStore
+        : (productsResponse?.items ?? [])
+    ) as ProductDetailsItem[];
+
+    return products.find((item) => String(item.id) === String(id)) ?? null;
+  }, [productsFromStore, productsResponse, id]);
+
   const features = [
-    {
-      title: "Free shipping",
-      desc: "On orders over $50",
-      bg: "bg-light",
-    },
-    {
-      title: "Easy returns",
-      desc: "Just phone number",
-      bg: "bg-light",
-    },
+    { title: "Free shipping", desc: "On orders over ₹500", bg: "bg-light" },
+    { title: "Easy returns", desc: "Fast and simple returns", bg: "bg-light" },
     {
       title: "Nationwide delivery",
-      desc: "Fast delivery",
+      desc: "Fast delivery across India",
       bg: "bg-light",
     },
-    {
-      title: "Refund policy",
-      desc: "60 days return",
-      bg: "bg-light",
-    },
+    { title: "Refund policy", desc: "60 days return window", bg: "bg-light" },
   ];
+
+  if (isLoading) {
+    return <div className="container py-5 text-center">Loading product...</div>;
+  }
+
+  if (isError || !product) {
+    return (
+      <div className="container py-5 text-center">
+        <h2 className="fw-bold mb-3">404</h2>
+        <p className="text-muted mb-4">Product not found.</p>
+        <a className="btn btn-dark" href="/products">
+          Back to products
+        </a>
+      </div>
+    );
+  }
+
+  const quantityInBag =
+    bagItems.find((item) => item.id === Number(product.id))?.quantity ?? 0;
+
+  const productImages =
+    product.images && product.images.length > 0
+      ? product.images
+      : ([product.image].filter(Boolean) as string[]);
 
   return (
     <div className="product-details-app container py-5 mb-20">
-      <div className="row">
-        <div className="col-sm-6">
-          <ProductGallery />
+      <div className="row g-5">
+        <div className="col-lg-6">
+          <ProductGallery images={productImages} />
         </div>
-        <div className="col-sm-6">
-          <div>
-            {/* Breadcrumb */}
-            <nav aria-label="breadcrumb" className="mb-3">
-              <ol className="breadcrumb small mb-2">
-                <li className="breadcrumb-item">
-                  <a href="/">Home</a>
-                </li>
-                <li className="breadcrumb-item">
-                  <a href="/collections/jackets">Jackets</a>
-                </li>
-                <li className="breadcrumb-item active">Silk Midi Dress</li>
-              </ol>
-            </nav>
 
-            {/* Title */}
-            <h1 className="h3 fw-semibold">Silk Midi Dress</h1>
+        <div className="col-lg-6">
+          <nav aria-label="breadcrumb" className="mb-3">
+            <ol className="breadcrumb small mb-2">
+              <li className="breadcrumb-item">
+                <a href="/products">Products</a>
+              </li>
+              <li className="breadcrumb-item active">{product.name}</li>
+            </ol>
+          </nav>
 
-            {/* Price + Rating */}
-            <div className="d-flex flex-wrap align-items-center gap-3 mt-3">
-              <div className="border border-success rounded px-3 py-1 fw-semibold text-success fs-5">
-                $120.00
-              </div>
+          <h1 className="h3 fw-semibold">{product.name}</h1>
 
-              <div className="text-warning small d-flex align-items-center gap-1">
-                ⭐ 4.7
-                <span className="text-muted">· 95 reviews</span>
-              </div>
-
-              <div className="text-success small fw-medium">✔ In Stock</div>
+          <div className="d-flex flex-wrap align-items-center gap-3 mt-3">
+            <div className="border rounded px-3 py-1 fw-semibold detail-pill fs-5">
+              ₹{Number(product.price ?? 0).toFixed(2)}
             </div>
+            <div className="text-warning small d-flex align-items-center gap-1">
+              <i className="bi bi-star-fill text-warning"></i>
+              {product.rating ?? 4.5}
+              <span className="text-muted">
+                · {product.reviews ?? 0} reviews
+              </span>
+            </div>
+            <div className="text-success small fw-medium">
+              <i className="bi bi-check-circle text-success me-1"></i>
+              In Stock
+            </div>
+          </div>
 
-            <hr className="my-4" />
-
-            {/* FORM */}
-            <form>
-              {/* COLOR */}
-              <div className="mb-4">
-                <label className="form-label fw-semibold">Color</label>
-
-                <div className="d-flex gap-2">
-                  {["#2E8B57", "#F4D03F", "#000080", "#FF7F50"].map(
-                    (color, i) => (
-                      <div
-                        key={i}
-                        className="rounded-circle border"
-                        style={{
-                          width: "36px",
-                          height: "36px",
-                          backgroundColor: color,
-                          cursor: "pointer",
-                        }}
-                      />
-                    ),
-                  )}
-                </div>
-              </div>
-
-              {/* SIZE */}
-              <div className="mb-4">
-                <div className="d-flex justify-content-between align-items-center">
-                  <label className="form-label fw-semibold mb-0">Size</label>
-                  <a
-                    href="#"
-                    className="small text-primary text-decoration-none"
-                  >
-                    See sizing chart
-                  </a>
-                </div>
-
-                <div className="d-flex flex-wrap gap-2 mt-2">
-                  {["XS", "S", "M", "L"].map((size, i) => (
-                    <button
-                      key={i}
-                      type="button"
-                      className={`btn btn-sm px-3 py-2 border ${
-                        size === "XS"
-                          ? "btn-dark text-white"
-                          : "btn-outline-dark"
-                      }`}
-                    >
-                      {size}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* QUANTITY + ADD TO CART */}
-              <div className="d-flex align-items-center gap-3 mb-4">
-                <div className="input-group" style={{ maxWidth: "140px" }}>
-                  <button className="btn btn-outline-secondary" type="button">
-                    -
-                  </button>
-                  <input
-                    type="text"
-                    className="form-control text-center"
-                    value="1"
-                    readOnly
+          <div className="mt-4">
+            <label className="form-label fw-semibold">Color</label>
+            <div className="d-flex gap-2">
+              {(product.colors ?? ["var(--bs-dark)", "var(--bs-success)"]).map(
+                (color, index) => (
+                  <div
+                    key={`${color}-${index}`}
+                    className="rounded-circle border border-secondary"
+                    style={{ width: 32, height: 32, backgroundColor: color }}
                   />
-                  <button className="btn btn-outline-secondary" type="button">
-                    +
-                  </button>
-                </div>
+                ),
+              )}
+            </div>
+          </div>
 
-                <button className="btn btn-dark flex-grow-1 py-2">
-                  🛒 Add to cart
+          <div className="d-flex align-items-center gap-3 mt-4 product-details-actions">
+            {quantityInBag === 0 ? (
+              <button
+                className="btn btn-dark btn-sm rounded-pill shadow px-3 detail-bag-btn"
+                onClick={() =>
+                  dispatch(
+                    addItemToBag({
+                      id: Number(product.id),
+                      name: product.name,
+                      image: product.image ?? "/static/media/img/product-1.png",
+                      price: Number(product.price ?? 0),
+                      quantity: 1,
+                    }),
+                  )
+                }
+              >
+                <i className="bi bi-cart"></i> Add to bag
+              </button>
+            ) : (
+              <div
+                className="d-flex align-items-center justify-content-between bg-dark rounded-pill px-3 py-1 shadow quantity-pill"
+                style={{ minWidth: 96 }}
+              >
+                <button
+                  className="btn btn-link p-0 d-flex align-items-center justify-content-center rounded-circle border border-light qty-control-btn"
+                  style={{ width: 28, height: 28 }}
+                  onClick={() =>
+                    quantityInBag > 1
+                      ? dispatch(decreaseBagItemQuantity(Number(product.id)))
+                      : dispatch(removeBagItem(Number(product.id)))
+                  }
+                >
+                  -
+                </button>
+                <span className="fw-semibold text-light">{quantityInBag}</span>
+                <button
+                  className="btn btn-link p-0 d-flex align-items-center justify-content-center rounded-circle border border-light qty-control-btn"
+                  style={{ width: 28, height: 28 }}
+                  onClick={() =>
+                    dispatch(
+                      addItemToBag({
+                        id: Number(product.id),
+                        name: product.name,
+                        image:
+                          product.image ?? "/static/media/img/product-1.png",
+                        price: Number(product.price ?? 0),
+                        quantity: 1,
+                      }),
+                    )
+                  }
+                >
+                  +
                 </button>
               </div>
-            </form>
+            )}
+          </div>
 
-            {/* ACCORDIONS */}
-            <div className="accordion" id="productAccordion">
-              <div className="accordion-item">
-                <h2 className="accordion-header">
-                  <button
-                    className="accordion-button"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#desc"
-                  >
-                    Description
-                  </button>
-                </h2>
-                <div
-                  id="desc"
-                  className="accordion-collapse collapse show"
-                  data-bs-parent="#productAccordion"
-                >
-                  <div className="accordion-body small text-muted">
-                    Fashion is a form of self-expression and autonomy...
-                  </div>
+          <div className="row g-3 mt-4">
+            {features.map((item, index) => (
+              <div key={`${item.title}-${index}`} className="col-12 col-sm-6">
+                <div className="p-3 rounded feature-card h-100">
+                  <h6 className="fw-semibold mb-1">{item.title}</h6>
+                  <p className="small text-muted mb-0">{item.desc}</p>
                 </div>
               </div>
-
-              <div className="accordion-item">
-                <h2 className="accordion-header">
-                  <button
-                    className="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#fabric"
-                  >
-                    Fabric + Care
-                  </button>
-                </h2>
-                <div id="fabric" className="accordion-collapse collapse">
-                  <div className="accordion-body small text-muted">
-                    <ul className="mb-0">
-                      <li>Made from premium micromesh</li>
-                      <li>74% Polyamide, 26% Elastane</li>
-                      <li>Hand wash cold</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* FEATURE BOXES */}
-            <div className="row g-3 mt-4">
-              {features.map((item, i) => (
-                <div key={i} className="col-12 col-sm-6">
-                  <div className={`p-3 rounded ${item.bg} h-100`}>
-                    <h6 className="fw-semibold mb-1">{item.title}</h6>
-                    <p className="small text-muted mb-0">{item.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+            ))}
           </div>
         </div>
       </div>
 
-      <div className="row mt-4">
-        <h2 className="text-2xl font-semibold">Product Details</h2>
-        <div className="">
-          <p>
-            The patented eighteen-inch hardwood Arrowhead deck --- finely
-            mortised in, makes this the strongest and most rigid canoe ever
-            built. You cannot buy a canoe that will afford greater satisfaction.
+      <div className="row mt-5">
+        <div className="col-12">
+          <h2 className="h4 fw-semibold mb-3">Product Details</h2>
+          <p className="text-muted mb-0">
+            {product.description ??
+              "A well-crafted piece designed to blend comfort and elegance."}
           </p>
-          <p>
-            The St. Louis Meramec Canoe Company was founded by Alfred Wickett in
-            1922. Wickett had previously worked for the Old Town Canoe Co from
-            1900 to 1914. Manufacturing of the classic wooden canoes in Valley
-            Park, Missouri ceased in 1978.
-          </p>
-          <ul>
-            <li>Regular fit, mid-weight t-shirt</li>
-            <li>Natural color, 100% premium combed organic cotton</li>
-            <li>
-              Quality cotton grown without the use of herbicides or pesticides -
-              GOTS certified
-            </li>
-            <li>Soft touch water based printed in the USA</li>
-          </ul>
         </div>
       </div>
 
