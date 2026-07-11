@@ -147,7 +147,7 @@ const Products = () => {
   };
 
   return (
-    <section className="products-app container py-5">
+    <section className="products-app container py-5 mb-20">
       <div className="row">
         {products.map((product) => (
           <div key={product.id} className="col-sm-6 col-md-4 col-lg-4 p-3">

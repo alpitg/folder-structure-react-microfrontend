@@ -26,7 +26,7 @@ const ProductDetails = () => {
   ];
 
   return (
-    <div className="product-details-app container py-5">
+    <div className="product-details-app container py-5 mb-20">
       <div className="row">
         <div className="col-sm-6">
           <ProductGallery />
