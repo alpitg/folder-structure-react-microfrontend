@@ -21,6 +21,7 @@ interface ProductDetailsItem extends IProductData {
   images?: string[];
   reviews?: number;
   colors?: string[];
+  isNewArrival?: boolean;
 }
 
 const ProductDetails = () => {
@@ -95,7 +96,7 @@ const ProductDetails = () => {
   return (
     <div className="product-details-app container py-5 mb-20">
       <div className="row g-5">
-        <div className="col-lg-6">
+        <div className="col-lg-6 position-relative">
           <ProductGallery images={productImages} />
         </div>
 
@@ -118,7 +119,17 @@ const ProductDetails = () => {
             </ol>
           </nav>
 
-          <h1 className="h3 fw-semibold">{product.name}</h1>
+          <div className="d-flex align-items-center gap-3">
+            <h1 className="h3 fw-semibold mb-0">{product.name}</h1>
+            {product.isNewArrival && (
+              <div className="badge">
+                <span>
+                  <i className="bi bi-stars me-1"></i>
+                </span>
+                <span className="fw-semibold me-1">New in</span>
+              </div>
+            )}
+          </div>
 
           <div className="d-flex flex-wrap align-items-center gap-3 mt-3">
             <div className="border rounded px-3 py-1 fw-semibold detail-pill fs-5">
