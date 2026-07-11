@@ -6,14 +6,15 @@ import {
   removeBagItem,
 } from "../../../../app/redux/core/shopping-bag/shopping-bag.slice";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router";
 
 import type { AppState } from "../../../../app/store";
 import type { IProductData } from "../../../../features/store/catalog/interface/product/product.model";
 import NewArrivals from "./new-arrivals/new-arrivals";
 import ProductGallery from "./gallery/product-gallery";
+import { ROUTE_URL } from "../../../../routes/constants/routes.const";
 import { useGetProductsQuery } from "../../../../app/redux/catalog/product/product.api";
 import { useMemo } from "react";
-import { useParams } from "react-router";
 
 interface ProductDetailsItem extends IProductData {
   image?: string;
@@ -24,6 +25,7 @@ interface ProductDetailsItem extends IProductData {
 
 const ProductDetails = () => {
   const { id } = useParams();
+  const route = useNavigate();
   const dispatch = useDispatch();
   const bagItems = useSelector(
     (state: AppState) => state.core.shoppingBag.items,
@@ -72,9 +74,12 @@ const ProductDetails = () => {
       <div className="container py-5 text-center">
         <h2 className="fw-bold mb-3">404</h2>
         <p className="text-muted mb-4">Product not found.</p>
-        <a className="btn btn-dark" href="/products">
+        <button
+          className="btn btn-dark"
+          onClick={() => route(ROUTE_URL.WEBSITE.PRODUCTS)}
+        >
           Back to products
-        </a>
+        </button>
       </div>
     );
   }
@@ -98,7 +103,16 @@ const ProductDetails = () => {
           <nav aria-label="breadcrumb" className="mb-3">
             <ol className="breadcrumb small mb-2">
               <li className="breadcrumb-item">
-                <a href="/products">Products</a>
+                <a
+                  href={ROUTE_URL.WEBSITE.PRODUCTS}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    route(ROUTE_URL.WEBSITE.PRODUCTS);
+                  }}
+                  className="text-decoration-none text-dark"
+                >
+                  Products
+                </a>
               </li>
               <li className="breadcrumb-item active">{product.name}</li>
             </ol>
