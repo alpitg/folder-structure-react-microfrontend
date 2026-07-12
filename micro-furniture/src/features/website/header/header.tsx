@@ -1,5 +1,6 @@
+import { Link, NavLink } from "react-router";
+
 import { GetEnvConfig } from "../../../app.config";
-import { NavLink } from "react-router";
 import { ROUTE_URL } from "../../../routes/constants/routes.const";
 
 const HeaderApp = () => {
@@ -11,10 +12,10 @@ const HeaderApp = () => {
       arial-label="Furni navigation bar"
     >
       <div className="container">
-        <a className="navbar-brand" href="index.html">
+        <Link className="navbar-brand" to={ROUTE_URL.WEBSITE.BASE}>
           {appSettings?.name}
           <span>.</span>
-        </a>
+        </Link>
 
         <button
           className="navbar-toggler"

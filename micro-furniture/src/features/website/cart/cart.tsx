@@ -209,7 +209,7 @@ const CartApp = () => {
                   Send Enquiry by WhatsApp
                 </button>
 
-                <div className="mt-4">
+                {/* <div className="mt-4">
                   <h6 className="fw-semibold mb-3">
                     {appSettings?.cartPage?.pay?.title || "Proceed to Payment"}
                   </h6>
@@ -237,7 +237,7 @@ const CartApp = () => {
                       </button>
                     ))}
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

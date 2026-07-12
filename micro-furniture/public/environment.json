@@ -83,7 +83,7 @@
         {
           "method": "PhonePe",
           "icon": "static/media/img/phonepe.webp",
-          "link": "https://www.phonepe.com/",
+          "link": "phonepe://pay?amount={amount}&vpa={vpa}",
           "upi": "81494903097@upi"
         },
         {

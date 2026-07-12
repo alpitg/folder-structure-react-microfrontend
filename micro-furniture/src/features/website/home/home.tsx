@@ -1,9 +1,36 @@
 import CarouselApp from "./carousel/carousel";
 import CategoryBanner from "../category-banner/category-banner";
 import { GetEnvConfig } from "../../../app.config";
+import { NavLink } from "react-router";
+import { ROUTE_URL } from "../../../routes/constants/routes.const";
 import RecentWorksApp from "../recent-works/recent-works";
+import { addItemToBag } from "../../../app/redux/core/shopping-bag/shopping-bag.slice";
+import { useDispatch } from "react-redux";
+
 const HomeApp = () => {
   const appSettings = GetEnvConfig();
+  const dispatch = useDispatch();
+
+  const productList = [
+    {
+      id: 1,
+      title: "Animi Dolor Pariatur",
+      image: "/static/media/img/product-1.png",
+      price: 78.0,
+    },
+    {
+      id: 2,
+      title: "Art Deco Home",
+      image: "/static/media/img/product-2.png",
+      price: 43.0,
+    },
+    {
+      id: 3,
+      title: "Helen Chair",
+      image: "/static/media/img/product-3.png",
+      price: 43.0,
+    },
+  ];
 
   return (
     <section className="home-app">
@@ -28,59 +55,43 @@ const HomeApp = () => {
               </p>
             </div>
 
-            <div className="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-              <a className="product-item" href="cart.html">
-                <img
-                  src="/static/media/img/product-1.png"
-                  className="img-fluid product-thumbnail"
-                />
-                <h3 className="product-title">Nordic Chair</h3>
-                <strong className="product-price">$50.00</strong>
-
-                <span className="icon-cross">
+            {productList.map((product) => (
+              <div
+                className="col-12 col-md-4 col-lg-3 mb-5 mb-md-0"
+                key={product.id}
+              >
+                <a className="product-item">
                   <img
-                    src="/static/media/img/cross.svg"
-                    className="img-fluid"
+                    src={product.image}
+                    className="img-fluid product-thumbnail"
                   />
-                </span>
-              </a>
-            </div>
+                  <h3 className="product-title">{product.title}</h3>
+                  <strong className="product-price">
+                    ₹ {product.price.toFixed(2)}
+                  </strong>
 
-            <div className="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-              <a className="product-item" href="cart.html">
-                <img
-                  src="/static/media/img/product-2.png"
-                  className="img-fluid product-thumbnail"
-                />
-                <h3 className="product-title">Kruzo Aero Chair</h3>
-                <strong className="product-price">$78.00</strong>
-
-                <span className="icon-cross">
-                  <img
-                    src="/static/media/img/cross.svg"
-                    className="img-fluid"
-                  />
-                </span>
-              </a>
-            </div>
-
-            <div className="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-              <a className="product-item" href="cart.html">
-                <img
-                  src="/static/media/img/product-3.png"
-                  className="img-fluid product-thumbnail"
-                />
-                <h3 className="product-title">Ergonomic Chair</h3>
-                <strong className="product-price">$43.00</strong>
-
-                <span className="icon-cross">
-                  <img
-                    src="/static/media/img/cross.svg"
-                    className="img-fluid"
-                  />
-                </span>
-              </a>
-            </div>
+                  <span
+                    className="icon-cross"
+                    onClick={() =>
+                      dispatch(
+                        addItemToBag({
+                          id: product.id,
+                          name: product.title,
+                          image: product.image,
+                          price: product.price,
+                          quantity: 1,
+                        }),
+                      )
+                    }
+                  >
+                    <img
+                      src="/static/media/img/cross.svg"
+                      className="img-fluid"
+                    />
+                  </span>
+                </a>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -105,7 +116,7 @@ const HomeApp = () => {
                           <img
                             src={service.icon || "/static/media/img/truck.svg"}
                             alt="Image"
-                            className="imf-fluid"
+                            className="img-fluid"
                           />
                         </div>
                         <h3>{service.title}</h3>
