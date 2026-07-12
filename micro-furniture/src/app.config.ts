@@ -6,6 +6,34 @@ let environment = {
   description: "A microservice for managing posterica data",
   author: "Posterica Team",
   logo: "/static/media/img/logo.png",
+  cartPage: {
+    title: "Your Shopping Cart",
+    description: "Review your selected items and proceed to checkout.",
+    pay: {
+      title: "Proceed to Payment",
+      description: "Complete your purchase securely and conveniently.",
+      options: [
+        {
+          method: "PhonePe",
+          icon: "static/media/img/phonepe.svg",
+          link: "https://www.phonepe.com/",
+          upi: "your-upi-id@upi",
+        },
+        {
+          method: "Google Pay",
+          icon: "static/media/img/gpay.webp",
+          link: "https://www.google.com/pay/",
+          upi: "your-upi-id@upi",
+        },
+        {
+          method: "Paytm",
+          icon: "static/media/img/paytm.svg",
+          link: "https://www.paytm.com/",
+          upi: "your-upi-id@upi",
+        },
+      ],
+    },
+  },
   homePage: {
     title: "title here",
     subtitle: "subtitle here",

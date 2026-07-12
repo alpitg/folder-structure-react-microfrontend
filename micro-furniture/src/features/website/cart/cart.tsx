@@ -32,11 +32,35 @@ const CartApp = () => {
   };
 
   const clearCart = () => dispatch(clearBag());
+  const paymentOptions = appSettings?.cartPage?.pay?.options ?? [];
 
   const subtotal = items.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0,
   );
+
+  const handlePaymentOption = (option: any) => {
+    if (!option) return;
+
+    const upi = option?.upi?.trim();
+
+    if (upi) {
+      const deepLink = `upi://pay?pa=${encodeURIComponent(upi)}&pn=${encodeURIComponent(appSettings?.name || "Artisan Studio")}&tn=${encodeURIComponent("Cart Payment")}`;
+
+      window.location.href = deepLink;
+      window.setTimeout(() => {
+        if (option?.link) {
+          window.open(option.link, "_blank", "noopener,noreferrer");
+        }
+      }, 500);
+
+      return;
+    }
+
+    if (option?.link) {
+      window.open(option.link, "_blank", "noopener,noreferrer");
+    }
+  };
 
   const handleCheckout = () => {
     if (items.length === 0) return;
@@ -51,7 +75,8 @@ const CartApp = () => {
       `Subtotal: ₹${subtotal.toFixed(2)}`,
     ].join("\n");
 
-    const whatsappNumber = appSettings?.homePage?.contactDetails?.whatsapp?.number;
+    const whatsappNumber =
+      appSettings?.homePage?.contactDetails?.whatsapp?.number;
     const whatsappUrl = whatsappNumber
       ? `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`
       : `https://wa.me/?text=${encodeURIComponent(message)}`;
@@ -178,11 +203,41 @@ const CartApp = () => {
                 </div>
 
                 <button
-                  className="btn btn-dark w-100 mt-4"
+                  className="btn btn-dark w-100 mt-4 mb-5"
                   onClick={handleCheckout}
                 >
-                  Send Order by WhatsApp
+                  Send Enquiry by WhatsApp
                 </button>
+
+                <div className="mt-4">
+                  <h6 className="fw-semibold mb-3">
+                    {appSettings?.cartPage?.pay?.title || "Proceed to Payment"}
+                  </h6>
+
+                  <p className="text-muted small mb-3">
+                    {appSettings?.cartPage?.pay?.description ||
+                      "Choose a payment option to continue."}
+                  </p>
+
+                  <div className="d-flex flex-wrap gap-3">
+                    {paymentOptions.map((option: any) => (
+                      <button
+                        key={option?.method}
+                        className="btn btn-outline-dark payment-option-btn"
+                        onClick={() => handlePaymentOption(option)}
+                      >
+                        {option?.icon ? (
+                          <img
+                            src={option.icon}
+                            alt={option.method}
+                            className="payment-option-icon"
+                          />
+                        ) : null}
+                        <span>{option?.method}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>

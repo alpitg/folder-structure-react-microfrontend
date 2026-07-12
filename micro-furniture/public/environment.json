@@ -73,6 +73,34 @@
       ]
     }
   },
+  "cartPage": {
+    "title": "Your Shopping Cart",
+    "description": "Review your selected items and proceed to checkout.",
+    "pay": {
+      "title": "Proceed to Payment",
+      "description": "Complete your purchase securely and conveniently.",
+      "options": [
+        {
+          "method": "PhonePe",
+          "icon": "static/media/img/phonepe.webp",
+          "link": "https://www.phonepe.com/",
+          "upi": "81494903097@upi"
+        },
+        {
+          "method": "Google Pay",
+          "icon": "static/media/img/gpay.webp",
+          "link": "https://www.google.com/pay/",
+          "upi": "81494903097@upi"
+        },
+        {
+          "method": "Paytm",
+          "icon": "static/media/img/paytm.png",
+          "link": "https://www.paytm.com/",
+          "upi": "81494903097@upi"
+        }
+      ]
+    }
+  },
   "api": {
     "baseUrl": "http://localhost:8000",
     "apiVersion": "v1",
