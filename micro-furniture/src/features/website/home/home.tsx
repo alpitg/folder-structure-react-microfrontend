@@ -1,8 +1,6 @@
 import CarouselApp from "./carousel/carousel";
 import CategoryBanner from "../category-banner/category-banner";
 import { GetEnvConfig } from "../../../app.config";
-import { NavLink } from "react-router";
-import { ROUTE_URL } from "../../../routes/constants/routes.const";
 import RecentWorksApp from "../recent-works/recent-works";
 import { addItemToBag } from "../../../app/redux/core/shopping-bag/shopping-bag.slice";
 import { useDispatch } from "react-redux";

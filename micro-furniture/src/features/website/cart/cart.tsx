@@ -32,35 +32,35 @@ const CartApp = () => {
   };
 
   const clearCart = () => dispatch(clearBag());
-  const paymentOptions = appSettings?.cartPage?.pay?.options ?? [];
+//   const paymentOptions = appSettings?.cartPage?.pay?.options ?? [];
 
   const subtotal = items.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0,
   );
 
-  const handlePaymentOption = (option: any) => {
-    if (!option) return;
+//   const handlePaymentOption = (option: any) => {
+//     if (!option) return;
 
-    const upi = option?.upi?.trim();
+//     const upi = option?.upi?.trim();
 
-    if (upi) {
-      const deepLink = `upi://pay?pa=${encodeURIComponent(upi)}&pn=${encodeURIComponent(appSettings?.name || "Artisan Studio")}&tn=${encodeURIComponent("Cart Payment")}`;
+//     if (upi) {
+//       const deepLink = `upi://pay?pa=${encodeURIComponent(upi)}&pn=${encodeURIComponent(appSettings?.name || "Artisan Studio")}&tn=${encodeURIComponent("Cart Payment")}`;
 
-      window.location.href = deepLink;
-      window.setTimeout(() => {
-        if (option?.link) {
-          window.open(option.link, "_blank", "noopener,noreferrer");
-        }
-      }, 500);
+//       window.location.href = deepLink;
+//       window.setTimeout(() => {
+//         if (option?.link) {
+//           window.open(option.link, "_blank", "noopener,noreferrer");
+//         }
+//       }, 500);
 
-      return;
-    }
+//       return;
+//     }
 
-    if (option?.link) {
-      window.open(option.link, "_blank", "noopener,noreferrer");
-    }
-  };
+//     if (option?.link) {
+//       window.open(option.link, "_blank", "noopener,noreferrer");
+//     }
+//   };
 
   const handleCheckout = () => {
     if (items.length === 0) return;
