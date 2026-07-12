@@ -175,7 +175,7 @@ const CartApp = () => {
 
           <div className="row mt-5 gy-4">
             <div className="col-lg-6">
-              <h5 className="mb-4">Coupon Discount</h5>
+              {/* <h5 className="mb-4">Coupon Discount</h5>
 
               <p className="text-muted">
                 Enter your coupon code if you have one.
@@ -185,7 +185,7 @@ const CartApp = () => {
 
               <button className="btn btn-outline-dark mt-4 px-4">
                 Apply Coupon
-              </button>
+              </button> */}
             </div>
 
             <div className="col-lg-6">
