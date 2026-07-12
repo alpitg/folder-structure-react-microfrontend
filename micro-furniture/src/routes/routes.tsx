@@ -3,6 +3,7 @@ import { Suspense, lazy } from "react";
 
 import LoadingApp from "../components/loading/loading";
 import { ROUTE_URL } from "./constants/routes.const";
+import ScrollToTop from "../hooks/scroll-to-top";
 import { useAuthInit } from "../hooks/use-auth-init";
 
 const HomeApp = lazy(() => import("../features/website/home/home"));
@@ -20,6 +21,7 @@ const RoutesApp = () => {
   return (
     <Suspense fallback={<LoadingApp />}>
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           <Route path={ROUTE_URL.WEBSITE.BASE} element={<WebsiteApp />}>
             <Route path={ROUTE_URL.WEBSITE.BASE} element={<HomeApp />} />
