@@ -7,8 +7,8 @@
   "logo": "/static/media/img/logo.png",
   "debugMode": false,
   "homePage": {
-    "title": "Welcome to Artisan Studio",
-    "subtitle": "Your one-stop shop for quality furniture.",
+    "title": "Crafted Luxury Furniture",
+    "subtitle": "Furniture designed with timeless craftsmanship and modern style.",
     "description": "At Artisan Studio, we pride ourselves on offering a wide range of furniture options to suit every style and budget. Whether you're looking for modern, classic, or custom pieces, we have something for everyone.",
     "contactDetails": {
       "contactnumber": "+91 8149403097",
@@ -25,22 +25,22 @@
       "services": [
         {
           "title": "Fast & Free Shipping",
-          "description": "Description 1",
+          "description": "Enjoy quick delivery across the city with zero shipping charges on eligible orders.",
           "icon": "static/media/img/truck.svg"
         },
         {
           "title": "Easy to Shop",
-          "description": "Description 2",
+          "description": "Browse curated furniture collections, compare styles, and place your order in minutes.",
           "icon": "static/media/img/bag.svg"
         },
         {
           "title": "24/7 Support",
-          "description": "Description 3",
+          "description": "Our team is always available to answer questions and help with your purchase.",
           "icon": "static/media/img/support.svg"
         },
         {
           "title": "Hassle Free Returns",
-          "description": "Description 4",
+          "description": "Shop with confidence knowing returns are simple and customer-friendly.",
           "icon": "static/media/img/return.svg"
         }
       ]

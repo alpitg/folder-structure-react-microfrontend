@@ -30,15 +30,14 @@ const CarouselApp = () => {
         {/* LEFT CONTENT */}
 
         <div className="col-lg-5 mb-5 mb-lg-0">
-          <span className="badge bg-light rounded-pill px-3 py-2">
+          <span className="px-3 py-2">
             <i className="bi bi-stars me-2"></i>
             Premium Furniture
           </span>
-          <h1 className="display-4 fw-bold mt-3">Crafted Luxury Furniture</h1>
-          <p className="text-muted mt-4">
-            Elegant furniture designed with timeless craftsmanship, luxurious
-            materials and modern aesthetics.
-          </p>
+          <h1 className="display-4 fw-bold mt-3">
+            {appSettings?.homePage?.title}
+          </h1>
+          <p className="text-muted mt-4">{appSettings?.homePage?.description}</p>
 
           <a
             className="btn btn-dark rounded-pill px-4 mt-3"
