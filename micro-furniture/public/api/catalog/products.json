@@ -7,51 +7,239 @@
     {
       "id": "1",
       "name": "Nordic Chair",
+      "code": "PROD-001",
       "description": "Minimal Scandinavian design",
-      "price": 50,
-      "image": "/static/media/img/product-1.png",
-      "rating": 4.5,
-      "reviews": 87,
       "status": "published",
+      "template": "standard",
+      "categories": ["furniture", "chairs"],
+      "tags": ["scandinavian", "minimal", "design"],
+      "media": [
+        {
+          "url": "/static/media/img/product-1.png",
+          "alt": "Nordic Chair"
+        }
+      ],
+      "price": {
+        "basePrice": 50,
+        "discountType": "percentage",
+        "discountPercentage": 10,
+        "fixedDiscountedPrice": null,
+        "taxClass": "taxable_goods",
+        "taxPercent": 18
+      },
       "isNewArrival": true,
-      "category": "furniture",
-      "colors": ["#000000", "#ffffff", "#ff0000", "#00ff00", "#0000ff"]
+      "totalWishlistedCount": 87,
+      "inventory": {
+        "sku": "SKU-001",
+        "barcode": "1234567890123",
+        "quantityInShelf": 15,
+        "quantityInWarehouse": 50,
+        "quantity": 65,
+        "allowBackorders": true
+      },
+      "variations": [
+        {
+          "name": "Color",
+          "values": "Black,Grey,Green"
+        }
+      ],
+      "shipping": {
+        "isPhysical": true,
+        "weightInKg": 8.5,
+        "lengthInCm": 65,
+        "widthInCm": 60,
+        "heightInCm": 90
+      },
+      "meta": {
+        "metaTitle": "Nordic Chair | Scandinavian Design Furniture",
+        "metaDescription": "Premium Nordic-style chair with minimal Scandinavian design",
+        "metaKeywords": ["nordic", "chair", "scandinavian", "furniture"]
+      },
+      "scheduling": {
+        "publishAt": "2026-01-15T00:00:00Z"
+      },
+      "rating": 4.5,
+      "reviews": 42,
+      "createdAt": "2025-12-01T10:30:00Z",
+      "updatedAt": "2026-07-16T14:20:00Z"
     },
     {
       "id": "2",
       "name": "Kruzo Aero Chair",
+      "code": "PROD-002",
       "description": "Lightweight ergonomic build",
-      "price": 78,
-      "image": "/static/media/img/product-2.png",
-      "rating": 4.2,
-      "reviews": 54,
       "status": "published",
+      "template": "standard",
+      "categories": ["furniture", "chairs"],
+      "tags": ["ergonomic", "lightweight", "modern"],
+      "media": [
+        {
+          "url": "/static/media/img/product-2.png",
+          "alt": "Kruzo Aero Chair"
+        }
+      ],
+      "price": {
+        "basePrice": 78,
+        "discountType": "none",
+        "discountPercentage": null,
+        "fixedDiscountedPrice": null,
+        "taxClass": "taxable_goods",
+        "taxPercent": 18
+      },
       "isNewArrival": false,
-      "category": "furniture"
+      "totalWishlistedCount": 54,
+      "inventory": {
+        "sku": "SKU-002",
+        "barcode": "1234567890124",
+        "quantityInShelf": 25,
+        "quantityInWarehouse": 75,
+        "quantity": 100,
+        "allowBackorders": false
+      },
+      "variations": [
+        {
+          "name": "Size",
+          "values": "Small,Medium,Large"
+        }
+      ],
+      "shipping": {
+        "isPhysical": true,
+        "weightInKg": 6.2,
+        "lengthInCm": 60,
+        "widthInCm": 55,
+        "heightInCm": 85
+      },
+      "meta": {
+        "metaTitle": "Kruzo Aero Chair | Ergonomic Office Chair",
+        "metaDescription": "Lightweight ergonomic chair designed for comfort and modern style",
+        "metaKeywords": ["ergonomic", "office", "chair", "lightweight"]
+      },
+      "scheduling": {
+        "publishAt": "2025-11-20T00:00:00Z"
+      },
+      "rating": 4.2,
+      "createdAt": "2025-11-15T08:45:00Z",
+      "updatedAt": "2026-07-10T11:30:00Z"
     },
     {
       "id": "3",
       "name": "Ergonomic Chair",
+      "code": "PROD-003",
       "description": "Comfort-focused seating",
-      "price": 43,
-      "image": "/static/media/img/product-3.png",
-      "rating": 4.6,
-      "reviews": 102,
       "status": "published",
+      "template": "standard",
+      "categories": ["furniture", "chairs"],
+      "tags": ["comfort", "ergonomic", "premium"],
+      "media": [
+        {
+          "url": "/static/media/img/product-3.png",
+          "alt": "Ergonomic Chair"
+        }
+      ],
+      "price": {
+        "basePrice": 43,
+        "discountType": "fixed",
+        "discountPercentage": null,
+        "fixedDiscountedPrice": 38.7,
+        "taxClass": "taxable_goods",
+        "taxPercent": 18
+      },
       "isNewArrival": true,
-      "category": "furniture"
+      "totalWishlistedCount": 102,
+      "inventory": {
+        "sku": "SKU-003",
+        "barcode": "1234567890125",
+        "quantityInShelf": 30,
+        "quantityInWarehouse": 100,
+        "quantity": 130,
+        "allowBackorders": true
+      },
+      "variations": [
+        {
+          "name": "Color",
+          "values": "Gray,Black,Beige"
+        },
+        {
+          "name": "Armrest Type",
+          "values": "Fixed,Adjustable"
+        }
+      ],
+      "shipping": {
+        "isPhysical": true,
+        "weightInKg": 9.8,
+        "lengthInCm": 70,
+        "widthInCm": 68,
+        "heightInCm": 95
+      },
+      "meta": {
+        "metaTitle": "Ergonomic Chair | Premium Comfort Seating",
+        "metaDescription": "Premium ergonomic office chair with comfort-focused design and adjustable features",
+        "metaKeywords": ["ergonomic", "premium", "comfort", "office"]
+      },
+      "scheduling": {
+        "publishAt": "2026-02-01T00:00:00Z"
+      },
+      "rating": 4.6,
+      "createdAt": "2025-12-10T14:15:00Z",
+      "updatedAt": "2026-07-14T09:45:00Z"
     },
     {
       "id": "4",
       "name": "Modern Wooden Chair",
+      "code": "PROD-004",
       "description": "Premium wood finish",
-      "price": 65,
-      "image": "/static/media/img/product-1.png",
-      "rating": 4.3,
-      "reviews": 61,
       "status": "published",
+      "template": "standard",
+      "categories": ["furniture", "chairs"],
+      "tags": ["modern", "wooden", "premium"],
+      "media": [
+        {
+          "url": "/static/media/img/product-1.png",
+          "alt": "Modern Wooden Chair"
+        }
+      ],
+      "price": {
+        "basePrice": 65,
+        "discountType": "percentage",
+        "discountPercentage": 5,
+        "fixedDiscountedPrice": null,
+        "taxClass": "taxable_goods",
+        "taxPercent": 18
+      },
       "isNewArrival": false,
-      "category": "furniture"
+      "totalWishlistedCount": 61,
+      "inventory": {
+        "sku": "SKU-004",
+        "barcode": "1234567890126",
+        "quantityInShelf": 20,
+        "quantityInWarehouse": 60,
+        "quantity": 80,
+        "allowBackorders": true
+      },
+      "variations": [
+        {
+          "name": "Wood Type",
+          "values": "Oak,Walnut,Maple"
+        }
+      ],
+      "shipping": {
+        "isPhysical": true,
+        "weightInKg": 7.5,
+        "lengthInCm": 65,
+        "widthInCm": 62,
+        "heightInCm": 88
+      },
+      "meta": {
+        "metaTitle": "Modern Wooden Chair | Premium Furniture",
+        "metaDescription": "Modern wooden chair with premium finish and contemporary design",
+        "metaKeywords": ["modern", "wooden", "premium", "furniture"]
+      },
+      "scheduling": {
+        "publishAt": "2025-10-01T00:00:00Z"
+      },
+      "rating": 4.3,
+      "createdAt": "2025-10-20T12:00:00Z",
+      "updatedAt": "2026-07-12T16:20:00Z"
     }
   ]
 }

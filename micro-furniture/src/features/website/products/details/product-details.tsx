@@ -9,22 +9,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 
 import type { AppState } from "../../../../app/store";
-import type { IProductData } from "../../../../features/store/catalog/interface/product/product.model";
 import NewArrivals from "./new-arrivals/new-arrivals";
 import ProductGallery from "./gallery/product-gallery";
 import { ROUTE_URL } from "../../../../routes/constants/routes.const";
 import { useGetProductsQuery } from "../../../../app/redux/catalog/product/product.api";
 import { useMemo } from "react";
 
-interface ProductDetailsItem extends IProductData {
-  image?: string;
-  images?: string[];
-  reviews?: number;
-  colors?: string[];
-  isNewArrival?: boolean;
-}
-
 const ProductDetails = () => {
+  const blankImage = "/static/media/img/svg/blank-image.svg";
+
   const { id } = useParams();
   const route = useNavigate();
   const dispatch = useDispatch();
@@ -46,11 +39,10 @@ const ProductDetails = () => {
   );
 
   const product = useMemo(() => {
-    const products = (
+    const products =
       productsFromStore.length > 0
         ? productsFromStore
-        : (productsResponse?.items ?? [])
-    ) as ProductDetailsItem[];
+        : (productsResponse?.items ?? []);
 
     return products.find((item) => String(item.id) === String(id)) ?? null;
   }, [productsFromStore, productsResponse, id]);
@@ -86,15 +78,14 @@ const ProductDetails = () => {
   }
 
   const quantityInBag =
-    bagItems.find((item) => item.id === Number(product.id))?.quantity ?? 0;
+    bagItems.find((item) => item.id === product.id)?.quantity ?? 0;
 
-  const productImages =
-    product.images && product.images.length > 0
-      ? product.images
-      : ([product.image].filter(Boolean) as string[]);
+  const productImages = product?.media
+    ?.map((mediaItem) => mediaItem.url)
+    .filter(Boolean) as string[];
 
   return (
-    <div className="product-details-app container py-5 mb-20">
+    <div className="product-details-app container py-5 mb-20 mt-5">
       <div className="row g-5">
         <div className="col-lg-6 position-relative">
           <ProductGallery images={productImages} />
@@ -119,7 +110,7 @@ const ProductDetails = () => {
             </ol>
           </nav>
 
-          <div className="d-flex align-items-center gap-3">
+          <div className="d-flex align-items-center gap-3 mt-4">
             <h1 className="h3 fw-semibold mb-0">{product.name}</h1>
             {product.isNewArrival && (
               <div className="badge">
@@ -133,15 +124,17 @@ const ProductDetails = () => {
 
           <div className="d-flex flex-wrap align-items-center gap-3 mt-3">
             <div className="border rounded px-3 py-1 fw-semibold detail-pill fs-5">
-              ₹{Number(product.price ?? 0).toFixed(2)}
+              ₹{Number(product?.price?.basePrice ?? 0).toFixed(2)}
             </div>
-            <div className="text-warning small d-flex align-items-center gap-1">
-              <i className="bi bi-star-fill text-warning"></i>
-              {product.rating ?? 4.5}
-              <span className="text-muted">
-                · {product.reviews ?? 0} reviews
-              </span>
-            </div>
+            {product.rating && (
+              <div className="text-warning small d-flex align-items-center gap-1">
+                <i className="bi bi-star-fill text-warning"></i>
+                {product.rating ?? 4.5}
+                <span className="text-muted">
+                  · {product.reviews ?? 0} reviews
+                </span>
+              </div>
+            )}
             <div className="text-success small fw-medium">
               <i className="bi bi-check-circle text-success me-1"></i>
               In Stock
@@ -151,15 +144,18 @@ const ProductDetails = () => {
           <div className="mt-4">
             <label className="form-label fw-semibold">Color</label>
             <div className="d-flex gap-2">
-              {(product.colors ?? ["var(--bs-dark)", "var(--bs-success)"]).map(
-                (color, index) => (
-                  <div
-                    key={`${color}-${index}`}
-                    className="rounded-circle border border-secondary"
-                    style={{ width: 32, height: 32, backgroundColor: color }}
-                  />
-                ),
-              )}
+              {(
+                product?.variations?.[0]?.values?.split(",") ?? [
+                  "var(--bs-dark)",
+                  "var(--bs-success)",
+                ]
+              ).map((color, index) => (
+                <div
+                  key={`${color}-${index}`}
+                  className="rounded-circle border border-secondary"
+                  style={{ width: 32, height: 32, backgroundColor: color }}
+                />
+              ))}
             </div>
           </div>
 
@@ -170,16 +166,16 @@ const ProductDetails = () => {
                 onClick={() =>
                   dispatch(
                     addItemToBag({
-                      id: Number(product.id),
-                      name: product.name,
-                      image: product.image ?? "/static/media/img/product-1.png",
-                      price: Number(product.price ?? 0),
+                      id: product?.id,
+                      name: product?.name,
+                      image: product?.media?.[0]?.url ?? blankImage,
+                      price: product?.price?.basePrice ?? 0,
                       quantity: 1,
                     }),
                   )
                 }
               >
-                <i className="bi bi-cart"></i> Add to bag
+                <i className="bi bi-cart"></i> Add to Cart
               </button>
             ) : (
               <div
@@ -191,8 +187,8 @@ const ProductDetails = () => {
                   style={{ width: 28, height: 28 }}
                   onClick={() =>
                     quantityInBag > 1
-                      ? dispatch(decreaseBagItemQuantity(Number(product.id)))
-                      : dispatch(removeBagItem(Number(product.id)))
+                      ? dispatch(decreaseBagItemQuantity(product.id))
+                      : dispatch(removeBagItem(product.id))
                   }
                 >
                   -
@@ -204,11 +200,12 @@ const ProductDetails = () => {
                   onClick={() =>
                     dispatch(
                       addItemToBag({
-                        id: Number(product.id),
-                        name: product.name,
+                        id: product?.id,
+                        name: product?.name,
                         image:
-                          product.image ?? "/static/media/img/product-1.png",
-                        price: Number(product.price ?? 0),
+                          product?.media?.[0]?.url ??
+                          "/static/media/img/product-1.png",
+                        price: product?.price?.basePrice ?? 0,
                         quantity: 1,
                       }),
                     )

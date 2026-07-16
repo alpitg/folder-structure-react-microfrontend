@@ -63,6 +63,7 @@ export interface IProductData {
   tags: string[];
   media: IProductMedia[];
   price: IProductPrice;
+  isNewArrival: boolean;
   totalWishlistedCount: number;
   inventory: IProductInventory;
   variations: IProductVariation[];
@@ -70,6 +71,7 @@ export interface IProductData {
   meta: IProductMeta;
   scheduling: IProductScheduling;
   rating: number;
+  reviews: number;
   createdAt: string;
   updatedAt: string;
 }
