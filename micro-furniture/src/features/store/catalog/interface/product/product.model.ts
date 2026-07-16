@@ -72,6 +72,7 @@ export interface IProductData {
   scheduling: IProductScheduling;
   rating: number;
   reviews: number;
+  isFeatured?: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -82,6 +83,7 @@ export interface GetProductsParams {
   searchText?: string;
   status?: string;
   sort?: string;
+  isFeatured?: boolean;
 }
 
 export interface IPaginatedProductResponse {

@@ -20,6 +20,32 @@
       }
     },
     "whyChooseUs": {
+      "title": "Crafted with excellent material.",
+      "description": "Discover our carefully curated collection of premium furniture designed for modern living. Each piece is handpicked and crafted with meticulous attention to detail, combining elegant aesthetics with exceptional durability. From minimalist Scandinavian designs to ergonomic office solutions, we bring comfort and style to every space in your home.",
+      "services": [
+        {
+          "title": "Fast & Free Shipping",
+          "description": "Enjoy quick delivery across the city with zero shipping charges on eligible orders.",
+          "icon": "static/media/img/truck.svg"
+        },
+        {
+          "title": "Easy to Shop",
+          "description": "Browse curated furniture collections, compare styles, and place your order in minutes.",
+          "icon": "static/media/img/bag.svg"
+        },
+        {
+          "title": "24/7 Support",
+          "description": "Our team is always available to answer questions and help with your purchase.",
+          "icon": "static/media/img/support.svg"
+        },
+        {
+          "title": "Hassle Free Returns",
+          "description": "Shop with confidence knowing returns are simple and customer-friendly.",
+          "icon": "static/media/img/return.svg"
+        }
+      ]
+    },
+    "whyChooseUs2": {
       "title": "Why Choose Us",
       "description": "We provide the best furniture with utmost care and professionalism.",
       "services": [
@@ -45,8 +71,7 @@
         }
       ]
     },
-
-    "whyChooseUs2": {
+    "whyChooseUs3": {
       "title": "We Help You Make Modern Interior Design",
       "description": "We help you to create your dream interior design with our expert furniture.",
       "services": [

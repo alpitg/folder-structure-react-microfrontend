@@ -19,6 +19,7 @@ const Products = () => {
   const bagItems = useSelector(
     (state: AppState) => state.core.shoppingBag.items,
   );
+
   const {
     data: productsResponse,
     isLoading,

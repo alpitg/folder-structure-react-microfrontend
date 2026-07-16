@@ -11,39 +11,35 @@ import type { AppState } from "../../../app/store";
 import CarouselApp from "./carousel/carousel";
 import CategoryBanner from "../category-banner/category-banner";
 import { GetEnvConfig } from "../../../app.config";
+import type { IProductData } from "../../store/catalog/interface/product/product.model";
 import { NavLink } from "react-router";
 import { ROUTE_URL } from "../../../routes/constants/routes.const";
+import { useGetProductsQuery } from "../../../app/redux/catalog/product/product.api";
 
 const HomeApp = () => {
+  const blankImage = "/static/media/img/svg/blank-image.svg";
+
   const appSettings = GetEnvConfig();
   const dispatch = useDispatch();
   const bagItems = useSelector(
     (state: AppState) => state.core.shoppingBag.items,
   );
 
-  const productList = [
-    {
-      id: 1,
-      title: "Animi Dolor Pariatur",
-      image: "/static/media/img/product-1.png",
-      price: 78.0,
-    },
-    {
-      id: 2,
-      title: "Art Deco Home",
-      image: "/static/media/img/product-2.png",
-      price: 43.0,
-    },
-    {
-      id: 3,
-      title: "Helen Chair",
-      image: "/static/media/img/product-3.png",
-      price: 43.0,
-    },
-  ];
+  const { data: productsResponse } = useGetProductsQuery({
+    page: 1,
+    pageSize: 3,
+  });
+  const productsFromStore = useSelector(
+    (state: AppState) => state.catalog.products.products,
+  );
+
+  const products =
+    productsFromStore.length > 0
+      ? productsFromStore
+      : (productsResponse?.items ?? []);
 
   const handleAddToBag = (
-    product: { id: number; title: string; image: string; price: number },
+    product: IProductData,
     event: { preventDefault: () => void; stopPropagation: () => void },
   ) => {
     event.preventDefault();
@@ -51,10 +47,10 @@ const HomeApp = () => {
 
     dispatch(
       addItemToBag({
-        id: product.id,
-        name: product.title,
-        image: product.image,
-        price: product.price,
+        id: product?.id,
+        name: product?.name,
+        image: product?.media?.[0]?.url ?? blankImage,
+        price: product?.price?.basePrice ?? 0,
         quantity: 1,
       }),
     );
@@ -70,11 +66,10 @@ const HomeApp = () => {
           <div className="row">
             <div className="col-md-12 col-lg-3 mb-5 mb-lg-0">
               <h2 className="mb-4 section-title">
-                Crafted with excellent material.
+                {appSettings?.homePage?.whyChooseUs?.title}
               </h2>
               <p className="mb-4">
-                Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet
-                velit. Aliquam vulputate velit imperdiet dolor tempor tristique.
+                {appSettings?.homePage?.whyChooseUs?.description}
               </p>
               <p>
                 <NavLink to={ROUTE_URL.WEBSITE.PRODUCTS} className="btn">
@@ -83,79 +78,86 @@ const HomeApp = () => {
               </p>
             </div>
 
-            {productList.map((product) => {
-              const quantity =
-                bagItems.find((item) => item.id === product.id)?.quantity ?? 0;
+            {products
+              ?.filter((item) => item?.isFeatured)
+              .map((product) => {
+                const quantity =
+                  bagItems.find((item) => item.id === product.id)?.quantity ??
+                  0;
 
-              return (
-                <div
-                  className="col-12 col-md-4 col-lg-3 mb-5 mb-md-0"
-                  key={product.id}
-                >
-                  <div className="product-item">
-                    <img
-                      src={product.image}
-                      className="img-fluid product-thumbnail"
-                    />
-                    <h3 className="product-title">{product.title}</h3>
-                    <strong className="product-price">
-                      ₹ {product.price.toFixed(2)}
-                    </strong>
+                return (
+                  <div
+                    className="col-12 col-md-4 col-lg-3 mb-5 mb-md-0"
+                    key={product.id}
+                  >
+                    <div className="product-item">
+                      <img
+                        src={
+                          product?.media?.[0]?.url
+                            ? product.media[0].url
+                            : blankImage
+                        }
+                        className="img-fluid product-thumbnail"
+                      />
+                      <h3 className="product-title">{product.name}</h3>
+                      <strong className="product-price">
+                        ₹ {product?.price?.basePrice?.toFixed(2)}
+                      </strong>
 
-                    {quantity === 0 ? (
-                      <button
-                        type="button"
-                        className="icon-cross"
-                        onClick={(event) => handleAddToBag(product, event)}
-                        aria-label="Add to cart"
-                      >
-                        <img
-                          src="/static/media/img/cross.svg"
-                          className="img-fluid"
-                        />
-                      </button>
-                    ) : (
-                      <div
-                        className="icon-cross d-flex align-items-center justify-content-between bg-dark rounded-pill px-3 py-1 shadow"
-                        style={{ minWidth: 96 }}
-                      >
+                      {quantity === 0 ? (
                         <button
-                          className="btn btn-link p-0 d-flex align-items-center justify-content-center rounded-circle border border-light qty-control-btn"
-                          style={{ width: 28, height: 28 }}
-                          onClick={() =>
-                            quantity > 1
-                              ? dispatch(decreaseBagItemQuantity(product.id))
-                              : dispatch(removeBagItem(product.id))
-                          }
+                          type="button"
+                          className="icon-cross"
+                          onClick={(event) => handleAddToBag(product, event)}
+                          aria-label="Add to cart"
                         >
-                          -
+                          <img
+                            src="/static/media/img/cross.svg"
+                            className="img-fluid"
+                          />
                         </button>
-                        <span className="fw-semibold text-light">
-                          {quantity}
-                        </span>
-                        <button
-                          className="btn btn-link p-0 d-flex align-items-center justify-content-center rounded-circle border border-light qty-control-btn"
-                          style={{ width: 28, height: 28 }}
-                          onClick={() =>
-                            dispatch(
-                              addItemToBag({
-                                id: product.id,
-                                name: product.title,
-                                image: product.image,
-                                price: product.price,
-                                quantity: 1,
-                              }),
-                            )
-                          }
+                      ) : (
+                        <div
+                          className="icon-cross d-flex align-items-center justify-content-between bg-dark rounded-pill px-3 py-1 shadow"
+                          style={{ minWidth: 96 }}
                         >
-                          +
-                        </button>
-                      </div>
-                    )}
+                          <button
+                            className="btn btn-link p-0 d-flex align-items-center justify-content-center rounded-circle border border-light qty-control-btn"
+                            style={{ width: 28, height: 28 }}
+                            onClick={() =>
+                              quantity > 1
+                                ? dispatch(decreaseBagItemQuantity(product.id))
+                                : dispatch(removeBagItem(product.id))
+                            }
+                          >
+                            -
+                          </button>
+                          <span className="fw-semibold text-light">
+                            {quantity}
+                          </span>
+                          <button
+                            className="btn btn-link p-0 d-flex align-items-center justify-content-center rounded-circle border border-light qty-control-btn"
+                            style={{ width: 28, height: 28 }}
+                            onClick={() =>
+                              dispatch(
+                                addItemToBag({
+                                  id: product?.id,
+                                  name: product?.name,
+                                  image: product?.media?.[0]?.url ?? blankImage,
+                                  price: product?.price?.basePrice ?? 0,
+                                  quantity: 1,
+                                }),
+                              )
+                            }
+                          >
+                            +
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
         </div>
       </div>
@@ -164,12 +166,12 @@ const HomeApp = () => {
           <div className="row justify-content-between">
             <div className="col-lg-6">
               <h2 className="section-title">
-                {appSettings?.homePage?.whyChooseUs?.title}
+                {appSettings?.homePage?.whyChooseUs2?.title}
               </h2>
-              <p>{appSettings?.homePage?.whyChooseUs?.description}</p>
+              <p>{appSettings?.homePage?.whyChooseUs2?.description}</p>
 
               <div className="row my-5">
-                {appSettings?.homePage?.whyChooseUs?.services?.map(
+                {appSettings?.homePage?.whyChooseUs2?.services?.map(
                   (service, index) => (
                     <div
                       className="col-6 col-md-6"
