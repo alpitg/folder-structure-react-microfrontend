@@ -19,48 +19,48 @@ const CartApp = () => {
   const dispatch = useDispatch();
   const items = useSelector((state: AppState) => state.core.shoppingBag.items);
 
-  const increase = (id: number) => {
+  const increase = (id: string) => {
     dispatch(increaseBagItemQuantity(id));
   };
 
-  const decrease = (id: number) => {
+  const decrease = (id: string) => {
     dispatch(decreaseBagItemQuantity(id));
   };
 
-  const remove = (id: number) => {
+  const remove = (id: string) => {
     dispatch(removeBagItem(id));
   };
 
   const clearCart = () => dispatch(clearBag());
-//   const paymentOptions = appSettings?.cartPage?.pay?.options ?? [];
+  //   const paymentOptions = appSettings?.cartPage?.pay?.options ?? [];
 
   const subtotal = items.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0,
   );
 
-//   const handlePaymentOption = (option: any) => {
-//     if (!option) return;
+  //   const handlePaymentOption = (option: any) => {
+  //     if (!option) return;
 
-//     const upi = option?.upi?.trim();
+  //     const upi = option?.upi?.trim();
 
-//     if (upi) {
-//       const deepLink = `upi://pay?pa=${encodeURIComponent(upi)}&pn=${encodeURIComponent(appSettings?.name || "Artisan Studio")}&tn=${encodeURIComponent("Cart Payment")}`;
+  //     if (upi) {
+  //       const deepLink = `upi://pay?pa=${encodeURIComponent(upi)}&pn=${encodeURIComponent(appSettings?.name || "Artisan Studio")}&tn=${encodeURIComponent("Cart Payment")}`;
 
-//       window.location.href = deepLink;
-//       window.setTimeout(() => {
-//         if (option?.link) {
-//           window.open(option.link, "_blank", "noopener,noreferrer");
-//         }
-//       }, 500);
+  //       window.location.href = deepLink;
+  //       window.setTimeout(() => {
+  //         if (option?.link) {
+  //           window.open(option.link, "_blank", "noopener,noreferrer");
+  //         }
+  //       }, 500);
 
-//       return;
-//     }
+  //       return;
+  //     }
 
-//     if (option?.link) {
-//       window.open(option.link, "_blank", "noopener,noreferrer");
-//     }
-//   };
+  //     if (option?.link) {
+  //       window.open(option.link, "_blank", "noopener,noreferrer");
+  //     }
+  //   };
 
   const handleCheckout = () => {
     if (items.length === 0) return;
