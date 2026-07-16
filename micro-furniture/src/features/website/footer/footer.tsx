@@ -104,7 +104,7 @@ const FooterApp = () => {
             </ul>
           </div>
 
-          <div className="col-lg-8">
+          {/* <div className="col-lg-8">
             <div className="row links-wrap">
               <div className="col-6 col-sm-6 col-md-3">
                 <ul className="list-unstyled">
@@ -168,7 +168,7 @@ const FooterApp = () => {
                 </ul>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="border-top copyright">
