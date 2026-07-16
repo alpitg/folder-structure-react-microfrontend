@@ -1,0 +1,12 @@
+.home-app {
+  .qty-control-btn {
+    color: var(--bs-light);
+    background: transparent;
+    transition: all 0.2s ease;
+  }
+
+  .qty-control-btn:hover {
+    color: var(--bs-dark);
+    background: var(--bs-light);
+  }
+}

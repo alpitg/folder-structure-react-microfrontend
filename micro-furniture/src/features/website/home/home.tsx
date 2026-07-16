@@ -1,13 +1,25 @@
+import "./home.scss";
+
+import {
+  addItemToBag,
+  decreaseBagItemQuantity,
+  removeBagItem,
+} from "../../../app/redux/core/shopping-bag/shopping-bag.slice";
+import { useDispatch, useSelector } from "react-redux";
+
+import type { AppState } from "../../../app/store";
 import CarouselApp from "./carousel/carousel";
 import CategoryBanner from "../category-banner/category-banner";
 import { GetEnvConfig } from "../../../app.config";
-import RecentWorksApp from "../recent-works/recent-works";
-import { addItemToBag } from "../../../app/redux/core/shopping-bag/shopping-bag.slice";
-import { useDispatch } from "react-redux";
+import { NavLink } from "react-router";
+import { ROUTE_URL } from "../../../routes/constants/routes.const";
 
 const HomeApp = () => {
   const appSettings = GetEnvConfig();
   const dispatch = useDispatch();
+  const bagItems = useSelector(
+    (state: AppState) => state.core.shoppingBag.items,
+  );
 
   const productList = [
     {
@@ -30,6 +42,24 @@ const HomeApp = () => {
     },
   ];
 
+  const handleAddToBag = (
+    product: { id: number; title: string; image: string; price: number },
+    event: { preventDefault: () => void; stopPropagation: () => void },
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    dispatch(
+      addItemToBag({
+        id: product.id,
+        name: product.title,
+        image: product.image,
+        price: product.price,
+        quantity: 1,
+      }),
+    );
+  };
+
   return (
     <section className="home-app">
       <CarouselApp />
@@ -47,49 +77,85 @@ const HomeApp = () => {
                 velit. Aliquam vulputate velit imperdiet dolor tempor tristique.
               </p>
               <p>
-                <a href="shop.html" className="btn">
+                <NavLink to={ROUTE_URL.WEBSITE.PRODUCTS} className="btn">
                   Explore
-                </a>
+                </NavLink>
               </p>
             </div>
 
-            {productList.map((product) => (
-              <div
-                className="col-12 col-md-4 col-lg-3 mb-5 mb-md-0"
-                key={product.id}
-              >
-                <a className="product-item">
-                  <img
-                    src={product.image}
-                    className="img-fluid product-thumbnail"
-                  />
-                  <h3 className="product-title">{product.title}</h3>
-                  <strong className="product-price">
-                    ₹ {product.price.toFixed(2)}
-                  </strong>
+            {productList.map((product) => {
+              const quantity =
+                bagItems.find((item) => item.id === product.id)?.quantity ?? 0;
 
-                  <span
-                    className="icon-cross"
-                    onClick={() =>
-                      dispatch(
-                        addItemToBag({
-                          id: product.id,
-                          name: product.title,
-                          image: product.image,
-                          price: product.price,
-                          quantity: 1,
-                        }),
-                      )
-                    }
-                  >
+              return (
+                <div
+                  className="col-12 col-md-4 col-lg-3 mb-5 mb-md-0"
+                  key={product.id}
+                >
+                  <div className="product-item">
                     <img
-                      src="/static/media/img/cross.svg"
-                      className="img-fluid"
+                      src={product.image}
+                      className="img-fluid product-thumbnail"
                     />
-                  </span>
-                </a>
-              </div>
-            ))}
+                    <h3 className="product-title">{product.title}</h3>
+                    <strong className="product-price">
+                      ₹ {product.price.toFixed(2)}
+                    </strong>
+
+                    {quantity === 0 ? (
+                      <button
+                        type="button"
+                        className="icon-cross"
+                        onClick={(event) => handleAddToBag(product, event)}
+                        aria-label="Add to cart"
+                      >
+                        <img
+                          src="/static/media/img/cross.svg"
+                          className="img-fluid"
+                        />
+                      </button>
+                    ) : (
+                      <div
+                        className="icon-cross d-flex align-items-center justify-content-between bg-dark rounded-pill px-3 py-1 shadow"
+                        style={{ minWidth: 96 }}
+                      >
+                        <button
+                          className="btn btn-link p-0 d-flex align-items-center justify-content-center rounded-circle border border-light qty-control-btn"
+                          style={{ width: 28, height: 28 }}
+                          onClick={() =>
+                            quantity > 1
+                              ? dispatch(decreaseBagItemQuantity(product.id))
+                              : dispatch(removeBagItem(product.id))
+                          }
+                        >
+                          -
+                        </button>
+                        <span className="fw-semibold text-light">
+                          {quantity}
+                        </span>
+                        <button
+                          className="btn btn-link p-0 d-flex align-items-center justify-content-center rounded-circle border border-light qty-control-btn"
+                          style={{ width: 28, height: 28 }}
+                          onClick={() =>
+                            dispatch(
+                              addItemToBag({
+                                id: product.id,
+                                name: product.title,
+                                image: product.image,
+                                price: product.price,
+                                quantity: 1,
+                              }),
+                            )
+                          }
+                        >
+                          +
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -173,7 +239,7 @@ const HomeApp = () => {
           </div>
         </div>
       </div>
-      <div className="popular-product" id="services">
+      {/* <div className="popular-product" id="services">
         <div className="container">
           <div className="row">
             <div className="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0">
@@ -243,8 +309,8 @@ const HomeApp = () => {
             </div>
           </div>
         </div>
-      </div>
-      <RecentWorksApp />
+      </div> */}
+      {/* <RecentWorksApp /> */}
     </section>
   );
 };
