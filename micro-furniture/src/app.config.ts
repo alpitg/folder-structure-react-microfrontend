@@ -69,6 +69,17 @@ let environment = {
         },
       ],
     },
+    whyChooseUs3: {
+      title: "Why Choose Us",
+      description: "description here",
+      services: [
+        {
+          title: "Service 1",
+          description: "Description for service 1",
+          icon: "",
+        },
+      ],
+    },
   },
   api: {
     baseUrl: "",

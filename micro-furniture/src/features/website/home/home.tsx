@@ -224,12 +224,12 @@ const HomeApp = () => {
             </div>
             <div className="col-lg-5 ps-lg-5">
               <h2 className="section-title mb-4">
-                {appSettings?.homePage?.whyChooseUs2?.title}
+                {appSettings?.homePage?.whyChooseUs3?.title}
               </h2>
-              <p>{appSettings?.homePage?.whyChooseUs2?.description}</p>
+              <p>{appSettings?.homePage?.whyChooseUs3?.description}</p>
 
               <ul className="list-unstyled custom-list my-4">
-                {appSettings?.homePage?.whyChooseUs2?.services?.map(
+                {appSettings?.homePage?.whyChooseUs3?.services?.map(
                   (service, index) => (
                     <li key={`why-choose-us-2-service-${index}`}>
                       {service.title}

@@ -22,28 +22,7 @@
     "whyChooseUs": {
       "title": "Crafted with excellent material.",
       "description": "Discover our carefully curated collection of premium furniture designed for modern living. Each piece is handpicked and crafted with meticulous attention to detail, combining elegant aesthetics with exceptional durability. From minimalist Scandinavian designs to ergonomic office solutions, we bring comfort and style to every space in your home.",
-      "services": [
-        {
-          "title": "Fast & Free Shipping",
-          "description": "Enjoy quick delivery across the city with zero shipping charges on eligible orders.",
-          "icon": "static/media/img/truck.svg"
-        },
-        {
-          "title": "Easy to Shop",
-          "description": "Browse curated furniture collections, compare styles, and place your order in minutes.",
-          "icon": "static/media/img/bag.svg"
-        },
-        {
-          "title": "24/7 Support",
-          "description": "Our team is always available to answer questions and help with your purchase.",
-          "icon": "static/media/img/support.svg"
-        },
-        {
-          "title": "Hassle Free Returns",
-          "description": "Shop with confidence knowing returns are simple and customer-friendly.",
-          "icon": "static/media/img/return.svg"
-        }
-      ]
+      "services": []
     },
     "whyChooseUs2": {
       "title": "Why Choose Us",
@@ -72,28 +51,28 @@
       ]
     },
     "whyChooseUs3": {
-      "title": "We Help You Make Modern Interior Design",
-      "description": "We help you to create your dream interior design with our expert furniture.",
+      "title": "Design a Home You'll Love",
+      "description": "Discover beautifully crafted furniture that blends modern aesthetics with everyday comfort, helping you create a space that truly feels like home.",
       "services": [
         {
-          "title": "On time Delivery",
-          "description": "...",
-          "icon": "static/media/img/bag.svg"
+          "title": "Built to Last",
+          "description": "Crafted from premium materials to provide lasting durability and timeless elegance.",
+          "icon": "bi bi-shield-check"
         },
         {
-          "title": "Easy to Shop",
-          "description": "Description 2",
-          "icon": "static/media/img/bag.svg"
+          "title": "Modern Design",
+          "description": "Stylish furniture that complements every home with elegance and functionality.",
+          "icon": "bi bi-stars"
         },
         {
-          "title": "24/7 Support",
-          "description": "Description 3",
-          "icon": "static/media/img/bag.svg"
+          "title": "Comfort Guaranteed",
+          "description": "Designed with comfort in mind so you can relax and enjoy every moment.",
+          "icon": "bi bi-heart"
         },
         {
-          "title": "Hassle Free Returns",
-          "description": "Description 4",
-          "icon": "static/media/img/bag.svg"
+          "title": "Premium Craftsmanship",
+          "description": "Every piece is carefully crafted with precision, quality, and attention to detail.",
+          "icon": "bi bi-award"
         }
       ]
     }
