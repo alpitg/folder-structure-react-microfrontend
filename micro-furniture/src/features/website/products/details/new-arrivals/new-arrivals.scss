@@ -47,6 +47,30 @@
       font-size: 12px;
       padding: 4px 10px;
     }
+
+    .icon-cross {
+      min-width: 100px;
+      gap: 8px;
+    }
+
+    .qty-control-btn {
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      color: var(--bs-light);
+      background: transparent;
+      transition: all 0.2s ease;
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    .qty-control-btn:hover {
+      color: var(--bs-dark);
+      background: var(--bs-light);
+    }
   }
 
   .product-card:hover .product-actions {
