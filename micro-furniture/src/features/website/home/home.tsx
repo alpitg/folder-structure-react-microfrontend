@@ -14,9 +14,12 @@ import { GetEnvConfig } from "../../../app.config";
 import type { IProductData } from "../../store/catalog/interface/product/product.model";
 import { NavLink } from "react-router";
 import { ROUTE_URL } from "../../../routes/constants/routes.const";
+import ShopByCategoryApp from "./shop-by-category/shop-by-category";
 import { useGetProductsQuery } from "../../../app/redux/catalog/product/product.api";
+import AdditionalOffersApp from "./additional-offers/additional-offers";
 
 const HomeApp = () => {
+  //#region variables/methods
   const blankImage = "/static/media/img/svg/blank-image.svg";
 
   const appSettings = GetEnvConfig();
@@ -55,12 +58,14 @@ const HomeApp = () => {
       }),
     );
   };
+  //#endregion
 
   return (
-    <section className="home-app">
-      <CarouselApp />
-
+    <section className="home-app pt-4">
+      {/* <CarouselApp /> */}
+      {/* <ShopByCategoryApp /> */}
       <CategoryBanner />
+      {/* <AdditionalOffersApp /> */}
       <div className="product-section">
         <div className="container">
           <div className="row">

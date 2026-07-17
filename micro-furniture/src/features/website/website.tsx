@@ -8,60 +8,46 @@ import HeaderApp from "./header/header";
 import { ROUTE_URL } from "../../routes/constants/routes.const";
 
 const WebsiteApp = () => {
+  const menus = [
+    {
+      name: "Home",
+      icon: "bi bi-house-door",
+      url: ROUTE_URL.WEBSITE.BASE,
+    },
+    {
+      name: "Product",
+      icon: "bi bi-box-seam",
+      url: ROUTE_URL.WEBSITE.PRODUCTS,
+    },
+    {
+      name: "Cart",
+      icon: "bi bi-cart",
+      url: ROUTE_URL.WEBSITE.CART,
+    },
+  ];
+
   return (
     <div className="website-app">
       <HeaderApp />
 
       <div className="website-body">
-        <div className="d-lg-none container my-3">
-          <div className="border rounded-3 shadow-sm px-3 py-2 bg-white">
-            <ul className="nav justify-content-center align-items-center gap-3">
-              <li className="nav-item">
+          <ul className="category-menu d-lg-none my-3">
+            {menus.map((menu) => (
+              <li className="category-menu-item" key={menu?.name}>
                 <NavLink
-                  to={ROUTE_URL.WEBSITE.BASE}
-                  end
+                  to={menu?.url}
                   className={({ isActive }) =>
                     `nav-link px-2 text-decoration-none ${
                       isActive ? "fw-bold text-primary" : "fw-normal text-dark"
                     }`
                   }
                 >
-                  <i className="bi bi-house-door me-2"></i>
-                  Home
+                  <i className={`${menu?.icon} me-2`}></i>
+                  {menu?.name}
                 </NavLink>
               </li>
-
-              <li className="nav-item">
-                <NavLink
-                  to={ROUTE_URL.WEBSITE.PRODUCTS}
-                  className={({ isActive }) =>
-                    `nav-link px-2 text-decoration-none ${
-                      isActive ? "fw-bold text-primary" : "fw-normal text-dark"
-                    }`
-                  }
-                >
-                  <i className="bi bi-box-seam me-2"></i>
-                  Products
-                </NavLink>
-              </li>
-
-              <li className="nav-item">
-                <NavLink
-                  to={ROUTE_URL.WEBSITE.CART}
-                  className={({ isActive }) =>
-                    `nav-link px-2 text-decoration-none d-flex align-items-center ${
-                      isActive ? "fw-bold text-primary" : "fw-normal text-dark"
-                    }`
-                  }
-                >
-                  <i className="bi bi-cart3 me-2"></i>
-                  Cart
-                </NavLink>
-              </li>
-            </ul>
-          </div>
-        </div>
-
+            ))}
+          </ul>
         <Outlet />
       </div>
       <FooterApp></FooterApp>
