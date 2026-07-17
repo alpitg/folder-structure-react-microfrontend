@@ -25,45 +25,58 @@ const CarouselApp = () => {
   const appSettings = GetEnvConfig();
 
   return (
-    <section className="luxury-carousel container py-5">
-      <div className="row align-items-center">
-        {/* LEFT CONTENT */}
+    <section className="luxury-carousel py-5">
+      <div className="container">
+        <div className="row align-items-center g-5">
+          {/* LEFT CONTENT */}
+          <div className="col-lg-5">
+            <div className="luxury-content">
+              <span className="premium-badge">
+                <i className="bi bi-stars me-2"></i>
+                Premium Furniture
+              </span>
 
-        <div className="col-lg-5 mb-5 mb-lg-0">
-          <span className="px-3 py-2">
-            <i className="bi bi-stars me-2"></i>
-            Premium Furniture
-          </span>
-          <h1 className="display-4 fw-bold mt-3">
-            {appSettings?.homePage?.title}
-          </h1>
-          <p className="text-muted mt-4">{appSettings?.homePage?.description}</p>
+              <h1 className="display-4 fw-bold mt-4">
+                {appSettings?.homePage?.title}
+              </h1>
 
-          <a
-            className="btn btn-dark rounded-pill px-4 mt-3"
-            href={
-              `https://wa.me/${appSettings?.homePage?.contactDetails?.whatsapp?.number}?text=` +
-              appSettings?.homePage?.contactDetails?.whatsapp?.message
-            }
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span className="me-2"> Contact us: </span>
-            <span className="bi bi-whatsapp me-2" />
-            {appSettings?.homePage?.contactDetails?.contactnumber}
-          </a>
-          <h2 className="floating-text">Luxury</h2>
-        </div>
+              <p className="text-muted mt-4 fs-5">
+                {appSettings?.homePage?.description}
+              </p>
 
-        {/* RIGHT */}
+              <a
+                className="btn btn-dark rounded-pill px-4 py-3 mt-3 luxury-btn"
+                href={`https://wa.me/${appSettings?.homePage?.contactDetails?.whatsapp?.number}?text=${appSettings?.homePage?.contactDetails?.whatsapp?.message}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span className="me-2">Contact us</span>
+                <i className="bi bi-whatsapp me-2"></i>
+                {appSettings?.homePage?.contactDetails?.contactnumber}
+              </a>
 
-        <div className="col-lg-7">
-          <div className="orbit">
-            {products.map((item, index) => (
-              <div key={item.id} className={`orbit-item orbit-${index + 1}`}>
-                <img src={item.image} alt="" />
+              <h2 className="floating-text">Luxury</h2>
+            </div>
+          </div>
+
+          {/* RIGHT PRODUCTS */}
+          <div className="col-lg-7">
+            <div className="orbit-wrapper">
+              <div className="orbit-circle"></div>
+
+              <div className="orbit">
+                {products.map((item, index) => (
+                  <div
+                    key={item.id}
+                    className={`orbit-item orbit-${index + 1}`}
+                  >
+                    <img src={item.image} alt="Luxury furniture" />
+                  </div>
+                ))}
               </div>
-            ))}
+
+              <div className="center-glow"></div>
+            </div>
           </div>
         </div>
       </div>

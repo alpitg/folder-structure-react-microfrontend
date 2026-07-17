@@ -31,7 +31,7 @@ const WebsiteApp = () => {
       <HeaderApp />
 
       <div className="website-body">
-          <ul className="category-menu d-lg-none my-3">
+          <ul className="category-menu d-lg-none my-3 mb-0">
             {menus.map((menu) => (
               <li className="category-menu-item" key={menu?.name}>
                 <NavLink
