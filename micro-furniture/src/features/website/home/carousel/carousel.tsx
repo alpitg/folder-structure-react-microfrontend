@@ -26,7 +26,7 @@ const CarouselApp = () => {
 
   return (
     <section className="luxury-carousel py-5">
-      <div className="container">
+      <div className="container mt-10">
         <div className="row align-items-center g-5">
           {/* LEFT CONTENT */}
           <div className="col-lg-5">
