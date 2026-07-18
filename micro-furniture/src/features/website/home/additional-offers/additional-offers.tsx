@@ -21,19 +21,19 @@ const AdditionalOffersApp = () => {
       id: "art1000",
       title: "Extra ₹1,000 Off on Orders Above ₹15,000",
       subtitle: "Use Code ART1000",
-      image: "public/static/media/img/offers/discount.png",
+      image: "/static/media/img/offers/discount.png",
     },
     {
       id: "art1800",
       title: "Extra ₹2,000 Off on Orders Above ₹20,000",
       subtitle: "Use Code ART2000",
-      image: "public/static/media/img/offers/discount.png",
+      image: "/static/media/img/offers/discount.png",
     },
     {
       id: "gst",
       title: "Enjoy Reduced GST Rates",
       subtitle: "On Select Products",
-      image: "public/static/media/img/offers/gst.png",
+      image: "/static/media/img/offers/gst.png",
     },
   ];
 
