@@ -20,40 +20,4 @@
       text-decoration: underline;
     }
   }
-
-  .category-menu {
-    // position: fixed;
-    display: flex;
-    gap: 1.5rem;
-    list-style: none;
-    padding: 10px;
-    align-items: center;
-    justify-content: center;
-    background: var(--bs-white);
-    width: 100%;
-    z-index: 9;
-
-    .category-menu-item {
-      flex: 0 0 auto;
-    }
-
-    .category-menu-link {
-      display: block;
-      text-decoration: none;
-      color: inherit;
-      white-space: nowrap;
-    }
-
-    @media (max-width: 768px) {
-      overflow-x: auto;
-      flex-wrap: nowrap;
-      padding-bottom: 0.5rem;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-
-      &::-webkit-scrollbar {
-        display: none;
-      }
-    }
-  }
 }

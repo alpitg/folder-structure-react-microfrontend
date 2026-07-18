@@ -16,18 +16,23 @@ const HeaderApp = () => {
           {appSettings?.name}
           <span>.</span>
         </Link>
+        <div className="d-flex d-md-none gap-4 align-items-center">
+          <NavLink className="nav-link" to={ROUTE_URL.WEBSITE.CART} title="Cart">
+            <i className="bi bi-cart3 fs-xl me-1"></i>
+          </NavLink>
 
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarsFurni"
-          aria-controls="navbarsFurni"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarsFurni"
+            aria-controls="navbarsFurni"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+        </div>
 
         <div className="collapse navbar-collapse" id="navbarsFurni">
           <ul className="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
