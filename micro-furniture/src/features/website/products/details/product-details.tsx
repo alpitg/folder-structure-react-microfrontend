@@ -11,6 +11,7 @@ import { useNavigate, useParams } from "react-router";
 import type { AppState } from "../../../../app/store";
 import BenefitsApp from "./benefits/benefits";
 import ExportAdviceApp from "./expert-advice/export-advice";
+import { GetEnvConfig } from "../../../../app.config";
 import MoreDetailApp from "./more-detail/more-detail";
 import NewArrivals from "./new-arrivals/new-arrivals";
 import PricingApp from "./pricing/pricing";
@@ -21,6 +22,7 @@ import { useMemo } from "react";
 
 const ProductDetails = () => {
   const blankImage = "/static/media/img/svg/blank-image.svg";
+  const appSettings = GetEnvConfig();
 
   const { id } = useParams();
   const route = useNavigate();
@@ -114,7 +116,7 @@ const ProductDetails = () => {
               </div>
             )}
           </div>
-          <span className="text-muted">By Artisan studio.</span>
+          <span className="text-muted">By {appSettings?.name}.</span>
           <div className="d-flex justify-start align-items-center gap-3">
             {product.rating && (
               <div className="text-warning small d-flex align-items-center gap-1">
