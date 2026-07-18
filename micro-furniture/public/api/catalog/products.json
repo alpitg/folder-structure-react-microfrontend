@@ -484,7 +484,7 @@
       },
       "rating": 4.4,
       "reviews": 28,
-      "isFeatured": true,
+      "isFeatured": false,
       "createdAt": "2026-01-05T10:30:00Z",
       "updatedAt": "2026-07-15T14:20:00Z"
     }
