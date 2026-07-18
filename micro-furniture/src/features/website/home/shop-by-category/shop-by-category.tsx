@@ -1,5 +1,6 @@
-import { NavLink } from "react-router";
 import "./shop-by-category.scss";
+
+import { NavLink } from "react-router";
 import { ROUTE_URL } from "../../../../routes/constants/routes.const";
 
 const ShopByCategoryApp = () => {
@@ -69,8 +70,7 @@ const ShopByCategoryApp = () => {
       id: "wardrobes",
       title: "Wardrobes",
       category: "wardrobes",
-      image:
-        "https://cdn.swadeshonline.com/v2/patient-paper-41f385/swad-p/wrkr/company/17/applications/65f437fae78851028707daee/theme/pictures/free/original/Wardrobes-1781269450722.png",
+      image: "static/media/img/furniture/category/wardrobes.png",
       alt: "Category Wardrobe",
     },
     {

@@ -7,6 +7,7 @@ import {
 } from "../../../app/redux/core/shopping-bag/shopping-bag.slice";
 import { useDispatch, useSelector } from "react-redux";
 
+import AdditionalOffersApp from "./additional-offers/additional-offers";
 import type { AppState } from "../../../app/store";
 import CarouselApp from "./carousel/carousel";
 import CategoryBanner from "../category-banner/category-banner";
@@ -64,7 +65,7 @@ const HomeApp = () => {
       <CarouselApp />
       <ShopByCategoryApp />
       <CategoryBanner />
-      {/* <AdditionalOffersApp /> */}
+      <AdditionalOffersApp />
       <div className="product-section">
         <div className="container">
           <div className="row">
