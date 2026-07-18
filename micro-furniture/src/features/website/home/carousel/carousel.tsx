@@ -1,6 +1,8 @@
 import "./carousel.scss";
 
 import { GetEnvConfig } from "../../../../app.config";
+import { NavLink } from "react-router";
+import { ROUTE_URL } from "../../../../routes/constants/routes.const";
 
 const products = [
   {
@@ -13,11 +15,15 @@ const products = [
   },
   {
     id: 3,
-    image: "/static/media/img/product-3.png",
+    image: "/static/media/img/furniture/category/chests-of-drawers.png",
   },
   {
     id: 4,
     image: "/static/media/img/product-4.png",
+  },
+  {
+    id: 5,
+    image: "/static/media/img/furniture/category/sofas.png",
   },
 ];
 
@@ -31,11 +37,6 @@ const CarouselApp = () => {
           {/* LEFT CONTENT */}
           <div className="col-lg-5">
             <div className="luxury-content">
-              <span className="premium-badge">
-                <i className="bi bi-stars me-2"></i>
-                Premium Furniture
-              </span>
-
               <h1 className="display-4 fw-bold mt-4">
                 {appSettings?.homePage?.title}
               </h1>
@@ -66,12 +67,13 @@ const CarouselApp = () => {
 
               <div className="orbit">
                 {products.map((item, index) => (
-                  <div
+                  <NavLink
                     key={item.id}
                     className={`orbit-item orbit-${index + 1}`}
+                    to={ROUTE_URL.WEBSITE.PRODUCTS}
                   >
                     <img src={item.image} alt="Luxury furniture" />
-                  </div>
+                  </NavLink>
                 ))}
               </div>
 
