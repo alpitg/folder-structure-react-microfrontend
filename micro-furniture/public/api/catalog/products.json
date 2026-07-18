@@ -243,6 +243,180 @@
       "rating": 4.3,
       "createdAt": "2025-10-20T12:00:00Z",
       "updatedAt": "2026-07-12T16:20:00Z"
+    },
+    {
+      "id": "1b9d6bcd-2cbd-4e3b-a6a8-4ed4f42f9f7a",
+      "name": "Sofa",
+      "code": "PROD-001",
+      "description": "Comfortable sofa for living room",
+      "status": "published",
+      "template": "standard",
+      "categories": ["furniture", "sofas"],
+      "tags": ["comfortable", "living room"],
+      "media": [
+        {
+          "url": "/static/media/img/product-1.png",
+          "alt": "Sofa"
+        }
+      ],
+      "price": {
+        "basePrice": 500,
+        "discountType": "percentage",
+        "discountPercentage": 10,
+        "fixedDiscountedPrice": null,
+        "taxClass": "taxable_goods",
+        "taxPercent": 18
+      },
+      "isNewArrival": false,
+      "totalWishlistedCount": 61,
+      "inventory": {
+        "sku": "SKU-001",
+        "barcode": "1234567890123",
+        "quantityInShelf": 20,
+        "quantityInWarehouse": 60,
+        "quantity": 80,
+        "allowBackorders": true
+      },
+      "variations": [
+        {
+          "name": "Color",
+          "values": "Red,Blue,Black"
+        }
+      ],
+      "shipping": {
+        "isPhysical": true,
+        "weightInKg": 20,
+        "lengthInCm": 100,
+        "widthInCm": 80,
+        "heightInCm": 60
+      },
+      "meta": {
+        "metaTitle": "Sofa | Comfortable Furniture",
+        "metaDescription": "Comfortable sofa for living room",
+        "metaKeywords": ["comfortable", "living room", "furniture"]
+      },
+      "scheduling": {
+        "publishAt": "2025-10-01T00:00:00Z"
+      },
+      "rating": 4.5,
+      "createdAt": "2025-10-20T12:00:00Z",
+      "updatedAt": "2026-07-12T16:20:00Z"
+    },
+    {
+      "id": "f8b9e1f1-2cda-4b1c-bb6b-4ed4f42f9f7b",
+      "name": "Bed",
+      "code": "PROD-002",
+      "description": "Comfortable bed for bedroom",
+      "status": "published",
+      "template": "standard",
+      "categories": ["furniture", "beds"],
+      "tags": ["comfortable", "bedroom"],
+      "media": [
+        {
+          "url": "/static/media/img/product-2.png",
+          "alt": "Bed"
+        }
+      ],
+      "price": {
+        "basePrice": 300,
+        "discountType": "percentage",
+        "discountPercentage": 5,
+        "fixedDiscountedPrice": null,
+        "taxClass": "taxable_goods",
+        "taxPercent": 18
+      },
+      "isNewArrival": false,
+      "totalWishlistedCount": 61,
+      "inventory": {
+        "sku": "SKU-002",
+        "barcode": "1234567890124",
+        "quantityInShelf": 20,
+        "quantityInWarehouse": 60,
+        "quantity": 80,
+        "allowBackorders": true
+      },
+      "variations": [
+        {
+          "name": "Size",
+          "values": "Single,Double,King"
+        }
+      ],
+      "shipping": {
+        "isPhysical": true,
+        "weightInKg": 15,
+        "lengthInCm": 80,
+        "widthInCm": 60,
+        "heightInCm": 40
+      },
+      "meta": {
+        "metaTitle": "Bed | Comfortable Furniture",
+        "metaDescription": "Comfortable bed for bedroom",
+        "metaKeywords": ["comfortable", "bedroom", "furniture"]
+      },
+      "scheduling": {
+        "publishAt": "2025-10-01T00:00:00Z"
+      },
+      "rating": 4.3,
+      "createdAt": "2025-10-20T12:00:00Z",
+      "updatedAt": "2026-07-12T16:20:00Z"
+    },
+    {
+      "id": "3c9e1f1f-2cda-4b1c-bb6b-4ed4f42f9f7c",
+      "name": "Wardrobe",
+      "code": "PROD-003",
+      "description": "Spacious wardrobe for bedroom",
+      "status": "published",
+      "template": "standard",
+      "categories": ["furniture", "wardrobes"],
+      "tags": ["spacious", "bedroom"],
+      "media": [
+        {
+          "url": "/static/media/img/product-3.png",
+          "alt": "Wardrobe"
+        }
+      ],
+      "price": {
+        "basePrice": 400,
+        "discountType": "fixed",
+        "discountPercentage": null,
+        "fixedDiscountedPrice": 350,
+        "taxClass": "taxable_goods",
+        "taxPercent": 18
+      },
+      "isNewArrival": false,
+      "totalWishlistedCount": 61,
+      "inventory": {
+        "sku": "SKU-003",
+        "barcode": "1234567890125",
+        "quantityInShelf": 20,
+        "quantityInWarehouse": 60,
+        "quantity": 80,
+        "allowBackorders": true
+      },
+      "variations": [
+        {
+          "name": "Color",
+          "values": "White,Black,Brown"
+        }
+      ],
+      "shipping": {
+        "isPhysical": true,
+        "weightInKg": 25,
+        "lengthInCm": 120,
+        "widthInCm": 80,
+        "heightInCm": 200
+      },
+      "meta": {
+        "metaTitle": "Wardrobe | Spacious Furniture",
+        "metaDescription": "Spacious wardrobe for bedroom",
+        "metaKeywords": ["spacious", "bedroom", "furniture"]
+      },
+      "scheduling": {
+        "publishAt": "2025-10-01T00:00:00Z"
+      },
+      "rating": 4.3,
+      "createdAt": "2025-10-20T12:00:00Z",
+      "updatedAt": "2026-07-12T16:20:00Z"
     }
   ]
 }

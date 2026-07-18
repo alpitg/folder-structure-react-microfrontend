@@ -74,12 +74,12 @@ const ShopByCategoryApp = () => {
       alt: "Category Wardrobe",
     },
     {
-      id: "study-chairs",
+      id: "chairs",
       title: "Study Chairs",
-      category: "study-chairs",
+      category: "chairs",
       image:
         "https://cdn.swadeshonline.com/v2/patient-paper-41f385/swad-p/wrkr/company/17/applications/65f437fae78851028707daee/theme/pictures/free/original/Study-Chairs-1781270244175.png",
-      alt: "Category Study Chair",
+      alt: "Category Chairs",
     },
     {
       id: "tv-units",
