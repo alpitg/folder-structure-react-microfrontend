@@ -20,9 +20,9 @@
         }
       ],
       "price": {
-        "basePrice": 50,
+        "basePrice": 79999,
         "discountType": "percentage",
-        "discountPercentage": 10,
+        "discountPercentage": 18,
         "fixedDiscountedPrice": null,
         "taxClass": "taxable_goods",
         "taxPercent": 18
@@ -80,9 +80,9 @@
         }
       ],
       "price": {
-        "basePrice": 78,
+        "basePrice": 65999,
         "discountType": "none",
-        "discountPercentage": null,
+        "discountPercentage": 20,
         "fixedDiscountedPrice": null,
         "taxClass": "taxable_goods",
         "taxPercent": 18
@@ -139,10 +139,10 @@
         }
       ],
       "price": {
-        "basePrice": 43,
+        "basePrice": 54999,
         "discountType": "fixed",
-        "discountPercentage": null,
-        "fixedDiscountedPrice": 38.7,
+        "discountPercentage": 10,
+        "fixedDiscountedPrice": 49999,
         "taxClass": "taxable_goods",
         "taxPercent": 18
       },
@@ -255,7 +255,7 @@
       "tags": ["comfortable", "living room"],
       "media": [
         {
-          "url": "/static/media/img/product-1.png",
+          "url": "/static/media/img/furniture/category/sofas/sofa1.png",
           "alt": "Sofa"
         }
       ],
@@ -299,6 +299,7 @@
         "publishAt": "2025-10-01T00:00:00Z"
       },
       "rating": 4.5,
+      "reviews": 2,
       "createdAt": "2025-10-20T12:00:00Z",
       "updatedAt": "2026-07-12T16:20:00Z"
     },
@@ -313,7 +314,7 @@
       "tags": ["comfortable", "bedroom"],
       "media": [
         {
-          "url": "/static/media/img/product-2.png",
+          "url": "/static/media/img/furniture/category/beds/bed1.png",
           "alt": "Bed"
         }
       ],
@@ -362,7 +363,7 @@
     },
     {
       "id": "3c9e1f1f-2cda-4b1c-bb6b-4ed4f42f9f7c",
-      "name": "Wardrobe",
+      "name": "3 Door Wardrobe",
       "code": "PROD-003",
       "description": "Spacious wardrobe for bedroom",
       "status": "published",
@@ -371,14 +372,14 @@
       "tags": ["spacious", "bedroom"],
       "media": [
         {
-          "url": "/static/media/img/product-3.png",
+          "url": "/static/media/img/furniture/category/wardrobes/wardrobe1.png",
           "alt": "Wardrobe"
         }
       ],
       "price": {
         "basePrice": 400,
         "discountType": "fixed",
-        "discountPercentage": null,
+        "discountPercentage": 2,
         "fixedDiscountedPrice": 350,
         "taxClass": "taxable_goods",
         "taxPercent": 18
@@ -417,6 +418,75 @@
       "rating": 4.3,
       "createdAt": "2025-10-20T12:00:00Z",
       "updatedAt": "2026-07-12T16:20:00Z"
+    },
+    {
+      "id": "4d8f2a2c-6b3e-4c9a-b7f1-9e5d6a8c2f10",
+      "name": "Modern TV Unit",
+      "code": "PROD-004",
+      "description": "Elegant TV unit with spacious storage and modern design for living rooms",
+      "status": "published",
+      "template": "standard",
+      "categories": ["furniture", "tv-units"],
+      "tags": ["modern", "living room", "storage"],
+      "media": [
+        {
+          "url": "/static/media/img/furniture/category/tv-units/tv-unit1.png",
+          "alt": "Modern TV Unit"
+        }
+      ],
+      "price": {
+        "basePrice": 300,
+        "discountType": "percentage",
+        "discountPercentage": 10,
+        "fixedDiscountedPrice": null,
+        "taxClass": "taxable_goods",
+        "taxPercent": 18
+      },
+      "isNewArrival": true,
+      "totalWishlistedCount": 45,
+      "inventory": {
+        "sku": "SKU-004",
+        "barcode": "1234567890127",
+        "quantityInShelf": 15,
+        "quantityInWarehouse": 40,
+        "quantity": 55,
+        "allowBackorders": true
+      },
+      "variations": [
+        {
+          "name": "Color",
+          "values": "Walnut,White,Black"
+        },
+        {
+          "name": "Material",
+          "values": "Engineered Wood,MDF"
+        }
+      ],
+      "shipping": {
+        "isPhysical": true,
+        "weightInKg": 35,
+        "lengthInCm": 180,
+        "widthInCm": 40,
+        "heightInCm": 55
+      },
+      "meta": {
+        "metaTitle": "Modern TV Unit | Premium Living Room Furniture",
+        "metaDescription": "Stylish modern TV unit with premium finish and ample storage space for your living room",
+        "metaKeywords": [
+          "tv unit",
+          "living room",
+          "modern furniture",
+          "storage"
+        ]
+      },
+      "scheduling": {
+        "publishAt": "2026-01-10T00:00:00Z"
+      },
+      "rating": 4.4,
+      "reviews": 28,
+      "isFeatured": true,
+      "createdAt": "2026-01-05T10:30:00Z",
+      "updatedAt": "2026-07-15T14:20:00Z"
     }
   ]
 }

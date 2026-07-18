@@ -167,15 +167,31 @@ const Products = () => {
                     {product?.description}
                   </p>
 
-                  <div className="d-flex justify-content-between align-items-center">
-                    <div className="price">
-                      <i className="bi bi-currency-rupee"></i>
-                      {product?.price?.basePrice ?? 0}
+                  <div>
+                    <div className="product-price">
+                      <span className="sale-price">
+                        ₹
+                        {Math.round(
+                          (product?.price?.basePrice ?? 0) -
+                            ((product?.price?.basePrice ?? 0) *
+                              (product?.price?.discountPercentage ?? 0)) /
+                              100,
+                        ).toLocaleString("en-IN")}
+                      </span>
+                      <span className="mrp-price">
+                        ₹ {product?.price?.basePrice}
+                      </span>
+                      <span className="discount">
+                        {product?.price?.discountPercentage}% OFF
+                      </span>
                     </div>
-                    <div className="small text-muted">
-                      <i className="bi bi-star-fill text-warning me-2"></i>
-                      {product?.rating} ({product?.reviews ?? 0} reviews)
-                    </div>
+
+                    {product?.reviews > 0 && (
+                      <div className="small text-muted">
+                        <i className="bi bi-star-fill text-warning me-2"></i>
+                        {product?.rating} ({product?.reviews ?? 0} reviews)
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

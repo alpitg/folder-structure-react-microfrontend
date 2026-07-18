@@ -9,9 +9,15 @@
         transform: translateY(-1px);
         box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.16);
       }
+
+      @media (max-width: 600px) {
+        width: 100%;
+      }
     }
 
     .quantity-pill {
+      width: 100px;
+
       .qty-control-btn {
         color: var(--bs-light);
         background: transparent;
@@ -21,6 +27,10 @@
       .qty-control-btn:hover {
         color: var(--bs-dark);
         background: var(--bs-light);
+      }
+
+      @media (max-width: 600px) {
+        width: 100%;
       }
     }
   }

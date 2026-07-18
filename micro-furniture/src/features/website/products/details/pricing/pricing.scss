@@ -1,0 +1,58 @@
+.pricing-app {
+  .deal-price-box {
+    background-color: var(--bs-white);
+    padding: 1rem;
+    margin-top: 1rem;
+    width: 100%;
+
+    .deal-content {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .deal-title {
+      font-size: 10px;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .price-section {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .selling-price {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--bs-dark);
+    }
+
+    .mrp-section {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #7d7d7d;
+      font-size: 14px;
+
+      .mrp-price {
+        text-decoration: line-through;
+      }
+    }
+
+    .discount {
+      color: var(--bs-success);
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .tax-info {
+      color: var(--bs-muted);
+      font-size: 10px;
+      line-height: 16px;
+      margin-top: 4px;
+    }
+  }
+}

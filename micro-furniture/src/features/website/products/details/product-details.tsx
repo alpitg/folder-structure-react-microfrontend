@@ -9,7 +9,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 
 import type { AppState } from "../../../../app/store";
+import BenefitsApp from "./benefits/benefits";
+import ExportAdviceApp from "./expert-advice/export-advice";
+import MoreDetailApp from "./more-detail/more-detail";
 import NewArrivals from "./new-arrivals/new-arrivals";
+import PricingApp from "./pricing/pricing";
 import ProductGallery from "./gallery/product-gallery";
 import { ROUTE_URL } from "../../../../routes/constants/routes.const";
 import { useGetProductsQuery } from "../../../../app/redux/catalog/product/product.api";
@@ -46,17 +50,6 @@ const ProductDetails = () => {
 
     return products.find((item) => String(item.id) === String(id)) ?? null;
   }, [productsFromStore, productsResponse, id]);
-
-  const features = [
-    { title: "Free shipping", desc: "On orders over ₹500", bg: "bg-light" },
-    { title: "Easy returns", desc: "Fast and simple returns", bg: "bg-light" },
-    {
-      title: "Nationwide delivery",
-      desc: "Fast delivery across India",
-      bg: "bg-light",
-    },
-    { title: "Refund policy", desc: "60 days return window", bg: "bg-light" },
-  ];
 
   if (isLoading) {
     return <div className="container py-5 text-center">Loading product...</div>;
@@ -121,11 +114,8 @@ const ProductDetails = () => {
               </div>
             )}
           </div>
-
-          <div className="d-flex flex-wrap align-items-center gap-3 mt-3">
-            <div className="border rounded px-3 py-1 fw-semibold detail-pill fs-5">
-              ₹{Number(product?.price?.basePrice ?? 0).toFixed(2)}
-            </div>
+          <span className="text-muted">By Artisan studio.</span>
+          <div className="d-flex justify-start align-items-center gap-3">
             {product.rating && (
               <div className="text-warning small d-flex align-items-center gap-1">
                 <i className="bi bi-star-fill text-warning"></i>
@@ -140,6 +130,8 @@ const ProductDetails = () => {
               In Stock
             </div>
           </div>
+
+          <PricingApp product={product} />
 
           <div className="mt-4">
             <label className="form-label fw-semibold">Color</label>
@@ -159,7 +151,7 @@ const ProductDetails = () => {
             </div>
           </div>
 
-          <div className="d-flex align-items-center gap-3 mt-4 product-details-actions">
+          <div className="d-flex align-items-center gap-3 mt-4 mb-12 product-details-actions">
             {quantityInBag === 0 ? (
               <button
                 className="btn btn-dark btn-sm rounded-pill shadow px-3 detail-bag-btn"
@@ -178,10 +170,7 @@ const ProductDetails = () => {
                 <i className="bi bi-cart"></i> Add to Cart
               </button>
             ) : (
-              <div
-                className="d-flex align-items-center justify-content-between bg-dark rounded-pill px-3 py-1 shadow quantity-pill"
-                style={{ minWidth: 96 }}
-              >
+              <div className="d-flex align-items-center justify-content-between bg-dark rounded-pill px-3 py-1 shadow quantity-pill">
                 <button
                   className="btn btn-link p-0 d-flex align-items-center justify-content-center rounded-circle border border-light qty-control-btn"
                   style={{ width: 28, height: 28 }}
@@ -193,7 +182,9 @@ const ProductDetails = () => {
                 >
                   -
                 </button>
+
                 <span className="fw-semibold text-light">{quantityInBag}</span>
+
                 <button
                   className="btn btn-link p-0 d-flex align-items-center justify-content-center rounded-circle border border-light qty-control-btn"
                   style={{ width: 28, height: 28 }}
@@ -217,30 +208,21 @@ const ProductDetails = () => {
             )}
           </div>
 
-          <div className="row g-3 mt-4">
-            {features.map((item, index) => (
-              <div key={`${item.title}-${index}`} className="col-12 col-sm-6">
-                <div className="p-3 rounded feature-card h-100">
-                  <h6 className="fw-semibold mb-1">{item.title}</h6>
-                  <p className="small text-muted mb-0">{item.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <BenefitsApp />
         </div>
       </div>
 
-      <div className="row mt-5">
+      <div className="row mt-10">
+        <ExportAdviceApp />
+      </div>
+
+      <div className="row mt-10">
         <div className="col-12">
-          <h2 className="h4 fw-semibold mb-3">Product Details</h2>
-          <p className="text-muted mb-0">
-            {product.description ??
-              "A well-crafted piece designed to blend comfort and elegance."}
-          </p>
+          <MoreDetailApp product={product} />
         </div>
       </div>
 
-      <div className="row mt-5">
+      <div className="row mt-4">
         <NewArrivals />
       </div>
     </div>
