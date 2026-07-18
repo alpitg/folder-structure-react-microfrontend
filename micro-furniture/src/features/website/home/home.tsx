@@ -204,7 +204,7 @@ const HomeApp = () => {
                 <img
                   src="/static/media/img/why-choose-us-img.jpg"
                   alt="Image"
-                  className="img-fluid"
+                  className="img-fluid hover-ease-out"
                 />
               </div>
             </div>
@@ -217,13 +217,25 @@ const HomeApp = () => {
             <div className="col-lg-7 mb-5 mb-lg-0">
               <div className="imgs-grid">
                 <div className="grid grid-1">
-                  <img src="/static/media/img/img-grid-1.jpg" alt="Untree.co" />
+                  <img
+                    src="/static/media/img/img-grid-1.jpg"
+                    alt="Untree.co"
+                    className="hover-ease-out"
+                  />
                 </div>
                 <div className="grid grid-2">
-                  <img src="/static/media/img/img-grid-2.jpg" alt="Untree.co" />
+                  <img
+                    src="/static/media/img/img-grid-2.jpg"
+                    alt="Untree.co"
+                    className="hover-ease-out"
+                  />
                 </div>
                 <div className="grid grid-3">
-                  <img src="/static/media/img/img-grid-3.jpg" alt="Untree.co" />
+                  <img
+                    src="/static/media/img/img-grid-3.jpg"
+                    alt="Untree.co"
+                    className="hover-ease-out"
+                  />
                 </div>
               </div>
             </div>

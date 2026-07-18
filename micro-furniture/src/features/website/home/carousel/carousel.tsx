@@ -60,7 +60,7 @@ const CarouselApp = () => {
           </div>
 
           {/* RIGHT PRODUCTS */}
-          <div className="col-lg-7">
+          <div className="col-lg-7 d-none d-lg-block">
             <div className="orbit-wrapper">
               <div className="orbit-circle"></div>
 
