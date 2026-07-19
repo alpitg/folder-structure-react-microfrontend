@@ -17,7 +17,7 @@ import NewArrivals from "./new-arrivals/new-arrivals";
 import PricingApp from "./pricing/pricing";
 import ProductGallery from "./gallery/product-gallery";
 import { ROUTE_URL } from "../../../../routes/constants/routes.const";
-import { useGetProductsQuery } from "../../../../app/redux/catalog/product/product.api";
+import { useGetProductDetailQuery } from "../../../../app/redux/website/product/website-product.api";
 import { useMemo } from "react";
 
 const ProductDetails = () => {
@@ -35,22 +35,18 @@ const ProductDetails = () => {
     data: productsResponse,
     isLoading,
     isError,
-  } = useGetProductsQuery({
-    page: 1,
-    pageSize: 10,
-  });
+  } = useGetProductDetailQuery(id ?? "");
 
   const productsFromStore = useSelector(
-    (state: AppState) => state.catalog.products.products,
+    (state: AppState) => state.website.websiteProducts.websiteProductDetail,
   );
 
   const product = useMemo(() => {
-    const products =
-      productsFromStore.length > 0
-        ? productsFromStore
-        : (productsResponse?.items ?? []);
+    const productDetail = productsFromStore
+      ? productsFromStore
+      : productsResponse;
 
-    return products.find((item) => String(item.id) === String(id)) ?? null;
+    return productDetail;
   }, [productsFromStore, productsResponse, id]);
 
   if (isLoading) {

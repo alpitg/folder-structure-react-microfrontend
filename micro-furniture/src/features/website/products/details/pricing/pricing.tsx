@@ -15,16 +15,18 @@ const PricingApp = ({ product }: { product?: IProductData }) => {
                 ₹{(product?.price?.sellingPrice ?? 0).toLocaleString("en-IN")}
               </div>
 
-              <div className="mrp-section">
-                <span>MRP</span>
-                <span className="mrp-price">
-                  ₹ {product?.price?.basePrice ?? 0}
-                </span>
-              </div>
+              <span className="d-flex align-items-center">
+                <div className="mrp-section me-2">
+                  <span>MRP</span>
+                  <span className="mrp-price">
+                    ₹ {product?.price?.basePrice ?? 0}
+                  </span>
+                </div>
 
-              <div className="discount">
-                ({product?.price?.discount?.value ?? 0}% OFF)
-              </div>
+                <div className="discount">
+                  ({product?.price?.discount?.value ?? 0}% OFF)
+                </div>
+              </span>
             </div>
 
             <div className="tax-info">

@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import type { AppState } from "../../../../../app/store";
 import type { IProductData } from "../../../../store/catalog/interface/product/product.model";
-import { useGetProductsQuery } from "../../../../../app/redux/catalog/product/product.api";
+import { useGetProductsQuery } from "../../../../../app/redux/website/product/website-product.api";
 
 type ProductItem = IProductData;
 

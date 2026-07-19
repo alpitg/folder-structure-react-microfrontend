@@ -16,7 +16,7 @@ import type { IProductData } from "../../store/catalog/interface/product/product
 import { NavLink } from "react-router";
 import { ROUTE_URL } from "../../../routes/constants/routes.const";
 import ShopByCategoryApp from "./shop-by-category/shop-by-category";
-import { useGetProductsQuery } from "../../../app/redux/catalog/product/product.api";
+import { useGetProductsQuery } from "../../../app/redux/website/product/website-product.api";
 
 const HomeApp = () => {
   //#region variables/methods
@@ -29,16 +29,18 @@ const HomeApp = () => {
   );
 
   const { data: productsResponse } = useGetProductsQuery({
+    searchText: "",
     page: 1,
     pageSize: 3,
   });
+
   const productsFromStore = useSelector(
-    (state: AppState) => state.catalog.products.products,
+    (state: AppState) => state?.website?.websiteProducts?.websiteProducts,
   );
 
   const products =
-    productsFromStore.length > 0
-      ? productsFromStore
+    productsFromStore?.items?.length > 0
+      ? productsFromStore?.items
       : (productsResponse?.items ?? []);
 
   const handleAddToBag = (
@@ -83,86 +85,83 @@ const HomeApp = () => {
               </p>
             </div>
 
-            {products
-              ?.filter((item) => item?.isFeatured)
-              .map((product) => {
-                const quantity =
-                  bagItems.find((item) => item.id === product.id)?.quantity ??
-                  0;
+            {products.map((product) => {
+              const quantity =
+                bagItems.find((item) => item.id === product.id)?.quantity ?? 0;
 
-                return (
-                  <div
-                    className="col-12 col-md-4 col-lg-3 mb-5 mb-md-0"
-                    key={product.id}
-                  >
-                    <div className="product-item">
-                      <img
-                        src={
-                          product?.media?.[0]?.url
-                            ? product.media[0].url
-                            : blankImage
-                        }
-                        className="img-fluid product-thumbnail"
-                      />
-                      <h3 className="product-title">{product.name}</h3>
-                      <strong className="product-price">
-                        ₹ {product?.price?.sellingPrice?.toFixed(2)}
-                      </strong>
+              return (
+                <div
+                  className="col-12 col-md-4 col-lg-3 mb-5 mb-md-0"
+                  key={product.id}
+                >
+                  <div className="product-item">
+                    <img
+                      src={
+                        product?.media?.[0]?.url
+                          ? product.media[0].url
+                          : blankImage
+                      }
+                      className="img-fluid product-thumbnail"
+                    />
+                    <h3 className="product-title">{product.name}</h3>
+                    <strong className="product-price">
+                      ₹ {product?.price?.sellingPrice?.toFixed(2)}
+                    </strong>
 
-                      {quantity === 0 ? (
+                    {quantity === 0 ? (
+                      <button
+                        type="button"
+                        className="icon-cross"
+                        onClick={(event) => handleAddToBag(product, event)}
+                        aria-label="Add to cart"
+                      >
+                        <img
+                          src="/static/media/img/cross.svg"
+                          className="img-fluid"
+                        />
+                      </button>
+                    ) : (
+                      <div
+                        className="icon-cross d-flex align-items-center justify-content-between bg-dark rounded-pill px-3 py-1 shadow"
+                        style={{ minWidth: 96 }}
+                      >
                         <button
-                          type="button"
-                          className="icon-cross"
-                          onClick={(event) => handleAddToBag(product, event)}
-                          aria-label="Add to cart"
+                          className="btn btn-link p-0 d-flex align-items-center justify-content-center rounded-circle border border-light qty-control-btn"
+                          style={{ width: 28, height: 28 }}
+                          onClick={() =>
+                            quantity > 1
+                              ? dispatch(decreaseBagItemQuantity(product.id))
+                              : dispatch(removeBagItem(product.id))
+                          }
                         >
-                          <img
-                            src="/static/media/img/cross.svg"
-                            className="img-fluid"
-                          />
+                          -
                         </button>
-                      ) : (
-                        <div
-                          className="icon-cross d-flex align-items-center justify-content-between bg-dark rounded-pill px-3 py-1 shadow"
-                          style={{ minWidth: 96 }}
+                        <span className="fw-semibold text-light">
+                          {quantity}
+                        </span>
+                        <button
+                          className="btn btn-link p-0 d-flex align-items-center justify-content-center rounded-circle border border-light qty-control-btn"
+                          style={{ width: 28, height: 28 }}
+                          onClick={() =>
+                            dispatch(
+                              addItemToBag({
+                                id: product?.id,
+                                name: product?.name,
+                                image: product?.media?.[0]?.url ?? blankImage,
+                                price: product?.price?.basePrice ?? 0,
+                                quantity: 1,
+                              }),
+                            )
+                          }
                         >
-                          <button
-                            className="btn btn-link p-0 d-flex align-items-center justify-content-center rounded-circle border border-light qty-control-btn"
-                            style={{ width: 28, height: 28 }}
-                            onClick={() =>
-                              quantity > 1
-                                ? dispatch(decreaseBagItemQuantity(product.id))
-                                : dispatch(removeBagItem(product.id))
-                            }
-                          >
-                            -
-                          </button>
-                          <span className="fw-semibold text-light">
-                            {quantity}
-                          </span>
-                          <button
-                            className="btn btn-link p-0 d-flex align-items-center justify-content-center rounded-circle border border-light qty-control-btn"
-                            style={{ width: 28, height: 28 }}
-                            onClick={() =>
-                              dispatch(
-                                addItemToBag({
-                                  id: product?.id,
-                                  name: product?.name,
-                                  image: product?.media?.[0]?.url ?? blankImage,
-                                  price: product?.price?.basePrice ?? 0,
-                                  quantity: 1,
-                                }),
-                              )
-                            }
-                          >
-                            +
-                          </button>
-                        </div>
-                      )}
-                    </div>
+                          +
+                        </button>
+                      </div>
+                    )}
                   </div>
-                );
-              })}
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

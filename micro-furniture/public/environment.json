@@ -108,6 +108,13 @@
   "api": {
     "baseUrl": "http://localhost:8000",
     "apiVersion": "v1",
+    "website": {
+      "apiUrl": "http://localhost:8000",
+      "product": {
+        "list": "/api/store/products",
+        "detail": "/api/store/products/{id}"
+      }
+    },
     "administration": {
       "organizationUnits": {
         "list": "/api/organization-units",

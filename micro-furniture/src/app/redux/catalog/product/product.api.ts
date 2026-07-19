@@ -13,13 +13,14 @@ export const productsApi = createApi({
   baseQuery,
   endpoints: (builder) => ({
     getProducts: builder.query<PaginatedProducts, GetProductsParams>({
-      query: (params) => ({
+      query: (body) => ({
         url:
-          "/api/catalog/products.json",
-          // GetEnvConfig()?.api?.baseUrl +
-          // GetEnvConfig()?.api?.catalog?.product?.list,
-        method: "GET",
-        params,
+          // "/api/catalog/products.json",
+          // method: "GET",
+          GetEnvConfig()?.api?.baseUrl +
+          GetEnvConfig()?.api?.catalog?.product?.list,
+        method: "POST",
+        body,
       }),
     }),
 

@@ -10,23 +10,31 @@ import { productsApi } from "./redux/catalog/product/product.api";
 import { rolesApi } from "./redux/administration/roles/roles.api";
 import salesReducer from "./redux/sales/sales.reducer";
 import { usersApi } from "./redux/administration/users/users.api";
+import { websiteProductApi } from "./redux/website/product/website-product.api";
+import websiteReducer from "./redux/website/website.reducer";
 
 const store = configureStore({
   reducer: {
+    //#region administration
     core: coreReducer,
     master: masterReducer,
     sales: salesReducer,
     catalog: catalogReducer,
 
-    // administration
     [authApi.reducerPath]: authApi.reducer,
     [organizationUnitsApi.reducerPath]: organizationUnitsApi.reducer,
     [rolesApi.reducerPath]: rolesApi.reducer,
     [usersApi.reducerPath]: usersApi.reducer,
-
     [productsApi.reducerPath]: productsApi.reducer,
     [ordersApi.reducerPath]: ordersApi.reducer,
     [customersApi.reducerPath]: customersApi.reducer,
+    //#endregion
+
+    //#region website
+    website: websiteReducer,
+
+    [websiteProductApi.reducerPath]: websiteProductApi.reducer,
+    //#endregion
   }, // Add your reducers here
 
   middleware: (getDefaultMiddleware) =>
@@ -38,10 +46,13 @@ const store = configureStore({
       organizationUnitsApi.middleware,
       rolesApi.middleware,
       usersApi.middleware,
-
       productsApi.middleware,
       ordersApi.middleware,
-      customersApi.middleware
+      customersApi.middleware,
+
+      // website
+      websiteProductApi.middleware,
+
     ),
 
   devTools: process.env.NODE_ENV !== "production", // Enable Redux DevTools in development mode

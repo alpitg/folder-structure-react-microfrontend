@@ -84,8 +84,12 @@ let environment = {
   api: {
     baseUrl: "",
     apiVersion: "",
-    profile: {
-      posterica: "",
+    website: {
+      apiUrl: "",
+      product: {
+        list: "",
+        detail: "",
+      },
     },
     administration: {
       organizationUnits: {
@@ -125,6 +129,9 @@ let environment = {
         getUserForEdit: "",
         permissions: "",
       },
+    },
+    profile: {
+      posterica: "",
     },
     master: {
       frameTypes: "",

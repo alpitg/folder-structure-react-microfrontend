@@ -10,7 +10,7 @@ import { useLocation, useNavigate } from "react-router";
 
 import type { AppState } from "../../../app/store";
 import NotFoundApp from "./not-found/not-found";
-import { useGetProductsQuery } from "../../../app/redux/catalog/product/product.api";
+import { useGetProductsQuery } from "../../../app/redux/website/product/website-product.api";
 
 const Products = () => {
   const blankImage = "/static/media/img/svg/blank-image.svg";
@@ -30,16 +30,17 @@ const Products = () => {
     isLoading,
     isError,
   } = useGetProductsQuery({
+    searchText: "",
     page: 1,
     pageSize: 10,
   });
   const productsFromStore = useSelector(
-    (state: AppState) => state.catalog.products.products,
+    (state: AppState) => state?.website?.websiteProducts?.websiteProducts,
   );
 
   const products =
-    productsFromStore.length > 0
-      ? productsFromStore
+    productsFromStore?.items?.length > 0
+      ? productsFromStore?.items
       : (productsResponse?.items ?? []);
 
   const filteredProducts = category
@@ -175,11 +176,17 @@ const Products = () => {
                           "en-IN",
                         )}
                       </span>
-                      <span className="mrp-price">
-                        ₹ {product?.price?.basePrice}
-                      </span>
-                      <span className="discount">
-                        {product?.price?.discount?.value}% OFF
+                      <span className="d-flex align-items-center">
+                        {product?.price?.discount?.value && (
+                          <>
+                            <span className="mrp-price me-2">
+                              ₹ {product?.price?.basePrice}
+                            </span>
+                            <span className="discount">
+                              {product?.price?.discount?.value}% OFF
+                            </span>
+                          </>
+                        )}
                       </span>
                     </div>
 
