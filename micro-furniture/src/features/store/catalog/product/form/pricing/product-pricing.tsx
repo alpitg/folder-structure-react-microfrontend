@@ -12,7 +12,9 @@ const ProductPricing = () => {
     formState: { errors },
   } = useFormContext<IProductData>();
 
+  const discountEnabled = watch("price.discount.isActive");
   const discountType = watch("price.discount.type");
+  const discountValue = watch("price.discount.value") ?? 0;
   const selectedTaxClass = watch("price.tax.className");
   const taxRate = watch("price.tax.rate");
 
@@ -109,12 +111,6 @@ const ProductPricing = () => {
     [],
   );
 
-  const setDiscountPercentage = (value: number) => {
-    setValue("price.discount.value", value, {
-      shouldDirty: true,
-    });
-  };
-
   /**
    * Auto update tax rate
    */
@@ -153,70 +149,114 @@ const ProductPricing = () => {
               required: "Product base price is required",
               valueAsNumber: true,
             })}
+            onWheel={(e) => e.currentTarget.blur()}
           />
         </div>
 
-        {/* Discount Type */}
+        {/* Enable Discount */}
 
-        <div className="fv-row mb-10">
-          <label className="form-label">Discount Type</label>
+        <div className="mb-10">
+          <div className="form-check form-switch form-check-custom form-check-solid">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              id="discountEnabled"
+              {...register("price.discount.isActive")}
+            />
 
-          <div className="row g-5">
-            {discountTypes.map((x) => (
-              <div className="col" key={x.id}>
-                <label
-                  className={`btn btn-outline btn-outline-dashed d-flex ${
-                    discountType === x.value ? "active" : ""
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    className="form-check-input me-3"
-                    value={x.value}
-                    {...register("price.discount.type")}
-                  />
+            <label
+              className="form-check-label fw-semibold ms-3"
+              htmlFor="discountEnabled"
+            >
+              Enable Discount
+            </label>
+          </div>
 
-                  {x.displayName}
-                </label>
-              </div>
-            ))}
+          <div className="text-muted fs-7 mt-2">
+            Turn on to apply a discount to this product.
           </div>
         </div>
 
-        {discountType === "percentage" && (
-          <div className="mb-10">
-            <label className="form-label">Discount Percentage</label>
+        {/* Discount Settings */}
 
-            <CustomSliderApp
-              getValue={(value) => setDiscountPercentage(value)}
-            />
-          </div>
+        {discountEnabled && (
+          <>
+            <div className="fv-row mb-10">
+              <label className="form-label">Discount Type</label>
+
+              <div className="row g-5">
+                {discountTypes.map((x) => (
+                  <div className="col" key={x.id}>
+                    <label
+                      className={`btn btn-outline btn-outline-dashed d-flex ${
+                        discountType === x.value ? "active" : ""
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        className="form-check-input me-3"
+                        value={x.value}
+                        {...register("price.discount.type")}
+                      />
+
+                      {x.displayName}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {discountType === "percentage" && (
+              <div className="mb-10">
+                <label className="form-label">Discount Percentage</label>
+
+                <CustomSliderApp
+                  value={discountValue}
+                  onChange={(value) =>
+                    setValue("price.discount.value", value, {
+                      shouldDirty: true,
+                      shouldValidate: true,
+                    })
+                  }
+                />
+              </div>
+            )}
+
+            {discountType === "fixed" && (
+              <div className="mb-10">
+                <label className="form-label required">
+                  Fixed Discounted Price
+                </label>
+
+                <input
+                  type="number"
+                  min={0}
+                  className={`form-control form-control-solid mb-2 ${
+                    errors.price?.basePrice ? "is-invalid" : ""
+                  }`}
+                  placeholder="Discounted price"
+                  {...register("price.sellingPrice", {
+                    required: "Fixed Discounted Price is required",
+                    valueAsNumber: true,
+                    min: 0,
+                  })}
+                  onWheel={(e) => e.currentTarget.blur()}
+                />
+              </div>
+            )}
+          </>
         )}
 
-        {discountType === "fixed" && (
-          <div className="mb-10">
-            <label className="form-label">Fixed Discounted Price</label>
-
-            <input
-              type="number"
-              min={0}
-              className="form-control"
-              placeholder="Discounted price"
-              {...register("price.sellingPrice", {
-                valueAsNumber: true,
-                min: 0,
-              })}
-            />
-          </div>
-        )}
-
-        {/* TAX */}
+        {/* Tax */}
 
         <div className="row g-5">
           <div className="col-md-6">
             <label className="required form-label">Tax Class</label>
 
-            <select className="form-select" {...register("price.tax.className")}>
+            <select
+              className="form-select"
+              {...register("price.tax.className")}
+            >
               <option value="">Select Tax Class</option>
 
               {taxClasses.map((x) => (
@@ -234,6 +274,7 @@ const ProductPricing = () => {
               type="number"
               className="form-control"
               value={taxRate ?? ""}
+              onWheel={(e) => e.currentTarget.blur()}
               disabled
             />
           </div>

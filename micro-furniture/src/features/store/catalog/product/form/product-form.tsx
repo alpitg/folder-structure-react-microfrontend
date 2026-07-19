@@ -65,6 +65,7 @@ const ProductFormApp = ({ mode }: ProductFormAppProps) => {
       price: {
         basePrice: null,
         discount: {
+          isActive: false,
           type: "percentage",
           value: 0,
         },
@@ -73,7 +74,7 @@ const ProductFormApp = ({ mode }: ProductFormAppProps) => {
           included: false,
           className: "tax_free",
           rate: 0,
-        }
+        },
       },
       totalWishlistedCount: 0,
       inventory: {
@@ -146,11 +147,12 @@ const ProductFormApp = ({ mode }: ProductFormAppProps) => {
         price: {
           basePrice: data?.price?.basePrice,
           discount: {
+            isActive: data?.price?.discount?.isActive,
             type: data?.price?.discount?.type,
             value: data?.price?.discount?.value,
           },
           sellingPrice: data?.price?.sellingPrice,
-           tax: {
+          tax: {
             included: data?.price?.tax?.included,
             className: data?.price?.tax?.className,
             rate: data?.price?.tax?.rate,
