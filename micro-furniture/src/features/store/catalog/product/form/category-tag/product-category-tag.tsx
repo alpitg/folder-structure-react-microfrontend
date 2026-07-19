@@ -37,6 +37,7 @@ const ProductCategoryTag = () => {
               name={field.name}
               ref={field.ref}
             >
+              <option value="Furnitures">Furnitures</option>
               <option value="Computers">Computers</option>
               <option value="Watches">Watches</option>
               <option value="Headphones">Headphones</option>
@@ -52,12 +53,12 @@ const ProductCategoryTag = () => {
         />
         <div className="text-muted fs-7 mb-7">Add product to a category.</div>
 
-        <a
+        {/* <a
           href="/keen/demo1/apps/ecommerce/catalog/add-category.html"
           className="btn btn-light-primary btn-sm mb-10"
         >
           <i className="bi bi-plus-lg me-1"></i> Create new category
-        </a>
+        </a> */}
 
         {/* Tags */}
         <label className="form-label d-block">Tags</label>

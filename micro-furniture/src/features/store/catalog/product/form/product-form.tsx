@@ -71,7 +71,7 @@ const ProductFormApp = ({ mode }: ProductFormAppProps) => {
         sellingPrice: null,
         tax: {
           included: false,
-          class: "tax_free",
+          className: "tax_free",
           rate: 0,
         }
       },
@@ -152,7 +152,7 @@ const ProductFormApp = ({ mode }: ProductFormAppProps) => {
           sellingPrice: data?.price?.sellingPrice,
            tax: {
             included: data?.price?.tax?.included,
-            class: data?.price?.tax?.class,
+            className: data?.price?.tax?.className,
             rate: data?.price?.tax?.rate,
           },
         },

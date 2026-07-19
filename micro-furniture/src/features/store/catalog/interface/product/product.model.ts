@@ -19,7 +19,7 @@ export interface ProductTax {
    * - digital_goods
    * - services
    */
-  class: string;
+  className: string;
 
   /**
    * Tax percentage.
@@ -29,6 +29,7 @@ export interface ProductTax {
 }
 
 export interface ProductDiscount {
+  isActive: boolean;
   /**
    * Type of discount applied to the product.
    * - "none": No discount applied.

@@ -22,8 +22,13 @@
       "price": {
         "basePrice": 79999,
         "discount": {
+          "isActive": false,
           "type": "percentage",
           "value": 20
+        },
+        "deal": {
+          "label": null,
+          "valid_till": null
         },
         "sellingPrice": 63999.2,
         "tax": {
@@ -87,8 +92,13 @@
       "price": {
         "basePrice": 65999,
         "discount": {
+          "isActive": false,
           "type": "percentage",
           "value": 20
+        },
+        "deal": {
+          "label": null,
+          "valid_till": null
         },
         "sellingPrice": 52799.2,
         "tax": {
@@ -151,8 +161,13 @@
       "price": {
         "basePrice": 500,
         "discount": {
+          "isActive": false,
           "type": "percentage",
           "value": 10
+        },
+        "deal": {
+          "label": null,
+          "valid_till": null
         },
         "sellingPrice": 450,
         "tax": {
@@ -219,8 +234,13 @@
       "price": {
         "basePrice": 65,
         "discount": {
+          "isActive": true,
           "type": "percentage",
           "value": 5
+        },
+        "deal": {
+          "label": null,
+          "valid_till": null
         },
         "sellingPrice": 61.75,
         "tax": {
@@ -282,8 +302,13 @@
       "price": {
         "basePrice": 500,
         "discount": {
+          "isActive": true,
           "type": "percentage",
           "value": 10
+        },
+        "deal": {
+          "label": null,
+          "valid_till": null
         },
         "sellingPrice": 450,
         "tax": {
@@ -346,8 +371,13 @@
       "price": {
         "basePrice": 300,
         "discount": {
+          "isActive": true,
           "type": "percentage",
           "value": 5
+        },
+        "deal": {
+          "label": null,
+          "valid_till": null
         },
         "sellingPrice": 285,
         "tax": {
@@ -409,8 +439,13 @@
       "price": {
         "basePrice": 400,
         "discount": {
+          "isActive": true,
           "type": "fixed",
           "value": 50
+        },
+        "deal": {
+          "label": null,
+          "valid_till": null
         },
         "sellingPrice": 350,
         "tax": {
@@ -472,8 +507,13 @@
       "price": {
         "basePrice": 300,
         "discount": {
+          "isActive": true,
           "type": "percentage",
           "value": 10
+        },
+        "deal": {
+          "label": null,
+          "valid_till": null
         },
         "sellingPrice": 270,
         "tax": {
