@@ -69,10 +69,10 @@ const CartApp = () => {
       "Hello! I would like to place an order for the following items:",
       ...items.map(
         (item) =>
-          `- ${item.name} x${item.quantity} @ ₹${item.price.toFixed(2)} each = ₹${(item.price * item.quantity).toFixed(2)}`,
+          `- ${item.name} x${item.quantity} @ ₹ ${item.price.toFixed(2)} each = ₹ ${(item.price * item.quantity).toFixed(2)}`,
       ),
       "",
-      `Subtotal: ₹${subtotal.toFixed(2)}`,
+      `Subtotal: ₹ ${subtotal.toFixed(2)}`,
     ].join("\n");
 
     const whatsappNumber =
@@ -117,7 +117,7 @@ const CartApp = () => {
                       </div>
                     </td>
 
-                    <td>₹{item.price.toFixed(2)}</td>
+                    <td>₹ {item.price.toFixed(2)}</td>
 
                     <td>
                       <div className="quantity-box">
@@ -139,7 +139,7 @@ const CartApp = () => {
                       </div>
                     </td>
 
-                    <td>₹{(item.price * item.quantity).toFixed(2)}</td>
+                    <td>₹ {(item.price * item.quantity).toFixed(2)}</td>
 
                     <td className="text-end">
                       {/* <button
@@ -193,13 +193,13 @@ const CartApp = () => {
                 <div className="d-flex justify-content-between border-bottom pb-3">
                   <strong>Subtotal</strong>
 
-                  <span>₹{subtotal.toFixed(2)}</span>
+                  <span>₹ {subtotal.toFixed(2)}</span>
                 </div>
 
                 <div className="d-flex justify-content-between pt-3">
                   <strong>Total</strong>
 
-                  <strong>₹{subtotal.toFixed(2)}</strong>
+                  <strong>₹ {subtotal.toFixed(2)}</strong>
                 </div>
 
                 <button

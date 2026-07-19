@@ -102,7 +102,7 @@ const Products = () => {
                                   id: product?.id,
                                   name: product?.name,
                                   image: product?.media?.[0]?.url ?? blankImage,
-                                  price: product?.price?.basePrice ?? 0,
+                                  price: product?.price?.sellingPrice ?? 0,
                                   quantity: 1,
                                 }),
                               )
