@@ -25,6 +25,10 @@
   .product-card {
     position: relative;
 
+    .product-content {
+      line-height: 1.2;
+    }
+
     .product-img {
       position: relative;
       background: $lighter;
@@ -102,14 +106,14 @@
 
       .sale-price {
         color: var(--bs-dark);
-        font-size: 18px;
+        // font-size: 18px;
         font-weight: 700;
         line-height: 22px;
       }
 
       .mrp-price {
         color: var(--bs-muted);
-        font-size: 14px;
+        font-size: 10px;
         font-weight: 400;
         line-height: 18px;
         text-decoration: line-through;
@@ -117,7 +121,7 @@
 
       .discount {
         color: var(--bs-success);
-        font-size: 16px;
+        // font-size: 16px;
         font-weight: 700;
         text-transform: uppercase;
       }
