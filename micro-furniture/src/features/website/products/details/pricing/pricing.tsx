@@ -12,13 +12,7 @@ const PricingApp = ({ product }: { product?: IProductData }) => {
 
             <div className="price-section">
               <div className="selling-price">
-                ₹
-                {Math.round(
-                  (product?.price?.basePrice ?? 0) -
-                    ((product?.price?.basePrice ?? 0) *
-                      (product?.price?.discountPercentage ?? 0)) /
-                      100,
-                ).toFixed(2)}
+                ₹{(product?.price?.sellingPrice ?? 0).toLocaleString("en-IN")}
               </div>
 
               <div className="mrp-section">
@@ -29,7 +23,7 @@ const PricingApp = ({ product }: { product?: IProductData }) => {
               </div>
 
               <div className="discount">
-                ({product?.price?.discountPercentage ?? 0}% OFF)
+                ({product?.price?.discount?.value ?? 0}% OFF)
               </div>
             </div>
 

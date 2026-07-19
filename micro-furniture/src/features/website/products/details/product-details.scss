@@ -1,4 +1,4 @@
-@import "../../../../assets/scss/website_variables";
+@use "../../../../assets/scss/website_variables" as *;
 
 .product-details-app {
   .product-details-actions {

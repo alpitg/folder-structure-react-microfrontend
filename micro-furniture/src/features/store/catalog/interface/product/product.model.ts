@@ -5,16 +5,51 @@ export interface IProductMedia {
   alt: string;
 }
 
-export interface IProductPrice extends IDiscountType {
-  basePrice: number | null;
-  taxClass: "tax_free" | "taxable_goods" | "non_taxable" | string;
-  taxPercent: number | null;
+export interface ProductTax {
+  /**
+   * Whether the product price already includes tax.
+   */
+  included: boolean;
+
+  /**
+   * Tax class/category.
+   * Examples:
+   * - taxable_goods
+   * - non_taxable
+   * - digital_goods
+   * - services
+   */
+  class: string;
+
+  /**
+   * Tax percentage.
+   * Example: 18 = 18%
+   */
+  rate: number;
 }
 
-export interface IDiscountType {
-  discountType: DiscountType;
-  discountPercentage: number | null;
-  fixedDiscountedPrice: number | null;
+export interface ProductDiscount {
+  /**
+   * Type of discount applied to the product.
+   * - "none": No discount applied.
+   * - "percentage": Discount is a percentage of the base price.
+   * - "fixed": Discount is a fixed amount subtracted from the base price.
+   */
+  type: DiscountType;
+
+  /**
+   * Value of the discount.
+   * - If type is "percentage", this represents the percentage value (e.g., 10 for 10%).
+   * - If type is "fixed", this represents the fixed amount to be subtracted from the base price.
+   */
+  value: number;
+}
+
+export interface IProductPrice {
+  basePrice: number | null;
+  sellingPrice: number | null;
+  discount: ProductDiscount | null;
+  tax: ProductTax;
 }
 
 export interface IProductInventory {

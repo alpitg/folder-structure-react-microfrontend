@@ -64,11 +64,16 @@ const ProductFormApp = ({ mode }: ProductFormAppProps) => {
       media: [],
       price: {
         basePrice: null,
-        discountType: "none",
-        discountPercentage: null,
-        fixedDiscountedPrice: null,
-        taxClass: "tax_free",
-        taxPercent: null,
+        discount: {
+          type: "percentage",
+          value: 0,
+        },
+        sellingPrice: null,
+        tax: {
+          included: false,
+          class: "tax_free",
+          rate: 0,
+        }
       },
       totalWishlistedCount: 0,
       inventory: {
@@ -140,11 +145,16 @@ const ProductFormApp = ({ mode }: ProductFormAppProps) => {
         media: data?.media,
         price: {
           basePrice: data?.price?.basePrice,
-          discountType: data?.price?.discountType,
-          discountPercentage: data?.price?.discountPercentage,
-          fixedDiscountedPrice: data?.price?.fixedDiscountedPrice,
-          taxClass: data?.price?.taxClass,
-          taxPercent: data?.price?.taxPercent,
+          discount: {
+            type: data?.price?.discount?.type,
+            value: data?.price?.discount?.value,
+          },
+          sellingPrice: data?.price?.sellingPrice,
+           tax: {
+            included: data?.price?.tax?.included,
+            class: data?.price?.tax?.class,
+            rate: data?.price?.tax?.rate,
+          },
         },
         totalWishlistedCount: data?.totalWishlistedCount,
         inventory: {
@@ -219,7 +229,6 @@ const ProductFormApp = ({ mode }: ProductFormAppProps) => {
 
           <div className="form d-flex flex-column flex-lg-row">
             <div className="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10">
-
               <ProductStatusApp />
 
               <ProductCategoryTag />

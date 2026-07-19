@@ -21,11 +21,16 @@
       ],
       "price": {
         "basePrice": 79999,
-        "discountType": "percentage",
-        "discountPercentage": 18,
-        "fixedDiscountedPrice": null,
-        "taxClass": "taxable_goods",
-        "taxPercent": 18
+        "discount": {
+          "type": "percentage",
+          "value": 20
+        },
+        "sellingPrice": 63999.2,
+        "tax": {
+          "included": true,
+          "class": "taxable_goods",
+          "rate": 18
+        }
       },
       "isNewArrival": true,
       "totalWishlistedCount": 87,
@@ -81,11 +86,16 @@
       ],
       "price": {
         "basePrice": 65999,
-        "discountType": "none",
-        "discountPercentage": 20,
-        "fixedDiscountedPrice": null,
-        "taxClass": "taxable_goods",
-        "taxPercent": 18
+        "discount": {
+          "type": "percentage",
+          "value": 20
+        },
+        "sellingPrice": 52799.2,
+        "tax": {
+          "included": true,
+          "class": "taxable_goods",
+          "rate": 18
+        }
       },
       "isNewArrival": false,
       "totalWishlistedCount": 54,
@@ -140,11 +150,16 @@
       ],
       "price": {
         "basePrice": 54999,
-        "discountType": "fixed",
-        "discountPercentage": 10,
-        "fixedDiscountedPrice": 49999,
-        "taxClass": "taxable_goods",
-        "taxPercent": 18
+        "discount": {
+          "type": "fixed",
+          "value": 5499.9
+        },
+        "sellingPrice": 49499.1,
+        "tax": {
+          "included": true,
+          "class": "taxable_goods",
+          "rate": 18
+        }
       },
       "isNewArrival": true,
       "totalWishlistedCount": 102,
@@ -203,11 +218,16 @@
       ],
       "price": {
         "basePrice": 65,
-        "discountType": "percentage",
-        "discountPercentage": 5,
-        "fixedDiscountedPrice": null,
-        "taxClass": "taxable_goods",
-        "taxPercent": 18
+        "discount": {
+          "type": "percentage",
+          "value": 5
+        },
+        "sellingPrice": 61.75,
+        "tax": {
+          "included": true,
+          "class": "taxable_goods",
+          "rate": 18
+        }
       },
       "isNewArrival": false,
       "totalWishlistedCount": 61,
@@ -261,11 +281,16 @@
       ],
       "price": {
         "basePrice": 500,
-        "discountType": "percentage",
-        "discountPercentage": 10,
-        "fixedDiscountedPrice": null,
-        "taxClass": "taxable_goods",
-        "taxPercent": 18
+        "discount": {
+          "type": "percentage",
+          "value": 10
+        },
+        "sellingPrice": 450,
+        "tax": {
+          "included": true,
+          "class": "taxable_goods",
+          "rate": 18
+        }
       },
       "isNewArrival": false,
       "totalWishlistedCount": 61,
@@ -320,11 +345,16 @@
       ],
       "price": {
         "basePrice": 300,
-        "discountType": "percentage",
-        "discountPercentage": 5,
-        "fixedDiscountedPrice": null,
-        "taxClass": "taxable_goods",
-        "taxPercent": 18
+        "discount": {
+          "type": "percentage",
+          "value": 5
+        },
+        "sellingPrice": 285,
+        "tax": {
+          "included": true,
+          "class": "taxable_goods",
+          "rate": 18
+        }
       },
       "isNewArrival": false,
       "totalWishlistedCount": 61,
@@ -378,11 +408,16 @@
       ],
       "price": {
         "basePrice": 400,
-        "discountType": "fixed",
-        "discountPercentage": 2,
-        "fixedDiscountedPrice": 350,
-        "taxClass": "taxable_goods",
-        "taxPercent": 18
+        "discount": {
+          "type": "fixed",
+          "value": 50
+        },
+        "sellingPrice": 350,
+        "tax": {
+          "included": true,
+          "class": "taxable_goods",
+          "rate": 18
+        }
       },
       "isNewArrival": false,
       "totalWishlistedCount": 61,
@@ -436,11 +471,16 @@
       ],
       "price": {
         "basePrice": 300,
-        "discountType": "percentage",
-        "discountPercentage": 10,
-        "fixedDiscountedPrice": null,
-        "taxClass": "taxable_goods",
-        "taxPercent": 18
+        "discount": {
+          "type": "percentage",
+          "value": 10
+        },
+        "sellingPrice": 270,
+        "tax": {
+          "included": true,
+          "class": "taxable_goods",
+          "rate": 18
+        }
       },
       "isNewArrival": true,
       "totalWishlistedCount": 45,

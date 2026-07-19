@@ -42,10 +42,10 @@ const NewArrivals = () => {
 
     dispatch(
       addItemToBag({
-        id: product.id,
-        name: product.name,
-        image: product.media?.[0]?.url ?? "/static/media/img/product-1.png",
-        price: product.price?.basePrice ?? 0,
+        id: product?.id,
+        name: product?.name,
+        image: product?.media?.[0]?.url ?? "/static/media/img/product-1.png",
+        price: product?.price?.sellingPrice ?? 0,
         quantity: 1,
       }),
     );
@@ -135,7 +135,7 @@ const NewArrivals = () => {
                                   image:
                                     product.media?.[0]?.url ??
                                     "/static/media/img/product-1.png",
-                                  price: product.price?.basePrice ?? 0,
+                                  price: product?.price?.sellingPrice ?? 0,
                                   quantity: 1,
                                 }),
                               )
@@ -156,7 +156,7 @@ const NewArrivals = () => {
 
                     <div className="d-flex justify-content-between align-items-center">
                       <span className="fw-bold text-success">
-                        ₹{product?.price?.basePrice ?? 0}
+                        ₹{product?.price?.sellingPrice ?? 0}
                       </span>
 
                       <small className="text-muted">

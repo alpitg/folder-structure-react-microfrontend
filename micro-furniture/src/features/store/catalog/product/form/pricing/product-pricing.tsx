@@ -10,7 +10,7 @@ const ProductPricing = () => {
     formState: { errors },
     setValue,
   } = useFormContext<IProductData>();
-  const discountType = watch("price.discountType");
+  const discountType = watch("price.discount.type");
 
   const discountTypes = [
     {
@@ -58,16 +58,16 @@ const ProductPricing = () => {
   ];
 
   const setDiscountPercentage = (value: number) => {
-    setValue("price.discountPercentage", value);
+    setValue("price.discount.value", value);
   };
 
-  const selectedTaxClass = watch("price.taxClass");
+  const selectedTaxClass = watch("price.tax.class");
 
   // auto update tax percentage field when tax class changes
   useEffect(() => {
     const selected = taxClasses.find((x) => x.value === selectedTaxClass);
     if (selected && typeof selected.rate === "number") {
-      setValue("price.taxPercent", selected.rate); // auto set VAT %
+      setValue("price.tax.rate", selected.rate); // auto set VAT %
     }
   }, [selectedTaxClass, setValue]);
 
@@ -139,7 +139,7 @@ const ProductPricing = () => {
                         id={"discount-type-" + x?.id}
                         className="form-check-input"
                         type="radio"
-                        {...register("price.discountType")}
+                        {...register("price.discount.type")}
                         value={x?.value}
                       />
                     </span>
@@ -181,7 +181,7 @@ const ProductPricing = () => {
               id="discounted_price"
               type="number"
               min={0}
-              {...register("price.fixedDiscountedPrice", {
+              {...register("price.sellingPrice", {
                 valueAsNumber: true,
                 min: 0,
               })}
@@ -204,7 +204,7 @@ const ProductPricing = () => {
             <select
               id="tax"
               className="form-select mb-2"
-              {...register("price.taxClass")}
+              {...register("price.tax.class")}
               data-control="select2"
               data-hide-search="true"
               data-placeholder="Select an option"
@@ -224,17 +224,17 @@ const ProductPricing = () => {
             <input
               id="vat_amount"
               className={`form-control mb-2 ${
-                errors.price?.taxPercent ? "is-invalid" : ""
+                errors.price?.tax?.class ? "is-invalid" : ""
               }`}
               type="number"
               min={0}
               max={100}
-              {...register("price.taxPercent", {
+              {...register("price.tax.class", {
                 valueAsNumber: true,
                 min: 0,
                 max: 100,
               })}
-              disabled={true} 
+              disabled={true}
             />
             <div className="text-muted fs-7">
               This is auto-filled from the selected tax class. You can override

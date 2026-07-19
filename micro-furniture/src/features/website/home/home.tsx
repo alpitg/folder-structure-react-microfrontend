@@ -53,7 +53,7 @@ const HomeApp = () => {
         id: product?.id,
         name: product?.name,
         image: product?.media?.[0]?.url ?? blankImage,
-        price: product?.price?.basePrice ?? 0,
+        price: product?.price?.sellingPrice ?? 0,
         quantity: 1,
       }),
     );
@@ -106,7 +106,7 @@ const HomeApp = () => {
                       />
                       <h3 className="product-title">{product.name}</h3>
                       <strong className="product-price">
-                        ₹ {product?.price?.basePrice?.toFixed(2)}
+                        ₹ {product?.price?.sellingPrice?.toFixed(2)}
                       </strong>
 
                       {quantity === 0 ? (

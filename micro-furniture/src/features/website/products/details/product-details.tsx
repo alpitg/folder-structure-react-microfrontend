@@ -163,7 +163,7 @@ const ProductDetails = () => {
                       id: product?.id,
                       name: product?.name,
                       image: product?.media?.[0]?.url ?? blankImage,
-                      price: product?.price?.basePrice ?? 0,
+                      price: product?.price?.sellingPrice ?? 0,
                       quantity: 1,
                     }),
                   )
@@ -198,7 +198,7 @@ const ProductDetails = () => {
                         image:
                           product?.media?.[0]?.url ??
                           "/static/media/img/product-1.png",
-                        price: product?.price?.basePrice ?? 0,
+                        price: product?.price?.sellingPrice ?? 0,
                         quantity: 1,
                       }),
                     )

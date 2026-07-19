@@ -171,18 +171,15 @@ const Products = () => {
                     <div className="product-price">
                       <span className="sale-price">
                         ₹
-                        {Math.round(
-                          (product?.price?.basePrice ?? 0) -
-                            ((product?.price?.basePrice ?? 0) *
-                              (product?.price?.discountPercentage ?? 0)) /
-                              100,
-                        ).toLocaleString("en-IN")}
+                        {(product?.price?.sellingPrice ?? 0).toLocaleString(
+                          "en-IN",
+                        )}
                       </span>
                       <span className="mrp-price">
                         ₹ {product?.price?.basePrice}
                       </span>
                       <span className="discount">
-                        {product?.price?.discountPercentage}% OFF
+                        {product?.price?.discount?.value}% OFF
                       </span>
                     </div>
 

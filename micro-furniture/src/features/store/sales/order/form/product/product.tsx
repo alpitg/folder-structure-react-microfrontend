@@ -57,7 +57,7 @@ const ProductApp: React.FC<ProductAppProps> = () => {
         name: product?.name,
         description: product?.description,
         quantity: 1,
-        unitPrice: product?.price?.basePrice || 0,
+        unitPrice: product?.price?.sellingPrice || 0,
         discountAmount, // now it’s the actual ₹ off per unit
       });
     } else {
@@ -228,7 +228,7 @@ const ProductApp: React.FC<ProductAppProps> = () => {
                               {product?.name}
                             </div>
                             <div className="fw-semibold fs-7">
-                              Price: ₹{product?.price?.basePrice?.toFixed(2)}
+                              Price: ₹{product?.price?.sellingPrice?.toFixed(2)}
                             </div>
                             <div className="text-muted fs-7">
                               SKU: {product?.inventory?.sku}

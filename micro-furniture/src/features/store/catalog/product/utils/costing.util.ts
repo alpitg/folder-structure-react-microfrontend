@@ -124,16 +124,16 @@ export const calculateTotalAmount = (order: IOrder): number => {
 export const calculateDiscountAmount = (price: IProductPrice): number => {
   const base = price.basePrice ?? 0;
 
-  switch (price.discountType) {
+  switch (price?.discount?.type) {
     case "percentage": {
-      const percent = price.discountPercentage ?? 0;
+      const percent = price?.discount?.value ?? 0;
       return (base * percent) / 100; // money off
     }
     case "fixed": {
-      // if your fixedDiscountedPrice means “final price after discount”:
-      // return base - (price.fixedDiscountedPrice ?? base);
+      // if your sellingPrice means “final price after discount”:
+      // return base - (price.sellingPrice ?? base);
       // if it means “discount amount itself”:
-      return price.fixedDiscountedPrice ?? 0;
+      return price.sellingPrice ?? 0;
     }
     default:
       return 0;
