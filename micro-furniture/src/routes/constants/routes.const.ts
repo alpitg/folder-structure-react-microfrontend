@@ -1,37 +1,37 @@
 const SALES_ROUTE_URL = {
-  BASE: "/sales",
+  BASE: "crm/sales",
   ORDER: {
-    BASE: "/sales/order",
-    LIST: "/sales/order/list",
-    VIEW: "/sales/order/:orderId",
-    ADD: "/sales/order/add",
-    EDIT: "/sales/order/:orderId/edit",
+    BASE: "crm/sales/order",
+    LIST: "crm/sales/order/list",
+    VIEW: "crm/sales/order/:orderId",
+    ADD: "crm/sales/order/add",
+    EDIT: "crm/sales/order/:orderId/edit",
   },
 };
 
 const CATALOG = {
-  BASE: "/catalog",
+  BASE: "/crm/catalog",
   PRODUCT: {
-    BASE: "/catalog/product",
-    LIST: "/catalog/product/list",
-    ADD: "/catalog/product/add",
-    EDIT: "/catalog/product/edit/:id",
+    BASE: "/crm/catalog/product",
+    LIST: "/crm/catalog/product/list",
+    ADD: "/crm/catalog/product/add",
+    EDIT: "/crm/catalog/product/edit/:id",
   },
   CATEGORY: {
-    BASE: "/catalog/category",
-    LIST: "/catalog/category/list",
-    VIEW: "/catalog/category/:id",
-    ADD: "/catalog/category/add",
-    EDIT: "/catalog/category/edit/:id",
+    BASE: "crm/catalog/category",
+    LIST: "crm/catalog/category/list",
+    VIEW: "crm/catalog/category/:id",
+    ADD: "crm/catalog/category/add",
+    EDIT: "crm/catalog/category/edit/:id",
   },
 };
 
 const CUSTOMER_ROUTE_URL = {
-  BASE: "/customer",
-  LIST: "/customer/list",
-  VIEW: "/customer/:id",
-  ADD: "/customer/add",
-  EDIT: "/customer/:id/edit",
+  BASE: "crm/customer",
+  LIST: "crm/customer/list",
+  VIEW: "crm/customer/:id",
+  ADD: "crm/customer/add",
+  EDIT: "crm/customer/:id/edit",
 };
 
 export const ROUTE_URL = {
@@ -45,7 +45,7 @@ export const ROUTE_URL = {
     CART: "/cart",
   },
 
-  DASHBOARD: "/",
+  DASHBOARD: "/crm",
   LOGIN: "/login",
   FORGET_PASSWORD: "/forget-password",
   RESET_PASSWORD: "/reset-password",
