@@ -128,3 +128,17 @@ ssh -i /Users/alpitg/Downloads/sites-vm_key.pem azureuser@135.235.196.64
 
 
 ```
+
+
+### SSL certificate 
+```cmd
+
+sudo apt install certbot python3-certbot-nginx -y
+
+sudo certbot --nginx \
+-d artisanstudio.centralindia.cloudapp.azure.com
+
+
+sudo certbot renew --dry-run
+
+```
