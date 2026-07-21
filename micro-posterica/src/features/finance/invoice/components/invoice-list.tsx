@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
-
-import { Link } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, AppState } from "../../../../app/store";
-import { fetchInvoices } from "../../../../app/redux/finance/invoice/invoice.thunk";
-import PageHeaderApp from "../../../../components/header/page-header/page-header";
-import noRecordImage from "/static/media/img/svg/add-new-1.svg";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import type { Invoice } from "../../../../app/redux/finance/invoice/invoice.slice";
 import InvoiceFilterApp from "./filter/invoice-filter";
+import { Link } from "react-router";
+import PageHeaderApp from "../../../../components/header/page-header/page-header";
+import { fetchInvoices } from "../../../../app/redux/finance/invoice/invoice.thunk";
+import noRecordImage from "/static/media/img/svg/add-new-1.svg";
 
 const InvoiceList: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { invoices, loading, total, limit } = useSelector(
+  const { invoices, total, limit } = useSelector(
     (state: AppState) =>
       state.invoice as {
         invoices: Invoice[];
