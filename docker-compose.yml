@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  micro-furniture:
+    container_name: micro-furniture
+    build:
+      context: ./micro-furniture
+      dockerfile: Dockerfile
+    ports:
+      - "3001:80"
+    restart: unless-stopped
+
+  micro-posterica:
+    container_name: micro-posterica
+    build:
+      context: ./micro-posterica
+      dockerfile: Dockerfile
+    ports:
+      - "3002:80"
+    restart: unless-stopped

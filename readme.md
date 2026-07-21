@@ -106,3 +106,15 @@ export default defineConfig({
   ],
 })
 ```
+
+
+### Docker commands
+
+```cmd
+docker compose up --build
+
+
+docker build -t micro-furniture .
+docker run -p 3001:80 micro-furniture
+
+```
