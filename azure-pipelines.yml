@@ -1,0 +1,49 @@
+trigger:
+  branches:
+    include:
+      - main
+
+variables:
+  imageTag: '$(Build.BuildId)'
+  dockerImageName: 'alpitg/micro-furniture'
+
+
+stages:
+
+# ===========================
+# Build and Push Docker Image
+# ===========================
+- stage: Build_Furniture
+  displayName: Build and Push micro-furniture
+
+  jobs:
+  - job: Docker_Build
+
+    pool:
+      vmImage: ubuntu-latest
+
+    steps:
+
+    - checkout: self
+
+
+    # Login to Docker Hub
+    - task: Docker@2
+      displayName: Login to Docker Hub
+      inputs:
+        command: login
+        containerRegistry: 'dockerhub-service-connection'
+
+
+    # Build and Push Image
+    - task: Docker@2
+      displayName: Build and Push micro-furniture
+      inputs:
+        command: buildAndPush
+        repository: alpitg/micro-furniture
+        dockerfile: micro-furniture/Dockerfile
+        buildContext: micro-furniture
+        containerRegistry: 'dockerhub-service-connection'
+        tags: |
+          $(imageTag)
+          latest

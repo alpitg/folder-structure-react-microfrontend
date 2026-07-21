@@ -118,3 +118,13 @@ docker build -t micro-furniture .
 docker run -p 3001:80 micro-furniture
 
 ```
+
+### VM connect
+
+```cmd
+chmod 400 /Users/alpitg/Downloads/sites-vm_key.pem
+
+ssh -i /Users/alpitg/Downloads/sites-vm_key.pem azureuser@135.235.196.64
+
+
+```
