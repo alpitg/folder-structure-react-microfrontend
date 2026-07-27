@@ -165,7 +165,6 @@ sudo nano /etc/nginx/sites-enabled/default
 ```
 
 (or whichever file you found)
-
 Make sure your HTTP server block looks like this:
 
 ```cmd
@@ -173,28 +172,52 @@ server {
     listen 80;
     listen [::]:80;
 
-    server_name artisanstudio.centralindia.cloudapp.azure.com;
+    server_name artisanstudios.in www.artisanstudios.in;
 
-    location / {
-        proxy_pass http://127.0.0.1:8080;
+    # Python API
+    location /api/ {
+
+        proxy_pass http://127.0.0.1:8000/;
+
+        proxy_http_version 1.1;
+
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # proxy_set_header X-Forwarded-Prefix /api;
+    }
+
+    # Frontend
+    location / {
+        proxy_pass http://127.0.0.1:8080;
+
+        proxy_http_version 1.1;
+
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
     }
 }
+
 ```
 
 Save the file.
+
+view the file 
+```cmd
+sudo cat /etc/nginx/sites-enabled/default
+```
+
 
 3. Test and reload Nginx
 
 ```cmd
 sudo nginx -t
-```
-
-If successful:
-
-```cmd
 sudo systemctl reload nginx
+
 ```
 
 4. Install the already-created certificate
@@ -229,5 +252,32 @@ sudo nginx -T | grep -E "server_name|listen"
 ```
 
 I can tell you exactly which Nginx file needs editing.
+
+
+### Nginx common steps commands
+1. Create certificate - Generate and install the certificate
+```cmd
+sudo apt update
+sudo apt install certbot python3-certbot-nginx
+sudo certbot --nginx -d artisanstudios.in -d www.artisanstudios.in
+
+```
+
+2. Update nginx file
+
+```cmd
+sudo nginx -t
+sudo systemctl reload nginx
+
+```
+
+
+
+### For environment.json file
+
+```cmd
+sudo apt-get update
+sudo apt-get install -y jq
+```
 
 

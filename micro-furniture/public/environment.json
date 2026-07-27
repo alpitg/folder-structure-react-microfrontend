@@ -106,10 +106,10 @@
     }
   },
   "api": {
-    "baseUrl": "http://localhost:8000",
+    "baseUrl": "https://artisanstudios.in",
     "apiVersion": "v1",
     "website": {
-      "apiUrl": "http://localhost:8000",
+      "apiUrl": "https://artisanstudios.in",
       "product": {
         "list": "/api/store/products",
         "detail": "/api/store/products/{id}"
