@@ -26,6 +26,7 @@ export const mapUsersForApi = (
         data?.user?.shouldChangePasswordOnNextLogin,
       isLockoutEnabled: data?.user?.isLockoutEnabled,
       isDarkMode: data?.user?.isDarkMode,
+      isSystemUser: data?.user?.isSystemUser ?? false,
     },
     roles: data?.roles || [],
     grantedRoles: data?.grantedRoles || [],
