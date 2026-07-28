@@ -9,6 +9,7 @@ import LoadingApp from "../components/loading/loading";
 import LoginApp from "../components/auth/login/login";
 import PrivateRoute from "./private-route";
 import { ROUTE_URL } from "./constants/routes.const";
+import { SalesRoutes } from "../features/store/sales/routes/sales.routes";
 import ScrollToTop from "../hooks/scroll-to-top";
 import { useAuthInit } from "../hooks/use-auth-init";
 
@@ -26,19 +27,6 @@ const LandingPageApp = lazy(
   () => import("../components/landing-page/landing-page"),
 );
 
-const OrderListApp = lazy(
-  () => import("../features/store/sales/order/list/order-list"),
-);
-
-const OrderFormApp = lazy(
-  () => import("../features/store/sales/order/form/order-form"),
-);
-
-const OrderViewApp = lazy(
-  () => import("../features/store/sales/order/view/order-view"),
-);
-
-const SalesApp = lazy(() => import("../features/store/sales/sales"));
 //#endregion
 
 const RoutesApp = () => {
@@ -60,6 +48,8 @@ const RoutesApp = () => {
               element={<ProductDetailsApp />}
             />
             <Route path="/cart" element={<CartApp />} />
+
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
 
           {/* 🔓 Public */}
@@ -71,33 +61,16 @@ const RoutesApp = () => {
           <Route element={<AppInitializer />}>
             <Route element={<PrivateRoute />}>
               <Route path={ROUTE_URL.DASHBOARD} element={<LandingPageApp />}>
-                <Route path={ROUTE_URL.SALES.BASE} element={<SalesApp />}>
-                  <Route
-                    path={ROUTE_URL.SALES.ORDER.LIST}
-                    element={<OrderListApp />}
-                  />
-                  <Route
-                    path={ROUTE_URL.SALES.ORDER.ADD}
-                    element={<OrderFormApp />}
-                  />
-                  <Route
-                    path={ROUTE_URL.SALES.ORDER.EDIT}
-                    element={<OrderFormApp />}
-                  />
-                  <Route
-                    path={ROUTE_URL.SALES.ORDER.VIEW}
-                    element={<OrderViewApp />}
-                  />
-                </Route>
-
+                {SalesRoutes()}
                 {AdministrationRoutes()}
-
                 {CatalogRoutes()}
+                <Route
+                  path="*"
+                  element={<Navigate to={ROUTE_URL.DASHBOARD} replace />}
+                />
               </Route>
             </Route>
           </Route>
-
-          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
     </Suspense>
