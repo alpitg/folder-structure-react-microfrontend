@@ -23,6 +23,7 @@ export interface IUsersData {
   sendActivationEmail: boolean;
   isLockoutEnabled: boolean;
   isDarkMode: boolean;
+  isSystemUser: boolean;
 }
 
 export interface IUserWithPermissions {

@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { Suspense, lazy } from "react";
 
+import { AdministrationRoutes } from "../features/administration/administration.routes";
 import AppInitializer from "./app-initializer";
 import AuthApp from "../components/auth/auth";
 import { CatalogRoutes } from "../features/store/catalog/routes/catalog.routes";
@@ -88,6 +89,8 @@ const RoutesApp = () => {
                     element={<OrderViewApp />}
                   />
                 </Route>
+
+                {AdministrationRoutes()}
 
                 {CatalogRoutes()}
               </Route>

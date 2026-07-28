@@ -127,6 +127,9 @@ chmod 400 /Users/alpitg/Downloads/sites-vm_key.pem
 ssh -i /Users/alpitg/Downloads/sites-vm_key.pem azureuser@135.235.196.64
 
 
+chmod 400 /Users/alpitg/Downloads/microservice-vm_key.pem
+ssh -i /Users/alpitg/Downloads/microservice-vm_key.pem azureuser@74.225.250.126
+
 ```
 
 
@@ -266,6 +269,8 @@ sudo certbot --nginx -d artisanstudios.in -d www.artisanstudios.in
 2. Update nginx file
 
 ```cmd
+sudo nano /etc/nginx/sites-enabled/default
+
 sudo nginx -t
 sudo systemctl reload nginx
 
@@ -280,4 +285,61 @@ sudo apt-get update
 sudo apt-get install -y jq
 ```
 
+### Mongodb create on VM
 
+```cmd
+
+docker volume create mongodb_data
+
+docker volume ls
+
+docker run -d \
+--name mongodb \
+--memory=512m \
+-p 27017:27017 \
+-v mongodb_data:/data/db \
+-e MONGO_INITDB_ROOT_USERNAME=admin \
+-e MONGO_INITDB_ROOT_PASSWORD=YourStrongPassword \
+--restart always \
+mongo:7
+
+docker ps
+
+docker logs mongodb
+
+docker network create app-network
+
+docker network connect app-network mongodb
+
+```
+
+#### Remove mongo db (but data is safe)
+```cmd
+
+docker rm mongodb
+
+docker run -d \
+--name mongodb \
+-p 27017:27017 \
+-v mongodb_data:/data/db \
+-e MONGO_INITDB_ROOT_USERNAME=admin \
+-e MONGO_INITDB_ROOT_PASSWORD=YourStrongPassword \
+mongo:7
+
+
+```
+
+
+
+### Setup overview 
+
+https://domain.com
+        |
+        |
+        nginx
+        |
+ -------------------
+ |                 |
+/api             /
+ |                |
+FastAPI        React

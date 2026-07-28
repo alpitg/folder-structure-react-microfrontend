@@ -176,6 +176,7 @@ const UserListApp = () => {
                         <button
                           type="button"
                           className="btn btn-light text-hover-danger btn-icon btn-sm"
+                          disabled={user?.isSystemUser}
                           onClick={() => {
                             setSelectedUser(user); // store which user to delete
                             setShowDeleteConfirmationModel(true);
