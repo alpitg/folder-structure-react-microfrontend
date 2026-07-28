@@ -1,8 +1,12 @@
 import type { DiscountType } from "../../../../../interfaces/order/order.model";
 
 export interface IProductMedia {
-  url: string;
-  alt: string;
+  id: string | null;
+  url: string | null;
+  altText: string | null;
+  fileName: string | null;
+  isPrimary: boolean | null;
+  displayOrder: number | null;
 }
 
 export interface ProductTax {
