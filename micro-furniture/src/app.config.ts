@@ -1,5 +1,4 @@
 let environment = {
-  apiUrl: "http://localhost:3000/api",
   name: "Micro",
   version: "1.0.0",
   debugMode: false,
