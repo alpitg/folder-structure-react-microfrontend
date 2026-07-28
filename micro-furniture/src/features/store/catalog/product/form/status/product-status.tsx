@@ -8,13 +8,13 @@ const ProductStatusApp = () => {
   const templates = [
     {
       id: 1,
-      displayName: "Published",
-      value: "published",
+      displayName: "Draft",
+      value: "draft",
     },
     {
       id: 2,
-      displayName: "Draft",
-      value: "draft",
+      displayName: "Published",
+      value: "published",
     },
     {
       id: 3,
