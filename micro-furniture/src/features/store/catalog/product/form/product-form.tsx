@@ -20,6 +20,8 @@ import ProductVariantsApp from "./variants/product-variants";
 import { ROUTE_URL } from "../../../../../routes/constants/routes.const";
 import { useEffect } from "react";
 import PageHeaderApp from "../../../../../components/header/page-header/page-header";
+import ProductThumbnailApp from "./thumbnail/product-thumbnail";
+import ProductMediaApp from "./media/product-media";
 
 type ProductFormAppProps = {
   mode: "add" | "edit";
@@ -233,6 +235,8 @@ const ProductFormApp = ({ mode }: ProductFormAppProps) => {
             <div className="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10">
               <ProductStatusApp />
 
+              <ProductThumbnailApp />
+
               <ProductCategoryTag />
 
               <ProductSalesApp />
@@ -241,61 +245,16 @@ const ProductFormApp = ({ mode }: ProductFormAppProps) => {
             </div>
 
             <div className="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
-              <ul
-                className="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-semibold mb-n2"
-                role="tablist"
-              >
-                <li className="nav-item" role="presentation">
-                  <a
-                    className="nav-link text-active-primary pb-4 active"
-                    data-bs-toggle="tab"
-                    href="#catalog_add_product_general"
-                    aria-selected="true"
-                    role="tab"
-                  >
-                    <i className="bi bi-info-circle me-2"></i> General
-                  </a>
-                </li>
+              <div className="d-flex flex-column gap-7 gap-lg-10">
+                <ProductGeneralApp />
+                <ProductPricing />
 
-                <li className="nav-item" role="presentation">
-                  <a
-                    className="nav-link text-active-primary pb-4"
-                    data-bs-toggle="tab"
-                    href="#catalog_add_product_advanced"
-                    aria-selected="false"
-                    role="tab"
-                    tabIndex={-1}
-                  >
-                    <i className="bi bi-gear me-2"></i> Advanced
-                  </a>
-                </li>
-              </ul>
+                <ProductInventoryApp />
+                <ProductVariantsApp />
+                <ProductShippingApp />
+                <ProductMetaOptionApp />
 
-              <div className="tab-content">
-                <div
-                  className="tab-pane fade active show"
-                  id="catalog_add_product_general"
-                  role="tab-panel"
-                >
-                  <div className="d-flex flex-column gap-7 gap-lg-10">
-                    <ProductGeneralApp />
-                    <ProductPricing />
-                    {/* <ProductMediaApp /> */}
-                  </div>
-                </div>
-
-                <div
-                  className="tab-pane fade"
-                  id="catalog_add_product_advanced"
-                  role="tab-panel"
-                >
-                  <div className="d-flex flex-column gap-7 gap-lg-10">
-                    <ProductInventoryApp />
-                    <ProductVariantsApp />
-                    <ProductShippingApp />
-                    <ProductMetaOptionApp />
-                  </div>
-                </div>
+                {/* <ProductMediaApp /> */}
               </div>
             </div>
           </div>
