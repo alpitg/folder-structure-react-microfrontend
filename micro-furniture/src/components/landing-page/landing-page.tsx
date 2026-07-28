@@ -12,7 +12,7 @@ import { useToast } from "../../hooks/use-toast";
 const LandingPageApp = () => {
   const { toast } = useToast();
   const dispatch = useDispatch();
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(window.innerWidth >= 1024);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
