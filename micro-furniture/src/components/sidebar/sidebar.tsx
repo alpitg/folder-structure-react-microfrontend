@@ -22,9 +22,17 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
       title: "Dashboard",
       path: ROUTE_URL.DASHBOARD,
       icon: "bi bi-grid fs-3",
-      claims: [PERMISSION.PAGES.DASHBOARD.DEFAULT],
+      claims: [],
       subRoutes: [],
     },
+    // {
+    //   id: "admin-dashboard",
+    //   title: "Admin Dashboard",
+    //   path: ROUTE_URL.ADMIN_DASHBOARD,
+    //   icon: "bi bi-grid fs-3",
+    //   claims: [PERMISSION.PAGES.DASHBOARD.DEFAULT],
+    //   subRoutes: [],
+    // },
     {
       id: "administration",
       title: "Administration",
@@ -299,8 +307,8 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
       // clicking an open parent closes it
       setMenuState((prev) =>
         prev.map((route) =>
-          route?.id === menu?.id ? { ...route, isSelected: false } : route
-        )
+          route?.id === menu?.id ? { ...route, isSelected: false } : route,
+        ),
       );
       return;
     }
@@ -309,8 +317,8 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
       prev.map((route) =>
         route?.id === menu?.id
           ? { ...route, isSelected: !route?.isSelected }
-          : route
-      )
+          : route,
+      ),
     );
   };
 

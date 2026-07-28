@@ -27,6 +27,8 @@ const LandingPageApp = lazy(
   () => import("../components/landing-page/landing-page"),
 );
 
+const DashboardApp = lazy(() => import("../features/dashboard/dashboard"));
+
 //#endregion
 
 const RoutesApp = () => {
@@ -60,7 +62,13 @@ const RoutesApp = () => {
           {/* 🔒 Protected */}
           <Route element={<AppInitializer />}>
             <Route element={<PrivateRoute />}>
-              <Route path={ROUTE_URL.DASHBOARD} element={<LandingPageApp />}>
+              <Route path={ROUTE_URL.HOME} element={<LandingPageApp />}>
+                <Route
+                  index
+                  element={<Navigate to={ROUTE_URL.DASHBOARD} replace />}
+                />
+                <Route path={ROUTE_URL.DASHBOARD} element={<DashboardApp />} />
+
                 {SalesRoutes()}
                 {AdministrationRoutes()}
                 {CatalogRoutes()}

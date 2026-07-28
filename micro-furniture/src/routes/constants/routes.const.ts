@@ -35,7 +35,7 @@ const CUSTOMER_ROUTE_URL = {
 };
 
 export const ROUTE_URL = {
-  HOME: "",
+  HOME: "/crm",
   WEBSITE: {
     BASE: "",
     ABOUT: "/about",
@@ -45,7 +45,8 @@ export const ROUTE_URL = {
     CART: "/cart",
   },
 
-  DASHBOARD: "/crm",
+  DASHBOARD: "/crm/dashboard",
+  ADMIN_DASHBOARD: "/crm/admin-dashboard",
   LOGIN: "/crm/login",
   FORGET_PASSWORD: "/crm/forget-password",
   RESET_PASSWORD: "/crm/reset-password",
