@@ -1,9 +1,12 @@
 import "./navbar.scss";
 
+import { GetEnvConfig } from "../../app.config";
 import SwitchThemeApp from "./switch-theme/switch-theme";
 import UserMenuApp from "./user-menu/user-menu";
 
 const NavbarApp = ({ isOpen, toggleSidebar }: any) => {
+  const appSettings = GetEnvConfig();
+
   return (
     <div className="navbar-app">
       <nav className={`navbar-content ${isOpen ? `sidebar-open` : ""}`}>
@@ -17,7 +20,7 @@ const NavbarApp = ({ isOpen, toggleSidebar }: any) => {
               <i className="bi bi-list fs-1"></i>
             </button>
 
-            <h2 className="m-0 d-lg-none">Posterica</h2>
+            <h2 className="m-0 d-lg-none">{appSettings?.name}</h2>
           </div>
         </div>
         <div className="nav-right">

@@ -1,10 +1,10 @@
 let environment = {
   apiUrl: "http://localhost:3000/api",
-  name: "Micro Posterica",
+  name: "Micro",
   version: "1.0.0",
   debugMode: false,
-  description: "A microservice for managing posterica data",
-  author: "Posterica Team",
+  description: "A microservice for managing data",
+  author: "Team",
   logo: "/static/media/img/logo.png",
   cartPage: {
     title: "Your Shopping Cart",

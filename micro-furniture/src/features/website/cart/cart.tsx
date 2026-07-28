@@ -45,7 +45,7 @@ const CartApp = () => {
   //     const upi = option?.upi?.trim();
 
   //     if (upi) {
-  //       const deepLink = `upi://pay?pa=${encodeURIComponent(upi)}&pn=${encodeURIComponent(appSettings?.name || "Artisan Studio")}&tn=${encodeURIComponent("Cart Payment")}`;
+  //       const deepLink = `upi://pay?pa=${encodeURIComponent(upi)}&pn=${encodeURIComponent(appSettings?.name || "Artisan Studios")}&tn=${encodeURIComponent("Cart Payment")}`;
 
   //       window.location.href = deepLink;
   //       window.setTimeout(() => {

@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "apiUrl": "http://localhost:3000/api",
-  "name": "Artisan Studio",
+  "name": "Artisan Studios",
   "description": "Modern, classic & aesthetic Furniture",
   "author": "Chaitanya Suryawanshi",
   "logo": "/static/media/img/logo.png",
@@ -9,7 +9,7 @@
   "homePage": {
     "title": "Crafted Luxury Furniture",
     "subtitle": "Furniture designed with timeless craftsmanship and modern style.",
-    "description": "At Artisan Studio, we pride ourselves on offering a wide range of furniture options to suit every style and budget. Whether you're looking for modern, classic, or custom pieces, we have something for everyone.",
+    "description": "At Artisan Studios, we pride ourselves on offering a wide range of furniture options to suit every style and budget. Whether you're looking for modern, classic, or custom pieces, we have something for everyone.",
     "contactDetails": {
       "contactnumber": "+91 8149403097",
       "email": "email@domain",
@@ -109,7 +109,7 @@
     "baseUrl": "http://127.0.0.1:8000",
     "apiVersion": "v1",
     "website": {
-      "apiUrl": "https://artisanstudios.in",
+      "apiUrl": "http://127.0.0.1:8000",
       "product": {
         "list": "/api/store/products",
         "detail": "/api/store/products/{id}"

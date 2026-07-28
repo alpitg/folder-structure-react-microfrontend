@@ -1,11 +1,11 @@
 const SALES_ROUTE_URL = {
-  BASE: "crm/sales",
+  BASE: "/crm/sales",
   ORDER: {
-    BASE: "crm/sales/order",
-    LIST: "crm/sales/order/list",
-    VIEW: "crm/sales/order/:orderId",
-    ADD: "crm/sales/order/add",
-    EDIT: "crm/sales/order/:orderId/edit",
+    BASE: "/crm/sales/order",
+    LIST: "/crm/sales/order/list",
+    VIEW: "/crm/sales/order/:orderId",
+    ADD: "/crm/sales/order/add",
+    EDIT: "/crm/sales/order/:orderId/edit",
   },
 };
 
@@ -18,20 +18,20 @@ const CATALOG = {
     EDIT: "/crm/catalog/product/edit/:id",
   },
   CATEGORY: {
-    BASE: "crm/catalog/category",
-    LIST: "crm/catalog/category/list",
-    VIEW: "crm/catalog/category/:id",
-    ADD: "crm/catalog/category/add",
-    EDIT: "crm/catalog/category/edit/:id",
+    BASE: "/crm/catalog/category",
+    LIST: "/crm/catalog/category/list",
+    VIEW: "/crm/catalog/category/:id",
+    ADD: "/crm/catalog/category/add",
+    EDIT: "/crm/catalog/category/edit/:id",
   },
 };
 
 const CUSTOMER_ROUTE_URL = {
-  BASE: "crm/customer",
-  LIST: "crm/customer/list",
-  VIEW: "crm/customer/:id",
-  ADD: "crm/customer/add",
-  EDIT: "crm/customer/:id/edit",
+  BASE: "/crm/customer",
+  LIST: "/crm/customer/list",
+  VIEW: "/crm/customer/:id",
+  ADD: "/crm/customer/add",
+  EDIT: "/crm/customer/:id/edit",
 };
 
 export const ROUTE_URL = {

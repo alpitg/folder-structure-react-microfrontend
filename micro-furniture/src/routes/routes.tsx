@@ -5,6 +5,7 @@ import { AdministrationRoutes } from "../features/administration/administration.
 import AppInitializer from "./app-initializer";
 import AuthApp from "../components/auth/auth";
 import { CatalogRoutes } from "../features/store/catalog/routes/catalog.routes";
+import { CustomerRoutes } from "../features/store/customer/routes/customer.route";
 import LoadingApp from "../components/loading/loading";
 import LoginApp from "../components/auth/login/login";
 import PrivateRoute from "./private-route";
@@ -72,6 +73,7 @@ const RoutesApp = () => {
                 {SalesRoutes()}
                 {AdministrationRoutes()}
                 {CatalogRoutes()}
+                {CustomerRoutes()}
                 <Route
                   path="*"
                   element={<Navigate to={ROUTE_URL.DASHBOARD} replace />}
