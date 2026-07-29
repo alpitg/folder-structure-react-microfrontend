@@ -3,6 +3,7 @@ import "./sidebar.scss";
 import { NavLink, useLocation } from "react-router";
 import { useEffect, useState } from "react";
 
+import { GetEnvConfig } from "../../app.config";
 import type { IRoutes } from "../../interfaces/route.model";
 import { PERMISSION } from "../../routes/constants/permission.const";
 import { ROUTE_URL } from "../../routes/constants/routes.const";
@@ -13,6 +14,8 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
   const { user } = useAuth();
   const location = useLocation();
   const userClaims = user?.grantedRoles || [];
+
+  const appSettings = GetEnvConfig();
 
   // full static routes as before
 
@@ -333,7 +336,7 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
           <div className="hover-scroll-y my-5 mx-3">
             <div className="sidebar-header mb-5">
               <div className="d-flex align-items-center justify-content-between p-5">
-                <h2 className="m-0">Posterica</h2>
+                <h2 className="m-0">{appSettings?.name}</h2>
               </div>
             </div>
             <div className="menu menu-column menu-rounded menu-sub-indention fw-semibold">
