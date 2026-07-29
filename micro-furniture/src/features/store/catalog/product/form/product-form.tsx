@@ -20,7 +20,6 @@ import ProductVariantsApp from "./variants/product-variants";
 import { ROUTE_URL } from "../../../../../routes/constants/routes.const";
 import { useEffect } from "react";
 import PageHeaderApp from "../../../../../components/header/page-header/page-header";
-import ProductThumbnailApp from "./thumbnail/product-thumbnail";
 import ProductMediaApp from "./media/product-media";
 import { defaultProductValues } from "./product-form.helper";
 
@@ -157,6 +156,11 @@ const ProductFormApp = ({ mode }: ProductFormAppProps) => {
         <form
           id="catalog_add_product_form"
           onSubmit={methods.handleSubmit(onSubmit)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+            }
+          }}
           noValidate
         >
           <PageHeaderApp
@@ -193,7 +197,7 @@ const ProductFormApp = ({ mode }: ProductFormAppProps) => {
               <ProductGeneralApp />
               <ProductStatusApp />
 
-              <ProductThumbnailApp />
+              {/* <ProductThumbnailApp /> */}
 
               <ProductCategoryTag />
 
