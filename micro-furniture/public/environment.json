@@ -114,6 +114,9 @@
         "detail": "/api/store/products/{id}"
       }
     },
+    "dashboard": {
+      "stats": "/api/dashboard/stats"
+    },
     "administration": {
       "organizationUnits": {
         "list": "/api/organization-units",

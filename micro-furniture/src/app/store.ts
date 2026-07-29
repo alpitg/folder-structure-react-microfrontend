@@ -4,6 +4,7 @@ import catalogReducer from "./redux/catalog/catalog.reducer";
 import { configureStore } from "@reduxjs/toolkit";
 import coreReducer from "./redux/core/core.reducer";
 import { customersApi } from "./redux/customer/customer.api";
+import { dashboardApi } from "./redux/dashboard/dashboard.api";
 import masterReducer from "./redux/master/master.reducer";
 import { ordersApi } from "./redux/sales/order/order.api";
 import { organizationUnitsApi } from "./redux/administration/organization-units/organization-units.api";
@@ -30,6 +31,7 @@ const store = configureStore({
     [ordersApi.reducerPath]: ordersApi.reducer,
     [customersApi.reducerPath]: customersApi.reducer,
     [blobApi.reducerPath]: blobApi.reducer,
+    [dashboardApi.reducerPath]: dashboardApi.reducer,
     //#endregion
 
     //#region website
@@ -52,6 +54,7 @@ const store = configureStore({
       ordersApi.middleware,
       customersApi.middleware,
       blobApi.middleware,
+      dashboardApi.middleware,
 
       // website
       websiteProductApi.middleware,

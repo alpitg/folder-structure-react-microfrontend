@@ -90,6 +90,9 @@ let environment = {
         detail: "",
       },
     },
+    dashboard: {
+      stats: "",
+    },
     administration: {
       organizationUnits: {
         list: "",
