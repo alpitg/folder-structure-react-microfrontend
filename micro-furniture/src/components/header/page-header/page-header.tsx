@@ -36,7 +36,9 @@ const PageHeaderApp = ({
         </div>
 
         <div className="d-sm-flex align-items-center gap-2 gap-sm-3">
-          <div className="d-flex">{children}</div>
+          <div className="d-flex justify-content-end justify-content-sm-start w-100">
+            {children}
+          </div>
         </div>
       </div>
     </div>
