@@ -187,6 +187,9 @@
       "add": "/api/customer",
       "update": "/api/customer/{id}",
       "delete": "/api/customer/delete"
+    },
+    "blob": {
+      "getUploadUrl": "/api/upload/upload-url"
     }
   }
 }

@@ -21,6 +21,7 @@ import { ROUTE_URL } from "../../../../../routes/constants/routes.const";
 import { useEffect } from "react";
 import PageHeaderApp from "../../../../../components/header/page-header/page-header";
 import ProductThumbnailApp from "./thumbnail/product-thumbnail";
+import ProductMediaApp from "./media/product-media";
 
 type ProductFormAppProps = {
   mode: "add" | "edit";
@@ -253,7 +254,7 @@ const ProductFormApp = ({ mode }: ProductFormAppProps) => {
                 <ProductShippingApp />
                 <ProductMetaOptionApp />
 
-                {/* <ProductMediaApp /> */}
+                <ProductMediaApp />
               </div>
             </div>
           </div>

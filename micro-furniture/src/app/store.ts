@@ -1,4 +1,5 @@
 import { authApi } from "./redux/administration/auth/auth.api";
+import { blobApi } from "./redux/blob/blob.api";
 import catalogReducer from "./redux/catalog/catalog.reducer";
 import { configureStore } from "@reduxjs/toolkit";
 import coreReducer from "./redux/core/core.reducer";
@@ -28,6 +29,7 @@ const store = configureStore({
     [productsApi.reducerPath]: productsApi.reducer,
     [ordersApi.reducerPath]: ordersApi.reducer,
     [customersApi.reducerPath]: customersApi.reducer,
+    [blobApi.reducerPath]: blobApi.reducer,
     //#endregion
 
     //#region website
@@ -49,10 +51,10 @@ const store = configureStore({
       productsApi.middleware,
       ordersApi.middleware,
       customersApi.middleware,
+      blobApi.middleware,
 
       // website
       websiteProductApi.middleware,
-
     ),
 
   devTools: process.env.NODE_ENV !== "production", // Enable Redux DevTools in development mode

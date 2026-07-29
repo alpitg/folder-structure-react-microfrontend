@@ -167,6 +167,9 @@ let environment = {
       update: "",
       delete: "",
     },
+    blob: {
+      getUploadUrl: "",
+    },
   },
 };
 
