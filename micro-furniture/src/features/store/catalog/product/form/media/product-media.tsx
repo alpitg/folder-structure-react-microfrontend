@@ -12,7 +12,9 @@ type UploadedFile = {
 };
 
 const ProductMediaApp = () => {
-  const { setValue, getValues } = useFormContext<IProductData>();
+  const { watch, setValue, getValues } = useFormContext<IProductData>();
+
+  const media = watch("media") || [];
 
   const [files, setFiles] = useState<UploadedFile[]>([]);
 
@@ -36,40 +38,37 @@ const ProductMediaApp = () => {
       try {
         const blobUrl = await uploadToAzureBlob(file, getUploadUrl);
 
-        setFiles((prev) =>
-          prev.map((item) =>
-            item.file === file
-              ? {
-                  ...item,
-                  uploading: false,
-                  blobUrl,
-                }
-              : item,
-          ),
-        );
-
         const currentMedia = getValues("media") || [];
 
-        setValue(
-          "media",
-          [
-            ...currentMedia,
-            {
-              id: null,
-              url: blobUrl,
-              altText: file.name,
-              fileName: file.name,
-              isPrimary: currentMedia.length === 0,
-              displayOrder: currentMedia.length,
-            },
-          ],
-          {
-            shouldDirty: true,
-            shouldValidate: true,
-          },
+        const alreadyExists = currentMedia.some(
+          (item) => item.fileName === file.name,
         );
-      } catch (err) {
-        console.error(err);
+
+        if (!alreadyExists) {
+          setValue(
+            "media",
+            [
+              ...currentMedia,
+              {
+                id: null,
+                url: blobUrl,
+                altText: file.name,
+                fileName: file.name,
+                isPrimary: currentMedia.length === 0,
+                displayOrder: currentMedia.length,
+              },
+            ],
+            {
+              shouldDirty: true,
+              shouldValidate: true,
+            },
+          );
+        }
+        // Remove temporary upload item
+        // because media now contains the final image
+        setFiles((prev) => prev.filter((item) => item.file !== file));
+      } catch (error) {
+        console.error(error);
 
         setFiles((prev) =>
           prev.map((item) =>
@@ -87,12 +86,11 @@ const ProductMediaApp = () => {
 
     e.target.value = "";
   };
-
-  const removeFile = (file: File) => {
-    setFiles((prev) => prev.filter((item) => item.file !== file));
+  const removeMedia = (fileName: string) => {
     const currentMedia = getValues("media") || [];
+
     const updatedMedia = currentMedia.filter(
-      (item) => item.fileName !== file.name,
+      (item) => item.fileName !== fileName,
     );
 
     setValue(
@@ -104,11 +102,16 @@ const ProductMediaApp = () => {
 
         isPrimary: index === 0,
       })),
+
       {
         shouldDirty: true,
         shouldValidate: true,
       },
     );
+
+    // Remove from new upload state also
+
+    setFiles((prev) => prev.filter((item) => item.file.name !== fileName));
   };
 
   return (
@@ -154,6 +157,47 @@ const ProductMediaApp = () => {
 
         <br />
 
+        {media.length > 0 && (
+          <div className="mt-4">
+            {media.map((item) => (
+              <div
+                key={item.id || item.fileName}
+                className="d-flex align-items-center mb-4"
+              >
+                <div className="symbol symbol-60px me-4">
+                  <img
+                    src={item.url || ""}
+                    alt={item.altText || item.fileName || ""}
+                    style={{
+                      width: 60,
+                      height: 60,
+                      objectFit: "cover",
+                    }}
+                  />
+                </div>
+
+                <div className="flex-grow-1">
+                  <div className="fw-bold">{item.fileName}</div>
+
+                  {item.id && (
+                    <small className="text-muted">Existing image</small>
+                  )}
+
+                  {!item.id && <span className="text-success">Uploaded ✓</span>}
+                </div>
+
+                <button
+                  className="btn btn-sm btn-icon btn-light-danger"
+                  type="button"
+                  onClick={() => removeMedia(item.fileName || "")}
+                >
+                  <i className="bi bi-trash"></i>
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+
         {files.length > 0 && (
           <div className="mt-4">
             {files.map((item) => (
@@ -176,18 +220,8 @@ const ProductMediaApp = () => {
                 <div className="flex-grow-1">
                   <div className="fw-bold">{item.file.name}</div>
 
-                  <small className="text-muted">
-                    {(item.file.size / 1024).toFixed(1)} KB
-                  </small>
-
-                  <br />
-
                   {item.uploading && (
                     <span className="text-primary">Uploading...</span>
-                  )}
-
-                  {item.blobUrl && (
-                    <span className="text-success">Uploaded ✓</span>
                   )}
 
                   {item.error && (
@@ -198,7 +232,7 @@ const ProductMediaApp = () => {
                 <button
                   className="btn btn-sm btn-icon btn-light-danger"
                   type="button"
-                  onClick={() => removeFile(item.file)}
+                  onClick={() => removeMedia(item.file.name)}
                 >
                   <i className="bi bi-trash"></i>
                 </button>
