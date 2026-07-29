@@ -177,7 +177,7 @@ const Products = () => {
                         )}
                       </span>
                       <span className="d-flex align-items-center">
-                        {product?.price?.discount?.value && (
+                        {product?.price?.discount?.value ? (
                           <>
                             <span className="mrp-price me-2">
                               ₹ {product?.price?.basePrice}
@@ -186,7 +186,7 @@ const Products = () => {
                               {product?.price?.discount?.value}% OFF
                             </span>
                           </>
-                        )}
+                        ) : null}
                       </span>
                     </div>
 

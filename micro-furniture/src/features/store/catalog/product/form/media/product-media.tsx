@@ -1,4 +1,6 @@
+import type { IProductData } from "../../../interface/product/product.model";
 import { uploadToAzureBlob } from "../../../../../blob/upload.helper";
+import { useFormContext } from "react-hook-form";
 import { useGetUploadUrlMutation } from "../../../../../../app/redux/blob/blob.api";
 import { useState } from "react";
 
@@ -10,6 +12,8 @@ type UploadedFile = {
 };
 
 const ProductMediaApp = () => {
+  const { setValue, getValues } = useFormContext<IProductData>();
+
   const [files, setFiles] = useState<UploadedFile[]>([]);
 
   const [getUploadUrl] = useGetUploadUrlMutation();
@@ -21,6 +25,7 @@ const ProductMediaApp = () => {
 
     setFiles((prev) => [
       ...prev,
+
       ...selectedFiles.map((file) => ({
         file,
         uploading: true,
@@ -41,6 +46,27 @@ const ProductMediaApp = () => {
                 }
               : item,
           ),
+        );
+
+        const currentMedia = getValues("media") || [];
+
+        setValue(
+          "media",
+          [
+            ...currentMedia,
+            {
+              id: null,
+              url: blobUrl,
+              altText: file.name,
+              fileName: file.name,
+              isPrimary: currentMedia.length === 0,
+              displayOrder: currentMedia.length,
+            },
+          ],
+          {
+            shouldDirty: true,
+            shouldValidate: true,
+          },
         );
       } catch (err) {
         console.error(err);
@@ -63,7 +89,26 @@ const ProductMediaApp = () => {
   };
 
   const removeFile = (file: File) => {
-    setFiles((prev) => prev.filter((x) => x.file !== file));
+    setFiles((prev) => prev.filter((item) => item.file !== file));
+    const currentMedia = getValues("media") || [];
+    const updatedMedia = currentMedia.filter(
+      (item) => item.fileName !== file.name,
+    );
+
+    setValue(
+      "media",
+      updatedMedia.map((item, index) => ({
+        ...item,
+
+        displayOrder: index,
+
+        isPrimary: index === 0,
+      })),
+      {
+        shouldDirty: true,
+        shouldValidate: true,
+      },
+    );
   };
 
   return (
@@ -152,6 +197,7 @@ const ProductMediaApp = () => {
 
                 <button
                   className="btn btn-sm btn-icon btn-light-danger"
+                  type="button"
                   onClick={() => removeFile(item.file)}
                 >
                   <i className="bi bi-trash"></i>
