@@ -22,6 +22,7 @@ import { useEffect } from "react";
 import PageHeaderApp from "../../../../../components/header/page-header/page-header";
 import ProductThumbnailApp from "./thumbnail/product-thumbnail";
 import ProductMediaApp from "./media/product-media";
+import { defaultProductValues } from "./product-form.helper";
 
 type ProductFormAppProps = {
   mode: "add" | "edit";
@@ -54,57 +55,7 @@ const ProductFormApp = ({ mode }: ProductFormAppProps) => {
 
   const methods = useForm<IProductData>({
     mode: "onSubmit",
-    defaultValues: {
-      id: "",
-      name: "",
-      code: "",
-      description: "",
-      status: "draft",
-      template: "default",
-      categories: [],
-      tags: [],
-      media: [],
-      price: {
-        basePrice: null,
-        discount: {
-          isActive: false,
-          type: "percentage",
-          value: 0,
-        },
-        sellingPrice: null,
-        tax: {
-          included: false,
-          className: "tax_free",
-          rate: 0,
-        },
-      },
-      totalWishlistedCount: 0,
-      inventory: {
-        sku: null,
-        barcode: null,
-        quantityInShelf: null,
-        quantityInWarehouse: null,
-        allowBackorders: false,
-      },
-      variations: [],
-      shipping: {
-        isPhysical: true,
-        weightInKg: null,
-        lengthInCm: null,
-        widthInCm: null,
-        heightInCm: null,
-      },
-      meta: {
-        metaTitle: null,
-        metaDescription: null,
-        metaKeywords: [],
-      },
-      scheduling: {
-        publishAt: null,
-      },
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
+    defaultValues: defaultProductValues,
   });
 
   const onSubmit: SubmitHandler<IProductData> = (data: IProductData) => {
@@ -186,6 +137,12 @@ const ProductFormApp = ({ mode }: ProductFormAppProps) => {
         },
         createdAt: data?.createdAt,
         updatedAt: data?.updatedAt,
+      });
+    } else {
+      methods.reset({
+        ...defaultProductValues,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       });
     }
   }, [isEditMode, data, methods]);
