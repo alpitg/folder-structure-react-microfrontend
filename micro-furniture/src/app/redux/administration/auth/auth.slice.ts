@@ -1,8 +1,8 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { ILoginResponse } from "../../../../components/auth/login/login";
 import { LOCALSTORAGE_AUTH_KEY } from "../../../../constants/global/global-key.const";
-import type { IAppInitializer } from "../../../../components/app-initializer/app-initializer";
 import type { IUserWithPermissions } from "../../../../features/administration/interfaces/users.model";
+import type { IAppInitializer } from "../../../../routes/app-initializer";
 
 interface AuthState {
   accessToken: string | null;
