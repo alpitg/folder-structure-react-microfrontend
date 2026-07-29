@@ -16,7 +16,7 @@ const PageHeaderApp = ({
   return (
     <div className="page-header-app flex flex-col gap-4 mb-3">
       <div className="d-sm-flex flex-stack">
-        <div className="page-title d-flex flex-column justify-content-center flex-wrap me-3 gap-1">
+        <div className="page-title d-flex flex-column justify-content-center flex-wrap me-3 gap-1 pb-2 pb-lg-0">
           <div className="d-flex">
             {back && (
               <button
