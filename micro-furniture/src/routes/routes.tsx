@@ -29,6 +29,8 @@ const LandingPageApp = lazy(
 );
 
 const DashboardApp = lazy(() => import("../features/dashboard/dashboard"));
+const UIApp = lazy(() => import("../components/ui/ui"));
+const SettingsApp = lazy(() => import("../features/settings/settings"));
 
 //#endregion
 
@@ -69,11 +71,17 @@ const RoutesApp = () => {
                   element={<Navigate to={ROUTE_URL.DASHBOARD} replace />}
                 />
                 <Route path={ROUTE_URL.DASHBOARD} element={<DashboardApp />} />
+                <Route path={ROUTE_URL.UI} element={<UIApp />} />
+                <Route
+                  path={ROUTE_URL.APP_SETTINGS}
+                  element={<SettingsApp />}
+                />
 
                 {SalesRoutes()}
                 {AdministrationRoutes()}
                 {CatalogRoutes()}
                 {CustomerRoutes()}
+
                 <Route
                   path="*"
                   element={<Navigate to={ROUTE_URL.DASHBOARD} replace />}

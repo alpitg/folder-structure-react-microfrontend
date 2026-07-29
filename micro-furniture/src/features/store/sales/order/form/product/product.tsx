@@ -9,6 +9,8 @@ import {
   InitializeOrderItem,
   type IOrderInvoiceData,
 } from "../../../../../../interfaces/order/order.model";
+import { NavLink } from "react-router";
+import { ROUTE_URL } from "../../../../../../routes/constants/routes.const";
 
 type ProductAppProps = {};
 
@@ -39,11 +41,11 @@ const ProductApp: React.FC<ProductAppProps> = () => {
 
   const totalCost = orderItems.reduce(
     (acc, item) => acc + item.unitPrice * item.quantity - item.discountAmount,
-    0
+    0,
   );
   const handleAddProduct = (product: IProductData) => {
     const existingIndex = orderItems.findIndex(
-      (i) => i?.productId === product?.id
+      (i) => i?.productId === product?.id,
     );
 
     if (existingIndex === -1) {
@@ -119,19 +121,31 @@ const ProductApp: React.FC<ProductAppProps> = () => {
                     </div>
                     <div className="d-flex align-items-center border border-dashed rounded p-3 bg-body">
                       {/* Thumbnail */}
-                      <a href="#" className="symbol symbol-50px">
+                      <NavLink
+                        to={ROUTE_URL.CATALOG.PRODUCT.EDIT.replace(
+                          ":id",
+                          item?.productId ?? "",
+                        )}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="symbol symbol-50px"
+                      >
                         <span className="symbol-label"></span>
-                      </a>
-
+                      </NavLink>
                       {/* Product Info */}
                       <div className="ms-5 flex-grow-1">
                         {/* Title */}
-                        <a
-                          href="#"
+                        <NavLink
+                          to={ROUTE_URL.CATALOG.PRODUCT.EDIT.replace(
+                            ":id",
+                            item?.productId ?? "",
+                          )}
+                          target="_blank"
+                          rel="noopener noreferrer"
                           className="text-gray-800 text-hover-primary fs-5 fw-bold"
                         >
                           {item?.name}
-                        </a>
+                        </NavLink>
 
                         {/* Price */}
                         <div className="fw-semibold fs-7">
@@ -215,7 +229,7 @@ const ProductApp: React.FC<ProductAppProps> = () => {
                             className="form-check-input"
                             type="checkbox"
                             checked={orderItems?.some(
-                              (i) => i.productId === product.id
+                              (i) => i.productId === product.id,
                             )}
                             onChange={() => handleAddProduct(product)}
                           />

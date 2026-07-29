@@ -1,7 +1,7 @@
 let environment = {
-  name: "Micro",
   version: "1.0.0",
   debugMode: false,
+  name: "Micro",
   description: "A microservice for managing data",
   author: "Team",
   logo: "/static/media/img/logo.png",
@@ -38,8 +38,9 @@ let environment = {
     subtitle: "subtitle here",
     description: "description here",
     contactDetails: {
-      contactnumber: "+1234567890",
-      email: "email@domain",
+      address: "",
+      contactnumber: "",
+      email: "",
       instagram: "instagram_handle",
       whatsapp: {
         number: "+1234567890",
