@@ -59,12 +59,12 @@ const FooterApp = () => {
                   <h4 className="h5">Contact</h4>
 
                   <p className="mb-0">
-                    <strong>Phone:</strong>
+                    <strong>Phone: </strong>
                     {appSettings?.homePage?.contactDetails?.contactnumber}
                   </p>
 
                   <p className="mb-0">
-                    <strong>Email:</strong>
+                    <strong>Email: </strong>
                     {appSettings?.homePage?.contactDetails?.email}
                   </p>
                 </div>
@@ -77,7 +77,7 @@ const FooterApp = () => {
                   <h4 className="h5">Opening Hours</h4>
 
                   <p className="mb-0">
-                    <strong>Mon-Sat:</strong> 11AM - 11PM
+                    <strong>Mon-Sat:</strong> 11AM - 6PM
                   </p>
 
                   <p className="mb-0">
