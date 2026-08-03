@@ -11,6 +11,7 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 export const websiteProductApi = createApi({
   reducerPath: "websiteProductApi",
   baseQuery,
+  tagTypes: ["Products"],
   endpoints: (builder) => ({
     getProducts: builder.query<PaginatedProducts, GetProductsParams>({
       query: (params) => ({
@@ -18,8 +19,13 @@ export const websiteProductApi = createApi({
           GetEnvConfig()?.api?.website?.apiUrl +
           GetEnvConfig()?.api?.website?.product?.list,
         method: "GET",
-        params, // ✅ GET query params
+        params,
       }),
+
+      providesTags: ["Products"],
+
+      // Keep every visited page cached for 5 minutes
+      keepUnusedDataFor: 300,
     }),
 
     getProductDetail: builder.query<IProductData, string>({
@@ -29,8 +35,11 @@ export const websiteProductApi = createApi({
           "{id}",
           productId,
         ),
+
+      keepUnusedDataFor: 300,
     }),
   }),
 });
 
-export const { useGetProductsQuery, useGetProductDetailQuery } = websiteProductApi;
+export const { useGetProductsQuery, useGetProductDetailQuery } =
+  websiteProductApi;
