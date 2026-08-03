@@ -7,19 +7,19 @@ const FooterApp = () => {
     <footer className="footer-section">
       <div className="container relative">
         <div className="sofa-img">
-          {/* <img
+          <img
             src="/static/media/img/sofa.png"
             alt="Image"
             className="img-fluid"
-          /> */}
+          />
 
-          <img
+          {/* <img
             src="/static/media/img/gif/logo.gif"
             className="img-fluid"
             alt="Image"
             width={200}
             height={200}
-          />
+          /> */}
         </div>
 
         <div className="row">
