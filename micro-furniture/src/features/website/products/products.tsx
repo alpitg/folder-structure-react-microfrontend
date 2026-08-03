@@ -151,7 +151,7 @@ const Products = () => {
             {filteredProducts.map((product) => (
               <div key={product?.id} className="col-sm-6 col-md-4 col-lg-3 p-3">
                 <div className="product-card position-relative d-flex flex-column">
-                  <div className="product-img position-relative overflow-hidden rounded-4 p-6">
+                  <div className="product-img position-relative overflow-hidden rounded-4">
                     <img
                       loading="lazy"
                       src={

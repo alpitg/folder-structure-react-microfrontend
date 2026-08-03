@@ -211,7 +211,7 @@ const ProductMediaApp = () => {
                 </div>
 
                 <div className="flex-grow-1">
-                  <div className="fw-bold">{item.fileName}</div>
+                  <div>{item.fileName}</div>
 
                   {item.id && (
                     <span className="text-muted d-inline-flex align-items-center gap-1">
