@@ -262,7 +262,7 @@ const Products = () => {
               </div>
             ))}
           </div>
-          <div className="d-flex justify-content-center align-items-center mt-5">
+          <div className="d-flex justify-content-center align-items-center mt-10">
             <button
               className="btn btn-light btn-sm d-flex align-items-center gap-2"
               disabled={page === 1}
