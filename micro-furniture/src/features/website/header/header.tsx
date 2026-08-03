@@ -1,23 +1,47 @@
 import { Link, NavLink } from "react-router";
 
-import { GetEnvConfig } from "../../../app.config";
+// import { GetEnvConfig } from "../../../app.config";
 import { ROUTE_URL } from "../../../routes/constants/routes.const";
 
 const HeaderApp = () => {
-  const appSettings = GetEnvConfig();
+  // const appSettings = GetEnvConfig();
+
+  const closeNavbar = () => {
+    // Bootstrap md breakpoint = 768px
+    if (window.innerWidth >= 768) return;
+    
+    const navbar = document.getElementById("navbarsFurni");
+
+    if (!navbar) return;
+
+    // @ts-ignore
+    const collapse = window.bootstrap?.Collapse.getOrCreateInstance(navbar);
+    collapse?.hide();
+  };
 
   return (
     <nav
-      className="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark"
+      className="custom-navbar navbar navbar navbar-expand-md"
       arial-label="Furni navigation bar"
     >
       <div className="container">
         <Link className="navbar-brand" to={ROUTE_URL.WEBSITE.BASE}>
-          {appSettings?.name}
+          {/* {appSettings?.name} */}
+          <img
+            src="/static/logo/1-transparent-logo.png"
+            className="img-fluid"
+            alt="Image"
+            width={200}
+            height={200}
+          />
           <span>.</span>
         </Link>
         <div className="d-flex d-md-none gap-4 align-items-center">
-          <NavLink className="nav-link" to={ROUTE_URL.WEBSITE.CART} title="Cart">
+          <NavLink
+            className="nav-link"
+            to={ROUTE_URL.WEBSITE.CART}
+            title="Cart"
+          >
             <i className="bi bi-cart3 fs-xl me-1"></i>
           </NavLink>
 
@@ -37,18 +61,26 @@ const HeaderApp = () => {
         <div className="collapse navbar-collapse" id="navbarsFurni">
           <ul className="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
             <li className="nav-item">
-              <NavLink className="nav-link" to={ROUTE_URL.WEBSITE.BASE}>
+              <NavLink
+                className="nav-link"
+                to={ROUTE_URL.WEBSITE.BASE}
+                onClick={closeNavbar}
+              >
                 Home
               </NavLink>
             </li>
 
             <li>
-              <NavLink className="nav-link" to={ROUTE_URL.WEBSITE.PRODUCTS}>
+              <NavLink
+                className="nav-link dropdown-item"
+                to={ROUTE_URL.WEBSITE.PRODUCTS}
+                onClick={closeNavbar}
+              >
                 Products
               </NavLink>
             </li>
             <li>
-              <a className="nav-link" href="#contactus">
+              <a className="nav-link" href="#contactus" onClick={closeNavbar}>
                 Contact us
               </a>
             </li>
@@ -56,7 +88,11 @@ const HeaderApp = () => {
 
           <ul className="custom-navbar-nav navbar-nav mb-2 mb-md-0 ms-5">
             <li>
-              <NavLink className="nav-link" to={ROUTE_URL.WEBSITE.CART}>
+              <NavLink
+                className="nav-link"
+                to={ROUTE_URL.WEBSITE.CART}
+                onClick={closeNavbar}
+              >
                 <i className="bi bi-cart3 fs-xl me-1"></i>
                 Cart
               </NavLink>

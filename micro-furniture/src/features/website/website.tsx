@@ -1,4 +1,3 @@
-import "./website.scss";
 import "../../assets/scss/website.scss";
 
 import FooterApp from "./footer/footer";
