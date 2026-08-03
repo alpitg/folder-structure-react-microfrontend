@@ -1,12 +1,13 @@
+import { useEffect, useState } from "react";
+
 import type { IProductData } from "../../../interface/product/product.model";
 import { uploadToAzureBlob } from "../../../../../blob/upload.helper";
 import { useFormContext } from "react-hook-form";
 import { useGetUploadUrlMutation } from "../../../../../../app/redux/blob/blob.api";
-import { useState } from "react";
 
 type UploadedFile = {
   file: File;
-  blobUrl?: string;
+  blobUrl: string;
   uploading: boolean;
   error?: string;
 };
@@ -20,19 +21,31 @@ const ProductMediaApp = () => {
 
   const [getUploadUrl] = useGetUploadUrlMutation();
 
+  /**
+   * Cleanup blob URLs on component unmount
+   */
+  useEffect(() => {
+    return () => {
+      files.forEach((item) => {
+        if (item.blobUrl) {
+          URL.revokeObjectURL(item.blobUrl);
+        }
+      });
+    };
+  }, [files]);
+
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
 
     const selectedFiles = Array.from(e.target.files);
 
-    setFiles((prev) => [
-      ...prev,
+    const temporaryFiles: UploadedFile[] = selectedFiles.map((file) => ({
+      file,
+      blobUrl: URL.createObjectURL(file),
+      uploading: true,
+    }));
 
-      ...selectedFiles.map((file) => ({
-        file,
-        uploading: true,
-      })),
-    ]);
+    setFiles((prev) => [...prev, ...temporaryFiles]);
 
     for (const file of selectedFiles) {
       try {
@@ -64,9 +77,19 @@ const ProductMediaApp = () => {
             },
           );
         }
-        // Remove temporary upload item
-        // because media now contains the final image
-        setFiles((prev) => prev.filter((item) => item.file !== file));
+
+        /**
+         * Remove temporary upload item
+         */
+        setFiles((prev) => {
+          const removed = prev.find((item) => item.file === file);
+
+          if (removed?.blobUrl) {
+            URL.revokeObjectURL(removed.blobUrl);
+          }
+
+          return prev.filter((item) => item.file !== file);
+        });
       } catch (error) {
         console.error(error);
 
@@ -86,6 +109,7 @@ const ProductMediaApp = () => {
 
     e.target.value = "";
   };
+
   const removeMedia = (fileName: string) => {
     const currentMedia = getValues("media") || [];
 
@@ -95,6 +119,7 @@ const ProductMediaApp = () => {
 
     setValue(
       "media",
+
       updatedMedia.map((item, index) => ({
         ...item,
 
@@ -109,16 +134,25 @@ const ProductMediaApp = () => {
       },
     );
 
-    // Remove from new upload state also
+    setFiles((prev) => {
+      const removed = prev.find((item) => item.file.name === fileName);
 
-    setFiles((prev) => prev.filter((item) => item.file.name !== fileName));
+      if (removed?.blobUrl) {
+        URL.revokeObjectURL(removed.blobUrl);
+      }
+
+      return prev.filter((item) => item.file.name !== fileName);
+    });
   };
 
   return (
     <div className="card card-flush py-4">
       <div className="card-header">
         <div className="card-title">
-          <h2>Media</h2>
+          <h2>
+            <i className="bi bi-images me-2"></i>
+            Media
+          </h2>
         </div>
       </div>
 
@@ -166,7 +200,7 @@ const ProductMediaApp = () => {
               >
                 <div className="symbol symbol-60px me-4">
                   <img
-                    src={item.url || ""}
+                    src={item.url || "/static/media/img/svg/blank-image.svg"}
                     alt={item.altText || item.fileName || ""}
                     style={{
                       width: 60,
@@ -180,10 +214,18 @@ const ProductMediaApp = () => {
                   <div className="fw-bold">{item.fileName}</div>
 
                   {item.id && (
-                    <small className="text-muted">Existing image</small>
+                    <span className="text-muted d-inline-flex align-items-center gap-1">
+                      <i className="bi bi-image text-muted"></i>
+                      Existing image
+                    </span>
                   )}
 
-                  {!item.id && <span className="text-success">Uploaded ✓</span>}
+                  {!item.id && (
+                    <span className="text-success d-inline-flex align-items-center gap-1 fw-semibold">
+                      <i className="bi bi-check-circle-fill text-success"></i>
+                      Uploaded
+                    </span>
+                  )}
                 </div>
 
                 <button
@@ -207,7 +249,7 @@ const ProductMediaApp = () => {
               >
                 <div className="symbol symbol-60px me-4">
                   <img
-                    src={item.blobUrl || URL.createObjectURL(item.file)}
+                    src={item.blobUrl}
                     alt={item.file.name}
                     style={{
                       width: 60,
@@ -218,14 +260,21 @@ const ProductMediaApp = () => {
                 </div>
 
                 <div className="flex-grow-1">
-                  <div className="fw-bold">{item.file.name}</div>
+                  <div>{item.file.name}</div>
 
                   {item.uploading && (
-                    <span className="text-primary">Uploading...</span>
+                    <span className="text-primary d-inline-flex align-items-center gap-1">
+                      <i className="bi bi-arrow-repeat text-primary"></i>
+                      Uploading...
+                    </span>
                   )}
 
                   {item.error && (
-                    <span className="text-danger">{item.error}</span>
+                    <span className="text-danger d-inline-flex align-items-center gap-1">
+                      <i className="bi bi-exclamation-circle text-danger"></i>
+
+                      {item.error}
+                    </span>
                   )}
                 </div>
 

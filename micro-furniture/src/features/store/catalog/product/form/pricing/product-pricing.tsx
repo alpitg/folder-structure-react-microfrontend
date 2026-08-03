@@ -137,7 +137,10 @@ const ProductPricing = () => {
         {/* Base Price */}
 
         <div className="mb-10">
-          <label className="required form-label">Base Price</label>
+          <label className="required form-label">
+            <i className="bi bi-currency-rupee me-2"></i>
+            Base Price
+          </label>
 
           <input
             type="number"
@@ -168,11 +171,13 @@ const ProductPricing = () => {
               className="form-check-label fw-semibold ms-3"
               htmlFor="discountEnabled"
             >
+              <i className="bi bi-tags me-2"></i>
               Enable Discount
             </label>
           </div>
 
           <div className="text-muted fs-7 mt-2">
+            <i className="bi bi-info-circle me-1"></i>
             Turn on to apply a discount to this product.
           </div>
         </div>
@@ -182,7 +187,10 @@ const ProductPricing = () => {
         {discountEnabled && (
           <>
             <div className="fv-row mb-10">
-              <label className="form-label">Discount Type</label>
+              <label className="form-label">
+                <i className="bi bi-percent me-2"></i>
+                Discount Type
+              </label>
 
               <div className="row g-5">
                 {discountTypes.map((x) => (
@@ -208,7 +216,10 @@ const ProductPricing = () => {
 
             {discountType === "percentage" && (
               <div className="mb-10">
-                <label className="form-label">Discount Percentage</label>
+                <label className="form-label">
+                  <i className="bi bi-percent me-2"></i>
+                  Discount Percentage
+                </label>
 
                 <CustomSliderApp
                   value={discountValue}
@@ -225,6 +236,7 @@ const ProductPricing = () => {
             {discountType === "fixed" && (
               <div className="mb-10">
                 <label className="form-label required">
+                  <i className="bi bi-currency-rupee me-2"></i>
                   Fixed Discounted Price
                 </label>
 
@@ -251,7 +263,10 @@ const ProductPricing = () => {
 
         <div className="row g-5">
           <div className="col-md-6">
-            <label className="required form-label">Tax Class</label>
+            <label className="required form-label">
+              <i className="bi bi-receipt me-2"></i>
+              Tax Class
+            </label>
 
             <select
               className="form-select"
@@ -268,7 +283,10 @@ const ProductPricing = () => {
           </div>
 
           <div className="col-md-6">
-            <label className="form-label">Tax Amount (%)</label>
+            <label className="form-label">
+              <i className="bi bi-percent me-2"></i>
+              Tax Amount (%)
+            </label>
 
             <input
               type="number"
