@@ -30,7 +30,7 @@ const Products = () => {
 
   // Pagination
   const [page, setPage] = useState(1);
-  const [sort, setSort] = useState("newest");
+  // const [sort, setSort] = useState("newest");
   const pageSize = 10;
 
   const {
