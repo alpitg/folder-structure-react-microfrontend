@@ -30,6 +30,7 @@ const Products = () => {
 
   // Pagination
   const [page, setPage] = useState(1);
+  const [sort, setSort] = useState("newest");
   const pageSize = 10;
 
   const {
@@ -41,6 +42,7 @@ const Products = () => {
     searchText: "",
     page,
     pageSize,
+    sort: "newest",
   });
 
   /**
@@ -54,6 +56,7 @@ const Products = () => {
           searchText: "",
           page: page + 1,
           pageSize,
+          sort: "newest",
         },
         {
           force: false,
@@ -99,6 +102,51 @@ const Products = () => {
 
       {filteredProducts?.length > 0 ? (
         <>
+          <div className="row">
+            {/* <div className="card-toolbar flex-row-fluid justify-content-end align-items-center gap-4 mt-3 mt-md-0 position-relative">
+              <div className="dropdown">
+                <button
+                  className="btn btn-light"
+                  type="button"
+                  id="productSortDropdown"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  aria-label="Sort products"
+                >
+                  Sort By: {sort === "newest" ? "Newest first" : "Oldest first"}
+                  s
+                </button>
+                <ul
+                  className="dropdown-menu dropdown-menu-end p-0"
+                  aria-labelledby="productSortDropdown"
+                  role="menu"
+                >
+                  <li>
+                    <button
+                      className={`dropdown-item ${
+                        sort === "newest" ? "active" : ""
+                      }`}
+                      onClick={() => setSort("newest")}
+                      role="menuitem"
+                    >
+                      Newest first
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      className={`dropdown-item ${
+                        sort === "oldest" ? "active" : ""
+                      }`}
+                      onClick={() => setSort("oldest")}
+                      role="menuitem"
+                    >
+                      Oldest first
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div> */}
+          </div>
           <div className="row">
             {filteredProducts.map((product) => (
               <div key={product?.id} className="col-sm-6 col-md-4 col-lg-3 p-3">
