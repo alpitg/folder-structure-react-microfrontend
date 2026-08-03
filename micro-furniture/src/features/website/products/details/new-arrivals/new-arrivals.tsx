@@ -1,5 +1,6 @@
 import "./new-arrivals.scss";
 
+import type { AppDispatch, AppState } from "../../../../../app/store";
 import {
   addItemToBag,
   decreaseBagItemQuantity,
@@ -7,7 +8,6 @@ import {
 } from "../../../../../app/redux/core/shopping-bag/shopping-bag.slice";
 import { useDispatch, useSelector } from "react-redux";
 
-import type { AppState } from "../../../../../app/store";
 import type { IProductData } from "../../../../store/catalog/interface/product/product.model";
 import { useGetProductsQuery } from "../../../../../app/redux/website/product/website-product.api";
 
@@ -16,12 +16,12 @@ type ProductItem = IProductData;
 const NewArrivals = () => {
   const blankImage = "/static/media/img/svg/blank-image.svg";
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+
   const bagItems = useSelector(
     (state: AppState) => state.core.shoppingBag.items,
   );
 
-  // Fetch products from store
   const {
     data: productsData,
     isLoading,
@@ -29,23 +29,27 @@ const NewArrivals = () => {
   } = useGetProductsQuery({
     page: 1,
     pageSize: 10,
+    sort: "newest",
   });
 
   const products = productsData?.items ?? [];
 
+  const getQuantity = (productId: string) =>
+    bagItems.find((item) => item.id === productId)?.quantity ?? 0;
+
   const handleAddToBag = (
     product: ProductItem,
-    event?: { preventDefault: () => void; stopPropagation: () => void },
+    event?: React.MouseEvent<HTMLButtonElement>,
   ) => {
     event?.preventDefault();
     event?.stopPropagation();
 
     dispatch(
       addItemToBag({
-        id: product?.id,
-        name: product?.name,
-        image: product?.media?.[0]?.url ?? "/static/media/img/product-1.png",
-        price: product?.price?.sellingPrice ?? 0,
+        id: product.id,
+        name: product.name,
+        image: product.media?.[0]?.url ?? blankImage,
+        price: product.price?.sellingPrice ?? 0,
         quantity: 1,
       }),
     );
@@ -56,7 +60,9 @@ const NewArrivals = () => {
   }
 
   if (error) {
-    return <div className="container py-5">Failed to load products</div>;
+    return (
+      <div className="container py-5 text-danger">Failed to load products</div>
+    );
   }
 
   return (
@@ -75,25 +81,23 @@ const NewArrivals = () => {
       <div className="product-carousel-wrapper position-relative">
         <div className="product-carousel d-flex gap-4 overflow-auto hide-scrollbar pb-3">
           {products.map((product) => {
-            const quantity =
-              bagItems.find((item) => item.id === product.id)?.quantity ?? 0;
+            const quantity = getQuantity(product.id);
 
             return (
               <div key={product.id} className="product-slide flex-shrink-0">
                 <div className="product-card card border-0 shadow-sm h-100 position-relative overflow-hidden">
                   <div className="product-img position-relative overflow-hidden">
                     <img
-                      src={
-                        product?.media?.[0]?.url
-                          ? product?.media?.[0]?.url
-                          : blankImage
-                      }
-                      alt={product?.name}
+                      loading="lazy"
+                      decoding="async"
+                      src={product.media?.[0]?.url ?? blankImage}
+                      alt={product.name}
                       className="product-image"
                     />
 
-                    {product?.isNewArrival && (
+                    {product.isNewArrival && (
                       <span className="badge bg-light text-dark position-absolute top-0 start-0 m-2 shadow-sm">
+                        <i className="bi bi-stars me-1"></i>
                         New
                       </span>
                     )}
@@ -104,6 +108,7 @@ const NewArrivals = () => {
                           type="button"
                           className="btn btn-dark btn-sm rounded-pill px-3"
                           onClick={(event) => handleAddToBag(product, event)}
+                          aria-label="Add product to cart"
                         >
                           <i className="bi bi-cart me-1"></i>
                           Add to Cart
@@ -121,25 +126,15 @@ const NewArrivals = () => {
                           >
                             -
                           </button>
+
                           <span className="fw-semibold text-light">
                             {quantity}
                           </span>
+
                           <button
                             type="button"
                             className="btn btn-link p-0 d-flex align-items-center justify-content-center rounded-circle border border-light qty-control-btn"
-                            onClick={() =>
-                              dispatch(
-                                addItemToBag({
-                                  id: product.id,
-                                  name: product.name,
-                                  image:
-                                    product.media?.[0]?.url ??
-                                    "/static/media/img/product-1.png",
-                                  price: product?.price?.sellingPrice ?? 0,
-                                  quantity: 1,
-                                }),
-                              )
-                            }
+                            onClick={() => handleAddToBag(product)}
                           >
                             +
                           </button>
@@ -149,20 +144,27 @@ const NewArrivals = () => {
                   </div>
 
                   <div className="card-body">
-                    <h6 className="fw-semibold mb-1">{product?.name}</h6>
-                    <p className="text-muted small mb-2">
-                      {product?.description}
-                    </p>
+                    <h6 className="fw-semibold mb-1">{product.name}</h6>
+
+                    <div className="text-muted small mb-2">
+                      <i className="bi bi-box-seam me-1"></i>
+                      Premium quality product
+                    </div>
 
                     <div className="d-flex justify-content-between align-items-center">
                       <span className="fw-bold text-success">
-                        ₹{product?.price?.sellingPrice ?? 0}
+                        ₹
+                        {(product.price?.sellingPrice ?? 0).toLocaleString(
+                          "en-IN",
+                        )}
                       </span>
 
-                      <small className="text-muted">
-                        <i className="bi bi-star-fill text-warning me-1"></i>
-                        {product?.rating} ({product?.reviews ?? 0} reviews)
-                      </small>
+                      {product.rating && (
+                        <small className="text-muted">
+                          <i className="bi bi-star-fill text-warning me-1"></i>
+                          {product.rating} ({product.reviews ?? 0})
+                        </small>
+                      )}
                     </div>
                   </div>
                 </div>
