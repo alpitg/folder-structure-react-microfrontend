@@ -1,5 +1,3 @@
-import "./App.css";
-
 import { Provider } from "react-redux";
 import RoutesApp from "./routes/routes";
 import store from "./app/store";

@@ -79,7 +79,7 @@ const HomeApp = () => {
                 {appSettings?.homePage?.whyChooseUs?.description}
               </p>
               <p>
-                <NavLink to={ROUTE_URL.WEBSITE.PRODUCTS} className="btn">
+                <NavLink to={ROUTE_URL.WEBSITE.PRODUCTS} className="btn btn-dark">
                   Explore
                 </NavLink>
               </p>

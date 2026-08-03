@@ -40,7 +40,7 @@ const FooterApp = () => {
           </div>
 
           <div className="container">
-            <div className="row gy-3">
+            <div className="row gy-6">
               <div className="col-lg-3 col-md-6 d-flex">
                 <i className="bi bi-geo-alt fs-2 me-3"></i>
 
