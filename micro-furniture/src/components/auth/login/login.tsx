@@ -17,7 +17,6 @@ export interface ILoginForm {
 export interface ILoginResponse {
   tokenType: string;
   accessToken: string;
-  refreshToken: string;
 }
 
 const LoginApp = () => {
@@ -44,7 +43,6 @@ const LoginApp = () => {
         setCredentials({
           tokenType: response.tokenType,
           accessToken: response.accessToken,
-          refreshToken: response.refreshToken,
         })
       );
 
@@ -195,7 +193,7 @@ const LoginApp = () => {
       </form>
 
       {/* Sign up */}
-      <div className="mt-4 text-center">
+      {/* <div className="mt-4 text-center">
         <p className="mb-1">Not a member yet?</p>
         <div>
           <a
@@ -212,7 +210,7 @@ const LoginApp = () => {
             Email activation
           </a>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

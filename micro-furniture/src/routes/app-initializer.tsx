@@ -1,5 +1,4 @@
 import ErrorPage from "../components/ui/error/error-page";
-import type { IUserWithPermissions } from "../features/administration/interfaces/users.model";
 import LoadingApp from "../components/loading/loading";
 import { Outlet } from "react-router";
 import { setAppInitialData } from "../app/redux/administration/auth/auth.slice";
@@ -8,19 +7,15 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { useGetAppInitialDataQuery } from "../app/redux/administration/auth/auth.api";
 
-export interface IAppInitializer {
-  user: IUserWithPermissions | null;
-}
-
 const AppInitializer = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, hydrated } = useAuth();
   const dispatch = useDispatch();
 
   const { data, isLoading, isSuccess, isError } = useGetAppInitialDataQuery(
     undefined,
     {
-      skip: !isAuthenticated, // ✅ don’t call if no token
-      refetchOnMountOrArgChange: true,
+      skip: !hydrated || !isAuthenticated,
+      refetchOnMountOrArgChange: false,
       refetchOnReconnect: false,
       refetchOnFocus: false,
       pollingInterval: 0,

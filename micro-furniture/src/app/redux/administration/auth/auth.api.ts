@@ -12,7 +12,7 @@ import type {
 } from "../../../../components/navbar/user-menu/user-setting/user-setting.model";
 
 import { GetEnvConfig } from "../../../../app.config";
-import type { IAppInitializer } from "../../../../routes/app-initializer";
+import type { IAppInitializer } from "../../../../routes/app-initializer.model";
 import type { IUsersData } from "../../../../features/administration/interfaces/users.model";
 import { baseQuery } from "../../base.api";
 import { createApi } from "@reduxjs/toolkit/query/react";
