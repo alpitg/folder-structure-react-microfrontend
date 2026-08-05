@@ -6,10 +6,12 @@ import AppInitializer from "./app-initializer";
 import AuthApp from "../components/auth/auth";
 import { CatalogRoutes } from "../features/store/catalog/routes/catalog.routes";
 import { CustomerRoutes } from "../features/store/customer/routes/customer.route";
+import ForgetPasswordApp from "../components/auth/forget-password/forget-password";
 import LoadingApp from "../components/loading/loading";
 import LoginApp from "../components/auth/login/login";
 import PrivateRoute from "./private-route";
 import { ROUTE_URL } from "./constants/routes.const";
+import ResetPassword from "../components/auth/reset-password/reset-password";
 import { SalesRoutes } from "../features/store/sales/routes/sales.routes";
 import ScrollToTop from "../hooks/scroll-to-top";
 import { useAuthInit } from "../hooks/use-auth-init";
@@ -60,6 +62,14 @@ const RoutesApp = () => {
           {/* 🔓 Public */}
           <Route element={<AuthApp />}>
             <Route path={ROUTE_URL.LOGIN} element={<LoginApp />} />
+            <Route
+              path={ROUTE_URL.FORGET_PASSWORD}
+              element={<ForgetPasswordApp />}
+            />
+            <Route
+              path={ROUTE_URL.RESET_PASSWORD}
+              element={<ResetPassword />}
+            />
           </Route>
 
           {/* 🔒 Protected */}

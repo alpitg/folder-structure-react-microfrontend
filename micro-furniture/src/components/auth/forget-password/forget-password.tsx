@@ -110,7 +110,7 @@ const ForgetPasswordApp = () => {
                 to={ROUTE_URL.RESET_PASSWORD}
                 className="text-muted text-hover-primary fw-semibold"
               >
-                Click here, if you have a token
+                Click here, if you have a reset code
               </NavLink>
             </div>
           )}

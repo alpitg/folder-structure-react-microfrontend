@@ -229,7 +229,7 @@ const ProductMediaApp = () => {
                 </div>
 
                 <button
-                  className="btn btn-sm btn-icon btn-light-danger"
+                  className="btn btn-clean btn-sm btn-icon btn-icon-danger btn-active-light-danger ms-auto"
                   type="button"
                   onClick={() => removeMedia(item.fileName || "")}
                 >
@@ -279,7 +279,7 @@ const ProductMediaApp = () => {
                 </div>
 
                 <button
-                  className="btn btn-sm btn-icon btn-light-danger"
+                  className="btn btn-clean btn-sm btn-icon btn-icon-danger btn-active-light-danger ms-auto"
                   type="button"
                   onClick={() => removeMedia(item.file.name)}
                 >
