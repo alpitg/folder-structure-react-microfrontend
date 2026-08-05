@@ -141,6 +141,7 @@
       },
       "users": {
         "login": "/api/auth/login",
+        "logout": "/api/auth/logout",
         "refreshToken": "/api/auth/refresh",
         "appInit": "/api/auth/users/me/app-init",
         "forgotPassword": "/api/auth/forgot-password",

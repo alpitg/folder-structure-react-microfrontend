@@ -1,5 +1,6 @@
 import { useState, type FC } from "react";
 import { clearCredentials } from "../../../app/redux/administration/auth/auth.slice";
+import { useLogoutMutation } from "../../../app/redux/administration/auth/auth.api";
 import { useDispatch } from "react-redux";
 import ChangePasswordApp from "./change-password/change-password";
 import UserSettingApp from "./user-setting/user-setting";
@@ -9,8 +10,19 @@ const UserMenuApp: FC = () => {
   const { user } = useAuth();
 
   const dispatch = useDispatch();
+  const [logout] = useLogoutMutation();
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [showUserSettingApp, setShowUserSettingApp] = useState(false);
+
+  const handleLogout = async () => {
+    try {
+      await logout().unwrap();
+    } catch (error) {
+      console.warn("Logout request failed, clearing local auth state anyway.", error);
+    } finally {
+      dispatch(clearCredentials());
+    }
+  };
 
   return (
     <div className="user-menu-app">
@@ -106,7 +118,7 @@ const UserMenuApp: FC = () => {
             <button
               className="dropdown-item text-danger"
               type="button"
-              onClick={() => dispatch(clearCredentials())}
+              onClick={handleLogout}
             >
               <i className="bi bi-box-arrow-right me-2 fs-3"></i> Sign Out
             </button>

@@ -32,6 +32,16 @@ export const authApi = createApi({
       }),
     }),
 
+    // ✅ Logout
+    logout: builder.mutation<void, void>({
+      query: () => ({
+        url:
+          GetEnvConfig()?.api?.baseUrl +
+          GetEnvConfig()?.api?.administration?.users?.logout,
+        method: "POST",
+      }),
+    }),
+
     // ✅ Get app initial data
     getAppInitialData: builder.query<IAppInitializer, void>({
       query: () => ({
@@ -77,7 +87,7 @@ export const authApi = createApi({
           GetEnvConfig()?.api?.baseUrl +
           GetEnvConfig()?.api?.administration?.users?.updatePassword?.replace(
             "{id}",
-            id
+            id,
           ),
         method: "PUT",
         body: data,
@@ -91,7 +101,7 @@ export const authApi = createApi({
           GetEnvConfig()?.api?.baseUrl +
           GetEnvConfig()?.api?.administration?.users?.getCurrentUserProfile?.replace(
             "{id}",
-            id
+            id,
           ),
         method: "GET",
       }),
@@ -107,7 +117,7 @@ export const authApi = createApi({
           GetEnvConfig()?.api?.baseUrl +
           GetEnvConfig()?.api?.administration?.users?.updateCurrentUserProfile?.replace(
             "{id}",
-            id
+            id,
           ),
         method: "PUT",
         body: data,
@@ -118,6 +128,7 @@ export const authApi = createApi({
 
 export const {
   useLoginMutation,
+  useLogoutMutation,
   useGetAppInitialDataQuery,
   useForgotPasswordMutation,
   useResetPasswordMutation,

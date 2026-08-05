@@ -117,6 +117,7 @@ let environment = {
       },
       users: {
         login: "",
+        logout: "",
         refreshToken: "",
         appInit: "",
         forgotPassword: "",
