@@ -1,4 +1,4 @@
-import ErrorPage from "../components/ui/error/error-page";
+import ErrorLoginAgainApp from "../components/ui/error/error-login-again";
 import LoadingApp from "../components/loading/loading";
 import { Outlet } from "react-router";
 import { setAppInitialData } from "../app/redux/administration/auth/auth.slice";
@@ -36,7 +36,7 @@ const AppInitializer = () => {
   if (isLoading) return <LoadingApp />;
 
   if (isError) {
-    return <ErrorPage description="Unable to load the application." />;
+    return <ErrorLoginAgainApp description="Unable to load the application." />;
   }
 
   return <Outlet />;
