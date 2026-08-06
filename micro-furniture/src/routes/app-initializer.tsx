@@ -11,16 +11,20 @@ const AppInitializer = () => {
   const { isAuthenticated, hydrated } = useAuth();
   const dispatch = useDispatch();
 
-  const { data, isLoading, isSuccess, isError } = useGetAppInitialDataQuery(
-    undefined,
-    {
+  const { data, isLoading, isSuccess, isError, refetch } =
+    useGetAppInitialDataQuery(undefined, {
       skip: !hydrated || !isAuthenticated,
-      refetchOnMountOrArgChange: false,
-      refetchOnReconnect: false,
-      refetchOnFocus: false,
+      refetchOnMountOrArgChange: true,
+      refetchOnReconnect: true,
+      refetchOnFocus: true,
       pollingInterval: 0,
+    });
+
+  useEffect(() => {
+    if (hydrated && isAuthenticated) {
+      void refetch();
     }
-  );
+  }, [hydrated, isAuthenticated, refetch]);
 
   useEffect(() => {
     if (isSuccess && data) {
@@ -32,9 +36,7 @@ const AppInitializer = () => {
   if (isLoading) return <LoadingApp />;
 
   if (isError) {
-    return (
-      <ErrorPage description="Unable to load the application." />
-    );
+    return <ErrorPage description="Unable to load the application." />;
   }
 
   return <Outlet />;
