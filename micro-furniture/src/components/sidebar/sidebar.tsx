@@ -302,12 +302,21 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
     setMenuState(buildMenuState());
   }, [location.pathname, userClaims]);
 
+  const closeSidebar = () => {
+    if (window.innerWidth >= 1024) return;
+
+    if (typeof props.toggleSidebar === "function") {
+      props.toggleSidebar();
+    }
+  };
+
   const handleMenuClick = (menu: IRoutes) => {
-    // only parents with subRoutes toggle
-    if (!menu.subRoutes || menu.subRoutes.length === 0) return;
+    if (!menu.subRoutes || menu.subRoutes.length === 0) {
+      closeSidebar();
+      return;
+    }
 
     if (menu?.subRoutes && menu?.isSelected) {
-      // clicking an open parent closes it
       setMenuState((prev) =>
         prev.map((route) =>
           route?.id === menu?.id ? { ...route, isSelected: false } : route,
@@ -359,7 +368,11 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
                       <span className="menu-arrow"></span>
                     </span>
                   ) : (
-                    <NavLink className="menu-link" to={route.path}>
+                    <NavLink
+                      className="menu-link"
+                      to={route.path}
+                      onClick={closeSidebar}
+                    >
                       <span className="menu-icon">
                         <i className={route.icon}></i>
                       </span>
