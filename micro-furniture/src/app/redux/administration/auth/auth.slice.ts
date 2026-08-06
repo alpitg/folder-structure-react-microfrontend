@@ -31,6 +31,7 @@ const authSlice = createSlice({
     setCredentials: (state, action: PayloadAction<ILoginResponse>) => {
       state.accessToken = action.payload.accessToken;
       state.tokenType = action.payload.tokenType;
+      state.user = null;
 
       localStorage.setItem(
         LOCALSTORAGE_AUTH_KEY,
@@ -73,7 +74,12 @@ const authSlice = createSlice({
         const parsed = JSON.parse(auth) as Partial<ILoginResponse>;
         state.accessToken = parsed.accessToken ?? null;
         state.tokenType = parsed.tokenType ?? null;
+      } else {
+        state.accessToken = null;
+        state.tokenType = null;
       }
+
+      state.user = null;
       state.hydrated = true; // mark hydration complete
     },
   },
