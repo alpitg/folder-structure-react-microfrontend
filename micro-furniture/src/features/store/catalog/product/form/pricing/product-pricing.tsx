@@ -196,7 +196,7 @@ const ProductPricing = () => {
                 {discountTypes.map((x) => (
                   <div className="col" key={x.id}>
                     <label
-                      className={`btn btn-outline btn-outline-dashed d-flex p-5 ${
+                      className={`btn btn-outline btn-outline-dashed d-flex p-4 fs-8 align-items-center ${
                         discountType === x.value ? "active" : ""
                       }`}
                     >
