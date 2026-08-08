@@ -1,32 +1,32 @@
-import { Link, NavLink } from "react-router";
+import "./header.scss";
 
-// import { GetEnvConfig } from "../../../app.config";
+import { NavLink } from "react-router";
 import { ROUTE_URL } from "../../../routes/constants/routes.const";
 
 const HeaderApp = () => {
-  // const appSettings = GetEnvConfig();
-
   const closeNavbar = () => {
-    // Bootstrap md breakpoint = 768px
     if (window.innerWidth >= 768) return;
-    
+
     const navbar = document.getElementById("navbarsFurni");
 
     if (!navbar) return;
 
     // @ts-ignore
     const collapse = window.bootstrap?.Collapse.getOrCreateInstance(navbar);
+
     collapse?.hide();
   };
 
   return (
-    <nav
-      className="custom-navbar navbar navbar navbar-expand-md"
-      arial-label="Furni navigation bar"
-    >
-      <div className="container">
-        <Link className="navbar-brand" to={ROUTE_URL.WEBSITE.BASE}>
-          {/* {appSettings?.name} */}
+    <nav className="navbar navbar-expand-md header-navbar sticky-top">
+      <div className="container-fluid px-3 px-lg-5">
+        {/* Logo */}
+        <NavLink
+          className="navbar-brand header-logo"
+          to={ROUTE_URL.WEBSITE.BASE}
+          onClick={closeNavbar}
+        >
+          {/* <span className="logo-mark">A</span> */}
           <img
             src="/static/logo/1-transparent-logo.png"
             className="img-fluid"
@@ -34,27 +34,20 @@ const HeaderApp = () => {
             width={200}
             height={200}
           />
-          <span>.</span>
-        </Link>
-        <div className="d-flex d-md-none gap-4 align-items-center">
-          <NavLink
-            className="nav-link"
-            to={ROUTE_URL.WEBSITE.PRODUCTS}
-            title="Products"
-          >
-            <i className="bi bi-box-seam fs-xl me-1"></i>
-          </NavLink>
+        </NavLink>
 
+        {/* Mobile Cart + Toggle */}
+        <div className="d-flex align-items-center gap-5 d-md-none">
           <NavLink
-            className="nav-link"
             to={ROUTE_URL.WEBSITE.CART}
+            className="mobile-cart"
             title="Cart"
           >
-            <i className="bi bi-cart3 fs-xl me-1"></i>
+            <i className="bi bi-bag fs-5"></i>
           </NavLink>
 
           <button
-            className="navbar-toggler"
+            className="navbar-toggler border-0 shadow-none p-0"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarsFurni"
@@ -67,42 +60,72 @@ const HeaderApp = () => {
         </div>
 
         <div className="collapse navbar-collapse" id="navbarsFurni">
-          <ul className="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+          {/* Navigation */}
+          <ul className="navbar-nav header-nav mb-0">
             <li className="nav-item">
               <NavLink
                 className="nav-link"
                 to={ROUTE_URL.WEBSITE.BASE}
                 onClick={closeNavbar}
               >
-                Home
+                HOME
               </NavLink>
             </li>
 
-            <li>
+            <li className="nav-item">
               <NavLink
-                className="nav-link dropdown-item"
+                className="nav-link"
                 to={ROUTE_URL.WEBSITE.PRODUCTS}
                 onClick={closeNavbar}
               >
-                Products
+                PRODUCTS
               </NavLink>
-            </li>
-            <li>
-              <a className="nav-link" href="#contactus" onClick={closeNavbar}>
-                Contact us
-              </a>
             </li>
           </ul>
 
-          <ul className="custom-navbar-nav navbar-nav mb-2 mb-md-0 ms-5">
-            <li>
+          {/* Search */}
+          <div className="header-search mx-md-4 my-3 my-md-0">
+            <i className="bi bi-search"></i>
+
+            <input
+              type="text"
+              placeholder="Search for products, brands and more"
+              aria-label="Search"
+            />
+          </div>
+
+          {/* Right Actions */}
+          <ul className="navbar-nav header-actions ms-auto">
+            <li className="nav-item">
               <NavLink
-                className="nav-link"
                 to={ROUTE_URL.WEBSITE.CART}
+                className="action-link"
                 onClick={closeNavbar}
               >
-                <i className="bi bi-cart3 fs-xl me-1"></i>
-                Cart
+                <i className="bi bi-person"></i>
+                <span>Profile</span>
+              </NavLink>
+            </li>
+
+            <li className="nav-item">
+              <NavLink
+                to={ROUTE_URL.WEBSITE.WISHLIST}
+                className="action-link"
+                onClick={closeNavbar}
+              >
+                <i className="bi bi-heart"></i>
+                <span>Wishlist</span>
+              </NavLink>
+            </li>
+
+            <li className="nav-item">
+              <NavLink
+                to={ROUTE_URL.WEBSITE.CART}
+                className="action-link cart-action"
+                onClick={closeNavbar}
+              >
+                <i className="bi bi-bag"></i>
+                <span>Bag</span>
               </NavLink>
             </li>
           </ul>

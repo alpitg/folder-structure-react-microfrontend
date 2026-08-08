@@ -1,0 +1,254 @@
+// ==================================================
+// NAVBAR COLORS
+// ==================================================
+
+$color-primary: #ff3f6c;
+$color-dark: #282c3f;
+$color-muted: #94969f;
+$color-border: #eeeeee;
+$color-background: #fff;
+$color-search: #f5f5f6;
+
+// ==================================================
+// NAVBAR
+// ==================================================
+
+.header-navbar {
+  height: 72px;
+  z-index: 1030;
+  background: $color-background;
+  border-bottom: 1px solid $color-border;
+}
+
+// ==================================================
+// LOGO
+// ==================================================
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 35px;
+  text-decoration: none;
+
+  .logo-mark {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    background: $color-primary;
+    color: $color-background;
+    font-size: 20px;
+    font-weight: 800;
+  }
+
+  .logo-text {
+    color: $color-dark;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+// ==================================================
+// NAVIGATION
+// ==================================================
+
+.header-nav {
+  height: 100%;
+  align-items: center;
+
+  .nav-link {
+    position: relative;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    padding: 0 18px !important;
+    color: $color-dark;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    transition: color 0.2s ease;
+
+    &:hover,
+    &.active {
+      color: $color-primary;
+    }
+
+    &.active::after {
+      content: "";
+      position: absolute;
+      left: 15px;
+      right: 15px;
+      bottom: 0;
+      height: 3px;
+      background: $color-primary;
+    }
+  }
+}
+
+// ==================================================
+// SEARCH
+// ==================================================
+
+.header-search {
+  flex: 1;
+  max-width: 520px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  border-radius: 4px;
+  background: $color-search;
+  color: #696e79;
+
+  i {
+    margin-right: 12px;
+    font-size: 15px;
+  }
+
+  input {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: $color-dark;
+    font-size: 13px;
+
+    &::placeholder {
+      color: $color-muted;
+    }
+  }
+
+  &:focus-within {
+    background: $color-background;
+    border: 1px solid #d4d5d9;
+  }
+}
+
+// ==================================================
+// ACTIONS
+// ==================================================
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+
+  .action-link {
+    min-width: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 3px;
+    color: $color-dark;
+    font-size: 11px;
+    font-weight: 700;
+    text-decoration: none;
+
+    i {
+      font-size: 19px;
+      line-height: 1;
+    }
+
+    &:hover,
+    &.active {
+      color: $color-primary;
+    }
+  }
+}
+
+// ==================================================
+// MOBILE CART
+// ==================================================
+
+.mobile-cart {
+  color: $color-dark;
+  text-decoration: none;
+
+  &:hover {
+    color: $color-primary;
+  }
+}
+
+// ==================================================
+// TABLET
+// ==================================================
+
+@media (max-width: 991.98px) {
+  .header-logo {
+    margin-right: 15px;
+  }
+
+  .header-nav .nav-link {
+    padding: 0 10px !important;
+    font-size: 12px;
+  }
+
+  .header-actions {
+    gap: 12px;
+  }
+}
+
+// ==================================================
+// MOBILE
+// ==================================================
+
+@media (max-width: 767.98px) {
+  .header-navbar {
+    height: auto;
+    min-height: 60px;
+  }
+
+  .header-logo {
+    margin-right: 0;
+
+    .logo-mark {
+      width: 31px;
+      height: 31px;
+      font-size: 18px;
+    }
+
+    .logo-text {
+      font-size: 13px;
+    }
+  }
+
+  .header-nav {
+    height: auto;
+    align-items: stretch;
+
+    .nav-link {
+      height: 48px;
+      padding: 0 5px !important;
+      border-bottom: 1px solid #f1f1f1;
+
+      &.active::after {
+        display: none;
+      }
+    }
+  }
+
+  .header-search {
+    width: 100%;
+    max-width: none;
+  }
+
+  .header-actions {
+    justify-content: space-around;
+    flex-direction: row;
+    padding: 12px 0;
+    border-top: 1px solid $color-border;
+
+    .action-link {
+      flex: 1;
+    }
+  }
+}

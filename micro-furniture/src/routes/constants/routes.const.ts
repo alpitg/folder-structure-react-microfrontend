@@ -43,6 +43,7 @@ export const ROUTE_URL = {
     PRODUCTS: "/products",
     PRODUCT_DETAILS: "/products/:id",
     CART: "/cart",
+    WISHLIST: "/wishlist",
     ORDER_SUCCESS: "/order-success",
   },
 

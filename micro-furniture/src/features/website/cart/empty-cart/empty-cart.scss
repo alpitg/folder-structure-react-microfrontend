@@ -1,15 +1,147 @@
 .empty-cart-app {
-  min-height: 500px;
+  margin-top: 20px;
+  margin-bottom: 100px;
 
-  .empty-cart-icon {
-    font-size: 10rem; // 160px
-    color: var(--bs-dark);
+  min-height: calc(100vh - 140px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .empty-cart-content {
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
   }
 
-  h4 {
-    font-size: 1.25rem;
-    color: #333;
-    margin-bottom: 1.5rem;
+  .empty-cart-illustration {
+    width: 190px;
+    height: 150px;
+
+    margin: 0 auto 30px;
+
+    position: relative;
   }
 
+  .empty-cart-bag {
+    width: 120px;
+    height: 105px;
+
+    position: absolute;
+    left: 35px;
+    top: 25px;
+  }
+
+  .empty-cart-bag-handle {
+    width: 55px;
+    height: 40px;
+
+    position: absolute;
+    left: 32px;
+    top: -22px;
+
+    border: 4px solid var(--bs-dark);
+
+    border-bottom: 0;
+    border-radius: 30px 30px 0 0;
+  }
+
+  .empty-cart-bag-body {
+    width: 120px;
+    height: 92px;
+
+    position: absolute;
+    left: 0;
+    top: 10px;
+
+    border: 3px solid var(--bs-dark);
+    border-radius: 5px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    span {
+      display: block;
+
+      width: 55px;
+      height: 5px;
+
+      border-radius: 5px;
+      background: #ff3f6c;
+
+      &:nth-child(2) {
+        width: 45px;
+        background: #ff905a;
+      }
+
+      &:nth-child(3) {
+        width: 52px;
+        background: #20bd99;
+      }
+    }
+  }
+
+  .empty-cart-title {
+    margin: 24px 0 8px;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .empty-cart-message {
+    margin-bottom: 25px;
+    color: #94969f;
+    font-size: 13px;
+    line-height: 1.6;
+
+    margin-bottom: 24px;
+  }
+
+  .continue-shopping-btn {
+    min-width: 210px;
+    height: 48px;
+
+    border-radius: 3px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+    transition: 0.2s;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+  }
+
+  @media (max-width: 768px) {
+    margin-top: 10px;
+    margin-bottom: 60px;
+
+    min-height: calc(100vh - 100px);
+
+    .empty-cart-content {
+      padding: 0 15px;
+    }
+
+    .empty-cart-illustration {
+      margin-bottom: 20px;
+    }
+
+    .empty-cart-title {
+      font-size: 21px;
+    }
+
+    .empty-cart-message {
+      font-size: 14px;
+    }
+
+    .continue-shopping-btn {
+      width: 100%;
+      max-width: 250px;
+    }
+  }
 }

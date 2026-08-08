@@ -34,6 +34,7 @@ const LandingPageApp = lazy(
 const DashboardApp = lazy(() => import("../features/dashboard/dashboard"));
 const UIApp = lazy(() => import("../components/ui/ui"));
 const SettingsApp = lazy(() => import("../features/settings/settings"));
+const WishlistApp = lazy(() => import("../features/website/wishlist/wishlist"));
 
 //#endregion
 
@@ -45,6 +46,7 @@ const RoutesApp = () => {
       <BrowserRouter>
         <ScrollToTop />
         <Routes>
+          {/* Public website routes */}
           <Route path={ROUTE_URL.WEBSITE.BASE} element={<WebsiteApp />}>
             <Route path={ROUTE_URL.WEBSITE.BASE} element={<HomeApp />} />
             <Route
@@ -59,6 +61,11 @@ const RoutesApp = () => {
             <Route
               path={ROUTE_URL.WEBSITE.ORDER_SUCCESS}
               element={<OrderSuccessApp />}
+            />
+
+            <Route
+              path={ROUTE_URL.WEBSITE.WISHLIST}
+              element={<WishlistApp />}
             />
 
             <Route path="*" element={<Navigate to="/" replace />} />

@@ -56,6 +56,8 @@ declare global {
 }
 
 const CartApp = () => {
+  //#region variables
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -105,7 +107,6 @@ const CartApp = () => {
 
       if (existingScript) {
         existingScript.addEventListener("load", () => resolve(true));
-
         existingScript.addEventListener("error", () => resolve(false));
 
         return;
@@ -114,11 +115,9 @@ const CartApp = () => {
       const script = document.createElement("script");
 
       script.src = "https://checkout.razorpay.com/v1/checkout.js";
-
       script.async = true;
 
       script.onload = () => resolve(true);
-
       script.onerror = () => resolve(false);
 
       document.body.appendChild(script);
@@ -146,12 +145,6 @@ const CartApp = () => {
       // --------------------------------------------------
       // STEP 2: Prepare order payload
       // --------------------------------------------------
-      //
-      // IMPORTANT:
-      // Do NOT send price/subtotal/totalAmount.
-      //
-      // Backend gets the product price from MongoDB.
-      //
 
       const payload = {
         customerName: "Naru",
@@ -164,8 +157,11 @@ const CartApp = () => {
           quantity: item.quantity,
           customizedDetails: undefined,
         })),
+
         miscCharges: [],
+
         note: "Website order",
+
         likelyDateOfDelivery: null,
       };
 
@@ -197,15 +193,10 @@ const CartApp = () => {
 
       const options: RazorpayOptions = {
         key: payment.keyId,
-
         amount: payment.amount,
-
         currency: payment.currency,
-
         name: "Artisan Studios",
-
         description: `Order ${order.orderCode || ""}`,
-
         order_id: payment.razorpayOrderId,
 
         handler: async (response: RazorpayResponse) => {
@@ -220,11 +211,8 @@ const CartApp = () => {
 
             await verifyWebsitePayment({
               orderId: order.id,
-
               razorpayPaymentId: response.razorpay_payment_id,
-
               razorpayOrderId: response.razorpay_order_id,
-
               razorpaySignature: response.razorpay_signature,
             }).unwrap();
 
@@ -232,8 +220,6 @@ const CartApp = () => {
             // STEP 6: Payment verified
             // --------------------------------------------
 
-            // Clear cart ONLY after backend
-            // confirms successful verification.
             dispatch(clearBag());
 
             // --------------------------------------------
@@ -255,7 +241,7 @@ const CartApp = () => {
         },
 
         theme: {
-          color: "#212529",
+          color: "#ff3f6c",
         },
 
         modal: {
@@ -311,159 +297,229 @@ const CartApp = () => {
     (verifyPaymentError as any)?.data?.message ||
     null;
 
+  //#endregion
+
   return (
-    <section className="cart-app py-5">
+    <section className="cart-app">
       {items?.length === 0 ? (
         <EmptyCartApp />
       ) : (
-        <div className="container">
-          {/* -------------------------------------------- */}
-          {/* CART TABLE */}
-          {/* -------------------------------------------- */}
+        <div className="cart-page">
+          <div className="container">
+            {/* -------------------------------------------- */}
+            {/* CART HEADER */}
+            {/* -------------------------------------------- */}
 
-          <div className="table-responsive">
-            <table className="table align-middle cart-table">
-              <thead>
-                <tr>
-                  <th>Product</th>
-                  <th>Price</th>
-                  <th>Quantity</th>
-                  <th>Total</th>
-                  <th></th>
-                </tr>
-              </thead>
+            <div className="cart-page-header">
+              <h4>
+                Shopping Bag
+                <span>({items.length} Items)</span>
+              </h4>
+            </div>
 
-              <tbody>
-                {items.map((item) => (
-                  <tr key={item.id}>
-                    {/* Product */}
-                    <td>
-                      <NavLink to={`/products/${item.id}`}>
-                        <div className="d-flex align-items-center">
-                          <img
-                            src={item.image}
-                            alt={item.name}
-                            className="cart-image me-3"
-                          />
+            <div className="row g-4">
+              {/* -------------------------------------------- */}
+              {/* CART ITEMS */}
+              {/* -------------------------------------------- */}
 
-                          <h6 className="mb-0 fw-medium">{item.name}</h6>
-                        </div>
+              <div className="col-lg-8">
+                <div className="cart-items">
+                  {items.map((item) => (
+                    <div className="cart-item" key={item.id}>
+                      {/* Product Image */}
+
+                      <NavLink
+                        to={`/products/${item.id}`}
+                        className="cart-item-image-link"
+                      >
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="cart-image"
+                        />
                       </NavLink>
-                    </td>
 
-                    {/* Price */}
-                    <td>₹ {item.price.toFixed(2)}</td>
+                      {/* Product Details */}
 
-                    {/* Quantity */}
-                    <td>
-                      <div className="quantity-box">
-                        <button
-                          type="button"
-                          className="btn-qty"
-                          onClick={() => decrease(item.id)}
-                          disabled={isProcessing}
-                        >
-                          -
-                        </button>
+                      <div className="cart-item-details">
+                        <div className="cart-item-heading">
+                          <div>
+                            <NavLink
+                              to={`/products/${item.id}`}
+                              className="cart-product-name"
+                            >
+                              {item.name}
+                            </NavLink>
 
-                        <input readOnly value={item.quantity} />
+                            <p className="cart-product-description">
+                              Regular fit • Casual wear
+                            </p>
+                          </div>
 
-                        <button
-                          type="button"
-                          className="btn-qty"
-                          onClick={() => increase(item.id)}
-                          disabled={isProcessing}
-                        >
-                          +
-                        </button>
+                          <button
+                            type="button"
+                            className="remove-item"
+                            onClick={() => remove(item.id)}
+                            disabled={isProcessing}
+                            aria-label={`Remove ${item.name}`}
+                          >
+                            <i className="bi bi-x-lg"></i>
+                          </button>
+                        </div>
+
+                        {/* Price */}
+
+                        <div className="cart-price">
+                          <span className="current-price">
+                            ₹{item.price.toFixed(0)}
+                          </span>
+
+                          <span className="original-price">
+                            ₹{(item.price * 1.25).toFixed(0)}
+                          </span>
+
+                          <span className="discount">20% OFF</span>
+                        </div>
+
+                        {/* Quantity */}
+
+                        <div className="cart-item-bottom">
+                          <div className="quantity-box">
+                            <button
+                              type="button"
+                              className="btn-qty"
+                              onClick={() => decrease(item.id)}
+                              disabled={isProcessing}
+                            >
+                              -
+                            </button>
+
+                            <input
+                              readOnly
+                              value={item.quantity}
+                              aria-label="Quantity"
+                            />
+
+                            <button
+                              type="button"
+                              className="btn-qty"
+                              onClick={() => increase(item.id)}
+                              disabled={isProcessing}
+                            >
+                              +
+                            </button>
+                          </div>
+
+                          <div className="item-total">
+                            ₹{(item.price * item.quantity).toFixed(0)}
+                          </div>
+                        </div>
+
+                        {/* Delivery */}
+
+                        <div className="delivery-info">
+                          <i className="bi bi-truck"></i>
+
+                          <span>Delivery available to your location</span>
+                        </div>
                       </div>
-                    </td>
-
-                    {/* Total */}
-                    <td>₹ {(item.price * item.quantity).toFixed(2)}</td>
-
-                    {/* Remove */}
-                    <td className="text-end">
-                      <i
-                        className="bi bi-x-lg text-dark ms-2 cursor-pointer"
-                        onClick={() => remove(item.id)}
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* -------------------------------------------- */}
-          {/* CART ACTIONS */}
-          {/* -------------------------------------------- */}
-
-          <div className="d-flex justify-content-between flex-wrap gap-3 mt-5">
-            <NavLink
-              className="btn btn-dark px-4"
-              to={ROUTE_URL.WEBSITE.PRODUCTS}
-            >
-              ← Continue Shopping
-            </NavLink>
-
-            <button
-              type="button"
-              className="btn btn-outline-dark px-4"
-              onClick={clearCart}
-              disabled={isProcessing}
-            >
-              Clear Cart
-            </button>
-          </div>
-
-          {/* -------------------------------------------- */}
-          {/* SUMMARY */}
-          {/* -------------------------------------------- */}
-
-          <div className="row mt-5 gy-4">
-            <div className="col-lg-6"></div>
-
-            <div className="col-lg-6">
-              <div className="cart-summary ms-lg-auto">
-                <div className="d-flex justify-content-between border-bottom pb-3">
-                  <strong>Subtotal</strong>
-
-                  <span>₹ {subtotal.toFixed(2)}</span>
+                    </div>
+                  ))}
                 </div>
 
-                <div className="d-flex justify-content-between pt-3">
-                  <strong>Total</strong>
+                {/* Continue Shopping */}
 
-                  <strong>₹ {subtotal.toFixed(2)}</strong>
+                <div className="cart-actions d-flex gap-5">
+                  <NavLink
+                    className="continue-shopping"
+                    to={ROUTE_URL.WEBSITE.PRODUCTS}
+                  >
+                    <i className="bi bi-arrow-left"></i>
+                    Continue Shopping
+                  </NavLink>
+
+                  <button
+                    type="button"
+                    className="btn btn-secondary clear-cart"
+                    onClick={clearCart}
+                    disabled={isProcessing}
+                  >
+                    Clear Cart
+                  </button>
                 </div>
+              </div>
 
-                {/* ---------------------------------------- */}
-                {/* ERROR */}
-                {/* ---------------------------------------- */}
+              {/* -------------------------------------------- */}
+              {/* PRICE DETAILS */}
+              {/* -------------------------------------------- */}
 
-                {errorMessage && (
-                  <div className="alert alert-danger mt-3">{errorMessage}</div>
-                )}
+              <div className="col-lg-4">
+                <div className="price-details">
+                  <h6 className="price-details-title">PRICE DETAILS</h6>
 
-                {/* ---------------------------------------- */}
-                {/* CHECKOUT */}
-                {/* ---------------------------------------- */}
+                  <div className="price-row">
+                    <span>Total MRP</span>
 
-                <button
-                  type="button"
-                  className="btn btn-dark w-100 mt-4 mb-5"
-                  onClick={handleCheckout}
-                  disabled={isProcessing || items.length === 0}
-                >
-                  {isCreatingOrder
-                    ? "Creating Order..."
-                    : isVerifyingPayment
-                      ? "Verifying Payment..."
-                      : "Proceed to Payment"}
-                </button>
+                    <span>₹{subtotal.toFixed(0)}</span>
+                  </div>
+
+                  <div className="price-row">
+                    <span>Discount on MRP</span>
+
+                    <span className="discount-value">- ₹0</span>
+                  </div>
+
+                  <div className="price-row">
+                    <span>Platform Fee</span>
+
+                    <span>₹0</span>
+                  </div>
+
+                  <div className="price-row">
+                    <span>Shipping Fee</span>
+
+                    <span className="free">FREE</span>
+                  </div>
+
+                  <div className="price-divider"></div>
+
+                  <div className="price-total">
+                    <span>Total Amount</span>
+
+                    <span>₹{subtotal.toFixed(0)}</span>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="place-order-btn"
+                    onClick={handleCheckout}
+                    disabled={isProcessing || items.length === 0}
+                  >
+                    {isCreatingOrder
+                      ? "CREATING ORDER..."
+                      : isVerifyingPayment
+                        ? "VERIFYING PAYMENT..."
+                        : "PLACE ORDER"}
+                  </button>
+
+                  <div className="secure-payment">
+                    <i className="bi bi-shield-check"></i>
+
+                    <span>
+                      Safe and Secure Payments. 100% Authentic Products.
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
+
+            {/* -------------------------------------------- */}
+            {/* ERROR */}
+            {/* -------------------------------------------- */}
+
+            {errorMessage && (
+              <div className="alert alert-danger mt-4">{errorMessage}</div>
+            )}
           </div>
         </div>
       )}
