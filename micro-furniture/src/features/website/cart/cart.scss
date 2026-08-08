@@ -222,7 +222,9 @@ $color-summary: #f9f9f9;
   }
 
   .cart-actions {
-    margin-top: 20px;
+    margin: 20px 0 10px;
+    display: flex;
+    float: inline-end;
   }
 
   .continue-shopping {
@@ -414,10 +416,6 @@ $color-summary: #f9f9f9;
       margin-top: 12px;
       padding-top: 10px;
       font-size: 10px;
-    }
-
-    .continue-shopping {
-      width: 60%;
     }
 
     .price-details {
