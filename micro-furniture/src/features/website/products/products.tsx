@@ -1,11 +1,6 @@
 import "./products.scss";
 
 import type { AppDispatch, AppState } from "../../../app/store";
-import {
-  addItemToBag,
-  decreaseBagItemQuantity,
-  removeBagItem,
-} from "../../../app/redux/core/shopping-bag/shopping-bag.slice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -14,7 +9,10 @@ import {
 } from "../../../app/redux/website/product/website-product.api";
 import { useLocation, useNavigate } from "react-router";
 
+import type { IProductData } from "../../store/catalog/interface/product/product.model";
 import NotFoundApp from "./not-found/not-found";
+import { ROUTE_URL } from "../../../routes/constants/routes.const";
+import { addItemToBag } from "../../../app/redux/core/shopping-bag/shopping-bag.slice";
 
 const Products = () => {
   // ==================================================
@@ -40,7 +38,7 @@ const Products = () => {
 
   const [page, setPage] = useState(1);
 
-  const pageSize = 10;
+  const pageSize = 12;
 
   // ==================================================
   // PRODUCTS
@@ -86,6 +84,14 @@ const Products = () => {
   const products = productsResponse?.items ?? [];
 
   // ==================================================
+  // BAG ITEM MAP
+  // ==================================================
+
+  const bagItemMap = useMemo(() => {
+    return new Map(bagItems.map((item) => [item.id, item]));
+  }, [bagItems]);
+
+  // ==================================================
   // CATEGORY FILTER
   // ==================================================
 
@@ -111,41 +117,20 @@ const Products = () => {
   // BAG
   // ==================================================
 
-  const getBagQuantity = (productId: string) => {
-    return bagItems.find((item) => item?.id === productId)?.quantity ?? 0;
-  };
-
-  const addProductToBag = (product: any) => {
+  const addToCart = (product: IProductData) => {
     dispatch(
       addItemToBag({
-        id: product?.id,
-        name: product?.name,
-        image: product?.media?.[0]?.url ?? blankImage,
-        price: product?.price?.sellingPrice ?? 0,
+        id: product.id,
+        name: product.name,
+        image: product.media?.[0]?.url ?? blankImage,
+        price: product.price?.sellingPrice ?? 0,
         quantity: 1,
       }),
     );
   };
 
-  const increaseQuantity = (product: any) => {
-    dispatch(
-      addItemToBag({
-        id: product?.id,
-        name: product?.name,
-        image: product?.media?.[0]?.url ?? blankImage,
-        price: product?.price?.sellingPrice ?? 0,
-        quantity: 1,
-      }),
-    );
-  };
-
-  const decreaseQuantity = (productId: string, quantity: number) => {
-    if (quantity > 1) {
-      dispatch(decreaseBagItemQuantity(productId));
-      return;
-    }
-
-    dispatch(removeBagItem(productId));
+  const handleViewBag = () => {
+    navigate(ROUTE_URL.WEBSITE.CART);
   };
 
   // ==================================================
@@ -195,10 +180,11 @@ const Products = () => {
         <>
           <div className="row g-3 g-md-4">
             {filteredProducts.map((product) => {
-              const quantity = getBagQuantity(product?.id);
+              const bagItem = bagItemMap.get(product.id);
+              const quantity = bagItem?.quantity ?? 0;
 
               return (
-                <div key={product?.id} className="col-6 col-md-4 col-lg-3">
+                <div key={product.id} className="col-6 col-md-4 col-lg-3">
                   <div className="product-card">
                     {/* ================================================== */}
                     {/* IMAGE */}
@@ -216,7 +202,10 @@ const Products = () => {
                         className="product-image"
                       />
 
-                      {/* New Badge */}
+                      {/* ================================================== */}
+                      {/* NEW BADGE */}
+                      {/* ================================================== */}
+
                       {product?.isNewArrival && (
                         <span className="product-badge">
                           <i className="bi bi-stars"></i>
@@ -224,7 +213,10 @@ const Products = () => {
                         </span>
                       )}
 
-                      {/* Wishlist */}
+                      {/* ================================================== */}
+                      {/* WISHLIST */}
+                      {/* ================================================== */}
+
                       <button
                         type="button"
                         className="wishlist-btn"
@@ -233,41 +225,32 @@ const Products = () => {
                         <i className="bi bi-heart"></i>
                       </button>
 
-                      {/* Product Actions */}
+                      {/* ================================================== */}
+                      {/* PRODUCT ACTIONS */}
+                      {/* ================================================== */}
+
                       <div className="product-actions">
                         {quantity === 0 ? (
                           <button
                             type="button"
-                            className="add-to-bag-btn"
-                            onClick={() => addProductToBag(product)}
+                            className="add-to-cart-btn"
+                            onClick={() => addToCart(product)}
                           >
-                            <i className="bi bi-bag"></i>
-                            Add to Bag
+                            <i className="bi bi-bag-plus"></i>
+                            Add to Cart
                           </button>
                         ) : (
-                          <div className="quantity-control">
-                            <button
-                              type="button"
-                              onClick={() =>
-                                decreaseQuantity(product.id, quantity)
-                              }
-                              aria-label="Decrease quantity"
-                            >
-                              −
-                            </button>
-
-                            <span>{quantity}</span>
-
-                            <button
-                              type="button"
-                              onClick={() => increaseQuantity(product)}
-                              aria-label="Increase quantity"
-                            >
-                              +
-                            </button>
-                          </div>
+                          <button
+                            type="button"
+                            className="view-cart-btn"
+                            onClick={handleViewBag}
+                          >
+                            <i className="bi bi-bag-check"></i>
+                            View Bag
+                          </button>
                         )}
 
+                        {/* Quick View */}
                         <button
                           type="button"
                           className="quick-view-btn"
@@ -303,7 +286,10 @@ const Products = () => {
                         </p>
                       )}
 
-                      {/* Price */}
+                      {/* ================================================== */}
+                      {/* PRICE */}
+                      {/* ================================================== */}
+
                       <div className="product-price">
                         <span className="sale-price">
                           ₹
@@ -313,7 +299,7 @@ const Products = () => {
                         </span>
 
                         {product?.price?.basePrice &&
-                          product?.price?.basePrice >
+                          product.price.basePrice >
                             (product?.price?.sellingPrice ?? 0) && (
                             <>
                               <span className="mrp-price">
@@ -332,7 +318,10 @@ const Products = () => {
                           )}
                       </div>
 
-                      {/* Rating */}
+                      {/* ================================================== */}
+                      {/* RATING */}
+                      {/* ================================================== */}
+
                       {product?.reviews > 0 && (
                         <div className="product-rating">
                           <span className="rating-value">
