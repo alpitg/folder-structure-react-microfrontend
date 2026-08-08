@@ -38,6 +38,9 @@ export const ROUTE_URL = {
   HOME: "/crm",
   WEBSITE: {
     BASE: "",
+    LOGIN: "/login",
+    FORGOT_PASSWORD: "/forgot-password",
+    PROFILE_EDIT: "/profile/edit",
     ABOUT: "/about",
     CONTACT: "/contact",
     PRODUCTS: "/products",
@@ -45,6 +48,8 @@ export const ROUTE_URL = {
     CART: "/cart",
     WISHLIST: "/wishlist",
     ORDER_SUCCESS: "/order-success",
+    ORDERS: "/orders",
+    HELP: "/help",
   },
 
   DASHBOARD: "/crm/dashboard",

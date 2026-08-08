@@ -36,6 +36,8 @@ const UIApp = lazy(() => import("../components/ui/ui"));
 const SettingsApp = lazy(() => import("../features/settings/settings"));
 const WishlistApp = lazy(() => import("../features/website/wishlist/wishlist"));
 
+const ProfileApp = lazy(() => import("../features/website/profile/profile"));
+
 //#endregion
 
 const RoutesApp = () => {
@@ -66,6 +68,11 @@ const RoutesApp = () => {
             <Route
               path={ROUTE_URL.WEBSITE.WISHLIST}
               element={<WishlistApp />}
+            />
+
+            <Route
+              path={ROUTE_URL.WEBSITE.PROFILE_EDIT}
+              element={<ProfileApp />}
             />
 
             <Route path="*" element={<Navigate to="/" replace />} />
