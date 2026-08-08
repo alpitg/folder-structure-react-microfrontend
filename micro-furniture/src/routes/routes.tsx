@@ -9,6 +9,7 @@ import { CustomerRoutes } from "../features/store/customer/routes/customer.route
 import ForgetPasswordApp from "../components/auth/forget-password/forget-password";
 import LoadingApp from "../components/loading/loading";
 import LoginApp from "../components/auth/login/login";
+import OrderSuccessApp from "../features/website/cart/order-success/order-success";
 import PrivateRoute from "./private-route";
 import { ROUTE_URL } from "./constants/routes.const";
 import ResetPassword from "../components/auth/reset-password/reset-password";
@@ -55,6 +56,10 @@ const RoutesApp = () => {
               element={<ProductDetailsApp />}
             />
             <Route path="/cart" element={<CartApp />} />
+            <Route
+              path={ROUTE_URL.WEBSITE.ORDER_SUCCESS}
+              element={<OrderSuccessApp />}
+            />
 
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>

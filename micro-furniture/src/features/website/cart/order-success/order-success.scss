@@ -1,0 +1,105 @@
+.order-success-section {
+  .order-success-page {
+    background-color: #f8f8f8 !important;
+  }
+
+  .order-success-card {
+    border: 1px solid #eeeeee;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  }
+
+  .success-icon {
+    width: 72px;
+    height: 72px;
+    background-color: #e8f5e9;
+
+    i {
+      font-size: 42px;
+      line-height: 1;
+      color: #03a685;
+    }
+  }
+
+  .order-success-card {
+    h2 {
+      color: #282c3f;
+      font-size: 26px;
+    }
+
+    p {
+      font-size: 14px;
+    }
+  }
+
+  .order-id-box {
+    background-color: #fafafa !important;
+
+    .small {
+      letter-spacing: 0.6px;
+      font-size: 11px;
+    }
+  }
+
+  .delivery-message {
+    color: #535766;
+
+    i {
+      color: #03a685;
+      font-size: 18px;
+    }
+  }
+
+  .order-success-card {
+    .btn {
+      font-size: 14px;
+      font-weight: 600;
+      min-height: 44px;
+      border-radius: 4px;
+    }
+
+    .btn-dark {
+      background-color: #282c3f;
+      border-color: #282c3f;
+
+      &:hover {
+        background-color: #1f2230;
+        border-color: #1f2230;
+      }
+    }
+
+    .btn-outline-dark {
+      color: #282c3f;
+      border-color: #d4d5d9;
+
+      &:hover {
+        color: #fff;
+        background-color: #282c3f;
+        border-color: #282c3f;
+      }
+    }
+  }
+
+  @media (max-width: 575.98px) {
+    .order-success-page {
+      padding-top: 30px !important;
+      padding-bottom: 30px !important;
+    }
+
+    .order-success-card {
+      padding: 30px 20px !important;
+
+      h2 {
+        font-size: 22px;
+      }
+    }
+
+    .success-icon {
+      width: 64px;
+      height: 64px;
+
+      i {
+        font-size: 36px;
+      }
+    }
+  }
+}

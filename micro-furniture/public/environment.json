@@ -113,6 +113,10 @@
       "product": {
         "list": "/api/store/products",
         "detail": "/api/store/products/{id}"
+      },
+      "order": {
+        "create": "/api/store/orders/create",
+        "verifyPayment": "/api/store/orders/verify-payment"
       }
     },
     "dashboard": {

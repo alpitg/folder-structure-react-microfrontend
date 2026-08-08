@@ -90,6 +90,10 @@ let environment = {
         list: "",
         detail: "",
       },
+      order: {
+        create: "",
+        verifyPayment: "",
+      },
     },
     dashboard: {
       stats: "",

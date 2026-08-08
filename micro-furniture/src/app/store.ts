@@ -12,6 +12,7 @@ import { productsApi } from "./redux/catalog/product/product.api";
 import { rolesApi } from "./redux/administration/roles/roles.api";
 import salesReducer from "./redux/sales/sales.reducer";
 import { usersApi } from "./redux/administration/users/users.api";
+import { websiteOrderApi } from "./redux/website/order/website-order.api";
 import { websiteProductApi } from "./redux/website/product/website-product.api";
 import websiteReducer from "./redux/website/website.reducer";
 
@@ -36,8 +37,8 @@ const store = configureStore({
 
     //#region website
     website: websiteReducer,
-
     [websiteProductApi.reducerPath]: websiteProductApi.reducer,
+    [websiteOrderApi.reducerPath]: websiteOrderApi.reducer,
     //#endregion
   }, // Add your reducers here
 
@@ -58,6 +59,7 @@ const store = configureStore({
 
       // website
       websiteProductApi.middleware,
+      websiteOrderApi.middleware, // Add the website reducer middleware
     ),
 
   devTools: process.env.NODE_ENV !== "production", // Enable Redux DevTools in development mode

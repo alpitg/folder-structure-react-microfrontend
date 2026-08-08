@@ -335,3 +335,13 @@ export class InitializeOrderInvoice implements IOrderInvoiceData {
   }
 }
 //#endregion
+
+export interface PublicOrderRequest {
+  order: IOrder;
+  invoice: IInvoice;
+}
+
+export interface WebsiteOrderResponse {
+  order: IOrder;
+  invoice: IInvoice;
+}
