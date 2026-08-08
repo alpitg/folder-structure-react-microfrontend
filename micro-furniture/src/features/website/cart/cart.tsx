@@ -64,12 +64,12 @@ const CartApp = () => {
 
   const handleCheckout = () => {
     if (items.length === 0) return;
-
+    const frontUrl = window.location.origin;
     const message = [
       "Hello! I would like to place an order for the following items:",
       ...items.map(
         (item) =>
-          `- ${item.name} x${item.quantity} @ ₹ ${item.price.toFixed(2)} each = ₹ ${(item.price * item.quantity).toFixed(2)}`,
+          `- ${item.name} x${item.quantity} @ ₹ ${item.price.toFixed(2)} each = ₹ ${(item.price * item.quantity).toFixed(2)}\n  Product: ${frontUrl}/products/${item.id}`,
       ),
       "",
       `Subtotal: ₹ ${subtotal.toFixed(2)}`,
@@ -77,6 +77,7 @@ const CartApp = () => {
 
     const whatsappNumber =
       appSettings?.homePage?.contactDetails?.whatsapp?.number;
+
     const whatsappUrl = whatsappNumber
       ? `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`
       : `https://wa.me/?text=${encodeURIComponent(message)}`;
@@ -106,15 +107,17 @@ const CartApp = () => {
                 {items.map((item) => (
                   <tr key={item.id}>
                     <td>
-                      <div className="d-flex align-items-center">
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="cart-image me-3"
-                        />
+                      <NavLink to={`/products/${item.id}`}>
+                        <div className="d-flex align-items-center">
+                          <img
+                            src={item.image}
+                            alt={item.name}
+                            className="cart-image me-3"
+                          />
 
-                        <h6 className="mb-0 fw-medium">{item.name}</h6>
-                      </div>
+                          <h6 className="mb-0 fw-medium">{item.name}</h6>
+                        </div>
+                      </NavLink>
                     </td>
 
                     <td>₹ {item.price.toFixed(2)}</td>
