@@ -245,8 +245,8 @@ const Products = () => {
                             className="view-cart-btn"
                             onClick={handleViewBag}
                           >
-                            <i className="bi bi-bag-check"></i>
-                            View Bag
+                            Go to Bag
+                            <i className="bi bi-arrow-right"></i>
                           </button>
                         )}
 
