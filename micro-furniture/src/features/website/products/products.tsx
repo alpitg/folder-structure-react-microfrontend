@@ -8,30 +8,43 @@ import {
 } from "../../../app/redux/core/shopping-bag/shopping-bag.slice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useMemo, useState } from "react";
+import {
+  useGetProductsQuery,
+  websiteProductApi,
+} from "../../../app/redux/website/product/website-product.api";
 import { useLocation, useNavigate } from "react-router";
 
 import NotFoundApp from "./not-found/not-found";
-import { useGetProductsQuery } from "../../../app/redux/website/product/website-product.api";
-import { websiteProductApi } from "../../../app/redux/website/product/website-product.api";
 
 const Products = () => {
+  // ==================================================
+  // VARIABLES
+  // ==================================================
+
   const blankImage = "/static/media/img/svg/blank-image.svg";
 
   const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+
   const query = new URLSearchParams(location.search);
   const category = query.get("category");
-
-  const route = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
 
   const bagItems = useSelector(
     (state: AppState) => state.core.shoppingBag.items,
   );
 
-  // Pagination
+  // ==================================================
+  // PAGINATION
+  // ==================================================
+
   const [page, setPage] = useState(1);
-  // const [sort, setSort] = useState("newest");
+
   const pageSize = 10;
+
+  // ==================================================
+  // PRODUCTS
+  // ==================================================
 
   const {
     data: productsResponse,
@@ -45,9 +58,10 @@ const Products = () => {
     sort: "newest",
   });
 
-  /**
-   * Prefetch next page
-   */
+  // ==================================================
+  // PREFETCH NEXT PAGE
+  // ==================================================
+
   useEffect(() => {
     dispatch(
       websiteProductApi.util.prefetch(
@@ -65,11 +79,16 @@ const Products = () => {
     );
   }, [dispatch, page]);
 
+  // ==================================================
+  // PRODUCTS
+  // ==================================================
+
   const products = productsResponse?.items ?? [];
 
-  /**
-   * Category filtering
-   */
+  // ==================================================
+  // CATEGORY FILTER
+  // ==================================================
+
   const filteredProducts = useMemo(() => {
     if (!category) {
       return products;
@@ -80,204 +99,211 @@ const Products = () => {
     );
   }, [products, category]);
 
+  // ==================================================
+  // QUICK VIEW
+  // ==================================================
+
   const handleQuickView = (productId: string) => {
-    route(`/products/${productId}`);
+    navigate(`/products/${productId}`);
   };
 
+  // ==================================================
+  // BAG
+  // ==================================================
+
+  const getBagQuantity = (productId: string) => {
+    return bagItems.find((item) => item?.id === productId)?.quantity ?? 0;
+  };
+
+  const addProductToBag = (product: any) => {
+    dispatch(
+      addItemToBag({
+        id: product?.id,
+        name: product?.name,
+        image: product?.media?.[0]?.url ?? blankImage,
+        price: product?.price?.sellingPrice ?? 0,
+        quantity: 1,
+      }),
+    );
+  };
+
+  const increaseQuantity = (product: any) => {
+    dispatch(
+      addItemToBag({
+        id: product?.id,
+        name: product?.name,
+        image: product?.media?.[0]?.url ?? blankImage,
+        price: product?.price?.sellingPrice ?? 0,
+        quantity: 1,
+      }),
+    );
+  };
+
+  const decreaseQuantity = (productId: string, quantity: number) => {
+    if (quantity > 1) {
+      dispatch(decreaseBagItemQuantity(productId));
+      return;
+    }
+
+    dispatch(removeBagItem(productId));
+  };
+
+  // ==================================================
+  // RENDER
+  // ==================================================
+
   return (
-    <section className="products-app container py-5 mb-20">
-      {isLoading && <div className="text-center py-5">Loading products...</div>}
+    <section className="products-app">
+      {/* ================================================== */}
+      {/* LOADING */}
+      {/* ================================================== */}
+
+      {isLoading && (
+        <div className="products-loading">
+          <div className="spinner-border spinner-border-sm text-dark me-2" />
+          Loading products...
+        </div>
+      )}
+
+      {/* ================================================== */}
+      {/* FETCHING */}
+      {/* ================================================== */}
 
       {isFetching && !isLoading && (
-        <div className="text-center small text-muted mb-3">
+        <div className="products-updating">
+          <div className="spinner-border spinner-border-sm me-2" />
           Updating products...
         </div>
       )}
 
+      {/* ================================================== */}
+      {/* ERROR */}
+      {/* ================================================== */}
+
       {isError && (
-        <div className="text-center py-5 text-danger">
+        <div className="products-error">
+          <i className="bi bi-exclamation-circle me-2"></i>
           Unable to load products right now.
         </div>
       )}
 
-      {filteredProducts?.length > 0 ? (
+      {/* ================================================== */}
+      {/* PRODUCTS */}
+      {/* ================================================== */}
+
+      {!isLoading && !isError && filteredProducts.length > 0 ? (
         <>
-          <div className="row">
-            {/* <div className="card-toolbar flex-row-fluid justify-content-end align-items-center gap-4 mt-3 mt-md-0 position-relative">
-              <div className="dropdown">
-                <button
-                  className="btn btn-light"
-                  type="button"
-                  id="productSortDropdown"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                  aria-label="Sort products"
-                >
-                  Sort By: {sort === "newest" ? "Newest first" : "Oldest first"}
-                  s
-                </button>
-                <ul
-                  className="dropdown-menu dropdown-menu-end p-0"
-                  aria-labelledby="productSortDropdown"
-                  role="menu"
-                >
-                  <li>
-                    <button
-                      className={`dropdown-item ${
-                        sort === "newest" ? "active" : ""
-                      }`}
-                      onClick={() => setSort("newest")}
-                      role="menuitem"
-                    >
-                      Newest first
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      className={`dropdown-item ${
-                        sort === "oldest" ? "active" : ""
-                      }`}
-                      onClick={() => setSort("oldest")}
-                      role="menuitem"
-                    >
-                      Oldest first
-                    </button>
-                  </li>
-                </ul>
-              </div>
-            </div> */}
-          </div>
-          <div className="row">
-            {filteredProducts.map((product) => (
-              <div key={product?.id} className="col-sm-6 col-md-4 col-lg-3 p-3">
-                <div className="product-card position-relative d-flex flex-column">
-                  <div className="product-img position-relative overflow-hidden rounded-4">
-                    <img
-                      loading="lazy"
-                      src={
-                        product?.media?.[0]?.url
-                          ? product.media[0].url
-                          : blankImage
-                      }
-                      alt={product?.name}
-                      className="img-fluid w-100 product-image"
-                    />
+          <div className="row g-3 g-md-4">
+            {filteredProducts.map((product) => {
+              const quantity = getBagQuantity(product?.id);
 
-                    {product?.isNewArrival && (
-                      <div className="badge">
-                        <span>
-                          <i className="bi bi-stars me-1"></i>
-                        </span>
-                        <span className="fw-semibold me-1">New in</span>
-                      </div>
-                    )}
+              return (
+                <div key={product?.id} className="col-6 col-md-4 col-lg-3">
+                  <div className="product-card">
+                    {/* ================================================== */}
+                    {/* IMAGE */}
+                    {/* ================================================== */}
 
-                    <div className="product-actions d-flex gap-2">
-                      {(() => {
-                        const quantity =
-                          bagItems.find((item) => item?.id === product?.id)
-                            ?.quantity ?? 0;
-
-                        if (quantity === 0) {
-                          return (
-                            <button
-                              className="btn btn-dark btn-sm rounded-pill shadow px-3"
-                              onClick={() =>
-                                dispatch(
-                                  addItemToBag({
-                                    id: product?.id,
-                                    name: product?.name,
-                                    image:
-                                      product?.media?.[0]?.url ?? blankImage,
-                                    price: product?.price?.sellingPrice ?? 0,
-                                    quantity: 1,
-                                  }),
-                                )
-                              }
-                            >
-                              <i className="bi bi-cart"></i> Add to Cart
-                            </button>
-                          );
+                    <div className="product-img">
+                      <img
+                        loading="lazy"
+                        src={
+                          product?.media?.[0]?.url
+                            ? product.media[0].url
+                            : blankImage
                         }
+                        alt={product?.name || "Product"}
+                        className="product-image"
+                      />
 
-                        return (
-                          <div
-                            className="d-flex align-items-center justify-content-between bg-dark rounded-pill px-3 py-1 shadow"
-                            style={{
-                              minWidth: 96,
-                            }}
+                      {/* New Badge */}
+                      {product?.isNewArrival && (
+                        <span className="product-badge">
+                          <i className="bi bi-stars"></i>
+                          New
+                        </span>
+                      )}
+
+                      {/* Wishlist */}
+                      <button
+                        type="button"
+                        className="wishlist-btn"
+                        aria-label={`Add ${product?.name} to wishlist`}
+                      >
+                        <i className="bi bi-heart"></i>
+                      </button>
+
+                      {/* Product Actions */}
+                      <div className="product-actions">
+                        {quantity === 0 ? (
+                          <button
+                            type="button"
+                            className="add-to-bag-btn"
+                            onClick={() => addProductToBag(product)}
                           >
+                            <i className="bi bi-bag"></i>
+                            Add to Bag
+                          </button>
+                        ) : (
+                          <div className="quantity-control">
                             <button
-                              className="btn btn-link p-0 d-flex align-items-center justify-content-center rounded-circle border border-light qty-control-btn"
-                              style={{
-                                width: 28,
-                                height: 28,
-                              }}
+                              type="button"
                               onClick={() =>
-                                quantity > 1
-                                  ? dispatch(
-                                      decreaseBagItemQuantity(product.id),
-                                    )
-                                  : dispatch(removeBagItem(product.id))
+                                decreaseQuantity(product.id, quantity)
                               }
+                              aria-label="Decrease quantity"
                             >
-                              -
+                              −
                             </button>
-                            <span className="fw-semibold text-light">
-                              {quantity}
-                            </span>
+
+                            <span>{quantity}</span>
+
                             <button
-                              className="btn btn-link p-0 d-flex align-items-center justify-content-center rounded-circle border border-light qty-control-btn"
-                              style={{
-                                width: 28,
-                                height: 28,
-                              }}
-                              onClick={() =>
-                                dispatch(
-                                  addItemToBag({
-                                    id: product?.id,
-                                    name: product?.name,
-                                    image:
-                                      product?.media?.[0]?.url ?? blankImage,
-                                    price: product?.price?.basePrice ?? 0,
-                                    quantity: 1,
-                                  }),
-                                )
-                              }
+                              type="button"
+                              onClick={() => increaseQuantity(product)}
+                              aria-label="Increase quantity"
                             >
                               +
                             </button>
                           </div>
-                        );
-                      })()}
-                      <button
-                        className="btn btn-light btn-sm rounded-pill shadow px-3"
-                        onMouseEnter={() =>
-                          dispatch(
-                            websiteProductApi.util.prefetch(
-                              "getProductDetail",
-                              product.id,
-                              {
-                                force: false,
-                              },
-                            ),
-                          )
-                        }
-                        onClick={() => handleQuickView(product.id)}
-                      >
-                        <i className="bi bi-arrows-fullscreen"></i>
-                        Quick view
-                      </button>
+                        )}
+
+                        <button
+                          type="button"
+                          className="quick-view-btn"
+                          onMouseEnter={() =>
+                            dispatch(
+                              websiteProductApi.util.prefetch(
+                                "getProductDetail",
+                                product.id,
+                                {
+                                  force: false,
+                                },
+                              ),
+                            )
+                          }
+                          onClick={() => handleQuickView(product.id)}
+                        >
+                          <i className="bi bi-eye"></i>
+                          View
+                        </button>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="product-content px-2 pt-3 pb-2">
-                    <h6 className="fw-semibold mb-1">{product?.name}</h6>
-                    <p className="text-muted small mb-2">
-                      {product?.description}
-                    </p>
+                    {/* ================================================== */}
+                    {/* PRODUCT DETAILS */}
+                    {/* ================================================== */}
 
-                    <div>
+                    <div className="product-content">
+                      <h6 className="product-name">{product?.name}</h6>
+
+                      {product?.description && (
+                        <p className="product-description">
+                          {product.description}
+                        </p>
+                      )}
+
+                      {/* Price */}
                       <div className="product-price">
                         <span className="sale-price">
                           ₹
@@ -286,56 +312,76 @@ const Products = () => {
                           )}
                         </span>
 
-                        {product?.price?.discount?.value ? (
-                          <span className="d-flex align-items-center">
-                            <span className="mrp-price me-2">
-                              ₹ {product?.price?.basePrice}
-                            </span>
-                            <span className="discount">
-                              {product?.price?.discount?.value}% OFF
-                            </span>
-                          </span>
-                        ) : null}
+                        {product?.price?.basePrice &&
+                          product?.price?.basePrice >
+                            (product?.price?.sellingPrice ?? 0) && (
+                            <>
+                              <span className="mrp-price">
+                                ₹
+                                {product.price.basePrice.toLocaleString(
+                                  "en-IN",
+                                )}
+                              </span>
+
+                              {product?.price?.discount?.value && (
+                                <span className="discount">
+                                  {product.price.discount.value}% OFF
+                                </span>
+                              )}
+                            </>
+                          )}
                       </div>
 
+                      {/* Rating */}
                       {product?.reviews > 0 && (
-                        <div className="small text-muted">
-                          <i className="bi bi-star-fill text-warning me-2"></i>
-                          {product?.rating} ({product?.reviews ?? 0} reviews)
+                        <div className="product-rating">
+                          <span className="rating-value">
+                            {product?.rating ?? 0}
+                            <i className="bi bi-star-fill"></i>
+                          </span>
+
+                          <span className="rating-divider">|</span>
+
+                          <span>{product?.reviews ?? 0} reviews</span>
                         </div>
                       )}
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
-          <div className="d-flex justify-content-center align-items-center mt-20">
+
+          {/* ================================================== */}
+          {/* PAGINATION */}
+          {/* ================================================== */}
+
+          <div className="pagination-wrapper">
             <button
-              className="btn btn-light btn-sm d-flex align-items-center gap-2"
-              disabled={page === 1}
+              type="button"
+              className="pagination-btn"
+              disabled={page === 1 || isFetching}
               onClick={() => setPage((previous) => previous - 1)}
             >
-              <i className="bi bi-arrow-left"></i>
+              <i className="bi bi-chevron-left"></i>
               Previous
             </button>
 
-            <span className="align-self-center px-3">
-              Page {page} of {productsResponse?.total ?? 0}
-            </span>
+            <span className="pagination-page">Page {page}</span>
 
             <button
-              className="btn btn-light btn-sm d-flex align-items-center gap-2"
-              disabled={filteredProducts.length < pageSize}
+              type="button"
+              className="pagination-btn"
+              disabled={products.length < pageSize || isFetching}
               onClick={() => setPage((previous) => previous + 1)}
             >
               Next
-              <i className="bi bi-arrow-right"></i>
+              <i className="bi bi-chevron-right"></i>
             </button>
           </div>
         </>
       ) : (
-        !isLoading && <NotFoundApp />
+        !isLoading && !isError && <NotFoundApp />
       )}
     </section>
   );
