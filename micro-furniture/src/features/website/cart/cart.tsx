@@ -61,16 +61,15 @@ const CartApp = () => {
   //       window.open(option.link, "_blank", "noopener,noreferrer");
   //     }
   //   };
+
   const handleCheckout = () => {
     if (items.length === 0) return;
-
     const frontUrl = window.location.origin;
-
     const message = [
       "Hello! I would like to place an order for the following items:",
       ...items.map(
         (item) =>
-          `- ${item.name} x${item.quantity} @ ₹ ${item.price.toFixed(2)} each = ₹ ${(item.price * item.quantity).toFixed(2)}\n  ${frontUrl}/products/${item.id}`,
+          `- ${item.name} x${item.quantity} @ ₹ ${item.price.toFixed(2)} each = ₹ ${(item.price * item.quantity).toFixed(2)}\n  Link: ${frontUrl}/products/${item.id}`,
       ),
       "",
       `Subtotal: ₹ ${subtotal.toFixed(2)}`,
@@ -85,7 +84,7 @@ const CartApp = () => {
 
     window.open(whatsappUrl, "_blank", "noopener,noreferrer");
   };
-  
+
   return (
     <section className="cart-app py-5">
       {items?.length === 0 ? (
