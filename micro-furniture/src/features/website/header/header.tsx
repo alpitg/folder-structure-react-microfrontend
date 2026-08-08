@@ -39,6 +39,14 @@ const HeaderApp = () => {
         <div className="d-flex d-md-none gap-4 align-items-center">
           <NavLink
             className="nav-link"
+            to={ROUTE_URL.WEBSITE.PRODUCTS}
+            title="Products"
+          >
+            <i className="bi bi-box-seam fs-xl me-1"></i>
+          </NavLink>
+
+          <NavLink
+            className="nav-link"
             to={ROUTE_URL.WEBSITE.CART}
             title="Cart"
           >
