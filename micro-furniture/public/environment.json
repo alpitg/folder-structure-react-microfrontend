@@ -110,6 +110,10 @@
     "apiVersion": "v1",
     "website": {
       "apiUrl": "http://localhost:8000",
+      "login": "/api/auth/login",
+      "logout": "/api/auth/logout",
+      "refreshToken": "/api/auth/refresh",
+      "getCurrentUserProfile": "/api/auth/users/{id}/current-user-profile",
       "product": {
         "list": "/api/store/products",
         "detail": "/api/store/products/{id}"

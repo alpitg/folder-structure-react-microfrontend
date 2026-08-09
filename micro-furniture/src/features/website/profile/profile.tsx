@@ -1,5 +1,6 @@
 import "./profile.scss";
 
+import { GetEnvConfig } from "../../../app.config";
 import ProfileLoginForm from "../login/profile-login-form";
 import { useState } from "react";
 
@@ -14,6 +15,8 @@ interface ProfileProps {
 
 const Profile = ({ isLoggedIn = false, user }: ProfileProps) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const appSettings = GetEnvConfig();
 
   const openProfile = () => {
     setIsOpen(true);
@@ -42,7 +45,7 @@ const Profile = ({ isLoggedIn = false, user }: ProfileProps) => {
               <i className="bi bi-person"></i>
             </div>
 
-            <h1>Welcome to Myntra</h1>
+            <h1>Welcome to {appSettings?.name}</h1>
 
             <p>
               Login to access your profile, orders, wishlist and saved

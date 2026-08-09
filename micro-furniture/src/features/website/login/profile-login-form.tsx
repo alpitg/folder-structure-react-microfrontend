@@ -1,6 +1,7 @@
 import "./profile-login-form.scss";
 
 import { useState } from "react";
+import { useWebsiteLoginMutation } from "../../../app/redux/website/auth/profile-login.api";
 
 interface ProfileLoginFormProps {
   onLogin?: (mobile: string) => void;
@@ -10,7 +11,9 @@ const ProfileLoginForm = ({ onLogin }: ProfileLoginFormProps) => {
   const [mobile, setMobile] = useState("");
   const [error, setError] = useState("");
 
-  const handleLogin = () => {
+  const [websiteLogin, { isLoading }] = useWebsiteLoginMutation();
+
+  const handleLogin = async () => {
     if (!mobile) {
       setError("Please enter your mobile number.");
       return;
@@ -22,7 +25,23 @@ const ProfileLoginForm = ({ onLogin }: ProfileLoginFormProps) => {
     }
 
     setError("");
-    onLogin?.(mobile);
+
+    try {
+      const response = await websiteLogin({
+        mobile,
+      }).unwrap();
+
+      if (response.success) {
+        onLogin?.(mobile);
+        return;
+      }
+
+      setError(response.message || "Unable to login.");
+    } catch (error: any) {
+      setError(
+        error?.data?.message || "Something went wrong. Please try again.",
+      );
+    }
   };
 
   return (
@@ -65,8 +84,9 @@ const ProfileLoginForm = ({ onLogin }: ProfileLoginFormProps) => {
         type="button"
         className="account-login-action"
         onClick={handleLogin}
+        disabled={isLoading}
       >
-        <span>Continue</span>
+        <span>{isLoading ? "Please wait..." : "Continue"}</span>
         <i className="bi bi-arrow-right"></i>
       </button>
 

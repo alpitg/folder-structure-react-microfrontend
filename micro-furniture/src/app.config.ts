@@ -86,6 +86,10 @@ let environment = {
     apiVersion: "",
     website: {
       apiUrl: "",
+      login: "",
+      logout: "",
+      refreshToken: "",
+      getCurrentUserProfile: "",
       product: {
         list: "",
         detail: "",
