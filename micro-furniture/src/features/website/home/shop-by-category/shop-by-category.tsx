@@ -27,12 +27,12 @@ const ShopByCategoryApp = () => {
     },
     {
       title: "Chairs",
-      category: "chairs",
+      category: "chair",
       image: "/static/media/img/furniture/category/helen-chair.png",
     },
     {
       title: "Tables",
-      category: "tables",
+      category: "table",
       image: "/static/media/img/furniture/category/tables.webp",
     },
     {

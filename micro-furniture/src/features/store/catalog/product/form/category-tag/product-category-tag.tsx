@@ -27,11 +27,11 @@ const ProductCategoryTag = () => {
     },
     {
       title: "Chairs",
-      category: "chairs",
+      category: "chair",
     },
     {
       title: "Tables",
-      category: "tables",
+      category: "table",
     },
     {
       title: "Storage",
