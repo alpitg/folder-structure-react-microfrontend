@@ -4,76 +4,99 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 
 //#region Types
 
+export interface CartDiscount {
+  type: string;
+  value: number;
+}
+
+export interface CartPrice {
+  mrp: number;
+  sellingPrice: number;
+  discount: CartDiscount;
+}
+
 export interface CartItem {
   id: string;
   productId: string;
   productType?: string;
-  name: string;
-  image?: string;
   quantity: number;
-
-  unitPrice: number;
-  totalPrice: number;
-
+  name: string;
+  description?: string;
+  image?: string;
+  price: CartPrice;
+  itemTotal: number;
   customizedDetails?: Record<string, unknown>;
 }
 
-export interface CartCharges {
+export interface CartPricing {
   subtotal: number;
+  totalMrp: number;
   discount: number;
   tax: number;
   shipping: number;
   miscCharges: number;
+  total: number;
+}
+
+export interface CartResponse {
+  id?: string;
+  customerId?: string | null;
+  guestCartId?: string | null;
+  items: CartItem[];
+  pricing: CartPricing;
+  currency?: string;
+
+  summary: CartSummary;
+}
+
+export interface CartSummary {
+  totalItems: number;
+  totalQuantity: number;
+  mrp: number;
+  discount: number;
+  subtotal: number;
+  shipping: number;
+  tax: number;
+  miscCharges: number;
   grandTotal: number;
 }
 
-export interface CartMiscCharge {
-  label: string;
-  amount: number;
-}
+//#endregion
 
-export interface WebsiteCart {
-  id?: string;
+//#region Request Types
+
+/**
+ * Logged-in customer:
+ *   customerId = customer ID
+ *
+ * Guest:
+ *   guestCartId = browser-generated guest ID
+ */
+export interface CartIdentity {
   customerId?: string | null;
-
-  items: CartItem[];
-
-  charges: CartCharges;
-
-  miscCharges?: CartMiscCharge[];
-
-  couponCode?: string | null;
-
-  createdAt?: string;
-  updatedAt?: string;
+  guestCartId?: string | null;
 }
 
-export interface GetCartRequest {
-  customerId?: string | null;
-}
-
-export interface AddCartItemRequest {
+export interface AddCartItemRequest extends CartIdentity {
   productId: string;
   productType?: string;
-  quantity: number;
-  customerId?: string | null;
+  quantity?: number;
   customizedDetails?: Record<string, unknown>;
 }
 
-export interface UpdateCartItemRequest {
-  itemId: string;
+export interface UpdateCartItemRequest extends CartIdentity {
+  productId: string;
   quantity: number;
-  customerId?: string | null;
+  customizedDetails?: Record<string, unknown>;
 }
 
-export interface RemoveCartItemRequest {
-  itemId: string;
-  customerId?: string | null;
-}
+export type RemoveCartItemRequest = CartIdentity & {
+  productId: string;
+};
 
-export interface ClearCartRequest {
-  customerId?: string | null;
-}
+export type GetCartRequest = CartIdentity;
+
+export type ClearCartRequest = CartIdentity;
 
 //#endregion
 
@@ -87,12 +110,22 @@ export const websiteCartApi = createApi({
   endpoints: (builder) => ({
     //#region Get Cart
 
-    getWebsiteCart: builder.query<WebsiteCart, GetCartRequest | void>({
-      query: (params) => ({
-        url: GetEnvConfig()?.api?.website?.cart?.get,
-        method: "GET",
-        params: params ?? {},
-      }),
+    getWebsiteCart: builder.query<CartResponse, GetCartRequest | void>({
+      query: (identity) => {
+        const config = GetEnvConfig();
+
+        const customerId = identity?.customerId;
+        const guestCartId = identity?.guestCartId;
+
+        return {
+          url: config?.api?.baseUrl + config?.api?.website?.cart?.get,
+          method: "GET",
+          params: {
+            ...(customerId ? { customerId } : {}),
+            ...(guestCartId ? { guestCartId } : {}),
+          },
+        };
+      },
 
       providesTags: ["WebsiteCart"],
     }),
@@ -101,12 +134,16 @@ export const websiteCartApi = createApi({
 
     //#region Add Item
 
-    addWebsiteCartItem: builder.mutation<WebsiteCart, AddCartItemRequest>({
-      query: (payload) => ({
-        url: GetEnvConfig()?.api?.website?.cart?.addItem,
-        method: "POST",
-        body: payload,
-      }),
+    addWebsiteCartItem: builder.mutation<CartResponse, AddCartItemRequest>({
+      query: (payload) => {
+        const config = GetEnvConfig();
+
+        return {
+          url: config?.api?.baseUrl + config?.api?.website?.cart?.addItem,
+          method: "POST",
+          body: payload,
+        };
+      },
 
       invalidatesTags: ["WebsiteCart"],
     }),
@@ -115,44 +152,58 @@ export const websiteCartApi = createApi({
 
     //#region Update Item
 
-    updateWebsiteCartItem: builder.mutation<WebsiteCart, UpdateCartItemRequest>(
-      {
-        query: (payload) => ({
-          url: GetEnvConfig()?.api?.website?.cart?.updateItem,
+    updateWebsiteCartItem: builder.mutation<
+      CartResponse,
+      UpdateCartItemRequest
+    >({
+      query: (payload) => {
+        const config = GetEnvConfig();
+
+        return {
+          url: config?.api?.baseUrl + config?.api?.website?.cart?.updateItem,
           method: "PUT",
           body: payload,
-        }),
-
-        invalidatesTags: ["WebsiteCart"],
+        };
       },
-    ),
+
+      invalidatesTags: ["WebsiteCart"],
+    }),
 
     //#endregion
 
     //#region Remove Item
 
-    removeWebsiteCartItem: builder.mutation<WebsiteCart, RemoveCartItemRequest>(
-      {
-        query: (payload) => ({
-          url: GetEnvConfig()?.api?.website?.cart?.removeItem,
+    removeWebsiteCartItem: builder.mutation<
+      CartResponse,
+      RemoveCartItemRequest
+    >({
+      query: (payload) => {
+        const config = GetEnvConfig();
+
+        return {
+          url: config?.api?.baseUrl + config?.api?.website?.cart?.removeItem,
           method: "DELETE",
           body: payload,
-        }),
-
-        invalidatesTags: ["WebsiteCart"],
+        };
       },
-    ),
+
+      invalidatesTags: ["WebsiteCart"],
+    }),
 
     //#endregion
 
     //#region Clear Cart
 
-    clearWebsiteCart: builder.mutation<WebsiteCart, ClearCartRequest>({
-      query: (payload) => ({
-        url: GetEnvConfig()?.api?.website?.cart?.clear,
-        method: "POST",
-        body: payload,
-      }),
+    clearWebsiteCart: builder.mutation<CartResponse, ClearCartRequest>({
+      query: (payload) => {
+        const config = GetEnvConfig();
+
+        return {
+          url: config?.api?.baseUrl + config?.api?.website?.cart?.clear,
+          method: "DELETE",
+          body: payload,
+        };
+      },
 
       invalidatesTags: ["WebsiteCart"],
     }),
@@ -164,7 +215,6 @@ export const websiteCartApi = createApi({
 export const {
   useGetWebsiteCartQuery,
   useLazyGetWebsiteCartQuery,
-
   useAddWebsiteCartItemMutation,
   useUpdateWebsiteCartItemMutation,
   useRemoveWebsiteCartItemMutation,

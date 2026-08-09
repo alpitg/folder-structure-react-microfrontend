@@ -7,6 +7,7 @@ import AuthApp from "../components/auth/auth";
 import { CatalogRoutes } from "../features/store/catalog/routes/catalog.routes";
 import { CustomerRoutes } from "../features/store/customer/routes/customer.route";
 import ForgetPasswordApp from "../components/auth/forget-password/forget-password";
+import InitWebsiteApp from "../features/website/init-website/init-website";
 import LoadingApp from "../components/loading/loading";
 import LoginApp from "../components/auth/login/login";
 import OrderSuccessApp from "../features/website/cart/order-success/order-success";
@@ -50,32 +51,34 @@ const RoutesApp = () => {
         <Routes>
           {/* Public website routes */}
           <Route path={ROUTE_URL.WEBSITE.BASE} element={<WebsiteApp />}>
-            <Route path={ROUTE_URL.WEBSITE.BASE} element={<HomeApp />} />
-            <Route
-              path={ROUTE_URL.WEBSITE.PRODUCTS}
-              element={<ProductsApp />}
-            />
-            <Route
-              path={ROUTE_URL.WEBSITE.PRODUCT_DETAILS}
-              element={<ProductDetailsApp />}
-            />
-            <Route path="/cart" element={<CartApp />} />
-            <Route
-              path={ROUTE_URL.WEBSITE.ORDER_SUCCESS}
-              element={<OrderSuccessApp />}
-            />
+            <Route path={ROUTE_URL.WEBSITE.BASE} element={<InitWebsiteApp />}>
+              <Route path={ROUTE_URL.WEBSITE.BASE} element={<HomeApp />} />
+              <Route
+                path={ROUTE_URL.WEBSITE.PRODUCTS}
+                element={<ProductsApp />}
+              />
+              <Route
+                path={ROUTE_URL.WEBSITE.PRODUCT_DETAILS}
+                element={<ProductDetailsApp />}
+              />
+              <Route path="/cart" element={<CartApp />} />
+              <Route
+                path={ROUTE_URL.WEBSITE.ORDER_SUCCESS}
+                element={<OrderSuccessApp />}
+              />
 
-            <Route
-              path={ROUTE_URL.WEBSITE.WISHLIST}
-              element={<WishlistApp />}
-            />
+              <Route
+                path={ROUTE_URL.WEBSITE.WISHLIST}
+                element={<WishlistApp />}
+              />
 
-            <Route
-              path={ROUTE_URL.WEBSITE.PROFILE_EDIT}
-              element={<ProfileApp />}
-            />
+              <Route
+                path={ROUTE_URL.WEBSITE.PROFILE_EDIT}
+                element={<ProfileApp />}
+              />
 
-            <Route path="*" element={<Navigate to="/" replace />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Route>
           </Route>
 
           {/* 🔓 Public */}

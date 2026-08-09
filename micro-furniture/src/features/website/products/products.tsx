@@ -1,6 +1,10 @@
 import "./products.scss";
 
 import type { AppDispatch, AppState } from "../../../app/store";
+import {
+  useAddWebsiteCartItemMutation,
+  useGetWebsiteCartQuery,
+} from "../../../app/redux/website/cart/cart.api";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -41,6 +45,16 @@ const Products = () => {
   const pageSize = 12;
 
   // ==================================================
+  // CART
+  // ==================================================
+
+  const [addingProductId, setAddingProductId] = useState<string | null>(null);
+
+  const [addWebsiteCartItem] = useAddWebsiteCartItemMutation();
+
+  const guestCartId = localStorage.getItem("website_guest_cart_id");
+
+  // ==================================================
   // PRODUCTS
   // ==================================================
 
@@ -77,7 +91,7 @@ const Products = () => {
         },
       ),
     );
-  }, [dispatch, page]);
+  }, [dispatch, page, category]);
 
   // ==================================================
   // PRODUCTS
@@ -119,16 +133,50 @@ const Products = () => {
   // BAG
   // ==================================================
 
-  const addToCart = (product: IProductData) => {
-    dispatch(
-      addItemToBag({
-        id: product.id,
-        name: product.name,
-        image: product.media?.[0]?.url ?? blankImage,
-        price: product.price?.sellingPrice ?? 0,
+  const addToCart = async (product: IProductData) => {
+    if (!product?.id || addingProductId) {
+      return;
+    }
+
+    try {
+      setAddingProductId(product.id);
+
+      // ==================================================
+      // ADD TO SERVER CART
+      //
+      // Backend should identify:
+      // - logged-in customer from customerId/auth
+      // - guest customer from guest cart cookie/session
+      //
+      // Do not send customerId: undefined.
+      // ==================================================
+
+      await addWebsiteCartItem({
+        customerId: null,
+        guestCartId: guestCartId,
+        productId: product.id,
+        productType: "physical",
         quantity: 1,
-      }),
-    );
+      }).unwrap();
+
+      // ==================================================
+      // KEEP LOCAL BAG IN SYNC
+      // ==================================================
+
+      dispatch(
+        addItemToBag({
+          id: product.id,
+          name: product.name,
+          image: product.media?.[0]?.url ?? blankImage,
+          price: product.price?.sellingPrice ?? 0,
+          quantity: 1,
+        }),
+      );
+    } catch (error) {
+      console.error("Unable to add product to cart:", error);
+    } finally {
+      setAddingProductId(null);
+    }
   };
 
   const handleViewBag = () => {
@@ -184,6 +232,7 @@ const Products = () => {
             {filteredProducts.map((product) => {
               const bagItem = bagItemMap.get(product.id);
               const quantity = bagItem?.quantity ?? 0;
+              const isAdding = addingProductId === product.id;
 
               return (
                 <div key={product.id} className="col-6 col-md-4 col-lg-3">
@@ -237,9 +286,10 @@ const Products = () => {
                             type="button"
                             className="add-to-cart-btn"
                             onClick={() => addToCart(product)}
+                            disabled={isAdding}
                           >
                             <i className="bi bi-bag-plus"></i>
-                            Add to Cart
+                            {isAdding ? "Adding..." : "Add to Cart"}
                           </button>
                         ) : (
                           <button
@@ -310,12 +360,24 @@ const Products = () => {
                                   "en-IN",
                                 )}
                               </span>
-
-                              {product?.price?.discount?.value && (
-                                <span className="discount">
-                                  {product.price.discount.value}% OFF
-                                </span>
-                              )}
+                              {product?.price?.discount?.type ===
+                                "percentage" &&
+                                product.price.discount.value != null && (
+                                  <span className="discount">
+                                    {product.price.discount.value}% OFF
+                                  </span>
+                                )}
+                              {product?.price?.discount?.type === "fixed" &&
+                                product.price.discount.value != null && (
+                                  <span className="discount">
+                                    ₹
+                                    {(
+                                      (product.price.basePrice ?? 0) -
+                                      (product.price.sellingPrice ?? 0)
+                                    ).toLocaleString("en-IN")}
+                                    <span> OFF</span>
+                                  </span>
+                                )}
                             </>
                           )}
                       </div>

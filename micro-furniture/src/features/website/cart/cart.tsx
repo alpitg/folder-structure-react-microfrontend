@@ -2,18 +2,16 @@ import "./cart.scss";
 
 import { NavLink, useNavigate } from "react-router";
 import {
-  clearBag,
-  decreaseBagItemQuantity,
-  increaseBagItemQuantity,
-  removeBagItem,
-} from "../../../app/redux/core/shopping-bag/shopping-bag.slice";
+  useClearWebsiteCartMutation,
+  useGetWebsiteCartQuery,
+  useRemoveWebsiteCartItemMutation,
+  useUpdateWebsiteCartItemMutation,
+} from "../../../app/redux/website/cart/cart.api";
 import {
   useCreateWebsiteOrderMutation,
   useVerifyWebsitePaymentMutation,
 } from "../../../app/redux/website/order/website-order.api";
-import { useDispatch, useSelector } from "react-redux";
 
-import type { AppState } from "../../../app/store";
 import EmptyCartApp from "./empty-cart/empty-cart";
 import { GetEnvConfig } from "../../../app.config";
 import { ROUTE_URL } from "../../../routes/constants/routes.const";
@@ -25,15 +23,19 @@ interface RazorpayOptions {
   name: string;
   description: string;
   order_id: string;
+
   handler: (response: RazorpayResponse) => void;
+
   prefill?: {
     name?: string;
     email?: string;
     contact?: string;
   };
+
   theme?: {
     color?: string;
   };
+
   modal?: {
     ondismiss?: () => void;
   };
@@ -47,6 +49,7 @@ interface RazorpayResponse {
 
 interface RazorpayInstance {
   open: () => void;
+
   on: (event: string, callback: (response: any) => void) => void;
 }
 
@@ -56,15 +59,56 @@ declare global {
   }
 }
 
-const CartApp = () => {
-  //#region variables
+const GUEST_CART_ID_KEY = "website_guest_cart_id";
 
-  const dispatch = useDispatch();
+const CartApp = () => {
+  //#region Variables
+
   const navigate = useNavigate();
 
   const appSettings = GetEnvConfig();
 
-  const items = useSelector((state: AppState) => state.core.shoppingBag.items);
+  // --------------------------------------------------
+  // GUEST CART ID
+  // --------------------------------------------------
+
+  const guestCartId = localStorage.getItem(GUEST_CART_ID_KEY);
+
+  // --------------------------------------------------
+  // CART API
+  // --------------------------------------------------
+
+  const {
+    data: cart,
+    isLoading: isCartLoading,
+    error: cartError,
+  } = useGetWebsiteCartQuery(
+    {
+      guestCartId,
+    },
+    {
+      skip: !guestCartId,
+    },
+  );
+
+  const [
+    updateWebsiteCartItem,
+    { isLoading: isUpdatingItem, error: updateItemError },
+  ] = useUpdateWebsiteCartItemMutation();
+
+  const [
+    removeWebsiteCartItem,
+    { isLoading: isRemovingItem, error: removeItemError },
+  ] = useRemoveWebsiteCartItemMutation();
+
+  const [
+    clearWebsiteCart,
+    { isLoading: isClearingCart, error: clearCartError },
+  ] = useClearWebsiteCartMutation();
+
+  // --------------------------------------------------
+  // ORDER API
+  // --------------------------------------------------
 
   const [
     createWebsiteOrder,
@@ -76,40 +120,119 @@ const CartApp = () => {
     { isLoading: isVerifyingPayment, error: verifyPaymentError },
   ] = useVerifyWebsitePaymentMutation();
 
-  const subtotal = items.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0,
-  );
+  // --------------------------------------------------
+  // SERVER CART
+  // --------------------------------------------------
 
-  const increase = (id: string) => {
-    dispatch(increaseBagItemQuantity(id));
+  const items = cart?.items ?? [];
+
+  const summary = cart?.summary;
+
+  //#endregion
+
+  //#region Cart Actions
+
+  const increase = async (productId: string) => {
+    const item = items.find((item) => item.productId === productId);
+
+    if (!item || !guestCartId) {
+      return;
+    }
+
+    try {
+      await updateWebsiteCartItem({
+        guestCartId,
+        productId,
+        quantity: item.quantity + 1,
+        customizedDetails: item.customizedDetails,
+      }).unwrap();
+    } catch (error) {
+      console.error("Unable to increase cart quantity:", error);
+    }
   };
 
-  const decrease = (id: string) => {
-    dispatch(decreaseBagItemQuantity(id));
+  const decrease = async (productId: string) => {
+    const item = items.find((item) => item.productId === productId);
+
+    if (!item || !guestCartId) {
+      return;
+    }
+
+    if (item.quantity <= 1) {
+      return;
+    }
+
+    try {
+      await updateWebsiteCartItem({
+        guestCartId,
+        productId,
+        quantity: item.quantity - 1,
+        customizedDetails: item.customizedDetails,
+      }).unwrap();
+    } catch (error) {
+      console.error("Unable to decrease cart quantity:", error);
+    }
   };
 
-  const remove = (id: string) => {
-    dispatch(removeBagItem(id));
+  const remove = async (productId: string) => {
+    if (!guestCartId) {
+      return;
+    }
+
+    try {
+      await removeWebsiteCartItem({
+        guestCartId,
+        productId,
+      }).unwrap();
+    } catch (error) {
+      console.error("Unable to remove cart item:", error);
+    }
   };
 
-  const clearCart = () => {
-    dispatch(clearBag());
+  const clearCart = async () => {
+    if (!guestCartId) {
+      return;
+    }
+
+    try {
+      await clearWebsiteCart({
+        guestCartId,
+      }).unwrap();
+    } catch (error) {
+      console.error("Unable to clear cart:", error);
+    }
   };
+
+  //#endregion
+
+  //#region WhatsApp Enquiry
 
   const handleEnquiry = () => {
-    if (items.length === 0) return;
+    if (items.length === 0) {
+      return;
+    }
 
     const frontUrl = window.location.origin;
 
     const message = [
       "Hello! I would like to place an order for the following items:",
+
       ...items.map(
         (item) =>
-          `- ${item.name} x${item.quantity} @ ₹ ${item.price.toFixed(2)} each = ₹ ${(item.price * item.quantity).toFixed(2)}\n  ${frontUrl}/products/${item.id}`,
+          `- ${item.name} x${item.quantity} @ ₹ ${item.price.sellingPrice.toFixed(
+            2,
+          )} each = ₹ ${item.itemTotal.toFixed(
+            2,
+          )}\n  ${frontUrl}/products/${item.productId}`,
       ),
+
       "",
-      `Subtotal: ₹ ${subtotal.toFixed(2)}`,
+
+      `Subtotal: ₹ ${(summary?.subtotal ?? 0).toFixed(2)}`,
+      `Discount: ₹ ${(summary?.discount ?? 0).toFixed(2)}`,
+      `Tax: ₹ ${(summary?.tax ?? 0).toFixed(2)}`,
+      `Shipping: ₹ ${(summary?.shipping ?? 0).toFixed(2)}`,
+      `Total: ₹ ${(summary?.grandTotal ?? 0).toFixed(2)}`,
     ].join("\n");
 
     const whatsappNumber =
@@ -121,6 +244,10 @@ const CartApp = () => {
 
     window.open(whatsappUrl, "_blank", "noopener,noreferrer");
   };
+
+  //#endregion
+
+  //#region Razorpay
 
   const loadRazorpayScript = (): Promise<boolean> => {
     return new Promise((resolve) => {
@@ -135,6 +262,7 @@ const CartApp = () => {
 
       if (existingScript) {
         existingScript.addEventListener("load", () => resolve(true));
+
         existingScript.addEventListener("error", () => resolve(false));
 
         return;
@@ -143,6 +271,7 @@ const CartApp = () => {
       const script = document.createElement("script");
 
       script.src = "https://checkout.razorpay.com/v1/checkout.js";
+
       script.async = true;
 
       script.onload = () => resolve(true);
@@ -151,6 +280,10 @@ const CartApp = () => {
       document.body.appendChild(script);
     });
   };
+
+  //#endregion
+
+  //#region Checkout
 
   const handleCheckout = async () => {
     if (items.length === 0) {
@@ -177,16 +310,23 @@ const CartApp = () => {
       // --------------------------------------------------
 
       const payload = {
-        customerName: "Naru",
+        customerName: "Guest",
+
         customerId: null,
+
+        guestCartId,
+
         items: items.map((item) => ({
-          productId: item.id,
-          productType: "physical",
+          productId: item.productId,
+          productType: item.productType ?? "physical",
           quantity: item.quantity,
-          customizedDetails: undefined,
+          customizedDetails: item.customizedDetails,
         })),
+
         miscCharges: [],
+
         note: "Website order",
+
         likelyDateOfDelivery: null,
       };
 
@@ -200,6 +340,10 @@ const CartApp = () => {
         throw new Error("Payment information was not returned.");
       }
 
+      // --------------------------------------------------
+      // STEP 4: Open Razorpay
+      // --------------------------------------------------
+
       if (appSettings?.cartPage?.disablePayment) {
         const payment = result.payment;
 
@@ -207,29 +351,28 @@ const CartApp = () => {
           throw new Error("Razorpay order was not created.");
         }
 
-        // --------------------------------------------------
-        // STEP 4: Open Razorpay Checkout
-        // --------------------------------------------------
-
         const order = result.order as {
           id?: string;
           orderCode?: string;
           customerName?: string;
+          customerEmail?: string;
+          customerMobile?: string;
         };
 
         const options: RazorpayOptions = {
           key: payment.keyId,
+
           amount: payment.amount,
+
           currency: payment.currency,
-          name: "Artisan Studios",
+
+          name: appSettings?.name ?? "Artisan Studios",
+
           description: `Order ${order.orderCode || ""}`,
+
           order_id: payment.razorpayOrderId,
 
           handler: async (response: RazorpayResponse) => {
-            // ----------------------------------------------
-            // STEP 5: Verify payment on backend
-            // ----------------------------------------------
-
             try {
               if (!order.id) {
                 throw new Error("Order ID is missing.");
@@ -237,20 +380,13 @@ const CartApp = () => {
 
               await verifyWebsitePayment({
                 orderId: order.id,
+
                 razorpayPaymentId: response.razorpay_payment_id,
+
                 razorpayOrderId: response.razorpay_order_id,
+
                 razorpaySignature: response.razorpay_signature,
               }).unwrap();
-
-              // --------------------------------------------
-              // STEP 6: Payment verified
-              // --------------------------------------------
-
-              dispatch(clearBag());
-
-              // --------------------------------------------
-              // STEP 7: Navigate to success page
-              // --------------------------------------------
 
               navigate(
                 `${ROUTE_URL.WEBSITE.ORDER_SUCCESS}?orderId=${order.id}`,
@@ -265,7 +401,11 @@ const CartApp = () => {
           },
 
           prefill: {
-            name: order.customerName || "Customer",
+            name: order.customerName || "Guest Customer",
+
+            email: order.customerEmail,
+
+            contact: order.customerMobile,
           },
 
           theme: {
@@ -279,15 +419,7 @@ const CartApp = () => {
           },
         };
 
-        // --------------------------------------------------
-        // STEP 8: Create Razorpay instance
-        // --------------------------------------------------
-
         const razorpay = new window.Razorpay(options);
-
-        // --------------------------------------------------
-        // Payment failure
-        // --------------------------------------------------
 
         razorpay.on("payment.failed", (response: any) => {
           console.error("Razorpay payment failed:", response);
@@ -297,10 +429,6 @@ const CartApp = () => {
 
           alert(errorMessage);
         });
-
-        // --------------------------------------------------
-        // Open Razorpay
-        // --------------------------------------------------
 
         razorpay.open();
       }
@@ -317,9 +445,26 @@ const CartApp = () => {
     }
   };
 
-  const isProcessing = isCreatingOrder || isVerifyingPayment;
+  //#endregion
+
+  //#region Loading / Errors
+
+  const isProcessing =
+    isUpdatingItem ||
+    isRemovingItem ||
+    isClearingCart ||
+    isCreatingOrder ||
+    isVerifyingPayment;
 
   const errorMessage =
+    (cartError as any)?.data?.detail ||
+    (cartError as any)?.data?.message ||
+    (updateItemError as any)?.data?.detail ||
+    (updateItemError as any)?.data?.message ||
+    (removeItemError as any)?.data?.detail ||
+    (removeItemError as any)?.data?.message ||
+    (clearCartError as any)?.data?.detail ||
+    (clearCartError as any)?.data?.message ||
     (createOrderError as any)?.data?.detail ||
     (createOrderError as any)?.data?.message ||
     (verifyPaymentError as any)?.data?.detail ||
@@ -328,243 +473,302 @@ const CartApp = () => {
 
   //#endregion
 
+  // ------------------------------------------------------
+  // LOADING
+  // ------------------------------------------------------
+
+  if (isCartLoading) {
+    return (
+      <section className="cart-page">
+        <div className="container">
+          <div className="text-center py-5">Loading cart...</div>
+        </div>
+      </section>
+    );
+  }
+
+  // ------------------------------------------------------
+  // EMPTY CART
+  // ------------------------------------------------------
+
+  if (items.length === 0) {
+    return <EmptyCartApp />;
+  }
+
+  // ------------------------------------------------------
+  // CART
+  // ------------------------------------------------------
+
   return (
     <section className="cart-app">
-      {items?.length === 0 ? (
-        <EmptyCartApp />
-      ) : (
-        <div className="cart-page">
-          <div className="container">
-            {/* -------------------------------------------- */}
-            {/* CART HEADER */}
-            {/* -------------------------------------------- */}
+      <div className="container">
+        {/* -------------------------------------------- */}
+        {/* CART HEADER */}
+        {/* -------------------------------------------- */}
 
-            <div className="cart-page-header">
-              <h4>
-                Shopping Bag
-                <span>({items.length} Items)</span>
-              </h4>
-            </div>
+        <div className="cart-app-header">
+          <h4>
+            Shopping Bag
+            <span>({items.length} Items)</span>
+          </h4>
+        </div>
 
-            <div className="row g-4">
-              {/* -------------------------------------------- */}
-              {/* CART ITEMS */}
-              {/* -------------------------------------------- */}
+        <div className="row g-4">
+          {/* -------------------------------------------- */}
+          {/* CART ITEMS */}
+          {/* -------------------------------------------- */}
 
-              <div className="col-lg-8">
-                <div className="cart-items">
-                  {items.map((item) => (
-                    <div className="cart-item" key={item.id}>
-                      {/* Product Image */}
+          <div className="col-lg-8">
+            <div className="cart-items">
+              {items.map((item) => (
+                <div className="cart-item" key={item.productId}>
+                  {/* Product Image */}
 
-                      <NavLink
-                        to={`/products/${item.id}`}
-                        className="cart-item-image-link"
-                      >
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="cart-image"
-                        />
-                      </NavLink>
-
-                      {/* Product Details */}
-
-                      <div className="cart-item-details">
-                        <div className="cart-item-heading">
-                          <div>
-                            <NavLink
-                              to={`/products/${item.id}`}
-                              className="cart-product-name"
-                            >
-                              {item.name}
-                            </NavLink>
-
-                            <p className="cart-product-description">
-                              Regular fit • Casual wear
-                            </p>
-                          </div>
-
-                          <button
-                            type="button"
-                            className="remove-item"
-                            onClick={() => remove(item.id)}
-                            disabled={isProcessing}
-                            aria-label={`Remove ${item.name}`}
-                          >
-                            <i className="bi bi-x-lg"></i>
-                          </button>
-                        </div>
-
-                        {/* Price */}
-
-                        <div className="cart-price">
-                          <span className="current-price">
-                            ₹{item.price.toFixed(0)}
-                          </span>
-
-                          <span className="original-price">
-                            ₹{(item.price * 1.25).toFixed(0)}
-                          </span>
-
-                          <span className="discount">20% OFF</span>
-                        </div>
-
-                        {/* Quantity */}
-
-                        <div className="cart-item-bottom">
-                          <div className="quantity-box">
-                            <button
-                              type="button"
-                              className="btn-qty"
-                              onClick={() => decrease(item.id)}
-                              disabled={isProcessing}
-                            >
-                              -
-                            </button>
-
-                            <input
-                              readOnly
-                              value={item.quantity}
-                              aria-label="Quantity"
-                            />
-
-                            <button
-                              type="button"
-                              className="btn-qty"
-                              onClick={() => increase(item.id)}
-                              disabled={isProcessing}
-                            >
-                              +
-                            </button>
-                          </div>
-
-                          <div className="item-total">
-                            ₹{(item.price * item.quantity).toFixed(0)}
-                          </div>
-                        </div>
-
-                        {/* Delivery */}
-
-                        <div className="delivery-info">
-                          <i className="bi bi-truck"></i>
-
-                          <span>Delivery available to your location</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Continue Shopping */}
-
-                <div className="cart-actions d-flex gap-5">
                   <NavLink
-                    className="continue-shopping"
-                    to={ROUTE_URL.WEBSITE.PRODUCTS}
+                    to={`/products/${item.productId}`}
+                    className="cart-item-image-link"
                   >
-                    <i className="bi bi-arrow-left"></i>
-                    Continue Shopping
+                    <img
+                      src={
+                        item.image || "/static/media/img/svg/blank-image.svg"
+                      }
+                      alt={item.name}
+                      className="cart-image"
+                    />
                   </NavLink>
 
-                  <button
-                    type="button"
-                    className="btn btn-secondary clear-cart"
-                    onClick={clearCart}
-                    disabled={isProcessing}
-                  >
-                    Clear Cart
-                  </button>
-                </div>
-              </div>
+                  {/* Product Details */}
 
-              {/* -------------------------------------------- */}
-              {/* PRICE DETAILS */}
-              {/* -------------------------------------------- */}
+                  <div className="cart-item-details">
+                    <div className="cart-item-heading">
+                      <div>
+                        <NavLink
+                          to={`/products/${item.productId}`}
+                          className="cart-product-name"
+                        >
+                          {item.name}
+                        </NavLink>
 
-              <div className="col-lg-4">
-                <div className="price-details">
-                  <h6 className="price-details-title">PRICE DETAILS</h6>
+                        <p className="cart-product-description">
+                          Regular fit • Casual wear
+                        </p>
+                      </div>
 
-                  <div className="price-row">
-                    <span>Total MRP</span>
-
-                    <span>₹{subtotal.toFixed(0)}</span>
-                  </div>
-
-                  <div className="price-row">
-                    <span>Discount on MRP</span>
-
-                    <span className="discount-value">- ₹0</span>
-                  </div>
-
-                  <div className="price-row">
-                    <span>Platform Fee</span>
-
-                    <span>₹0</span>
-                  </div>
-
-                  <div className="price-row">
-                    <span>Shipping Fee</span>
-
-                    <span className="free">FREE</span>
-                  </div>
-
-                  <div className="price-divider"></div>
-
-                  <div className="price-total">
-                    <span>Total Amount</span>
-
-                    <span>₹{subtotal.toFixed(0)}</span>
-                  </div>
-
-                  <button
-                    type="button"
-                    className="place-order-btn"
-                    onClick={handleCheckout}
-                    disabled={isProcessing || items.length === 0}
-                  >
-                    {isCreatingOrder
-                      ? "CREATING ORDER..."
-                      : isVerifyingPayment
-                        ? "VERIFYING PAYMENT..."
-                        : "PLACE ORDER"}
-                  </button>
-
-                  <div className="secure-payment">
-                    <i className="bi bi-shield-check"></i>
-
-                    <span>
-                      Safe and Secure Payments. 100% Authentic Products.
-                    </span>
-                  </div>
-
-                  <div>
-                    <div className="account-divider">
-                      <span>OR</span>
+                      <button
+                        type="button"
+                        className="remove-item"
+                        onClick={() => remove(item.productId)}
+                        disabled={isProcessing}
+                        aria-label={`Remove ${item.name}`}
+                      >
+                        <i className="bi bi-x-lg"></i>
+                      </button>
                     </div>
-                    <button
-                      className="btn btn-dark w-100 mt-4 mb-5"
-                      onClick={handleEnquiry}
-                    >
-                      Send Enquiry by WhatsApp
-                      <i className="bi bi-whatsapp ms-2"></i>
-                    </button>
+
+                    {/* Price */}
+
+                    <div className="cart-price">
+                      <span className="current-price">
+                        ₹{item.price.sellingPrice.toFixed(2)}
+                      </span>
+
+                      {item.price.mrp !== item.price.sellingPrice && (
+                        <span className="original-price">
+                          ₹{item.price.mrp.toFixed(2)}
+                        </span>
+                      )}
+
+                      {item.price.discount && (
+                        <span>
+                          {item?.price?.discount?.type === "percentage" &&
+                            item.price.discount.value != null && (
+                              <span className="discount">
+                                {item.price.discount.value}% OFF
+                              </span>
+                            )}
+
+                          {item?.price?.discount?.type === "fixed" && (
+                            <span className="discount">
+                              ₹
+                              {(
+                                item.price.mrp - item.price.sellingPrice
+                              )?.toFixed(2)}
+                              <span> OFF</span>
+                            </span>
+                          )}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Quantity */}
+
+                    <div className="cart-item-bottom">
+                      <div className="quantity-box">
+                        <button
+                          type="button"
+                          className="btn-qty"
+                          onClick={() => decrease(item.productId)}
+                          disabled={isProcessing || item.quantity <= 1}
+                        >
+                          -
+                        </button>
+
+                        <input
+                          readOnly
+                          value={item.quantity}
+                          aria-label="Quantity"
+                        />
+
+                        <button
+                          type="button"
+                          className="btn-qty"
+                          onClick={() => increase(item.productId)}
+                          disabled={isProcessing}
+                        >
+                          +
+                        </button>
+                      </div>
+
+                      <div className="item-total">
+                        ₹{item.itemTotal.toFixed(2)}
+                      </div>
+                    </div>
+
+                    {/* Delivery */}
+
+                    <div className="delivery-info">
+                      <i className="bi bi-truck"></i>
+
+                      <span>Delivery available to your location</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              ))}
             </div>
 
-            {/* -------------------------------------------- */}
-            {/* ERROR */}
-            {/* -------------------------------------------- */}
+            {/* Continue Shopping */}
 
-            {errorMessage && (
-              <div className="alert alert-danger mt-4">{errorMessage}</div>
-            )}
+            <div className="cart-actions d-flex gap-5">
+              <NavLink
+                className="continue-shopping"
+                to={ROUTE_URL.WEBSITE.PRODUCTS}
+              >
+                <i className="bi bi-arrow-left"></i>
+                Continue Shopping
+              </NavLink>
+
+              <button
+                type="button"
+                className="btn btn-secondary clear-cart"
+                onClick={clearCart}
+                disabled={isProcessing}
+              >
+                Clear Cart
+              </button>
+            </div>
+          </div>
+
+          {/* -------------------------------------------- */}
+          {/* PRICE DETAILS */}
+          {/* -------------------------------------------- */}
+
+          <div className="col-lg-4">
+            <div className="price-details">
+              <h6 className="price-details-title">PRICE DETAILS</h6>
+
+              <div className="price-row">
+                <span>Total MRP</span>
+
+                <span>₹{(summary?.mrp ?? 0).toFixed(2)}</span>
+              </div>
+
+              <div className="price-row">
+                <span>Discount on MRP</span>
+
+                <span className="discount-value">
+                  - ₹{(summary?.discount ?? 0).toFixed(2)}
+                </span>
+              </div>
+
+              <div className="price-row">
+                <span>Platform Fee</span>
+
+                <span>₹{(summary?.miscCharges ?? 0).toFixed(2)}</span>
+              </div>
+
+              <div className="price-row">
+                <span>Shipping Fee</span>
+
+                <span className="free">
+                  {(summary?.shipping ?? 0) === 0
+                    ? "FREE"
+                    : `₹${(summary?.shipping ?? 0).toFixed(2)}`}
+                </span>
+              </div>
+
+              {/* Tax */}
+
+              {(summary?.tax ?? 0) > 0 && (
+                <div className="price-row">
+                  <span>Tax</span>
+
+                  <span>₹{(summary?.tax ?? 0).toFixed(2)}</span>
+                </div>
+              )}
+
+              <div className="price-divider"></div>
+
+              <div className="price-total">
+                <span>Total Amount</span>
+
+                <span>₹{(summary?.grandTotal ?? 0).toFixed(2)}</span>
+              </div>
+
+              <button
+                type="button"
+                className="place-order-btn"
+                onClick={handleCheckout}
+                disabled={isProcessing || items.length === 0}
+              >
+                {isCreatingOrder
+                  ? "CREATING ORDER..."
+                  : isVerifyingPayment
+                    ? "VERIFYING PAYMENT..."
+                    : "PLACE ORDER"}
+              </button>
+
+              <div className="secure-payment">
+                <i className="bi bi-shield-check"></i>
+
+                <span>Safe and Secure Payments. 100% Authentic Products.</span>
+              </div>
+
+              <div>
+                <div className="account-divider">
+                  <span>OR</span>
+                </div>
+
+                <button
+                  className="btn btn-dark w-100 mt-4 mb-5"
+                  onClick={handleEnquiry}
+                  disabled={isProcessing}
+                >
+                  Send Enquiry by WhatsApp
+                  <i className="bi bi-whatsapp ms-2"></i>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-      )}
+
+        {/* -------------------------------------------- */}
+        {/* ERROR */}
+        {/* -------------------------------------------- */}
+
+        {errorMessage && (
+          <div className="alert alert-danger mt-4">{errorMessage}</div>
+        )}
+      </div>
     </section>
   );
 };

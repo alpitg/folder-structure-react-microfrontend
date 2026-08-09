@@ -66980,7 +66980,7 @@ input {
 .page-header-app {
 position: sticky;
     top: var(--bs-app-header-height);
-    z-index: 100;
+    z-index: 99;
     margin: 0px;
     background-color: var(--bs-app-bg-color);
     padding: 20px 0;
