@@ -106,10 +106,10 @@
     }
   },
   "api": {
-    "baseUrl": "http://127.0.0.1:8000",
+    "baseUrl": "http://localhost:8000",
     "apiVersion": "v1",
     "website": {
-      "apiUrl": "http://127.0.0.1:8000",
+      "apiUrl": "http://localhost:8000",
       "product": {
         "list": "/api/store/products",
         "detail": "/api/store/products/{id}"

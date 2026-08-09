@@ -6,6 +6,7 @@ axiosInstance.interceptors.request.use(async (req) => {
 //   req.baseURL = ApiEndpoint().baseApiUrl; // Set the base URL for all requests
   //   req.headers.Authorization = `Bearer ${token}`;
   // req.headers["Access-Control-Allow-Origin"] = "*";
+  req.withCredentials = true;
   req.headers["Content-Type"] = "application/json";
   return req;
 });
