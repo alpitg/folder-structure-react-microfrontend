@@ -121,6 +121,7 @@ export interface GetProductsParams {
   page?: number;
   pageSize?: number;
   searchText?: string;
+  categories?: string[] | null;
   status?: string;
   sort?: string;
   isFeatured?: boolean;

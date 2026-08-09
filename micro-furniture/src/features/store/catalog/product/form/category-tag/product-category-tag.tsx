@@ -7,6 +7,46 @@ const ProductCategoryTag = () => {
   const { control } = useFormContext<IProductData>();
   const [inputValue, setInputValue] = useState("");
 
+  const categories = [
+    {
+      title: "Sofas",
+      category: "sofa",
+      image: "/static/media/img/furniture/category/sofa.png",
+    },
+    {
+      title: "Beds",
+      category: "bed",
+    },
+    {
+      title: "Dining",
+      category: "dining",
+    },
+    {
+      title: "TV unit",
+      category: "tv-unit",
+    },
+    {
+      title: "Chairs",
+      category: "chairs",
+    },
+    {
+      title: "Tables",
+      category: "tables",
+    },
+    {
+      title: "Storage",
+      category: "storage",
+    },
+    {
+      title: "Wardrobes",
+      category: "wardrobe",
+    },
+    {
+      title: "Home Decor",
+      category: "home-decor",
+    },
+  ];
+
   return (
     <div className="card card-flush py-4">
       <div className="card-header">
@@ -29,25 +69,20 @@ const ProductCategoryTag = () => {
               onChange={(e) => {
                 const selected = Array.from(
                   e.target.selectedOptions,
-                  (o) => o.value
+                  (option) => option.value,
                 );
+
                 field.onChange(selected);
               }}
               onBlur={field.onBlur}
               name={field.name}
               ref={field.ref}
             >
-              <option value="Furnitures">Furnitures</option>
-              <option value="Computers">Computers</option>
-              <option value="Watches">Watches</option>
-              <option value="Headphones">Headphones</option>
-              <option value="Footwear">Footwear</option>
-              <option value="Cameras">Cameras</option>
-              <option value="Shirts">Shirts</option>
-              <option value="Household">Household</option>
-              <option value="Handbags">Handbags</option>
-              <option value="Wines">Wines</option>
-              <option value="Sandals">Sandals</option>
+              {categories.map((category) => (
+                <option key={category.category} value={category.category}>
+                  {category.title}
+                </option>
+              ))}
             </select>
           )}
         />
@@ -101,8 +136,8 @@ const ProductCategoryTag = () => {
                       onClick={() =>
                         field.onChange(
                           (field.value || []).filter(
-                            (_: string, i: number) => i !== idx
-                          )
+                            (_: string, i: number) => i !== idx,
+                          ),
                         )
                       }
                     />

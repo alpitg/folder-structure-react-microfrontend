@@ -51,6 +51,7 @@ const Products = () => {
     isError,
   } = useGetProductsQuery({
     searchText: "",
+    categories: category ? [category] : null,
     page,
     pageSize,
     sort: "newest",
@@ -66,6 +67,7 @@ const Products = () => {
         "getProducts",
         {
           searchText: "",
+          categories: category ? [category] : null,
           page: page + 1,
           pageSize,
           sort: "newest",
