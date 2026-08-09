@@ -867,9 +867,8 @@ const ProductDetails = () => {
               className="mobile-sticky-bag-btn view"
               onClick={() => navigate(ROUTE_URL.WEBSITE.CART)}
             >
-              <i className="bi bi-bag-check"></i>
-
-              <span>Go to Bag</span>
+              Go to Bag
+              <i className="bi bi-arrow-right"></i>
             </button>
           ) : (
             <button
@@ -878,7 +877,6 @@ const ProductDetails = () => {
               onClick={addToBag}
             >
               <i className="bi bi-bag-plus"></i>
-
               <span>Add to Bag</span>
             </button>
           )}

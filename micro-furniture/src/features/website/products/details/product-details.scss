@@ -9,10 +9,6 @@ $color-background: #ffffff;
 $color-background-light: #f5f5f6;
 $color-white: #ffffff;
 
-/* ==================================================
-   PRODUCT DETAILS APP
-================================================== */
-
 .product-details-app {
   --color-primary: #{$color-primary};
   --color-primary-hover: #{$color-primary-hover};
@@ -23,56 +19,33 @@ $color-white: #ffffff;
   --color-border: #{$color-border};
   --color-background: #{$color-background};
   --color-background-light: #{$color-background-light};
-
   background: $color-background;
   color: $color-dark;
-
-  /* ==================================================
-     PAGE
-  ================================================== */
 
   .product-page-container {
     width: 100%;
     max-width: 1480px;
-
     margin: 0 auto;
-
     padding: 0 40px 90px;
   }
 
-  /* ==================================================
-     BREADCRUMB
-  ================================================== */
-
   .product-breadcrumb {
     min-height: 55px;
-
     display: flex;
     align-items: center;
-
     gap: 9px;
-
     border-bottom: 1px solid $color-border;
-
     color: $color-muted;
-
     font-size: 12px;
-
     white-space: nowrap;
-
     overflow: hidden;
 
     button {
       border: 0;
-
       padding: 0;
-
       background: transparent;
-
       color: $color-text;
-
       cursor: pointer;
-
       font-size: inherit;
       font-weight: 600;
 
@@ -83,51 +56,35 @@ $color-white: #ffffff;
 
     i {
       flex: 0 0 auto;
-
       color: #b7b8bf;
-
       font-size: 9px;
     }
 
     span {
       min-width: 0;
-
       overflow: hidden;
-
       text-overflow: ellipsis;
     }
   }
 
-  /* ==================================================
-     LOADING / ERROR
-  ================================================== */
-
   .product-page-state {
     min-height: 500px;
-
     display: flex;
     flex-direction: column;
-
     align-items: center;
     justify-content: center;
-
     padding: 40px;
-
     text-align: center;
 
     h4 {
       margin: 18px 0 0;
-
       color: $color-dark;
-
       font-size: 20px;
     }
 
     p {
       margin: 12px 0 20px;
-
       color: $color-muted;
-
       font-size: 13px;
     }
   }
@@ -135,63 +92,48 @@ $color-white: #ffffff;
   .product-state-icon {
     width: 65px;
     height: 65px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     border-radius: 50%;
-
     background: $color-background-light;
-
     color: $color-muted;
-
     font-size: 27px;
   }
 
   .product-dark-btn {
     min-height: 44px;
-
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
     gap: 9px;
-
     padding: 0 22px;
-
     border: 0;
     border-radius: 3px;
-
     background: $color-dark;
     color: $color-white;
-
     font-size: 12px;
     font-weight: 700;
-
     line-height: 1;
-
     cursor: pointer;
-
     transition:
       background-color 0.2s ease,
       transform 0.15s ease,
       box-shadow 0.2s ease;
 
-    i {
-      color: $color-white;
-      font-size: 13px;
-      line-height: 1;
-    }
-
+    i,
     span {
       color: $color-white;
+    }
+
+    i {
+      font-size: 13px;
+      line-height: 1;
     }
 
     &:hover {
       background: #1f2232;
       color: $color-white;
-
       box-shadow: 0 4px 12px rgba(40, 44, 63, 0.18);
     }
 
@@ -200,55 +142,34 @@ $color-white: #ffffff;
     }
   }
 
-  /* ==================================================
-     PRODUCT LAYOUT
-  ================================================== */
-
   .product-layout {
     padding-top: 28px;
   }
 
-  /* ==================================================
-     GALLERY
-  ================================================== */
-
   .product-gallery-layout {
     display: grid;
-
     grid-template-columns: 82px minmax(0, 1fr);
-
     gap: 14px;
   }
 
   .product-thumbnails {
     display: flex;
-
     flex-direction: column;
-
     gap: 10px;
   }
 
   .product-thumbnail {
     position: relative;
-
     width: 80px;
     height: 102px;
-
     flex: 0 0 auto;
-
     display: block;
-
     padding: 0;
-
     overflow: hidden;
-
     border: 1px solid $color-border;
     border-radius: 0;
-
     background: $color-background-light;
-
     cursor: pointer;
-
     transition:
       border-color 0.2s ease,
       transform 0.2s ease,
@@ -257,74 +178,53 @@ $color-white: #ffffff;
     img {
       width: 100%;
       height: 100%;
-
       display: block;
-
       object-fit: cover;
     }
 
     &:hover {
       border-color: #bfc0c5;
-
       transform: translateY(-1px);
     }
 
     &.active {
       border: 2px solid $color-primary;
-
       box-shadow: 0 0 0 1px rgba(255, 63, 108, 0.08);
     }
 
     &:focus-visible {
       border-color: $color-primary;
-
       outline: 2px solid rgba(255, 63, 108, 0.25);
-
       outline-offset: 2px;
     }
   }
 
   .product-main-image-wrapper {
     position: relative;
-
     min-width: 0;
-
     height: min(680px, 70vw);
-
     min-height: 520px;
-
     overflow: hidden;
-
     background: $color-background-light;
   }
 
   .product-main-image {
     position: relative;
-
     width: 100%;
     height: 100%;
-
     display: block;
-
     padding: 0;
-
     border: 0;
     border-radius: 0;
-
     background: $color-background-light;
-
     cursor: zoom-in;
-
     overflow: hidden;
 
     img {
       width: 100%;
       height: 100%;
-
       display: block;
-
       object-fit: cover;
-
       transition: transform 0.5s ease;
     }
 
@@ -335,7 +235,6 @@ $color-white: #ffffff;
 
       .image-zoom-hint {
         opacity: 1;
-
         transform: translateY(0);
       }
     }
@@ -343,30 +242,19 @@ $color-white: #ffffff;
 
   .image-zoom-hint {
     position: absolute;
-
     left: 16px;
     bottom: 16px;
-
     display: flex;
     align-items: center;
-
     gap: 7px;
-
     padding: 8px 12px;
-
     background: rgba(255, 255, 255, 0.94);
-
     border-radius: 3px;
-
     color: $color-dark;
-
     font-size: 11px;
     font-weight: 600;
-
     opacity: 0;
-
     transform: translateY(5px);
-
     transition: 0.2s ease;
 
     i {
@@ -376,27 +264,18 @@ $color-white: #ffffff;
 
   .product-new-badge {
     position: absolute;
-
     left: 15px;
     top: 15px;
-
     z-index: 5;
-
     display: inline-flex;
     align-items: center;
-
     gap: 6px;
-
     padding: 7px 10px;
-
     background: $color-dark;
     color: $color-white;
-
     border-radius: 2px;
-
     font-size: 10px;
     font-weight: 700;
-
     letter-spacing: 0.3px;
 
     i {
@@ -408,38 +287,23 @@ $color-white: #ffffff;
     }
   }
 
-  /* ==================================================
-     IMAGE WISHLIST
-  ================================================== */
-
   .product-wishlist-btn {
     position: absolute;
-
     top: 15px;
     right: 15px;
-
     z-index: 6;
-
     width: 42px;
     height: 42px;
-
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
     padding: 0;
-
     border: 0;
     border-radius: 50%;
-
     background: rgba(255, 255, 255, 0.96);
-
     color: $color-dark;
-
     cursor: pointer;
-
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-
     transition:
       color 0.2s ease,
       background-color 0.2s ease,
@@ -448,23 +312,16 @@ $color-white: #ffffff;
 
     i {
       display: inline-flex;
-
       color: $color-dark;
-
       font-size: 18px;
-
       line-height: 1;
-
       transition: color 0.2s ease;
     }
 
     &:hover {
       background: $color-white;
-
       color: $color-primary;
-
       transform: scale(1.05);
-
       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
 
       i {
@@ -485,39 +342,23 @@ $color-white: #ffffff;
     }
   }
 
-  /* ==================================================
-     GALLERY NAVIGATION
-  ================================================== */
-
   .gallery-nav {
     position: absolute;
-
     top: 50%;
-
     transform: translateY(-50%);
-
     z-index: 5;
-
     width: 40px;
     height: 40px;
-
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
     padding: 0;
-
     border: 0;
     border-radius: 50%;
-
     background: rgba(255, 255, 255, 0.95);
-
     color: $color-dark;
-
     cursor: pointer;
-
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-
     transition:
       color 0.2s ease,
       background-color 0.2s ease,
@@ -525,11 +366,8 @@ $color-white: #ffffff;
 
     i {
       color: $color-dark;
-
       font-size: 14px;
-
       line-height: 1;
-
       transition: color 0.2s ease;
     }
 
@@ -556,18 +394,12 @@ $color-white: #ffffff;
 
   .gallery-counter {
     position: absolute;
-
     right: 15px;
     bottom: 15px;
-
     padding: 6px 9px;
-
     border-radius: 3px;
-
     background: rgba(255, 255, 255, 0.92);
-
     color: $color-text;
-
     font-size: 10px;
     font-weight: 600;
   }
@@ -576,41 +408,28 @@ $color-white: #ffffff;
     display: none;
   }
 
-  /* ==================================================
-     PRODUCT INFORMATION
-  ================================================== */
-
   .product-information {
     padding: 4px 10px 0 12px;
   }
 
   .product-brand {
     margin-bottom: 8px;
-
     color: $color-muted;
-
     font-size: 12px;
   }
 
   .product-title-row {
     display: flex;
-
     align-items: flex-start;
     justify-content: space-between;
-
     gap: 15px;
 
     h1 {
       min-width: 0;
-
       margin: 0;
-
       color: $color-dark;
-
       font-size: clamp(22px, 2vw, 28px);
-
       font-weight: 700;
-
       line-height: 1.3;
     }
   }
@@ -621,21 +440,13 @@ $color-white: #ffffff;
 
   .desktop-new-badge {
     display: inline-flex;
-
     align-items: center;
-
     gap: 5px;
-
     margin-top: 10px;
-
     padding: 5px 8px;
-
     border-radius: 2px;
-
     background: rgba(255, 63, 108, 0.08);
-
     color: $color-primary;
-
     font-size: 10px;
     font-weight: 700;
 
@@ -645,37 +456,22 @@ $color-white: #ffffff;
     }
   }
 
-  /* ==================================================
-     RATING
-  ================================================== */
-
   .product-rating-row {
     display: flex;
-
     align-items: center;
-
     flex-wrap: wrap;
-
     gap: 10px;
-
     margin-top: 17px;
   }
 
   .product-rating {
     display: inline-flex;
-
     align-items: center;
-
     gap: 4px;
-
     padding: 5px 8px;
-
     background: $color-success;
-
     color: $color-white;
-
     border-radius: 3px;
-
     font-size: 12px;
     font-weight: 700;
 
@@ -685,7 +481,6 @@ $color-white: #ffffff;
 
     i {
       color: $color-white;
-
       font-size: 10px;
     }
   }
@@ -696,46 +491,33 @@ $color-white: #ffffff;
 
   .review-count {
     color: $color-text;
-
     font-size: 12px;
   }
 
   .stock-status {
     display: inline-flex;
-
     align-items: center;
-
     gap: 5px;
-
     margin-left: auto;
-
     color: $color-success;
-
     font-size: 12px;
     font-weight: 600;
 
-    i {
-      color: $color-success;
-
-      font-size: 12px;
-    }
-
+    i,
     span {
       color: $color-success;
+    }
+
+    i {
+      font-size: 12px;
     }
   }
 
   .product-info-divider {
     height: 1px;
-
     margin: 20px 0;
-
     background: $color-border;
   }
-
-  /* ==================================================
-     PRICING
-  ================================================== */
 
   .product-pricing {
     margin-bottom: 28px;
@@ -743,64 +525,47 @@ $color-white: #ffffff;
 
   .product-price-row {
     display: flex;
-
     align-items: baseline;
-
     flex-wrap: wrap;
-
     gap: 9px;
   }
 
   .product-selling-price {
     color: $color-dark;
-
     font-size: 26px;
     font-weight: 700;
   }
 
   .product-mrp {
     color: $color-muted;
-
     font-size: 13px;
-
     text-decoration: line-through;
   }
 
   .product-discount {
     color: $color-primary;
-
     font-size: 13px;
     font-weight: 700;
   }
 
   .tax-message {
     display: flex;
-
     align-items: center;
-
     gap: 5px;
-
     margin-top: 5px;
-
     color: $color-success;
-
     font-size: 11px;
     font-weight: 600;
 
-    i {
-      color: $color-success;
-
-      font-size: 10px;
-    }
-
+    i,
     span {
       color: $color-success;
     }
-  }
 
-  /* ==================================================
-     COLOR
-  ================================================== */
+    i {
+      font-size: 10px;
+    }
+  }
 
   .product-option {
     margin-bottom: 27px;
@@ -808,52 +573,37 @@ $color-white: #ffffff;
 
   .option-title {
     display: flex;
-
     align-items: center;
-
     gap: 12px;
-
     margin-bottom: 12px;
 
     strong {
       color: $color-dark;
-
       font-size: 13px;
     }
 
     span {
       color: $color-muted;
-
       font-size: 11px;
     }
   }
 
   .product-colors {
     display: flex;
-
     flex-wrap: wrap;
-
     gap: 10px;
   }
 
   .color-option {
     width: 34px;
     height: 34px;
-
     flex: 0 0 34px;
-
     padding: 0;
-
     border: 2px solid $color-white;
-
     border-radius: 50%;
-
     outline: 1px solid $color-border;
-
     background-color: transparent;
-
     cursor: pointer;
-
     transition:
       outline-color 0.2s ease,
       outline-width 0.2s ease,
@@ -861,7 +611,6 @@ $color-white: #ffffff;
 
     &:hover {
       outline-color: $color-primary;
-
       transform: scale(1.05);
     }
 
@@ -871,96 +620,116 @@ $color-white: #ffffff;
 
     &.selected {
       outline: 2px solid $color-dark;
-
       outline-offset: 2px;
     }
 
     &:focus-visible {
       outline: 2px solid $color-primary;
-
       outline-offset: 3px;
     }
   }
 
-  /* ==================================================
-     ACTIONS
-  ================================================== */
-
   .product-actions-area {
     width: 100%;
-
     display: grid;
-
-    grid-template-columns:
-      minmax(0, 1fr)
-      170px;
-
+    grid-template-columns: minmax(0, 1fr) 170px;
     gap: 10px;
-
     margin-bottom: 28px;
+
+    .wishlist-btn {
+      position: static;
+      width: 100%;
+      height: 50px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 16px;
+      border: 1px solid $color-border;
+      border-radius: 3px;
+      background: $color-white;
+      color: $color-dark;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1;
+      cursor: pointer;
+      transition:
+        color 0.2s ease,
+        border-color 0.2s ease,
+        background-color 0.2s ease;
+
+      i {
+        color: $color-dark !important;
+        font-size: 17px;
+        line-height: 1;
+      }
+
+      span {
+        color: $color-dark !important;
+      }
+
+      &:hover {
+        border-color: $color-primary;
+        background: rgba(255, 63, 108, 0.04);
+        color: $color-primary;
+
+        i,
+        span {
+          color: $color-primary !important;
+        }
+      }
+
+      &.active {
+        border-color: $color-primary;
+        background: rgba(255, 63, 108, 0.05);
+
+        i,
+        span {
+          color: $color-primary !important;
+        }
+      }
+    }
   }
 
   .add-to-cart-btn,
   .view-cart-btn {
     width: 100%;
     min-width: 0;
-
     height: 50px;
-
     display: inline-flex;
-
     align-items: center;
     justify-content: center;
-
     gap: 9px;
-
     padding: 0 20px;
-
     border: 0;
-
     border-radius: 3px;
-
     background: $color-primary;
-
     color: $color-white;
-
     font-size: 13px;
     font-weight: 700;
-
     line-height: 1;
-
     white-space: nowrap;
-
     cursor: pointer;
-
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
-
     transition:
       background-color 0.2s ease,
       box-shadow 0.2s ease,
       transform 0.15s ease;
 
-    i {
-      flex: 0 0 auto;
-
+    i,
+    span {
       color: #fff !important;
-
-      font-size: 16px;
-
       line-height: 1;
     }
 
-    span {
-      color: #fff !important;
-
-      line-height: 1;
+    i {
+      flex: 0 0 auto;
+      font-size: 16px;
     }
 
     &:hover {
       background: $color-primary-hover;
-
       color: $color-white;
-
       box-shadow: 0 5px 14px rgba(255, 63, 108, 0.22);
 
       i,
@@ -976,119 +745,28 @@ $color-white: #ffffff;
     }
   }
 
-  /* ==================================================
-     DESKTOP WISHLIST
-  ================================================== */
-
-  .product-actions-area {
-    .wishlist-btn {
-      position: static;
-
-      width: 100%;
-      height: 50px;
-
-      display: inline-flex;
-
-      align-items: center;
-      justify-content: center;
-
-      gap: 8px;
-
-      padding: 0 16px;
-
-      border: 1px solid $color-border;
-
-      border-radius: 3px;
-
-      background: $color-white;
-
-      color: $color-dark;
-
-      font-size: 12px;
-      font-weight: 700;
-
-      line-height: 1;
-
-      cursor: pointer;
-
-      transition:
-        color 0.2s ease,
-        border-color 0.2s ease,
-        background-color 0.2s ease;
-
-      i {
-        color: $color-dark !important;
-
-        font-size: 17px;
-
-        line-height: 1;
-      }
-
-      span {
-        color: $color-dark !important;
-      }
-
-      &:hover {
-        border-color: $color-primary;
-
-        background: rgba(255, 63, 108, 0.04);
-
-        color: $color-primary;
-
-        i,
-        span {
-          color: $color-primary !important;
-        }
-      }
-
-      &.active {
-        border-color: $color-primary;
-
-        background: rgba(255, 63, 108, 0.05);
-
-        i,
-        span {
-          color: $color-primary !important;
-        }
-      }
-    }
-  }
-
-  /* ==================================================
-     DELIVERY
-  ================================================== */
-
   .delivery-section {
     padding-top: 3px;
-
     margin-bottom: 25px;
   }
 
   .section-heading {
     display: flex;
-
     align-items: center;
-
     gap: 9px;
-
     margin-bottom: 13px;
 
     i {
       color: $color-dark;
-
       font-size: 16px;
     }
 
     h3 {
       margin: 0;
-
       color: $color-dark;
-
       font-size: 13px;
       font-weight: 700;
-
       text-transform: uppercase;
-
       letter-spacing: 0.3px;
     }
   }
@@ -1096,17 +774,11 @@ $color-white: #ffffff;
   .delivery-input {
     width: 100%;
     max-width: 380px;
-
     height: 46px;
-
     display: flex;
-
     align-items: center;
-
     padding: 0 12px;
-
     border: 1px solid $color-border;
-
     border-radius: 3px;
 
     &:focus-within {
@@ -1115,29 +787,19 @@ $color-white: #ffffff;
 
     > i {
       flex: 0 0 auto;
-
       color: $color-muted;
-
       font-size: 15px;
     }
 
     input {
       flex: 1;
-
       min-width: 0;
-
       height: 100%;
-
       padding: 0 10px;
-
       border: 0;
-
       outline: 0;
-
       background: transparent;
-
       color: $color-dark;
-
       font-size: 12px;
 
       &::placeholder {
@@ -1147,27 +809,17 @@ $color-white: #ffffff;
 
     button {
       flex: 0 0 auto;
-
       height: 34px;
-
       display: inline-flex;
-
       align-items: center;
       justify-content: center;
-
       padding: 0 3px;
-
       border: 0;
-
       background: transparent;
-
       color: $color-primary !important;
-
       font-size: 11px;
       font-weight: 700;
-
       line-height: 1;
-
       cursor: pointer;
 
       &:hover {
@@ -1182,93 +834,64 @@ $color-white: #ffffff;
 
   .delivery-helper {
     margin: 8px 0 0;
-
     color: $color-muted;
-
     font-size: 10px;
   }
 
   .delivery-success {
     display: flex;
-
     align-items: center;
-
     gap: 9px;
-
     margin-top: 12px;
-
     color: $color-success;
 
     > i {
       color: $color-success;
-
       font-size: 17px;
     }
 
     div {
       display: flex;
-
       flex-direction: column;
-
       gap: 2px;
     }
 
     strong {
       color: $color-dark;
-
       font-size: 12px;
     }
 
     span {
       color: $color-muted;
-
       font-size: 10px;
     }
   }
 
-  /* ==================================================
-     PERKS
-  ================================================== */
-
   .product-perks {
     display: grid;
-
     grid-template-columns: repeat(3, 1fr);
-
     gap: 12px;
-
     padding: 20px 0;
-
     border-top: 1px solid $color-border;
-
     border-bottom: 1px solid $color-border;
   }
 
   .product-perk {
     display: flex;
-
     align-items: flex-start;
-
     gap: 8px;
   }
 
   .perk-icon {
     width: 32px;
     height: 32px;
-
     flex: 0 0 32px;
-
     display: flex;
-
     align-items: center;
     justify-content: center;
-
     border-radius: 50%;
-
     background: rgba(3, 166, 133, 0.08);
-
     color: $color-success;
-
     font-size: 14px;
 
     i {
@@ -1278,30 +901,21 @@ $color-white: #ffffff;
 
   .product-perk > div:last-child {
     display: flex;
-
     flex-direction: column;
-
     gap: 3px;
   }
 
   .product-perk strong {
     color: $color-dark;
-
     font-size: 10px;
     font-weight: 700;
   }
 
   .product-perk span {
     color: $color-muted;
-
     font-size: 9px;
-
     line-height: 1.3;
   }
-
-  /* ==================================================
-     OFFERS
-  ================================================== */
 
   .product-offers {
     padding-top: 25px;
@@ -1309,33 +923,22 @@ $color-white: #ffffff;
 
   .offer-card {
     display: flex;
-
     gap: 11px;
-
     padding: 12px;
-
     margin-bottom: 9px;
-
     background: $color-background-light;
-
     border-radius: 3px;
   }
 
   .offer-icon {
     width: 34px;
     height: 34px;
-
     flex: 0 0 34px;
-
     display: flex;
-
     align-items: center;
     justify-content: center;
-
     border-radius: 50%;
-
     background: rgba(255, 63, 108, 0.08);
-
     color: $color-primary;
 
     i {
@@ -1345,60 +948,39 @@ $color-white: #ffffff;
 
   .offer-card strong {
     display: block;
-
     color: $color-dark;
-
     font-size: 11px;
   }
 
   .offer-card p {
     margin: 4px 0 0;
-
     color: $color-text;
-
     font-size: 10px;
-
     line-height: 1.5;
   }
-
-  /* ==================================================
-     DESCRIPTION
-  ================================================== */
 
   .product-description-section {
     margin-top: 25px;
 
     h3 {
       margin: 0 0 10px;
-
       color: $color-dark;
-
       font-size: 13px;
       font-weight: 700;
-
       text-transform: uppercase;
     }
 
     p {
       margin: 0;
-
       color: $color-text;
-
       font-size: 12px;
-
       line-height: 1.8;
     }
   }
 
-  /* ==================================================
-     ADDITIONAL DETAILS
-  ================================================== */
-
   .additional-product-content {
     margin-top: 45px;
-
     padding-top: 30px;
-
     border-top: 1px solid $color-border;
   }
 
@@ -1411,123 +993,83 @@ $color-white: #ffffff;
 
     h2 {
       margin: 0 0 4px;
-
       color: $color-dark;
-
       font-size: 17px;
       font-weight: 700;
     }
 
     span {
       color: $color-muted;
-
       font-size: 11px;
     }
   }
 
   .details-content-grid {
     display: grid;
-
     grid-template-columns: repeat(3, 1fr);
-
     border-top: 1px solid $color-border;
   }
 
   .detail-item {
     display: flex;
-
     flex-direction: column;
-
     gap: 6px;
-
     padding: 16px 20px 16px 0;
-
     border-bottom: 1px solid $color-border;
 
     span {
       color: $color-muted;
-
       font-size: 10px;
-
       text-transform: uppercase;
     }
 
     strong {
       color: $color-dark;
-
       font-size: 12px;
-
       font-weight: 600;
-
       word-break: break-word;
     }
   }
 
-  /* ==================================================
-     IMAGE VIEWER
-  ================================================== */
-
   .product-image-viewer {
     position: fixed;
-
     inset: 0;
-
     z-index: 9999;
-
     display: flex;
-
     align-items: center;
     justify-content: center;
-
     padding: 60px;
-
     background: rgba(20, 22, 31, 0.96);
   }
 
   .viewer-image {
     max-width: min(900px, 90vw);
-
     max-height: 85vh;
-
     width: auto;
     height: auto;
-
     object-fit: contain;
-
     user-select: none;
   }
 
   .viewer-close {
     position: absolute;
-
     top: 20px;
     right: 25px;
-
     z-index: 10;
-
     width: 44px;
     height: 44px;
-
     display: inline-flex;
-
     align-items: center;
     justify-content: center;
-
     padding: 0;
-
     border: 0;
-
     border-radius: 50%;
-
     background: rgba(255, 255, 255, 0.1);
-
     color: $color-white;
-
     cursor: pointer;
 
     i {
       color: $color-white;
-
       font-size: 16px;
     }
 
@@ -1538,33 +1080,20 @@ $color-white: #ffffff;
 
   .viewer-nav {
     position: absolute;
-
     top: 50%;
-
     transform: translateY(-50%);
-
     z-index: 10;
-
     width: 48px;
     height: 48px;
-
     display: inline-flex;
-
     align-items: center;
     justify-content: center;
-
     padding: 0;
-
     border: 0;
-
     border-radius: 50%;
-
     background: rgba(255, 255, 255, 0.12);
-
     color: $color-white;
-
     font-size: 20px;
-
     cursor: pointer;
 
     i {
@@ -1590,27 +1119,15 @@ $color-white: #ffffff;
 
   .viewer-counter {
     position: absolute;
-
     bottom: 20px;
-
     left: 50%;
-
     transform: translateX(-50%);
-
     padding: 7px 12px;
-
     background: rgba(255, 255, 255, 0.1);
-
     border-radius: 3px;
-
     color: $color-white;
-
     font-size: 11px;
   }
-
-  /* ==================================================
-     MOBILE STICKY ACTIONS
-  ================================================== */
 
   .mobile-sticky-actions {
     display: none;
@@ -1619,31 +1136,19 @@ $color-white: #ffffff;
   .mobile-sticky-wishlist {
     appearance: none;
     -webkit-appearance: none;
-
     width: 58px;
     height: 46px;
-
     display: inline-flex;
-
     align-items: center;
     justify-content: center;
-
     padding: 0;
-
     border: 1px solid $color-border;
-
     border-radius: 3px;
-
     background: $color-white;
-
     color: $color-dark;
-
     cursor: pointer;
-
     font-size: 19px;
-
     line-height: 1;
-
     transition:
       color 0.2s ease,
       border-color 0.2s ease,
@@ -1651,15 +1156,12 @@ $color-white: #ffffff;
 
     i {
       color: $color-dark !important;
-
       font-size: 19px;
-
       line-height: 1;
     }
 
     &:hover {
       border-color: $color-primary;
-
       background: rgba(255, 63, 108, 0.03);
 
       i {
@@ -1669,7 +1171,6 @@ $color-white: #ffffff;
 
     &.active {
       border-color: $color-primary;
-
       background: rgba(255, 63, 108, 0.05);
 
       i {
@@ -1681,59 +1182,39 @@ $color-white: #ffffff;
   .mobile-sticky-bag-btn {
     width: 100%;
     height: 46px;
-
     display: inline-flex;
-
     align-items: center;
     justify-content: center;
-
     gap: 9px;
-
     min-width: 0;
-
     padding: 0 15px;
-
     border: 0;
-
     border-radius: 3px;
-
     background: $color-primary;
-
     color: $color-white;
-
     font-size: 13px;
     font-weight: 700;
-
     line-height: 1;
-
     cursor: pointer;
-
     box-shadow: 0 3px 10px rgba(255, 63, 108, 0.18);
-
     transition:
       background-color 0.2s ease,
       transform 0.15s ease,
       box-shadow 0.2s ease;
 
-    i {
+    i,
+    span {
       color: #fff !important;
-
-      font-size: 16px;
-
       line-height: 1;
     }
 
-    span {
-      color: #fff !important;
-
-      line-height: 1;
+    i {
+      font-size: 16px;
     }
 
     &:hover {
       background: $color-primary-hover;
-
       color: $color-white;
-
       box-shadow: 0 5px 14px rgba(255, 63, 108, 0.24);
 
       i,
@@ -1744,26 +1225,9 @@ $color-white: #ffffff;
 
     &:active {
       background: $color-primary-hover;
-
       transform: translateY(1px);
     }
-
-    &.view {
-      background: $color-success;
-
-      &:hover {
-        background: #029579;
-      }
-
-      &:active {
-        background: #028a71;
-      }
-    }
   }
-
-  /* ==================================================
-     LARGE TABLET
-  ================================================== */
 
   @media (max-width: 1199px) {
     .product-page-container {
@@ -1772,9 +1236,7 @@ $color-white: #ffffff;
     }
 
     .product-gallery-layout {
-      grid-template-columns:
-        68px
-        minmax(0, 1fr);
+      grid-template-columns: 68px minmax(0, 1fr);
     }
 
     .product-thumbnail {
@@ -1795,13 +1257,8 @@ $color-white: #ffffff;
     }
   }
 
-  /* ==================================================
-     MOBILE
-  ================================================== */
-
   @media (max-width: 767px) {
     min-height: 100vh;
-
     padding-bottom: 20px;
 
     .product-page-container {
@@ -1810,17 +1267,12 @@ $color-white: #ffffff;
 
     .product-breadcrumb {
       min-height: 45px;
-
       font-size: 10px;
     }
 
     .product-layout {
       padding-top: 10px;
     }
-
-    /* ----------------------------------------------
-       Gallery
-    ---------------------------------------------- */
 
     .product-gallery-layout {
       display: block;
@@ -1832,11 +1284,8 @@ $color-white: #ffffff;
 
     .product-main-image-wrapper {
       width: 100%;
-
       height: 100vw;
-
       min-height: 350px;
-
       max-height: 520px;
     }
 
@@ -1849,13 +1298,11 @@ $color-white: #ffffff;
     .product-wishlist-btn {
       top: 12px;
       right: 12px;
-
       width: 38px;
       height: 38px;
 
       i {
         color: inherit;
-
         font-size: 17px;
       }
     }
@@ -1888,15 +1335,10 @@ $color-white: #ffffff;
 
     .mobile-product-thumbnails {
       display: flex;
-
       gap: 7px;
-
       margin-top: 8px;
-
       padding-bottom: 2px;
-
       overflow-x: auto;
-
       scrollbar-width: none;
 
       &::-webkit-scrollbar {
@@ -1905,15 +1347,10 @@ $color-white: #ffffff;
 
       .product-thumbnail {
         flex: 0 0 62px;
-
         width: 62px;
         height: 78px;
       }
     }
-
-    /* ----------------------------------------------
-       Information
-    ---------------------------------------------- */
 
     .product-information {
       padding: 20px 2px 0;
@@ -1921,14 +1358,12 @@ $color-white: #ffffff;
 
     .product-brand {
       margin-bottom: 6px;
-
       font-size: 10px;
     }
 
     .product-title-row {
       h1 {
         font-size: 20px;
-
         line-height: 1.35;
       }
     }
@@ -1936,37 +1371,25 @@ $color-white: #ffffff;
     .mobile-title-wishlist {
       width: 38px;
       height: 38px;
-
       flex: 0 0 38px;
-
       display: inline-flex;
-
       align-items: center;
       justify-content: center;
-
       padding: 0;
-
       border: 1px solid $color-border;
-
       border-radius: 50%;
-
       background: $color-white;
-
       color: $color-dark;
-
       cursor: pointer;
 
       i {
         color: $color-dark !important;
-
         font-size: 17px;
-
         line-height: 1;
       }
 
       &.active {
         border-color: $color-primary;
-
         color: $color-primary;
 
         i {
@@ -1981,7 +1404,6 @@ $color-white: #ffffff;
 
     .product-rating-row {
       margin-top: 12px;
-
       gap: 7px;
     }
 
@@ -1999,10 +1421,6 @@ $color-white: #ffffff;
       margin: 16px 0;
     }
 
-    /* ----------------------------------------------
-       Price
-    ---------------------------------------------- */
-
     .product-pricing {
       margin-bottom: 22px;
     }
@@ -2016,16 +1434,11 @@ $color-white: #ffffff;
       font-size: 11px;
     }
 
-    /* ----------------------------------------------
-       Normal Mobile Action Section
-    ---------------------------------------------- */
-
     .product-actions-area {
       grid-template-columns: 1fr;
-
       gap: 9px;
-
       margin-bottom: 22px;
+      min-height: 50px;
 
       .wishlist-btn {
         display: none;
@@ -2035,38 +1448,17 @@ $color-white: #ffffff;
     .add-to-cart-btn,
     .view-cart-btn {
       width: 100%;
-
       min-height: 50px;
-
       height: 50px;
-
       font-size: 13px;
     }
 
-    /*
-     * The normal action area still exists in the page.
-     *
-     * When it enters the viewport, the React observer
-     * hides the fixed CTA automatically.
-     */
-    .product-actions-area {
-      min-height: 50px;
-    }
-
-    /* ----------------------------------------------
-       Delivery
-    ---------------------------------------------- */
-
     .delivery-input {
       max-width: 100%;
-    }
 
-    .delivery-input {
       button {
         height: 34px;
-
         padding-left: 5px;
-
         color: $color-primary !important;
       }
     }
@@ -2075,15 +1467,9 @@ $color-white: #ffffff;
       margin-bottom: 20px;
     }
 
-    /* ----------------------------------------------
-       Perks
-    ---------------------------------------------- */
-
     .product-perks {
       grid-template-columns: 1fr;
-
       gap: 13px;
-
       padding: 17px 0;
     }
 
@@ -2091,21 +1477,12 @@ $color-white: #ffffff;
       align-items: center;
     }
 
-    /* ----------------------------------------------
-       Offers
-    ---------------------------------------------- */
-
     .product-offers {
       padding-top: 20px;
     }
 
-    /* ----------------------------------------------
-       Details
-    ---------------------------------------------- */
-
     .additional-product-content {
       margin-top: 30px;
-
       padding-top: 22px;
     }
 
@@ -2117,24 +1494,18 @@ $color-white: #ffffff;
       padding-right: 10px;
     }
 
-    /* ----------------------------------------------
-       Viewer
-    ---------------------------------------------- */
-
     .product-image-viewer {
       padding: 50px 15px;
     }
 
     .viewer-image {
       max-width: 96vw;
-
       max-height: 78vh;
     }
 
     .viewer-close {
       top: 12px;
       right: 12px;
-
       width: 38px;
       height: 38px;
     }
@@ -2152,43 +1523,25 @@ $color-white: #ffffff;
       right: 10px;
     }
 
-    /* ----------------------------------------------
-       MOBILE FIXED CTA
-    ---------------------------------------------- */
-
     .mobile-sticky-actions {
       position: fixed;
-
       left: 0;
       right: 0;
       bottom: 0;
-
       z-index: 500;
-
       width: 100%;
-
       height: 62px;
-
       display: grid;
-
-      grid-template-columns:
-        58px
-        minmax(0, 1fr);
-
+      grid-template-columns: 58px minmax(0, 1fr);
       gap: 8px;
-
       padding: 8px 10px;
-
       background: $color-white;
-
       border-top: 1px solid $color-border;
-
       box-shadow: 0 -3px 15px rgba(0, 0, 0, 0.08);
     }
 
     .mobile-sticky-wishlist {
       width: 58px;
-
       height: 46px;
 
       i {
@@ -2204,26 +1557,16 @@ $color-white: #ffffff;
 
     .mobile-sticky-bag-btn {
       width: 100%;
-
       height: 46px;
-
       min-width: 0;
-
       font-size: 13px;
 
-      i {
-        color: #fff !important;
-      }
-
+      i,
       span {
         color: #fff !important;
       }
     }
   }
-
-  /* ==================================================
-     SMALL MOBILE
-  ================================================== */
 
   @media (max-width: 420px) {
     .product-main-image-wrapper {
@@ -2244,19 +1587,13 @@ $color-white: #ffffff;
 
     .mobile-sticky-actions {
       gap: 6px;
-
       padding-left: 8px;
       padding-right: 8px;
+      grid-template-columns: 54px minmax(0, 1fr);
     }
 
     .mobile-sticky-wishlist {
       width: 54px;
-    }
-
-    .mobile-sticky-actions {
-      grid-template-columns:
-        54px
-        minmax(0, 1fr);
     }
   }
 }
