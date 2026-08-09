@@ -1,60 +1,36 @@
 import { useEffect, useState } from "react";
-import {
-  useGetWebsiteCartQuery,
-  useLazyGetWebsiteCartQuery,
-} from "../../../app/redux/website/cart/cart.api";
 
-import ErrorLoginAgainApp from "../../../components/ui/error/error-login-again";
 import LoadingApp from "../../../components/loading/loading";
 import { Outlet } from "react-router";
-import { useAuth } from "../../../hooks/use-auth";
+import { useLazyGetWebsiteCartQuery } from "../../../app/redux/website/cart/cart.api";
 
 const GUEST_CART_ID_KEY = "website_guest_cart_id";
 
 const InitWebsiteApp = () => {
-  const { isAuthenticated, hydrated } = useAuth();
-
-  const [guestCartId, setGuestCartId] = useState<string | null>(() => {
-    return localStorage.getItem(GUEST_CART_ID_KEY);
-  });
-
   const [isInitializingGuestCart, setIsInitializingGuestCart] = useState(true);
 
-  const [
-    createOrGetGuestCart,
-    { isLoading: isCreatingGuestCart, isError: isCreateCartError },
-  ] = useLazyGetWebsiteCartQuery();
+  const [createOrGetGuestCart, { isLoading: isCreatingGuestCart }] =
+    useLazyGetWebsiteCartQuery();
 
-  const { isLoading: isLoadingCart, isError: isCartError } =
-    useGetWebsiteCartQuery(
-      guestCartId
-        ? {
-            guestCartId,
-          }
-        : undefined,
-      {
-        skip: !hydrated || isAuthenticated || !guestCartId,
-      },
-    );
+  // ==================================================
+  // INITIALIZE GUEST CART
+  // ==================================================
 
   useEffect(() => {
-    if (!hydrated) {
-      return;
-    }
-
-    // For now we only initialize guest carts.
-    if (isAuthenticated) {
-      setIsInitializingGuestCart(false);
-      return;
-    }
-
     const existingGuestCartId = localStorage.getItem(GUEST_CART_ID_KEY);
 
+    // ==================================================
+    // CART ID ALREADY EXISTS
+    // ==================================================
+
     if (existingGuestCartId) {
-      setGuestCartId(existingGuestCartId);
       setIsInitializingGuestCart(false);
       return;
     }
+
+    // ==================================================
+    // CREATE GUEST CART
+    // ==================================================
 
     const initializeGuestCart = async () => {
       try {
@@ -69,8 +45,6 @@ const InitWebsiteApp = () => {
         }
 
         localStorage.setItem(GUEST_CART_ID_KEY, newGuestCartId);
-
-        setGuestCartId(newGuestCartId);
       } catch (error) {
         console.error("Unable to initialize guest cart:", error);
       } finally {
@@ -79,25 +53,17 @@ const InitWebsiteApp = () => {
     };
 
     initializeGuestCart();
-  }, [hydrated, isAuthenticated, createOrGetGuestCart]);
+  }, [createOrGetGuestCart]);
 
-  //#region render
+  // ==================================================
+  // RENDER
+  // ==================================================
 
-  if (!hydrated) {
+  if (isInitializingGuestCart || isCreatingGuestCart) {
     return <LoadingApp />;
-  }
-
-  if (isInitializingGuestCart || isCreatingGuestCart || isLoadingCart) {
-    return <LoadingApp />;
-  }
-
-  if (isCreateCartError || isCartError) {
-    return <ErrorLoginAgainApp description="Unable to load the application." />;
   }
 
   return <Outlet />;
-
-  //#endregion
 };
 
 export default InitWebsiteApp;
