@@ -62282,12 +62282,12 @@ body {
 //   border-bottom: var(--bs-app-header-base-border-bottom);
 // }
 
-// @media (min-width: 992px) {
-//   :root {
-//     --bs-app-header-height: 70px;
-//     --bs-app-header-height-actual: 70px;
-//   }
-
+@media (min-width: 992px) {
+  :root {
+    --bs-app-header-height: 70px;
+    --bs-app-header-height-actual: 70px;
+  }
+}
 //   [data-kt-app-header-fixed="true"][data-kt-app-header-stacked="true"] {
 //     --bs-app-header-height: calc(
 //       var(--bs-app-header-primary-height, 0px) +
