@@ -19,7 +19,7 @@ export const defaultProductValues: IProductData = {
     },
     sellingPrice: null,
     tax: {
-      included: false,
+      included: true,
       className: "tax_free",
       rate: 0,
     },

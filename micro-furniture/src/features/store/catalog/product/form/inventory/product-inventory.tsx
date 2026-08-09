@@ -81,8 +81,10 @@ const ProductInventoryApp = () => {
               }`}
               {...register("inventory.quantityInShelf", {
                 valueAsNumber: true,
+                min: 0,
                 required: "On Shelf quantity is required",
               })}
+              onWheel={(e) => e.currentTarget.blur()}
             />
             <input
               type="number"
@@ -91,8 +93,11 @@ const ProductInventoryApp = () => {
                 errors?.inventory?.quantityInWarehouse ? "is-invalid" : ""
               }`}
               {...register("inventory.quantityInWarehouse", {
+                min: 0,
+                valueAsNumber: true,
                 required: "In-Warehouse quantity is required",
               })}
+              onWheel={(e) => e.currentTarget.blur()}
             />
           </div>
           {errors?.inventory?.quantityInWarehouse?.message ? (

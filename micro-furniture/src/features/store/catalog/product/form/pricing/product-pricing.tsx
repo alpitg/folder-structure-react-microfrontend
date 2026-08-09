@@ -260,7 +260,6 @@ const ProductPricing = () => {
         )}
 
         {/* Tax */}
-
         <div className="row g-5">
           <div className="col-md-6">
             <label className="required form-label">
@@ -295,6 +294,26 @@ const ProductPricing = () => {
               onWheel={(e) => e.currentTarget.blur()}
               disabled
             />
+          </div>
+
+          <div className="col-md-6">
+            <div className="form-check form-switch">
+              <input
+                type="checkbox"
+                className="form-check-input"
+                id="taxIncluded"
+                {...register("price.tax.included")}
+              />
+
+              <label className="form-check-label" htmlFor="taxIncluded">
+                Inclusive of taxes
+              </label>
+            </div>
+
+            <small className="text-muted">
+              Enable this if the selling price already includes the applicable
+              tax.
+            </small>
           </div>
         </div>
       </div>

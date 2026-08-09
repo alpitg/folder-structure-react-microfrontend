@@ -311,22 +311,16 @@ const CartApp = () => {
 
       const payload = {
         customerName: "Guest",
-
         customerId: null,
-
         guestCartId,
-
         items: items.map((item) => ({
           productId: item.productId,
           productType: item.productType ?? "physical",
           quantity: item.quantity,
           customizedDetails: item.customizedDetails,
         })),
-
         miscCharges: [],
-
         note: "Website order",
-
         likelyDateOfDelivery: null,
       };
 
