@@ -1,10 +1,20 @@
+$color-primary: #ff3f6c;
+$color-primary-hover: #e93660;
+$color-dark: #282c3f;
+$color-text: #535766;
+$color-muted: #94969f;
+$color-border: #eaeaec;
+$color-background-light: #f5f5f6;
+$color-background: #fff;
+$color-success: #03a685;
+
 .order-success-section {
   .order-success-page {
-    background-color: #f8f8f8 !important;
+    background-color: $color-background-light !important;
   }
 
   .order-success-card {
-    border: 1px solid #eeeeee;
+    border: 1px solid $color-border;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
   }
 
@@ -16,13 +26,13 @@
     i {
       font-size: 42px;
       line-height: 1;
-      color: #03a685;
+      color: $color-success;
     }
   }
 
   .order-success-card {
     h2 {
-      color: #282c3f;
+      color: $color-dark;
       font-size: 26px;
     }
 
@@ -32,7 +42,7 @@
   }
 
   .order-id-box {
-    background-color: #fafafa !important;
+    background-color: $color-background-light !important;
 
     .small {
       letter-spacing: 0.6px;
@@ -41,10 +51,10 @@
   }
 
   .delivery-message {
-    color: #535766;
+    color: $color-text;
 
     i {
-      color: #03a685;
+      color: $color-success;
       font-size: 18px;
     }
   }
@@ -58,8 +68,8 @@
     }
 
     .btn-dark {
-      background-color: #282c3f;
-      border-color: #282c3f;
+      background-color: $color-dark;
+      border-color: $color-dark;
 
       &:hover {
         background-color: #1f2230;
@@ -68,13 +78,13 @@
     }
 
     .btn-outline-dark {
-      color: #282c3f;
+      color: $color-dark;
       border-color: #d4d5d9;
 
       &:hover {
-        color: #fff;
-        background-color: #282c3f;
-        border-color: #282c3f;
+        color: $color-background;
+        background-color: $color-dark;
+        border-color: $color-dark;
       }
     }
   }

@@ -313,59 +313,110 @@
   }
 
   // Footer Section
-  .footer-section {
-    padding: 20px 0 20px 0;
-    background: var(--bs-light);
 
-    .relative {
-      position: relative;
-    }
+  $primary: #ff3f6c;
+  $dark: #282c3f;
+  $text: #535766;
+  $muted: #94969f;
+  $border: #eaeaec;
+  $white: #fff;
+  $light: #f8f8f8;
 
-    a {
-      text-decoration: none;
+  .footer-app {
+    .footer-logo {
       color: $dark;
-      transition: 0.3s all ease;
-      &:hover {
-        color: rgba($dark, 0.5);
-      }
-    }
+      font-size: 26px;
+      font-weight: 800;
+      text-decoration: none;
 
-    .sofa-img {
-      position: absolute;
-      top: -150px;
-      z-index: 1;
-      right: 0;
-
-      @media (max-width: 767px) {
-        top: -150px;
-        right: 0;
-        opacity: 0.9;
-      }
-
-      img {
-        max-width: 380px;
-        // width: 100%;
-        height: auto;
-
-        @media (max-width: 767px) {
-          max-width: 150px;
-        }
-      }
-    }
-
-    .footer-logo-wrap {
-      .footer-logo {
-        font-size: 32px;
-        font-weight: 500;
-        text-decoration: none;
+      span {
         color: $primary;
       }
     }
 
-    .border-top {
-      border-color: $light;
-      &.copyright {
-        font-size: 14px !important;
+    p {
+      color: $text;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .footer-icon {
+      flex: 0 0 42px;
+      color: $primary;
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .footer-title {
+      margin: 0 0 8px;
+      color: $dark;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .footer-text {
+      color: $muted;
+      font-size: 12px;
+    }
+
+    .footer-text strong {
+      color: $text;
+    }
+
+    .footer-social {
+      width: 38px;
+      height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid $border;
+      border-radius: 50%;
+      background: $white;
+      color: $dark;
+      text-decoration: none;
+      transition: 0.2s ease;
+
+      i {
+        color: inherit;
+        font-size: 16px;
+      }
+
+      &:hover {
+        border-color: $primary;
+        background: $primary;
+        color: $white;
+      }
+    }
+
+    .footer-bottom {
+      border-color: $border !important;
+    }
+
+    .footer-copyright {
+      color: $muted;
+      font-size: 11px;
+    }
+
+    @media (max-width: 767px) {
+      .footer-logo {
+        font-size: 22px;
+      }
+
+      .footer-icon {
+        flex-basis: 36px;
+        font-size: 20px;
+      }
+
+      .footer-title {
+        font-size: 13px;
+      }
+
+      .footer-text {
+        font-size: 11px;
+      }
+
+      .footer-bottom {
+        padding-bottom: 70px;
       }
     }
   }

@@ -7,6 +7,7 @@ import type { AppState } from "../../../app/store";
 import { GetEnvConfig } from "../../../app.config";
 import type { IProductData } from "../../store/catalog/interface/product/product.model";
 import { ROUTE_URL } from "../../../routes/constants/routes.const";
+import ShopByCategoryApp from "./shop-by-category/shop-by-category";
 import { addItemToBag } from "../../../app/redux/core/shopping-bag/shopping-bag.slice";
 import { useGetProductsQuery } from "../../../app/redux/website/product/website-product.api";
 
@@ -17,45 +18,6 @@ const Home = () => {
   const navigate = useNavigate();
 
   const appSettings = GetEnvConfig();
-
-  const categories = [
-    {
-      title: "Sofas",
-      image: "/static/media/img/furniture/category/sofa.png",
-    },
-    {
-      title: "Beds",
-      image: "/static/media/img/furniture/category/bed1.png",
-    },
-    {
-      title: "Dining",
-      image: "/static/media/img/furniture/category/dinning-set.png",
-    },
-    {
-      title: "TV unit",
-      image: "/static/media/img/furniture/category/tv-unit.png",
-    },
-    {
-      title: "Chairs",
-      image: "/static/media/img/furniture/category/helen-chair.png",
-    },
-    {
-      title: "Tables",
-      image: "/static/media/img/furniture/category/tables.webp",
-    },
-    {
-      title: "Storage",
-      image: "/static/media/img/furniture/category/storages.webp",
-    },
-    {
-      title: "Wardrobes",
-      image: "/static/media/img/furniture/category/wardrobe.png",
-    },
-    {
-      title: "Home Decor",
-      image: "/static/media/img/furniture/category/home-decor.webp",
-    },
-  ];
 
   const offers = [
     {
@@ -159,38 +121,7 @@ const Home = () => {
       </section>
 
       {/* CATEGORIES */}
-
-      <section className="home-section">
-        <div className="home-section-header">
-          <div>
-            <span>SHOP BY</span>
-            <h2>Categories</h2>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => navigate(ROUTE_URL.WEBSITE.PRODUCTS)}
-          >
-            View All <i className="bi bi-arrow-right" />
-          </button>
-        </div>
-
-        <div className="home-categories">
-          {categories.map((category) => (
-            <button
-              type="button"
-              className="home-category"
-              key={category.title}
-            >
-              <div className="home-category-image">
-                <img src={category.image} alt={category.title} />
-              </div>
-
-              <span>{category.title}</span>
-            </button>
-          ))}
-        </div>
-      </section>
+      <ShopByCategoryApp />
 
       {/* DEAL BANNER */}
 

@@ -1,123 +1,94 @@
-import "./shop-by-category.scss";
-
-import { NavLink } from "react-router";
 import { ROUTE_URL } from "../../../../routes/constants/routes.const";
+import { useNavigate } from "react-router";
 
 const ShopByCategoryApp = () => {
+  const navigate = useNavigate();
+
   const categories = [
     {
-      id: "sofas",
       title: "Sofas",
-      category: "sofa-sets",
-      image: "/static/media/img/furniture/category/sofas.png",
-      alt: "Category Sofa",
+      category: "sofa",
+      image: "/static/media/img/furniture/category/sofa.png",
     },
     {
-      id: "chest-of-drawers",
-      title: "Chest of Drawers",
-      category: "chest-of-drawers",
-      image: "/static/media/img/furniture/category/chests-of-drawers.png",
-      alt: "Category Chest of Drawers",
-    },
-    {
-      id: "beds",
       title: "Beds",
-      category: "beds",
-      image: "/static/media/img/furniture/category/beds.png",
-      alt: "Category Bed",
+      category: "bed",
+      image: "/static/media/img/furniture/category/bed1.png",
     },
     {
-      id: "sideboards",
-      title: "Sideboards",
-      category: "cabinets-and-sideboards",
-      image:
-        "https://cdn.swadeshonline.com/v2/patient-paper-41f385/swad-p/wrkr/company/17/applications/65f437fae78851028707daee/theme/pictures/free/original/Sideboard-1781269680273.png",
-      alt: "Category Sideboard",
+      title: "Dining",
+      category: "dining",
+      image: "/static/media/img/furniture/category/dinning-set.png",
     },
     {
-      id: "sofa-cum-beds",
-      title: "Sofa Cum Beds",
-      category: "sofa-cum-beds",
-      image:
-        "https://cdn.swadeshonline.com/v2/patient-paper-41f385/swad-p/wrkr/company/17/applications/65f437fae78851028707daee/theme/pictures/free/original/Sofa-Beds-1781269364542.png",
-      alt: "Category Sofa Cum Bed",
+      title: "TV unit",
+      category: "tv-unit",
+      image: "/static/media/img/furniture/category/tv-unit.png",
     },
     {
-      id: "mattresses",
-      title: "Mattresses",
-      category: "mattresses",
-      image:
-        "https://cdn.swadeshonline.com/v2/patient-paper-41f385/swad-p/wrkr/company/17/applications/65f437fae78851028707daee/theme/pictures/free/original/Mattresses-1781269702725.png",
-      alt: "Category Mattress",
-    },
-    {
-      id: "coffee-tables",
-      title: "Coffee Tables",
-      category: "coffee-table",
-      image:
-        "https://cdn.swadeshonline.com/v2/patient-paper-41f385/swad-p/wrkr/company/17/applications/65f437fae78851028707daee/theme/pictures/free/original/Coffee-Tables-1781269387814.png",
-      alt: "Category Coffee Table",
-    },
-    {
-      id: "bedside-tables",
-      title: "Bedside Tables",
-      category: "bedside-tables",
-      image:
-        "https://cdn.swadeshonline.com/v2/patient-paper-41f385/swad-p/wrkr/company/17/applications/65f437fae78851028707daee/theme/pictures/free/original/Bedside-Tables-1781270223759.png",
-      alt: "Category Bedside Table",
-    },
-    {
-      id: "wardrobes",
-      title: "Wardrobes",
-      category: "wardrobes",
-      image: "static/media/img/furniture/category/wardrobes.png",
-      alt: "Category Wardrobe",
-    },
-    {
-      id: "chairs",
-      title: "Study Chairs",
+      title: "Chairs",
       category: "chairs",
-      image:
-        "https://cdn.swadeshonline.com/v2/patient-paper-41f385/swad-p/wrkr/company/17/applications/65f437fae78851028707daee/theme/pictures/free/original/Study-Chairs-1781270244175.png",
-      alt: "Category Chairs",
+      image: "/static/media/img/furniture/category/helen-chair.png",
     },
     {
-      id: "tv-units",
-      title: "TV Units",
-      category: "tv-units",
-      image:
-        "https://cdn.swadeshonline.com/v2/patient-paper-41f385/swad-p/wrkr/company/17/applications/65f437fae78851028707daee/theme/pictures/free/original/TV-Unit-1781269474659.png",
-      alt: "Category TV Unit",
+      title: "Tables",
+      category: "tables",
+      image: "/static/media/img/furniture/category/tables.webp",
     },
     {
-      id: "bar-furniture",
-      title: "Bar Furniture",
-      category: "bar-furniture",
-      image:
-        "https://cdn.swadeshonline.com/v2/patient-paper-41f385/swad-p/wrkr/company/17/applications/65f437fae78851028707daee/theme/pictures/free/original/Bar-Furniture-1781270264797.png",
-      alt: "Category Bar Furniture",
+      title: "Storage",
+      category: "storage",
+      image: "/static/media/img/furniture/category/storages.webp",
+    },
+    {
+      title: "Wardrobes",
+      category: "wardrobe",
+      image: "/static/media/img/furniture/category/wardrobe.png",
+    },
+    {
+      title: "Home Decor",
+      category: "home-decor",
+      image: "/static/media/img/furniture/category/home-decor.webp",
     },
   ];
 
   return (
-    <div className="shop-by-category-app">
-      <div className="container">
-        <h2 className="mb-4 section-title">Shop by Categories.</h2>
-        <ul className="shop-by-category-list">
-          {categories.map(({ id, title, image, category, alt }) => (
-            <li key={id} className="shop-by-category-item">
-              <NavLink
-                to={`${ROUTE_URL.WEBSITE.PRODUCTS}?category=${category}`}
-                className="hover-ease-out"
-              >
-                <img className="shop-by-category-image" src={image} alt={alt} />
-                <p className="text-uppercase fw-medium mt-2">{title}</p>
-              </NavLink>
-            </li>
-          ))}
-        </ul>
+    <section className="home-section">
+      <div className="home-section-header">
+        <div>
+          <span>SHOP BY</span>
+          <h2>Categories</h2>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => navigate(ROUTE_URL.WEBSITE.PRODUCTS)}
+        >
+          View All <i className="bi bi-arrow-right" />
+        </button>
       </div>
-    </div>
+
+      <div className="home-categories">
+        {categories.map((category) => (
+          <button
+            type="button"
+            className="home-category"
+            key={category.title}
+            onClick={() =>
+              navigate(
+                `${ROUTE_URL.WEBSITE.PRODUCTS}?category=${category?.category}`,
+              )
+            }
+          >
+            <div className="home-category-image">
+              <img src={category.image} alt={category.title} />
+            </div>
+
+            <span>{category.title}</span>
+          </button>
+        ))}
+      </div>
+    </section>
   );
 };
 
