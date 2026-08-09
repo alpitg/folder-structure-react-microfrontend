@@ -42,26 +42,32 @@ const ProfileApp = lazy(() => import("../features/website/profile/profile"));
 //#endregion
 
 const RoutesApp = () => {
-  useAuthInit(); // run once at app start
+  useAuthInit();
 
   return (
-    <Suspense fallback={<LoadingApp />}>
-      <BrowserRouter>
+    <BrowserRouter>
+      <Suspense fallback={<LoadingApp />}>
         <ScrollToTop />
+
         <Routes>
-          {/* Public website routes */}
-          <Route path={ROUTE_URL.WEBSITE.BASE} element={<WebsiteApp />}>
-            <Route path={ROUTE_URL.WEBSITE.BASE} element={<InitWebsiteApp />}>
-              <Route path={ROUTE_URL.WEBSITE.BASE} element={<HomeApp />} />
+          {/* PUBLIC WEBSITE */}
+
+          <Route element={<InitWebsiteApp />}>
+            <Route path={ROUTE_URL.WEBSITE.BASE} element={<WebsiteApp />}>
+              <Route index element={<HomeApp />} />
+
               <Route
                 path={ROUTE_URL.WEBSITE.PRODUCTS}
                 element={<ProductsApp />}
               />
+
               <Route
                 path={ROUTE_URL.WEBSITE.PRODUCT_DETAILS}
                 element={<ProductDetailsApp />}
               />
-              <Route path="/cart" element={<CartApp />} />
+
+              <Route path={ROUTE_URL.WEBSITE.CART} element={<CartApp />} />
+
               <Route
                 path={ROUTE_URL.WEBSITE.ORDER_SUCCESS}
                 element={<OrderSuccessApp />}
@@ -81,20 +87,22 @@ const RoutesApp = () => {
             </Route>
           </Route>
 
-          {/* 🔓 Public */}
+          {/* AUTH */}
           <Route element={<AuthApp />}>
             <Route path={ROUTE_URL.LOGIN} element={<LoginApp />} />
+
             <Route
               path={ROUTE_URL.FORGET_PASSWORD}
               element={<ForgetPasswordApp />}
             />
+
             <Route
               path={ROUTE_URL.RESET_PASSWORD}
               element={<ResetPassword />}
             />
           </Route>
 
-          {/* 🔒 Protected */}
+          {/* ADMIN */}
           <Route element={<AppInitializer />}>
             <Route element={<PrivateRoute />}>
               <Route path={ROUTE_URL.HOME} element={<LandingPageApp />}>
@@ -122,8 +130,8 @@ const RoutesApp = () => {
             </Route>
           </Route>
         </Routes>
-      </BrowserRouter>
-    </Suspense>
+      </Suspense>
+    </BrowserRouter>
   );
 };
 
