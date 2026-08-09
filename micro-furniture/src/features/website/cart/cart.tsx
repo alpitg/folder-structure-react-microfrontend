@@ -162,12 +162,14 @@ const CartApp = () => {
       // STEP 1: Load Razorpay
       // --------------------------------------------------
 
-      const razorpayLoaded = await loadRazorpayScript();
+      if (appSettings?.cartPage?.disablePayment) {
+        const razorpayLoaded = await loadRazorpayScript();
 
-      if (!razorpayLoaded) {
-        alert("Unable to load payment gateway. Please try again.");
+        if (!razorpayLoaded) {
+          alert("Unable to load payment gateway. Please try again.");
 
-        return;
+          return;
+        }
       }
 
       // --------------------------------------------------
@@ -176,20 +178,15 @@ const CartApp = () => {
 
       const payload = {
         customerName: "Naru",
-
         customerId: null,
-
         items: items.map((item) => ({
           productId: item.id,
           productType: "physical",
           quantity: item.quantity,
           customizedDetails: undefined,
         })),
-
         miscCharges: [],
-
         note: "Website order",
-
         likelyDateOfDelivery: null,
       };
 
@@ -203,106 +200,110 @@ const CartApp = () => {
         throw new Error("Payment information was not returned.");
       }
 
-      const payment = result.payment;
+      if (appSettings?.cartPage?.disablePayment) {
+        const payment = result.payment;
 
-      if (!payment.keyId || !payment.razorpayOrderId) {
-        throw new Error("Razorpay order was not created.");
-      }
+        if (!payment.keyId || !payment.razorpayOrderId) {
+          throw new Error("Razorpay order was not created.");
+        }
 
-      // --------------------------------------------------
-      // STEP 4: Open Razorpay Checkout
-      // --------------------------------------------------
+        // --------------------------------------------------
+        // STEP 4: Open Razorpay Checkout
+        // --------------------------------------------------
 
-      const order = result.order as {
-        id?: string;
-        orderCode?: string;
-        customerName?: string;
-      };
+        const order = result.order as {
+          id?: string;
+          orderCode?: string;
+          customerName?: string;
+        };
 
-      const options: RazorpayOptions = {
-        key: payment.keyId,
-        amount: payment.amount,
-        currency: payment.currency,
-        name: "Artisan Studios",
-        description: `Order ${order.orderCode || ""}`,
-        order_id: payment.razorpayOrderId,
+        const options: RazorpayOptions = {
+          key: payment.keyId,
+          amount: payment.amount,
+          currency: payment.currency,
+          name: "Artisan Studios",
+          description: `Order ${order.orderCode || ""}`,
+          order_id: payment.razorpayOrderId,
 
-        handler: async (response: RazorpayResponse) => {
-          // ----------------------------------------------
-          // STEP 5: Verify payment on backend
-          // ----------------------------------------------
+          handler: async (response: RazorpayResponse) => {
+            // ----------------------------------------------
+            // STEP 5: Verify payment on backend
+            // ----------------------------------------------
 
-          try {
-            if (!order.id) {
-              throw new Error("Order ID is missing.");
+            try {
+              if (!order.id) {
+                throw new Error("Order ID is missing.");
+              }
+
+              await verifyWebsitePayment({
+                orderId: order.id,
+                razorpayPaymentId: response.razorpay_payment_id,
+                razorpayOrderId: response.razorpay_order_id,
+                razorpaySignature: response.razorpay_signature,
+              }).unwrap();
+
+              // --------------------------------------------
+              // STEP 6: Payment verified
+              // --------------------------------------------
+
+              dispatch(clearBag());
+
+              // --------------------------------------------
+              // STEP 7: Navigate to success page
+              // --------------------------------------------
+
+              navigate(
+                `${ROUTE_URL.WEBSITE.ORDER_SUCCESS}?orderId=${order.id}`,
+              );
+            } catch (error) {
+              console.error("Payment verification failed:", error);
+
+              alert(
+                "Payment was received, but we could not verify it yet. Please contact support.",
+              );
             }
-
-            await verifyWebsitePayment({
-              orderId: order.id,
-              razorpayPaymentId: response.razorpay_payment_id,
-              razorpayOrderId: response.razorpay_order_id,
-              razorpaySignature: response.razorpay_signature,
-            }).unwrap();
-
-            // --------------------------------------------
-            // STEP 6: Payment verified
-            // --------------------------------------------
-
-            dispatch(clearBag());
-
-            // --------------------------------------------
-            // STEP 7: Navigate to success page
-            // --------------------------------------------
-
-            navigate(`${ROUTE_URL.WEBSITE.ORDER_SUCCESS}?orderId=${order.id}`);
-          } catch (error) {
-            console.error("Payment verification failed:", error);
-
-            alert(
-              "Payment was received, but we could not verify it yet. Please contact support.",
-            );
-          }
-        },
-
-        prefill: {
-          name: order.customerName || "Customer",
-        },
-
-        theme: {
-          color: "#ff3f6c",
-        },
-
-        modal: {
-          ondismiss: () => {
-            console.log("Razorpay checkout closed");
           },
-        },
-      };
 
-      // --------------------------------------------------
-      // STEP 8: Create Razorpay instance
-      // --------------------------------------------------
+          prefill: {
+            name: order.customerName || "Customer",
+          },
 
-      const razorpay = new window.Razorpay(options);
+          theme: {
+            color: "#ff3f6c",
+          },
 
-      // --------------------------------------------------
-      // Payment failure
-      // --------------------------------------------------
+          modal: {
+            ondismiss: () => {
+              console.log("Razorpay checkout closed");
+            },
+          },
+        };
 
-      razorpay.on("payment.failed", (response: any) => {
-        console.error("Razorpay payment failed:", response);
+        // --------------------------------------------------
+        // STEP 8: Create Razorpay instance
+        // --------------------------------------------------
 
-        const errorMessage =
-          response?.error?.description || "Payment failed. Please try again.";
+        const razorpay = new window.Razorpay(options);
 
-        alert(errorMessage);
-      });
+        // --------------------------------------------------
+        // Payment failure
+        // --------------------------------------------------
 
-      // --------------------------------------------------
-      // Open Razorpay
-      // --------------------------------------------------
+        razorpay.on("payment.failed", (response: any) => {
+          console.error("Razorpay payment failed:", response);
 
-      razorpay.open();
+          const errorMessage =
+            response?.error?.description || "Payment failed. Please try again.";
+
+          alert(errorMessage);
+        });
+
+        // --------------------------------------------------
+        // Open Razorpay
+        // --------------------------------------------------
+
+        razorpay.open();
+      }
     } catch (error: any) {
       console.error("Checkout initialization failed:", error);
 

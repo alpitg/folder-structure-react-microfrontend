@@ -80,30 +80,7 @@
   "cartPage": {
     "title": "Your Shopping Cart",
     "description": "Review your selected items and proceed to checkout.",
-    "pay": {
-      "title": "Proceed to Payment",
-      "description": "Complete your purchase securely and conveniently.",
-      "options": [
-        {
-          "method": "PhonePe",
-          "icon": "static/media/img/phonepe.webp",
-          "link": "phonepe://pay?amount={amount}&vpa={vpa}",
-          "upi": "81494903097@upi"
-        },
-        {
-          "method": "Google Pay",
-          "icon": "static/media/img/gpay.webp",
-          "link": "https://www.google.com/pay/",
-          "upi": "81494903097@upi"
-        },
-        {
-          "method": "Paytm",
-          "icon": "static/media/img/paytm.png",
-          "link": "https://www.paytm.com/",
-          "upi": "81494903097@upi"
-        }
-      ]
-    }
+    "disablePayment": true
   },
   "api": {
     "baseUrl": "http://localhost:8000",
@@ -121,6 +98,13 @@
       "order": {
         "create": "/api/store/orders/create",
         "verifyPayment": "/api/store/orders/verify-payment"
+      },
+      "cart": {
+        "get": "/api/store/cart/create",
+        "addItem": "/api/store/cart/add-item",
+        "updateItem": "/api/store/cart/update-item",
+        "removeItem": "/api/store/cart/remove-item",
+        "clear": "/api/store/cart/clear"
       }
     },
     "dashboard": {
