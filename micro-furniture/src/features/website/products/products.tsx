@@ -1,7 +1,9 @@
 import "./products.scss";
 
-import type { AppDispatch, AppState } from "../../../app/store";
-import { useDispatch, useSelector } from "react-redux";
+import {
+  useAddWebsiteCartItemMutation,
+  useGetWebsiteCartQuery,
+} from "../../../app/redux/website/cart/cart.api";
 import { useEffect, useMemo, useState } from "react";
 import {
   useGetProductsQuery,
@@ -9,11 +11,12 @@ import {
 } from "../../../app/redux/website/product/website-product.api";
 import { useLocation, useNavigate } from "react-router";
 
+import type { AppDispatch } from "../../../app/store";
 import type { IProductData } from "../../store/catalog/interface/product/product.model";
 import NotFoundApp from "./not-found/not-found";
 import { ROUTE_URL } from "../../../routes/constants/routes.const";
 import { addItemToBag } from "../../../app/redux/core/shopping-bag/shopping-bag.slice";
-import { useAddWebsiteCartItemMutation } from "../../../app/redux/website/cart/cart.api";
+import { useDispatch } from "react-redux";
 
 const Products = () => {
   // ==================================================
@@ -28,10 +31,6 @@ const Products = () => {
 
   const query = new URLSearchParams(location.search);
   const category = query.get("category");
-
-  const bagItems = useSelector(
-    (state: AppState) => state.core.shoppingBag.items,
-  );
 
   // ==================================================
   // PAGINATION
@@ -50,6 +49,24 @@ const Products = () => {
   const [addWebsiteCartItem] = useAddWebsiteCartItemMutation();
 
   const guestCartId = localStorage.getItem("website_guest_cart_id");
+
+  // ==================================================
+  // SERVER CART
+  // ==================================================
+
+  const {
+    data: cartResponse,
+    isLoading: isCartLoading,
+    isFetching: isCartFetching,
+  } = useGetWebsiteCartQuery(
+    {
+      customerId: null,
+      guestCartId,
+    },
+    {
+      skip: !guestCartId,
+    },
+  );
 
   // ==================================================
   // PRODUCTS
@@ -97,12 +114,14 @@ const Products = () => {
   const products = productsResponse?.items ?? [];
 
   // ==================================================
-  // BAG ITEM MAP
+  // SERVER CART ITEM MAP
   // ==================================================
 
-  const bagItemMap = useMemo(() => {
-    return new Map(bagItems.map((item) => [item.id, item]));
-  }, [bagItems]);
+  const cartItemMap = useMemo(() => {
+    const items = cartResponse?.items ?? [];
+
+    return new Map(items.map((item) => [item.productId, item]));
+  }, [cartResponse]);
 
   // ==================================================
   // CATEGORY FILTER
@@ -135,17 +154,22 @@ const Products = () => {
       return;
     }
 
+    // ==================================================
+    // SERVER-SIDE CART CHECK
+    // ==================================================
+
+    const existingCartItem = cartItemMap.get(product.id);
+
+    if (existingCartItem) {
+      handleViewBag();
+      return;
+    }
+
     try {
       setAddingProductId(product.id);
 
       // ==================================================
       // ADD TO SERVER CART
-      //
-      // Backend should identify:
-      // - logged-in customer from customerId/auth
-      // - guest customer from guest cart cookie/session
-      //
-      // Do not send customerId: undefined.
       // ==================================================
 
       await addWebsiteCartItem({
@@ -169,6 +193,12 @@ const Products = () => {
           quantity: 1,
         }),
       );
+
+      // ==================================================
+      // REFRESH SERVER CART
+      // ==================================================
+
+      dispatch(websiteProductApi.util.invalidateTags(["Products"]));
     } catch (error) {
       console.error("Unable to add product to cart:", error);
     } finally {
@@ -227,8 +257,9 @@ const Products = () => {
         <>
           <div className="row g-3 g-md-4">
             {filteredProducts.map((product) => {
-              const bagItem = bagItemMap.get(product.id);
-              const quantity = bagItem?.quantity ?? 0;
+              const cartItem = cartItemMap.get(product.id);
+              const quantity = cartItem?.quantity ?? 0;
+
               const isAdding = addingProductId === product.id;
 
               return (
@@ -278,7 +309,16 @@ const Products = () => {
                       {/* ================================================== */}
 
                       <div className="product-actions">
-                        {quantity === 0 ? (
+                        {isCartLoading || isCartFetching ? (
+                          <button
+                            type="button"
+                            className="add-to-cart-btn"
+                            disabled
+                          >
+                            <i className="bi bi-bag-plus"></i>
+                            Checking...
+                          </button>
+                        ) : quantity === 0 ? (
                           <button
                             type="button"
                             className="add-to-cart-btn"
@@ -357,6 +397,7 @@ const Products = () => {
                                   "en-IN",
                                 )}
                               </span>
+
                               {product?.price?.discount?.type ===
                                 "percentage" &&
                                 product.price.discount.value != null && (
@@ -364,14 +405,14 @@ const Products = () => {
                                     {product.price.discount.value}% OFF
                                   </span>
                                 )}
+
                               {product?.price?.discount?.type === "fixed" &&
                                 product.price.discount.value != null && (
                                   <span className="discount">
                                     ₹
-                                    {(
-                                      (product.price.basePrice ?? 0) -
-                                      (product.price.sellingPrice ?? 0)
-                                    ).toLocaleString("en-IN")}
+                                    {product.price.discount.value.toLocaleString(
+                                      "en-IN",
+                                    )}
                                     <span> OFF</span>
                                   </span>
                                 )}

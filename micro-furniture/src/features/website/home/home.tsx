@@ -1,14 +1,17 @@
 import "./home.scss";
 
 import { NavLink, useNavigate } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
+import {
+  useAddWebsiteCartItemMutation,
+  useGetWebsiteCartQuery,
+} from "../../../app/redux/website/cart/cart.api";
 
-import type { AppState } from "../../../app/store";
 import { GetEnvConfig } from "../../../app.config";
 import type { IProductData } from "../../store/catalog/interface/product/product.model";
 import { ROUTE_URL } from "../../../routes/constants/routes.const";
 import ShopByCategoryApp from "./shop-by-category/shop-by-category";
 import { addItemToBag } from "../../../app/redux/core/shopping-bag/shopping-bag.slice";
+import { useDispatch } from "react-redux";
 import { useGetProductsQuery } from "../../../app/redux/website/product/website-product.api";
 
 const blankImage = "/static/media/img/svg/blank-image.svg";
@@ -37,9 +40,33 @@ const Home = () => {
     },
   ];
 
-  const bagItems = useSelector(
-    (state: AppState) => state.core.shoppingBag.items,
+  const guestCartId = localStorage.getItem("website_guest_cart_id");
+
+  // ==================================================
+  // CART
+  // ==================================================
+
+  const {
+    data: cartResponse,
+    isLoading: isCartLoading,
+    isFetching: isCartFetching,
+    refetch: refetchCart,
+  } = useGetWebsiteCartQuery(
+    {
+      customerId: null,
+      guestCartId,
+    },
+    {
+      skip: !guestCartId,
+    },
   );
+
+  const [addWebsiteCartItem, { isLoading: isAddingToCart }] =
+    useAddWebsiteCartItemMutation();
+
+  // ==================================================
+  // PRODUCTS
+  // ==================================================
 
   const { data: productsResponse, isLoading } = useGetProductsQuery({
     searchText: "",
@@ -47,31 +74,77 @@ const Home = () => {
     pageSize: 12,
   });
 
-  const productsFromStore = useSelector(
-    (state: AppState) => state?.website?.websiteProducts?.websiteProducts,
+  const products = productsResponse?.items ?? [];
+
+  // ==================================================
+  // CART ITEM MAP
+  // ==================================================
+
+  const cartItemMap = new Map(
+    (cartResponse?.items ?? []).map((item) => [item.productId, item]),
   );
 
-  const products =
-    productsFromStore?.items?.length > 0
-      ? productsFromStore.items
-      : (productsResponse?.items ?? []);
+  // ==================================================
+  // ADD TO BAG
+  // ==================================================
 
-  const handleAddToBag = (
-    product: any,
-    event: React.MouseEvent<HTMLButtonElement>,
+  const handleAddToBag = async (
+    product: IProductData,
+    event: React.MouseEvent,
   ) => {
     event.preventDefault();
     event.stopPropagation();
 
-    dispatch(
-      addItemToBag({
-        id: product?.id,
-        name: product?.name,
-        image: product?.media?.[0]?.url ?? blankImage,
-        price: product?.price?.sellingPrice ?? 0,
+    if (!product?.id || isAddingToCart) {
+      return;
+    }
+
+    // ==================================================
+    // SERVER-SIDE CART CHECK
+    // ==================================================
+
+    const existingCartItem = cartItemMap.get(product.id);
+
+    if (existingCartItem) {
+      navigate(ROUTE_URL.WEBSITE.CART);
+      return;
+    }
+
+    try {
+      // ==================================================
+      // ADD TO SERVER CART
+      // ==================================================
+
+      await addWebsiteCartItem({
+        customerId: null,
+        guestCartId,
+        productId: product.id,
+        productType: "physical",
         quantity: 1,
-      }),
-    );
+      }).unwrap();
+
+      // ==================================================
+      // KEEP LOCAL BAG IN SYNC
+      // ==================================================
+
+      dispatch(
+        addItemToBag({
+          id: product.id,
+          name: product.name,
+          image: product.media?.[0]?.url ?? blankImage,
+          price: product.price?.sellingPrice ?? 0,
+          quantity: 1,
+        }),
+      );
+
+      // ==================================================
+      // REFRESH SERVER CART
+      // ==================================================
+
+      await refetchCart();
+    } catch (error) {
+      console.error("Unable to add product to cart:", error);
+    }
   };
 
   return (
@@ -121,6 +194,7 @@ const Home = () => {
       </section>
 
       {/* CATEGORIES */}
+
       <ShopByCategoryApp />
 
       {/* DEAL BANNER */}
@@ -174,24 +248,33 @@ const Home = () => {
 
               const mrp = product?.price?.basePrice ?? 0;
 
-              const discount =
-                mrp > sellingPrice
-                  ? Math.round(((mrp - sellingPrice) / mrp) * 100)
-                  : 0;
+              const discount = product?.price?.discount;
 
-              const isInBag = bagItems?.some(
-                (item: any) => item?.id === product?.id,
-              );
+              const isInBag = cartItemMap.has(product?.id);
+
+              const isCartChecking = isCartLoading || isCartFetching;
 
               return (
                 <article className="home-product-card" key={product?.id}>
                   <div className="home-product-image">
                     <img src={image} alt={product?.name || "Product"} />
 
-                    {discount > 0 && (
-                      <span className="home-product-discount">
-                        {discount}% OFF
-                      </span>
+                    {mrp > sellingPrice && discount && (
+                      <>
+                        {discount.type === "percentage" &&
+                          discount.value != null && (
+                            <span className="home-product-discount">
+                              {discount.value}% OFF
+                            </span>
+                          )}
+
+                        {discount.type === "fixed" &&
+                          discount.value != null && (
+                            <span className="home-product-discount">
+                              ₹{discount.value.toLocaleString("en-IN")} OFF
+                            </span>
+                          )}
+                      </>
                     )}
 
                     <button
@@ -211,21 +294,42 @@ const Home = () => {
                     <h3>{product?.name}</h3>
 
                     <div className="home-product-price">
-                      <strong>₹{sellingPrice}</strong>
+                      <strong>₹{sellingPrice.toLocaleString("en-IN")}</strong>
 
-                      {mrp > sellingPrice && <span>₹{mrp}</span>}
+                      {mrp > sellingPrice && (
+                        <span>₹{mrp.toLocaleString("en-IN")}</span>
+                      )}
 
-                      {discount > 0 && <em>{discount}% off</em>}
+                      {mrp > sellingPrice &&
+                        discount?.type === "percentage" &&
+                        discount.value != null && (
+                          <em>{discount.value}% off</em>
+                        )}
+
+                      {mrp > sellingPrice &&
+                        discount?.type === "fixed" &&
+                        discount.value != null && (
+                          <em>₹{discount.value.toLocaleString("en-IN")} off</em>
+                        )}
                     </div>
 
                     <button
                       type="button"
                       className={`home-product-bag ${isInBag ? "added" : ""}`}
                       onClick={(event) => handleAddToBag(product, event)}
+                      disabled={isAddingToCart || isCartChecking}
                     >
                       <i className={`bi ${isInBag ? "bi-check2" : "bi-bag"}`} />
 
-                      <span>{isInBag ? "Added to Bag" : "Add to Bag"}</span>
+                      <span>
+                        {isCartChecking
+                          ? "Checking..."
+                          : isAddingToCart
+                            ? "Adding..."
+                            : isInBag
+                              ? "Added to Bag"
+                              : "Add to Bag"}
+                      </span>
                     </button>
                   </div>
                 </article>
