@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import type { AppState } from "../../../app/store";
 import EmptyCartApp from "./empty-cart/empty-cart";
+import { GetEnvConfig } from "../../../app.config";
 import { ROUTE_URL } from "../../../routes/constants/routes.const";
 
 interface RazorpayOptions {
@@ -61,6 +62,8 @@ const CartApp = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const appSettings = GetEnvConfig();
+
   const items = useSelector((state: AppState) => state.core.shoppingBag.items);
 
   const [
@@ -92,6 +95,31 @@ const CartApp = () => {
 
   const clearCart = () => {
     dispatch(clearBag());
+  };
+
+  const handleEnquiry = () => {
+    if (items.length === 0) return;
+
+    const frontUrl = window.location.origin;
+
+    const message = [
+      "Hello! I would like to place an order for the following items:",
+      ...items.map(
+        (item) =>
+          `- ${item.name} x${item.quantity} @ ₹ ${item.price.toFixed(2)} each = ₹ ${(item.price * item.quantity).toFixed(2)}\n  ${frontUrl}/products/${item.id}`,
+      ),
+      "",
+      `Subtotal: ₹ ${subtotal.toFixed(2)}`,
+    ].join("\n");
+
+    const whatsappNumber =
+      appSettings?.homePage?.contactDetails?.whatsapp?.number;
+
+    const whatsappUrl = whatsappNumber
+      ? `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`
+      : `https://wa.me/?text=${encodeURIComponent(message)}`;
+
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
   };
 
   const loadRazorpayScript = (): Promise<boolean> => {
@@ -508,6 +536,19 @@ const CartApp = () => {
                     <span>
                       Safe and Secure Payments. 100% Authentic Products.
                     </span>
+                  </div>
+
+                  <div>
+                    <div className="account-divider">
+                      <span>OR</span>
+                    </div>
+                    <button
+                      className="btn btn-dark w-100 mt-4 mb-5"
+                      onClick={handleEnquiry}
+                    >
+                      Send Enquiry by WhatsApp
+                      <i className="bi bi-whatsapp ms-2"></i>
+                    </button>
                   </div>
                 </div>
               </div>

@@ -112,28 +112,6 @@ $border: #eaeaec;
     }
   }
 
-  .account-divider {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin: 24px 0;
-    color: $muted;
-    font-size: 10px;
-    font-weight: 600;
-
-    &::before,
-    &::after {
-      content: "";
-      flex: 1;
-      height: 1px;
-      background: $border;
-    }
-
-    span {
-      flex: 0 0 auto;
-    }
-  }
-
   .account-benefits {
     display: flex;
     flex-direction: column;
