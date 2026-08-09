@@ -66975,3 +66975,22 @@ input {
   }
 }
 // ----- End: very important for mobile devices ----- 
+
+// ----- Start: Page header ----- 
+.page-header-app {
+position: sticky;
+    top: var(--bs-app-header-height);
+    z-index: 1030;
+    margin: 0px;
+    background-color: var(--bs-app-bg-color);
+    padding: 20px;
+}
+
+@media (max-width: 767.98px){
+.page-header-app {
+    .page-title {
+      display: none !important;
+    }
+  }
+}
+// ----- End: Page header ----- 
