@@ -291,24 +291,22 @@ const Products = () => {
                       {/* ================================================== */}
 
                       <div className="product-actions">
-                        {isCartLoading || isCartFetching ? (
-                          <button
-                            type="button"
-                            className="add-to-cart-btn"
-                            disabled
-                          >
-                            <i className="bi bi-bag-plus"></i>
-                            Checking...
-                          </button>
-                        ) : quantity === 0 ? (
+                        {quantity === 0 ? (
                           <button
                             type="button"
                             className="add-to-cart-btn"
                             onClick={() => addToCart(product)}
-                            disabled={isAdding}
+                            disabled={
+                              isAdding || isCartLoading || isCartFetching
+                            }
                           >
-                            <i className="bi bi-bag-plus"></i>
-                            {isAdding ? "Adding..." : "Add to Cart"}
+                            <i
+                              className={`bi ${
+                                isAdding ? "bi-hourglass-split" : "bi-bag-plus"
+                              }`}
+                            ></i>
+
+                            {isAdding ? "Adding..." : "Add to Bag"}
                           </button>
                         ) : (
                           <button
@@ -316,8 +314,8 @@ const Products = () => {
                             className="view-cart-btn"
                             onClick={handleViewBag}
                           >
-                            Go to Bag
-                            <i className="bi bi-arrow-right"></i>
+                            <i className="bi bi-check2"></i>
+                            Added to Bag
                           </button>
                         )}
 
