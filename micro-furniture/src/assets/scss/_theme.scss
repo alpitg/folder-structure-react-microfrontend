@@ -66983,11 +66983,11 @@ position: sticky;
     z-index: 1030;
     margin: 0px;
     background-color: var(--bs-app-bg-color);
-    padding: 20px;
+    padding: 20px 0;
 }
 
 @media (max-width: 767.98px){
-.page-header-app {
+  .page-header-app {
     .page-title {
       display: none !important;
     }
