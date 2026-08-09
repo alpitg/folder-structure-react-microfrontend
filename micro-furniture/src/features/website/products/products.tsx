@@ -1,10 +1,6 @@
 import "./products.scss";
 
 import type { AppDispatch, AppState } from "../../../app/store";
-import {
-  useAddWebsiteCartItemMutation,
-  useGetWebsiteCartQuery,
-} from "../../../app/redux/website/cart/cart.api";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -17,6 +13,7 @@ import type { IProductData } from "../../store/catalog/interface/product/product
 import NotFoundApp from "./not-found/not-found";
 import { ROUTE_URL } from "../../../routes/constants/routes.const";
 import { addItemToBag } from "../../../app/redux/core/shopping-bag/shopping-bag.slice";
+import { useAddWebsiteCartItemMutation } from "../../../app/redux/website/cart/cart.api";
 
 const Products = () => {
   // ==================================================
