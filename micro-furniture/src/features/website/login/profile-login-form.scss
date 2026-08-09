@@ -1,13 +1,13 @@
-$primary: #ff3f6c;
-$primary-hover: #e93660;
-$dark: #282c3f;
-$text: #535766;
-$muted: #94969f;
-$border: #eaeaec;
+$color-primary: #ff3f6c;
+$color-primary-hover: #e93660;
+$color-dark: #282c3f;
+$color-text: #535766;
+$color-muted: #94969f;
+$color-border: #eaeaec;
 
 .profile-login-form {
   width: 100%;
-  color: $dark;
+  color: $color-dark;
 
   h3 {
     margin: 0 0 8px;
@@ -18,8 +18,7 @@ $border: #eaeaec;
 
   .profile-login-description {
     margin: 0 0 25px;
-    color: $muted;
-    font-size: 13px;
+    color: $color-muted;
     line-height: 1.6;
   }
 
@@ -29,7 +28,7 @@ $border: #eaeaec;
     label {
       display: block;
       margin-bottom: 8px;
-      color: $dark;
+      color: $color-dark;
       font-size: 12px;
       font-weight: 600;
     }
@@ -39,21 +38,20 @@ $border: #eaeaec;
     height: 48px;
     display: flex;
     align-items: center;
-    border: 1px solid $border;
+    border: 1px solid $color-border;
     border-radius: 3px;
     background: #fff;
     transition: border-color 0.2s ease;
 
     &:focus-within {
-      border-color: $primary;
+      border-color: $color-primary;
     }
 
     .account-input-prefix {
       padding: 0 13px;
-      color: $text;
-      font-size: 13px;
+      color: $color-text;
       font-weight: 600;
-      border-right: 1px solid $border;
+      border-right: 1px solid $color-border;
     }
 
     input {
@@ -63,12 +61,11 @@ $border: #eaeaec;
       padding: 0 12px;
       border: 0;
       outline: 0;
-      color: $dark;
+      color: $color-dark;
       background: transparent;
-      font-size: 13px;
 
       &::placeholder {
-        color: $muted;
+        color: $color-muted;
       }
     }
   }
@@ -95,10 +92,9 @@ $border: #eaeaec;
     gap: 8px;
     border: 0;
     border-radius: 3px;
-    background: $primary;
+    background: $color-primary;
     color: #fff;
     cursor: pointer;
-    font-size: 13px;
     font-weight: 700;
     transition: background 0.2s ease;
 
@@ -108,7 +104,7 @@ $border: #eaeaec;
     }
 
     &:hover {
-      background: $primary-hover;
+      background: $color-primary-hover;
     }
   }
 
@@ -132,10 +128,10 @@ $border: #eaeaec;
       justify-content: center;
       border-radius: 50%;
       background: rgba(255, 63, 108, 0.08);
-      color: $primary;
+      color: $color-primary;
 
       i {
-        color: $primary;
+        color: $color-primary;
         font-size: 15px;
         line-height: 1;
       }
@@ -148,28 +144,50 @@ $border: #eaeaec;
     }
 
     strong {
-      color: $dark;
+      color: $color-dark;
       font-size: 11px;
       font-weight: 700;
     }
 
     span {
-      color: $muted;
+      color: $color-muted;
       font-size: 10px;
     }
   }
 
   .account-terms {
     margin: 24px 0 0;
-    color: $muted;
+    color: $color-muted;
     font-size: 9px;
     line-height: 1.6;
     text-align: center;
 
     span {
-      color: $text;
+      color: $color-text;
       font-weight: 600;
       cursor: pointer;
+    }
+  }
+
+  .account-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 24px 0;
+    color: $color-muted;
+    font-size: 10px;
+    font-weight: 600;
+
+    &::before,
+    &::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: $color-border;
+    }
+
+    span {
+      flex: 0 0 auto;
     }
   }
 }
