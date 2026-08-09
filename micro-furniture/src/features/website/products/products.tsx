@@ -154,10 +154,6 @@ const Products = () => {
       return;
     }
 
-    // ==================================================
-    // SERVER-SIDE CART CHECK
-    // ==================================================
-
     const existingCartItem = cartItemMap.get(product.id);
 
     if (existingCartItem) {
@@ -168,21 +164,13 @@ const Products = () => {
     try {
       setAddingProductId(product.id);
 
-      // ==================================================
-      // ADD TO SERVER CART
-      // ==================================================
-
       await addWebsiteCartItem({
         customerId: null,
-        guestCartId: guestCartId,
+        guestCartId,
         productId: product.id,
         productType: "physical",
         quantity: 1,
       }).unwrap();
-
-      // ==================================================
-      // KEEP LOCAL BAG IN SYNC
-      // ==================================================
 
       dispatch(
         addItemToBag({
@@ -193,12 +181,6 @@ const Products = () => {
           quantity: 1,
         }),
       );
-
-      // ==================================================
-      // REFRESH SERVER CART
-      // ==================================================
-
-      dispatch(websiteProductApi.util.invalidateTags(["Products"]));
     } catch (error) {
       console.error("Unable to add product to cart:", error);
     } finally {
