@@ -12,12 +12,13 @@
     "contactDetails": {
       "address": "Manewada, Nagpur, Maharashtra, India",
       "contactnumber": "+91 8149403097",
-      "email": "email@domain",
+      "email": "help@artisanstudios.in",
       "instagram": "artisanstudiofurniture",
       "whatsapp": {
         "number": "+918149403097",
         "message": "Hello, I would like to inquire about your furniture options."
-      }
+      },
+      "site": "artisanstudios.in"
     },
     "whyChooseUs": {
       "title": "Crafted with excellent material.",
@@ -81,6 +82,9 @@
     "title": "Your Shopping Cart",
     "description": "Review your selected items and proceed to checkout.",
     "enablePayment": true
+  },
+  "legal": {
+    "lastUpdated": "Aug, 2026"
   },
   "api": {
     "baseUrl": "http://localhost:8000",

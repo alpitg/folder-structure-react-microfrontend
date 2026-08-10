@@ -50,6 +50,8 @@ export const ROUTE_URL = {
     ORDER_SUCCESS: "/order-success",
     ORDERS: "/orders",
     HELP: "/help",
+    TERMS_OF_USE: "/terms-of-use",
+    PRIVACY_POLICY: "/privacy-policy",
   },
 
   DASHBOARD: "/crm/dashboard",

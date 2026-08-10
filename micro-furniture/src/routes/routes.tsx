@@ -8,6 +8,7 @@ import { CatalogRoutes } from "../features/store/catalog/routes/catalog.routes";
 import { CustomerRoutes } from "../features/store/customer/routes/customer.route";
 import ForgetPasswordApp from "../components/auth/forget-password/forget-password";
 import InitWebsiteApp from "../features/website/init-website/init-website";
+import { LegalRoutes } from "../features/website/legal/legal.routes";
 import LoadingApp from "../components/loading/loading";
 import LoginApp from "../components/auth/login/login";
 import OrderSuccessApp from "../features/website/cart/order-success/order-success";
@@ -82,6 +83,8 @@ const RoutesApp = () => {
                 path={ROUTE_URL.WEBSITE.PROFILE_EDIT}
                 element={<ProfileApp />}
               />
+
+              {LegalRoutes()}
 
               <Route path="*" element={<Navigate to="/" replace />} />
             </Route>

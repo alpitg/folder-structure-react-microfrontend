@@ -18,6 +18,7 @@ let environment = {
         number: "+1234567890",
         message: "Hello, I would like to inquire about your services.",
       },
+      site: "",
     },
     whyChooseUs: {
       title: "Why Choose Us",
@@ -57,6 +58,9 @@ let environment = {
     title: "Your Shopping Cart",
     description: "Review your selected items and proceed to checkout.",
     enablePayment: false,
+  },
+  legal: {
+    lastUpdated: "",
   },
   api: {
     baseUrl: "",

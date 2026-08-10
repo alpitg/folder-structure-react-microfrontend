@@ -669,13 +669,11 @@ const CartApp = () => {
           <div className="col-lg-4">
             <div className="price-details">
               <h6 className="price-details-title">PRICE DETAILS</h6>
-
               <div className="price-row">
                 <span>Total MRP</span>
 
                 <span>₹{(summary?.mrp ?? 0).toFixed(2)}</span>
               </div>
-
               <div className="price-row">
                 <span>Discount on MRP</span>
 
@@ -683,13 +681,11 @@ const CartApp = () => {
                   - ₹{(summary?.discount ?? 0).toFixed(2)}
                 </span>
               </div>
-
               <div className="price-row">
                 <span>Platform Fee</span>
 
                 <span>₹{(summary?.miscCharges ?? 0).toFixed(2)}</span>
               </div>
-
               <div className="price-row">
                 <span>Shipping Fee</span>
 
@@ -699,9 +695,7 @@ const CartApp = () => {
                     : `₹${(summary?.shipping ?? 0).toFixed(2)}`}
                 </span>
               </div>
-
               {/* Tax */}
-
               {(summary?.tax ?? 0) > 0 && (
                 <div className="price-row">
                   <span>Tax</span>
@@ -709,15 +703,12 @@ const CartApp = () => {
                   <span>₹{(summary?.tax ?? 0).toFixed(2)}</span>
                 </div>
               )}
-
               <div className="price-divider"></div>
-
               <div className="price-total">
                 <span>Total Amount</span>
 
                 <span>₹{(summary?.grandTotal ?? 0).toFixed(2)}</span>
               </div>
-
               <button
                 type="button"
                 className="place-order-btn"
@@ -730,11 +721,29 @@ const CartApp = () => {
                     ? "VERIFYING PAYMENT..."
                     : "PLACE ORDER"}
               </button>
-
               <div className="secure-payment">
                 <i className="bi bi-shield-check"></i>
 
                 <span>Safe and Secure Payments. 100% Authentic Products.</span>
+              </div>
+
+              <div className="text-center small text-muted py-2">
+                By placing the order, you agree to {appSettings?.name}'s{" "}
+                <NavLink
+                  to={ROUTE_URL.WEBSITE.TERMS_OF_USE}
+                  className="text-decoration-none"
+                  target="_blank"
+                >
+                  Terms of Use
+                </NavLink>
+                <span> and </span>
+                <NavLink
+                  to={ROUTE_URL.WEBSITE.PRIVACY_POLICY}
+                  className="text-decoration-none"
+                  target="_blank"
+                >
+                  Privacy Policy
+                </NavLink>
               </div>
 
               <div>
