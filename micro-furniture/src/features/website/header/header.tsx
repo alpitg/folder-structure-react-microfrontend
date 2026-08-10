@@ -37,7 +37,21 @@ const HeaderApp = () => {
         </NavLink>
 
         {/* Mobile Cart + Toggle */}
-        <div className="d-flex align-items-center gap-5 d-md-none">
+        <div className="menu d-flex align-items-center gap-6 d-md-none me-3">
+          <NavLink
+            to={ROUTE_URL.WEBSITE.PRODUCTS}
+            className="mobile-cart"
+            title="Products"
+          >
+            <i className="bi bi-box-seam fs-5"></i>
+          </NavLink>
+          <NavLink
+            to={ROUTE_URL.WEBSITE.WISHLIST}
+            className="mobile-cart"
+            title="Wishlist"
+          >
+            <i className="bi bi-heart fs-5"></i>
+          </NavLink>
           <NavLink
             to={ROUTE_URL.WEBSITE.CART}
             className="mobile-cart"
