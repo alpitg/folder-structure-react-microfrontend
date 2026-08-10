@@ -295,7 +295,7 @@ const CartApp = () => {
       // STEP 1: Load Razorpay
       // --------------------------------------------------
 
-      if (appSettings?.cartPage?.disablePayment) {
+      if (appSettings?.cartPage?.enablePayment) {
         const razorpayLoaded = await loadRazorpayScript();
 
         if (!razorpayLoaded) {
@@ -338,7 +338,7 @@ const CartApp = () => {
       // STEP 4: Open Razorpay
       // --------------------------------------------------
 
-      if (appSettings?.cartPage?.disablePayment) {
+      if (appSettings?.cartPage?.enablePayment) {
         const payment = result.payment;
 
         if (!payment.keyId || !payment.razorpayOrderId) {

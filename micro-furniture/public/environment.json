@@ -80,7 +80,7 @@
   "cartPage": {
     "title": "Your Shopping Cart",
     "description": "Review your selected items and proceed to checkout.",
-    "disablePayment": true
+    "enablePayment": true
   },
   "api": {
     "baseUrl": "http://localhost:8000",

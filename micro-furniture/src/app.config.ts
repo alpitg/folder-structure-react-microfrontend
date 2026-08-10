@@ -56,7 +56,7 @@ let environment = {
   cartPage: {
     title: "Your Shopping Cart",
     description: "Review your selected items and proceed to checkout.",
-    disablePayment: false,
+    enablePayment: false,
   },
   api: {
     baseUrl: "",
