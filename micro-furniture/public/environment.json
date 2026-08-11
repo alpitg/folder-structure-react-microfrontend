@@ -91,7 +91,7 @@
     "apiVersion": "v1",
     "website": {
       "apiUrl": "http://localhost:8000",
-      "login": "/api/auth/login",
+      "login": "/api/store/auth/login",
       "logout": "/api/auth/logout",
       "refreshToken": "/api/auth/refresh",
       "getCurrentUserProfile": "/api/auth/users/{id}/current-user-profile",
