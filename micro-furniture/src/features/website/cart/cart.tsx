@@ -15,6 +15,8 @@ import {
 import EmptyCartApp from "./empty-cart/empty-cart";
 import { GetEnvConfig } from "../../../app.config";
 import { ROUTE_URL } from "../../../routes/constants/routes.const";
+import UserLoginApp from "../login/user-login";
+import { useState } from "react";
 
 interface RazorpayOptions {
   key: string;
@@ -65,8 +67,8 @@ const CartApp = () => {
   //#region Variables
 
   const navigate = useNavigate();
-
   const appSettings = GetEnvConfig();
+  const [isOpen, setIsOpen] = useState(false);
 
   // --------------------------------------------------
   // GUEST CART ID
@@ -287,6 +289,11 @@ const CartApp = () => {
 
   const handleCheckout = async () => {
     if (items.length === 0) {
+      return;
+    }
+
+    if (guestCartId) {
+      setIsOpen(true);
       return;
     }
 
@@ -764,6 +771,8 @@ const CartApp = () => {
           <div className="alert alert-danger mt-4">{errorMessage}</div>
         )}
       </div>
+
+      {isOpen && <UserLoginApp onClose={() => setIsOpen(false)} />}
     </section>
   );
 };
