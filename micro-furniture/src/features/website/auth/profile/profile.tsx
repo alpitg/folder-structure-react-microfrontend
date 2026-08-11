@@ -1,7 +1,7 @@
 import "./profile.scss";
 
-import { GetEnvConfig } from "../../../app.config";
-import UserLoginApp from "../auth/login/user-login";
+import { GetEnvConfig } from "../../../../app.config";
+import UserLoginApp from "../login/user-login";
 import { useState } from "react";
 
 interface ProfileProps {

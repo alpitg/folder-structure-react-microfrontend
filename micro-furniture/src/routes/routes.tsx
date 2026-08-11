@@ -38,7 +38,7 @@ const UIApp = lazy(() => import("../components/ui/ui"));
 const SettingsApp = lazy(() => import("../features/settings/settings"));
 const WishlistApp = lazy(() => import("../features/website/wishlist/wishlist"));
 
-const ProfileApp = lazy(() => import("../features/website/profile/profile"));
+const ProfileApp = lazy(() => import("../features/website/auth/profile/profile"));
 
 //#endregion
 
