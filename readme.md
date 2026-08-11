@@ -132,6 +132,18 @@ ssh -i /Users/alpitg/Downloads/microservice-vm_key.pem azureuser@74.225.250.126
 
 ```
 
+### removing unused Docker resources is safe (if deployment failed)
+```cmd
+df -h
+docker system df
+
+docker system prune -a
+docker builder prune -a
+
+
+df -h
+```
+
 
 ### SSL certificate 
 ```cmd

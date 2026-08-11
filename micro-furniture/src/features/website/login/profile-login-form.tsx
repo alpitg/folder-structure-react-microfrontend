@@ -1,5 +1,8 @@
 import "./profile-login-form.scss";
 
+import { GetEnvConfig } from "../../../app.config";
+import { NavLink } from "react-router";
+import { ROUTE_URL } from "../../../routes/constants/routes.const";
 import { useState } from "react";
 import { useWebsiteLoginMutation } from "../../../app/redux/website/auth/profile-login.api";
 
@@ -10,6 +13,8 @@ interface ProfileLoginFormProps {
 const ProfileLoginForm = ({ onLogin }: ProfileLoginFormProps) => {
   const [mobile, setMobile] = useState("");
   const [error, setError] = useState("");
+
+  const appSettings = GetEnvConfig();
 
   const [websiteLogin, { isLoading }] = useWebsiteLoginMutation();
 
@@ -129,10 +134,29 @@ const ProfileLoginForm = ({ onLogin }: ProfileLoginFormProps) => {
         </div>
       </div>
 
-      <p className="account-terms">
+      {/* <p className="account-terms">
         By continuing, you agree to our <span>Terms of Use</span> and{" "}
         <span>Privacy Policy</span>.
-      </p>
+      </p> */}
+
+      <div className="text-center small text-muted py-2">
+        By continuing, you agree to our {appSettings?.name}'s{" "}
+        <NavLink
+          to={ROUTE_URL.WEBSITE.TERMS_OF_USE}
+          className="text-decoration-none"
+          target="_blank"
+        >
+          Terms of Use
+        </NavLink>
+        <span> and </span>
+        <NavLink
+          to={ROUTE_URL.WEBSITE.PRIVACY_POLICY}
+          className="text-decoration-none"
+          target="_blank"
+        >
+          Privacy Policy
+        </NavLink>
+      </div>
     </div>
   );
 };
