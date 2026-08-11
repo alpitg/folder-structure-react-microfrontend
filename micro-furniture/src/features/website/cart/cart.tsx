@@ -230,7 +230,7 @@ const CartApp = () => {
 
       `Subtotal: ₹ ${(summary?.subtotal ?? 0).toFixed(2)}`,
       `Discount: ₹ ${(summary?.discount ?? 0).toFixed(2)}`,
-      `Tax: ₹ ${(summary?.tax ?? 0).toFixed(2)}`,
+      `Tax: ₹ ${(summary?.taxToAdd ?? 0).toFixed(2)}`,
       `Shipping: ₹ ${(summary?.shipping ?? 0).toFixed(2)}`,
       `Total: ₹ ${(summary?.grandTotal ?? 0).toFixed(2)}`,
     ].join("\n");
@@ -696,11 +696,11 @@ const CartApp = () => {
                 </span>
               </div>
               {/* Tax */}
-              {(summary?.tax ?? 0) > 0 && (
+              {(summary?.taxToAdd ?? 0) > 0 && (
                 <div className="price-row">
                   <span>Tax</span>
 
-                  <span>₹{(summary?.tax ?? 0).toFixed(2)}</span>
+                  <span>₹{(summary?.taxToAdd ?? 0).toFixed(2)}</span>
                 </div>
               )}
               <div className="price-divider"></div>

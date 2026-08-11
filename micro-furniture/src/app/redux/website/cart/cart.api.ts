@@ -56,7 +56,8 @@ export interface CartSummary {
   discount: number;
   subtotal: number;
   shipping: number;
-  tax: number;
+  taxToAdd: number;
+  totalTax: number;
   miscCharges: number;
   grandTotal: number;
 }
