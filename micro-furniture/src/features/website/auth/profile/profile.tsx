@@ -4,24 +4,57 @@ import { GetEnvConfig } from "../../../../app.config";
 import UserLoginApp from "../login/user-login";
 import { useState } from "react";
 
+interface ProfileUser {
+  id?: string;
+  name?: string;
+  email?: string;
+  phone?: string;
+  mobile?: string;
+}
+
 interface ProfileProps {
   isLoggedIn?: boolean;
-  user?: {
-    id?: string;
-    name?: string;
-    email?: string;
-    phone?: string;
-  };
+  user?: ProfileUser;
+}
+
+interface LoginCustomer {
+  id?: string;
+  name?: string;
+  email?: string;
+  mobile?: string;
 }
 
 const Profile = ({ isLoggedIn = false, user }: ProfileProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(isLoggedIn);
-  const [currentUser, setCurrentUser] = useState(user);
-
   const appSettings = GetEnvConfig();
 
+  const storedCustomerId = localStorage.getItem("customerId");
+  const storedCustomerMobile = localStorage.getItem("customerMobile");
+  const storedCustomerName = localStorage.getItem("customerName");
+  const storedCustomerEmail = localStorage.getItem("customerEmail");
+
+  const hasStoredLogin = Boolean(
+    storedCustomerId || localStorage.getItem("access_token"),
+  );
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const [loggedIn, setLoggedIn] = useState(isLoggedIn || hasStoredLogin);
+
+  const [currentUser, setCurrentUser] = useState<ProfileUser | undefined>(
+    user || {
+      id: storedCustomerId || undefined,
+      name: storedCustomerName || undefined,
+      email: storedCustomerEmail || undefined,
+      phone: storedCustomerMobile || undefined,
+      mobile: storedCustomerMobile || undefined,
+    },
+  );
+
   const openProfile = () => {
+    if (loggedIn) {
+      return;
+    }
+
     setIsOpen(true);
   };
 
@@ -29,14 +62,28 @@ const Profile = ({ isLoggedIn = false, user }: ProfileProps) => {
     setIsOpen(false);
   };
 
-  const handleLogin = (customerId: string, mobile: string) => {
+  const handleLogin = (
+    customerId: string,
+    mobile: string,
+    customer?: LoginCustomer,
+  ) => {
     localStorage.setItem("customerId", customerId);
-
     localStorage.setItem("customerMobile", mobile);
+
+    if (customer?.name) {
+      localStorage.setItem("customerName", customer.name);
+    }
+
+    if (customer?.email) {
+      localStorage.setItem("customerEmail", customer.email);
+    }
 
     setCurrentUser({
       id: customerId,
+      mobile: mobile,
       phone: mobile,
+      name: customer?.name,
+      email: customer?.email,
     });
 
     setLoggedIn(true);
