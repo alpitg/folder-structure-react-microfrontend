@@ -355,15 +355,10 @@ const CartApp = () => {
 
         const options: RazorpayOptions = {
           key: payment.keyId,
-
           amount: payment.amount,
-
           currency: payment.currency,
-
           name: appSettings?.name ?? "Artisan Studios",
-
           description: `Order ${order.orderCode || ""}`,
-
           order_id: payment.razorpayOrderId,
 
           handler: async (response: RazorpayResponse) => {
@@ -374,13 +369,12 @@ const CartApp = () => {
 
               await verifyWebsitePayment({
                 orderId: order.id,
-
                 razorpayPaymentId: response.razorpay_payment_id,
-
                 razorpayOrderId: response.razorpay_order_id,
-
                 razorpaySignature: response.razorpay_signature,
               }).unwrap();
+
+              localStorage.removeItem(GUEST_CART_ID_KEY);
 
               navigate(
                 `${ROUTE_URL.WEBSITE.ORDER_SUCCESS}?orderId=${order.orderCode}`,
@@ -396,9 +390,7 @@ const CartApp = () => {
 
           prefill: {
             name: order.customerName || "Guest Customer",
-
             email: order.customerEmail,
-
             contact: order.customerMobile,
           },
 
