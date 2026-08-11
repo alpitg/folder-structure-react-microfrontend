@@ -67,9 +67,14 @@ let environment = {
     apiVersion: "",
     website: {
       apiUrl: "",
-      login: "",
-      logout: "",
-      refreshToken: "",
+      auth: {
+        refresh: "",
+        me: "",
+        logout: "",
+        sendOtp: "",
+        resendOtp: "",
+        verifyOtp: "",
+      },
       getCurrentUserProfile: "",
       product: {
         list: "",

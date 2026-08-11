@@ -15,7 +15,7 @@ import {
 import EmptyCartApp from "./empty-cart/empty-cart";
 import { GetEnvConfig } from "../../../app.config";
 import { ROUTE_URL } from "../../../routes/constants/routes.const";
-import UserLoginApp from "../login/user-login";
+import UserLoginApp from "../auth/login/user-login";
 import { useState } from "react";
 
 interface RazorpayOptions {
@@ -25,19 +25,15 @@ interface RazorpayOptions {
   name: string;
   description: string;
   order_id: string;
-
   handler: (response: RazorpayResponse) => void;
-
   prefill?: {
     name?: string;
     email?: string;
     contact?: string;
   };
-
   theme?: {
     color?: string;
   };
-
   modal?: {
     ondismiss?: () => void;
   };
@@ -51,8 +47,14 @@ interface RazorpayResponse {
 
 interface RazorpayInstance {
   open: () => void;
-
   on: (event: string, callback: (response: any) => void) => void;
+}
+
+interface Customer {
+  id: string;
+  mobile: string;
+  name?: string;
+  email?: string;
 }
 
 declare global {
@@ -63,22 +65,40 @@ declare global {
 
 const GUEST_CART_ID_KEY = "website_guest_cart_id";
 
-const CartApp = () => {
-  //#region Variables
+const ACCESS_TOKEN_KEY = "access_token";
 
+const CUSTOMER_ID_KEY = "customer_id";
+
+const CUSTOMER_MOBILE_KEY = "customer_mobile";
+
+const CUSTOMER_NAME_KEY = "customer_name";
+
+const CUSTOMER_EMAIL_KEY = "customer_email";
+
+const CartApp = () => {
   const navigate = useNavigate();
   const appSettings = GetEnvConfig();
+
   const [isOpen, setIsOpen] = useState(false);
 
-  // --------------------------------------------------
-  // GUEST CART ID
-  // --------------------------------------------------
+  const [customer, setCustomer] = useState<Customer | null>(() => {
+    const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
+
+    const customerId = localStorage.getItem(CUSTOMER_ID_KEY);
+
+    if (!accessToken || !customerId) {
+      return null;
+    }
+
+    return {
+      id: customerId,
+      mobile: localStorage.getItem(CUSTOMER_MOBILE_KEY) || "",
+      name: localStorage.getItem(CUSTOMER_NAME_KEY) || undefined,
+      email: localStorage.getItem(CUSTOMER_EMAIL_KEY) || undefined,
+    };
+  });
 
   const guestCartId = localStorage.getItem(GUEST_CART_ID_KEY);
-
-  // --------------------------------------------------
-  // CART API
-  // --------------------------------------------------
 
   const {
     data: cart,
@@ -108,10 +128,6 @@ const CartApp = () => {
     { isLoading: isClearingCart, error: clearCartError },
   ] = useClearWebsiteCartMutation();
 
-  // --------------------------------------------------
-  // ORDER API
-  // --------------------------------------------------
-
   const [
     createWebsiteOrder,
     { isLoading: isCreatingOrder, error: createOrderError },
@@ -122,17 +138,8 @@ const CartApp = () => {
     { isLoading: isVerifyingPayment, error: verifyPaymentError },
   ] = useVerifyWebsitePaymentMutation();
 
-  // --------------------------------------------------
-  // SERVER CART
-  // --------------------------------------------------
-
   const items = cart?.items ?? [];
-
   const summary = cart?.summary;
-
-  //#endregion
-
-  //#region Cart Actions
 
   const increase = async (productId: string) => {
     const item = items.find((item) => item.productId === productId);
@@ -205,10 +212,6 @@ const CartApp = () => {
     }
   };
 
-  //#endregion
-
-  //#region WhatsApp Enquiry
-
   const handleEnquiry = () => {
     if (items.length === 0) {
       return;
@@ -247,10 +250,6 @@ const CartApp = () => {
     window.open(whatsappUrl, "_blank", "noopener,noreferrer");
   };
 
-  //#endregion
-
-  //#region Razorpay
-
   const loadRazorpayScript = (): Promise<boolean> => {
     return new Promise((resolve) => {
       if (window.Razorpay) {
@@ -277,31 +276,30 @@ const CartApp = () => {
       script.async = true;
 
       script.onload = () => resolve(true);
+
       script.onerror = () => resolve(false);
 
       document.body.appendChild(script);
     });
   };
 
-  //#endregion
-
-  //#region Checkout
-
   const handleCheckout = async () => {
     if (items.length === 0) {
       return;
     }
 
-    if (guestCartId) {
+    const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
+
+    /*
+     * Customer must be authenticated
+     * before creating the order.
+     */
+    if (!accessToken || !customer?.id) {
       setIsOpen(true);
       return;
     }
 
     try {
-      // --------------------------------------------------
-      // STEP 1: Load Razorpay
-      // --------------------------------------------------
-
       if (appSettings?.cartPage?.enablePayment) {
         const razorpayLoaded = await loadRazorpayScript();
 
@@ -312,38 +310,33 @@ const CartApp = () => {
         }
       }
 
-      // --------------------------------------------------
-      // STEP 2: Prepare order payload
-      // --------------------------------------------------
-
       const payload = {
-        customerName: "Guest",
-        customerId: null,
+        customerName: customer.name || "Customer",
+
+        customerId: customer.id,
+
         guestCartId,
+
         items: items.map((item) => ({
           productId: item.productId,
+
           productType: item.productType ?? "physical",
+
           quantity: item.quantity,
+
           customizedDetails: item.customizedDetails,
         })),
+
         miscCharges: [],
         note: "Website order",
         likelyDateOfDelivery: null,
       };
-
-      // --------------------------------------------------
-      // STEP 3: Create website order
-      // --------------------------------------------------
 
       const result = await createWebsiteOrder(payload).unwrap();
 
       if (!result?.payment) {
         throw new Error("Payment information was not returned.");
       }
-
-      // --------------------------------------------------
-      // STEP 4: Open Razorpay
-      // --------------------------------------------------
 
       if (appSettings?.cartPage?.enablePayment) {
         const payment = result.payment;
@@ -376,12 +369,17 @@ const CartApp = () => {
 
               await verifyWebsitePayment({
                 orderId: order.id,
+
                 razorpayPaymentId: response.razorpay_payment_id,
+
                 razorpayOrderId: response.razorpay_order_id,
+
                 razorpaySignature: response.razorpay_signature,
               }).unwrap();
 
-              localStorage.removeItem(GUEST_CART_ID_KEY);
+              if (guestCartId) {
+                localStorage.removeItem(GUEST_CART_ID_KEY);
+              }
 
               navigate(
                 `${ROUTE_URL.WEBSITE.ORDER_SUCCESS}?orderId=${order.orderCode}`,
@@ -396,9 +394,11 @@ const CartApp = () => {
           },
 
           prefill: {
-            name: order.customerName || "Guest Customer",
-            email: order.customerEmail,
-            contact: order.customerMobile,
+            name: order.customerName || customer.name || "Customer",
+
+            email: order.customerEmail || customer.email,
+
+            contact: order.customerMobile || customer.mobile,
           },
 
           theme: {
@@ -424,6 +424,18 @@ const CartApp = () => {
         });
 
         razorpay.open();
+      } else {
+        /*
+         * If payment is disabled,
+         * go directly to order success.
+         */
+        if (guestCartId) {
+          localStorage.removeItem(GUEST_CART_ID_KEY);
+        }
+
+        navigate(
+          `${ROUTE_URL.WEBSITE.ORDER_SUCCESS}?orderId=${result?.order?.orderCode}`,
+        );
       }
     } catch (error: any) {
       console.error("Checkout initialization failed:", error);
@@ -438,9 +450,18 @@ const CartApp = () => {
     }
   };
 
-  //#endregion
+  const handleLogin = (customerId: string, mobile: string) => {
+    const loggedInCustomer: Customer = {
+      id: customerId,
+      mobile,
+      name: localStorage.getItem(CUSTOMER_NAME_KEY) || undefined,
+      email: localStorage.getItem(CUSTOMER_EMAIL_KEY) || undefined,
+    };
 
-  //#region Loading / Errors
+    setCustomer(loggedInCustomer);
+
+    setIsOpen(false);
+  };
 
   const isProcessing =
     isUpdatingItem ||
@@ -464,59 +485,28 @@ const CartApp = () => {
     (verifyPaymentError as any)?.data?.message ||
     null;
 
-  //#endregion
-
-  // ------------------------------------------------------
-  // LOADING
-  // ------------------------------------------------------
-
   if (isCartLoading) {
-    return (
-      <section className="cart-page">
-        <div className="container">
-          <div className="text-center py-5">Loading cart...</div>
-        </div>
-      </section>
-    );
+    return <div>Loading cart...</div>;
   }
-
-  // ------------------------------------------------------
-  // EMPTY CART
-  // ------------------------------------------------------
 
   if (items.length === 0) {
     return <EmptyCartApp />;
   }
 
-  // ------------------------------------------------------
-  // CART
-  // ------------------------------------------------------
-
   return (
     <section className="cart-app">
       <div className="container">
-        {/* -------------------------------------------- */}
-        {/* CART HEADER */}
-        {/* -------------------------------------------- */}
-
         <div className="cart-app-header">
           <h4>
             Shopping Bag
             <span>({items.length} Items)</span>
           </h4>
         </div>
-
         <div className="row g-4">
-          {/* -------------------------------------------- */}
-          {/* CART ITEMS */}
-          {/* -------------------------------------------- */}
-
           <div className="col-lg-8">
             <div className="cart-items">
               {items.map((item) => (
                 <div className="cart-item" key={item.productId}>
-                  {/* Product Image */}
-
                   <NavLink
                     to={`/products/${item.productId}`}
                     className="cart-item-image-link"
@@ -529,8 +519,6 @@ const CartApp = () => {
                       className="cart-image"
                     />
                   </NavLink>
-
-                  {/* Product Details */}
 
                   <div className="cart-item-details">
                     <div className="cart-item-heading">
@@ -557,8 +545,6 @@ const CartApp = () => {
                         <i className="bi bi-x-lg"></i>
                       </button>
                     </div>
-
-                    {/* Price */}
 
                     <div className="cart-price">
                       <span className="current-price">
@@ -593,8 +579,6 @@ const CartApp = () => {
                       )}
                     </div>
 
-                    {/* Quantity */}
-
                     <div className="cart-item-bottom">
                       <div className="quantity-box">
                         <button
@@ -627,8 +611,6 @@ const CartApp = () => {
                       </div>
                     </div>
 
-                    {/* Delivery */}
-
                     <div className="delivery-info">
                       <i className="bi bi-truck"></i>
 
@@ -638,8 +620,6 @@ const CartApp = () => {
                 </div>
               ))}
             </div>
-
-            {/* Continue Shopping */}
 
             <div className="cart-actions d-flex gap-5">
               <NavLink
@@ -661,18 +641,16 @@ const CartApp = () => {
             </div>
           </div>
 
-          {/* -------------------------------------------- */}
-          {/* PRICE DETAILS */}
-          {/* -------------------------------------------- */}
-
           <div className="col-lg-4">
             <div className="price-details">
               <h6 className="price-details-title">PRICE DETAILS</h6>
+
               <div className="price-row">
                 <span>Total MRP</span>
 
                 <span>₹{(summary?.mrp ?? 0).toFixed(2)}</span>
               </div>
+
               <div className="price-row">
                 <span>Discount on MRP</span>
 
@@ -680,11 +658,13 @@ const CartApp = () => {
                   - ₹{(summary?.discount ?? 0).toFixed(2)}
                 </span>
               </div>
+
               <div className="price-row">
                 <span>Platform Fee</span>
 
                 <span>₹{(summary?.miscCharges ?? 0).toFixed(2)}</span>
               </div>
+
               <div className="price-row">
                 <span>Shipping Fee</span>
 
@@ -694,7 +674,7 @@ const CartApp = () => {
                     : `₹${(summary?.shipping ?? 0).toFixed(2)}`}
                 </span>
               </div>
-              {/* Tax */}
+
               {(summary?.taxToAdd ?? 0) > 0 && (
                 <div className="price-row">
                   <span>Tax</span>
@@ -702,12 +682,15 @@ const CartApp = () => {
                   <span>₹{(summary?.taxToAdd ?? 0).toFixed(2)}</span>
                 </div>
               )}
+
               <div className="price-divider"></div>
+
               <div className="price-total">
                 <span>Total Amount</span>
 
                 <span>₹{(summary?.grandTotal ?? 0).toFixed(2)}</span>
               </div>
+
               <button
                 type="button"
                 className="place-order-btn"
@@ -720,6 +703,7 @@ const CartApp = () => {
                     ? "VERIFYING PAYMENT..."
                     : "PLACE ORDER"}
               </button>
+
               <div className="secure-payment">
                 <i className="bi bi-shield-check"></i>
 
@@ -735,7 +719,7 @@ const CartApp = () => {
                 >
                   Terms of Use
                 </NavLink>
-                <span> and </span>
+                <span>{" and "}</span>
                 <NavLink
                   to={ROUTE_URL.WEBSITE.PRIVACY_POLICY}
                   className="text-decoration-none"
@@ -762,17 +746,14 @@ const CartApp = () => {
             </div>
           </div>
         </div>
-
-        {/* -------------------------------------------- */}
-        {/* ERROR */}
-        {/* -------------------------------------------- */}
-
-        {errorMessage && (
-          <div className="alert alert-danger mt-4">{errorMessage}</div>
-        )}
       </div>
 
-      {isOpen && <UserLoginApp onClose={() => setIsOpen(false)} />}
+      {errorMessage && (
+        <div className="alert alert-danger mt-4">{errorMessage}</div>
+      )}
+      {isOpen && (
+        <UserLoginApp onLogin={handleLogin} onClose={() => setIsOpen(false)} />
+      )}
     </section>
   );
 };

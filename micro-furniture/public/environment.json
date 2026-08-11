@@ -91,9 +91,14 @@
     "apiVersion": "v1",
     "website": {
       "apiUrl": "http://localhost:8000",
-      "login": "/api/store/auth/login",
-      "logout": "/api/auth/logout",
-      "refreshToken": "/api/auth/refresh",
+      "auth": {
+        "refresh": "/api/website/auth/refresh",
+        "me": "/api/website/auth/me",
+        "logout": "/api/website/auth/logout",
+        "sendOtp": "/api/website/auth/otp/send",
+        "resendOtp": "/api/website/auth/otp/resend",
+        "verifyOtp": "/api/website/auth/otp/verify"
+      },
       "getCurrentUserProfile": "/api/auth/users/{id}/current-user-profile",
       "product": {
         "list": "/api/store/products",
