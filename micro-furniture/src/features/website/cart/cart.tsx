@@ -383,7 +383,7 @@ const CartApp = () => {
               }).unwrap();
 
               navigate(
-                `${ROUTE_URL.WEBSITE.ORDER_SUCCESS}?orderId=${order.id}`,
+                `${ROUTE_URL.WEBSITE.ORDER_SUCCESS}?orderId=${order.orderCode}`,
               );
             } catch (error) {
               console.error("Payment verification failed:", error);
@@ -653,7 +653,7 @@ const CartApp = () => {
 
               <button
                 type="button"
-                className="btn btn-secondary clear-cart"
+                className="btn btn-outline-secondary clear-cart"
                 onClick={clearCart}
                 disabled={isProcessing}
               >

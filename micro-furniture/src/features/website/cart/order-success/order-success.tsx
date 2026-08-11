@@ -2,11 +2,24 @@ import "./order-success.scss";
 
 import { useNavigate, useSearchParams } from "react-router";
 
+import { useState } from "react";
+
 const OrderSuccessApp = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  const orderId = searchParams.get("orderId");
+  const orderId = searchParams.get("orderId") ?? "";
+
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(orderId);
+    setCopied(true);
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 1500);
+  };
 
   return (
     <section className="order-success-section bg-light min-vh-100 d-flex align-items-center justify-content-center py-5">
@@ -31,7 +44,20 @@ const OrderSuccessApp = () => {
                 <div className="order-id-box border rounded-2 bg-light px-3 py-3 mb-4">
                   <div className="small text-muted mb-1">ORDER ID</div>
 
-                  <div className="fw-semibold text-break">{orderId}</div>
+                  <div className="d-flex align-items-center gap-2 justify-content-center">
+                    <div className="fw-semibold text-break">{orderId}</div>
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-link p-0 text-secondary"
+                      onClick={handleCopy}
+                      title={copied ? "Copied" : "Copy Order ID"}
+                      aria-label={copied ? "Copied" : "Copy Order ID"}
+                    >
+                      <i
+                        className={`bi ${copied ? "bi-check2 text-success" : "bi-copy"}`}
+                      ></i>
+                    </button>
+                  </div>
                 </div>
               )}
 
