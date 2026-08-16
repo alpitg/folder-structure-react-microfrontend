@@ -1,0 +1,347 @@
+// ==================================================
+// CART STEPS COLORS
+// ==================================================
+
+$color-primary: #ff3f6c;
+$color-primary-hover: #e93660;
+
+$color-dark: #282c3f;
+$color-text: #535766;
+$color-muted: #94969f;
+
+$color-success: #03a685;
+
+$color-border: #eaeaec;
+$color-border-light: #f0f0f0;
+
+$color-background: #fff;
+$color-background-light: #f5f5f6;
+
+// ==================================================
+// CART STEPS
+// ==================================================
+
+.cart-steps {
+  width: 100%;
+  margin-bottom: 25px;
+
+  display: flex;
+  justify-content: center;
+
+  background: $color-background;
+
+  // ==================================================
+  // STEPS LIST
+  // ==================================================
+
+  .cart-steps-list {
+    width: 100%;
+    max-width: 620px;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  // ==================================================
+  // STEP
+  // ==================================================
+
+  .cart-step {
+    flex: 1;
+
+    position: relative;
+
+    min-width: 0;
+
+    display: flex;
+    justify-content: center;
+
+    // ==================================================
+    // STEP BUTTON
+    // ==================================================
+
+    .cart-step-button {
+      position: relative;
+      z-index: 2;
+
+      width: 110px;
+
+      padding: 0;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      color: $color-muted;
+      background: transparent;
+
+      border: 0;
+
+      cursor: default;
+
+      transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+
+      &:disabled {
+        opacity: 1;
+      }
+    }
+
+    // ==================================================
+    // STEP NUMBER
+    // ==================================================
+
+    .cart-step-number {
+      width: 32px;
+      height: 32px;
+
+      margin-bottom: 8px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      color: $color-muted;
+      background: $color-background;
+
+      border: 1px solid #d4d5d9;
+      border-radius: 50%;
+
+      font-size: 12px;
+      font-weight: 600;
+
+      transition:
+        color 0.2s ease,
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+
+      i {
+        font-size: 15px;
+        font-weight: 700;
+      }
+    }
+
+    // ==================================================
+    // STEP ICON
+    // ==================================================
+
+    .cart-step-icon {
+      display: none;
+
+      margin-bottom: 6px;
+
+      i {
+        font-size: 15px;
+      }
+    }
+
+    // ==================================================
+    // STEP LABEL
+    // ==================================================
+
+    .cart-step-label {
+      display: block;
+
+      color: $color-muted;
+
+      font-size: 12px;
+      font-weight: 600;
+
+      line-height: 1.2;
+
+      text-transform: uppercase;
+
+      letter-spacing: 0.8px;
+
+      white-space: nowrap;
+
+      transition: color 0.2s ease;
+    }
+
+    // ==================================================
+    // ACTIVE STEP
+    // ==================================================
+
+    &.cart-step-active {
+      .cart-step-button {
+        color: $color-primary;
+      }
+
+      .cart-step-number {
+        color: $color-background;
+
+        background: $color-primary;
+
+        border-color: $color-primary;
+
+        box-shadow: 0 0 0 4px rgba($color-primary, 0.08);
+      }
+
+      .cart-step-label {
+        color: $color-primary;
+      }
+    }
+
+    // ==================================================
+    // COMPLETED STEP
+    // ==================================================
+
+    &.cart-step-completed {
+      .cart-step-button {
+        color: $color-success;
+      }
+
+      .cart-step-number {
+        color: $color-background;
+
+        background: $color-success;
+
+        border-color: $color-success;
+      }
+
+      .cart-step-label {
+        color: $color-success;
+      }
+    }
+
+    // ==================================================
+    // CLICKABLE STEP
+    // ==================================================
+
+    &.cart-step-clickable {
+      .cart-step-button {
+        cursor: pointer;
+
+        &:hover {
+          transform: translateY(-1px);
+        }
+
+        &:hover .cart-step-number {
+          box-shadow: 0 0 0 4px rgba($color-success, 0.08);
+        }
+
+        &:focus-visible {
+          outline: none;
+        }
+
+        &:focus-visible .cart-step-number {
+          outline: 2px solid rgba($color-primary, 0.35);
+          outline-offset: 3px;
+        }
+      }
+    }
+  }
+
+  // ==================================================
+  // CONNECTOR
+  // ==================================================
+
+  .cart-step-connector {
+    position: absolute;
+
+    z-index: 1;
+
+    top: 16px;
+    left: calc(50% + 18px);
+    right: calc(-50% + 18px);
+
+    height: 1px;
+
+    background: $color-border;
+
+    transition:
+      background-color 0.2s ease,
+      height 0.2s ease;
+  }
+
+  // ==================================================
+  // COMPLETED CONNECTOR
+  // ==================================================
+
+  .cart-step-connector-completed {
+    height: 2px;
+
+    background: $color-success;
+  }
+}
+
+// ==================================================
+// MOBILE
+// ==================================================
+
+@media (max-width: 575.98px) {
+  .cart-steps {
+    margin-bottom: 20px;
+
+    .cart-steps-list {
+      width: 100%;
+    }
+
+    .cart-step {
+      .cart-step-button {
+        width: 90px;
+      }
+
+      .cart-step-number {
+        width: 30px;
+        height: 30px;
+
+        margin-bottom: 7px;
+
+        font-size: 11px;
+
+        i {
+          font-size: 14px;
+        }
+      }
+
+      .cart-step-label {
+        font-size: 10px;
+
+        letter-spacing: 0.5px;
+      }
+    }
+
+    .cart-step-connector {
+      top: 15px;
+
+      left: calc(50% + 17px);
+      right: calc(-50% + 17px);
+    }
+  }
+}
+
+// ==================================================
+// SMALL MOBILE
+// ==================================================
+
+@media (max-width: 375px) {
+  .cart-steps {
+    .cart-step {
+      .cart-step-button {
+        width: 75px;
+      }
+
+      .cart-step-number {
+        width: 28px;
+        height: 28px;
+      }
+
+      .cart-step-label {
+        font-size: 9px;
+
+        letter-spacing: 0.3px;
+      }
+    }
+
+    .cart-step-connector {
+      top: 14px;
+
+      left: calc(50% + 16px);
+      right: calc(-50% + 16px);
+    }
+  }
+}

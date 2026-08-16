@@ -90,6 +90,7 @@ let environment = {
         updateItem: "",
         removeItem: "",
         clear: "",
+        merge: "",
       },
     },
     dashboard: {

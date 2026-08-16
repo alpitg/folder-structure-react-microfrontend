@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import type { AppDispatch } from "../../../../../app/store";
 import type { AppState } from "../../../../../app/store";
-import { fetchFrameTypes } from "../../../../../app/redux/master/frame-types/frame-types.thunk";
+import { fetchFrameTypes } from "../../../../../app/redux/crm/master/frame-types/frame-types.thunk";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 

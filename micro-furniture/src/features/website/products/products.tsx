@@ -3,20 +3,64 @@ import "./products.scss";
 import {
   useAddWebsiteCartItemMutation,
   useGetWebsiteCartQuery,
+  type CartIdentity,
 } from "../../../app/redux/website/cart/cart.api";
+
+import {
+  useGetCurrentUserQuery,
+  type WebsiteUser,
+} from "../../../app/redux/website/auth/profile-login.api";
+
 import { useEffect, useMemo, useState } from "react";
+
 import {
   useGetProductsQuery,
   websiteProductApi,
 } from "../../../app/redux/website/product/website-product.api";
+
 import { useLocation, useNavigate } from "react-router";
 
 import type { AppDispatch } from "../../../app/store";
+
 import type { IProductData } from "../../store/catalog/interface/product/product.model";
+
 import NotFoundApp from "./not-found/not-found";
+
 import { ROUTE_URL } from "../../../routes/constants/routes.const";
-import { addItemToBag } from "../../../app/redux/core/shopping-bag/shopping-bag.slice";
+
+import { addItemToBag } from "../../../app/redux/crm/core/shopping-bag/shopping-bag.slice";
+
 import { useDispatch } from "react-redux";
+
+// ==================================================
+// CONSTANTS
+// ==================================================
+
+const GUEST_CART_KEY = "website_guest_cart_id";
+
+const PAGE_SIZE = 12;
+
+// ==================================================
+// HELPERS
+// ==================================================
+
+const getOrCreateGuestCartId = (): string => {
+  const existingGuestCartId = localStorage.getItem(GUEST_CART_KEY);
+
+  if (existingGuestCartId) {
+    return existingGuestCartId;
+  }
+
+  const guestCartId = crypto.randomUUID();
+
+  localStorage.setItem(GUEST_CART_KEY, guestCartId);
+
+  return guestCartId;
+};
+
+// ==================================================
+// COMPONENT
+// ==================================================
 
 const Products = () => {
   // ==================================================
@@ -30,6 +74,7 @@ const Products = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const query = new URLSearchParams(location.search);
+
   const category = query.get("category");
 
   // ==================================================
@@ -38,35 +83,113 @@ const Products = () => {
 
   const [page, setPage] = useState(1);
 
-  const pageSize = 12;
+  // ==================================================
+  // CUSTOMER
+  // ==================================================
+
+  /**
+   * Current website user.
+   *
+   * If user is authenticated:
+   *
+   *     currentUserResponse.user.id
+   *
+   * If user is not authenticated:
+   *
+   *     undefined
+   */
+  const { data: currentUserResponse, isLoading: isUserLoading } =
+    useGetCurrentUserQuery();
+
+  const customer: WebsiteUser | null = currentUserResponse?.user ?? null;
+
+  const customerId = customer?.id ?? null;
+
+  // ==================================================
+  // GUEST CART
+  // ==================================================
+
+  /**
+   * We only need a guest cart ID when the user
+   * is NOT authenticated.
+   *
+   * This ID is never used for authenticated users.
+   */
+  const [guestCartId, setGuestCartId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (customerId) {
+      /**
+       * User is authenticated.
+       *
+       * We don't need a guest cart ID as the active
+       * cart identity.
+       */
+      return;
+    }
+
+    const id = getOrCreateGuestCartId();
+
+    setGuestCartId(id);
+  }, [customerId]);
+
+  // ==================================================
+  // CART IDENTITY
+  // ==================================================
+
+  /**
+   * IMPORTANT:
+   *
+   * Logged-in:
+   *
+   *     {
+   *       customerId: "..."
+   *     }
+   *
+   * Guest:
+   *
+   *     {
+   *       guestCartId: "..."
+   *     }
+   *
+   * Never send both.
+   */
+  const cartIdentity = useMemo<CartIdentity | undefined>(() => {
+    if (customerId) {
+      return {
+        customerId,
+      };
+    }
+
+    if (guestCartId) {
+      return {
+        guestCartId,
+      };
+    }
+
+    return undefined;
+  }, [customerId, guestCartId]);
 
   // ==================================================
   // CART
-  // ==================================================
-
-  const [addingProductId, setAddingProductId] = useState<string | null>(null);
-
-  const [addWebsiteCartItem] = useAddWebsiteCartItemMutation();
-
-  const guestCartId = localStorage.getItem("website_guest_cart_id");
-
-  // ==================================================
-  // SERVER CART
   // ==================================================
 
   const {
     data: cartResponse,
     isLoading: isCartLoading,
     isFetching: isCartFetching,
-  } = useGetWebsiteCartQuery(
-    {
-      customerId: null,
-      guestCartId,
-    },
-    {
-      skip: !guestCartId,
-    },
-  );
+    refetch: refetchCart,
+  } = useGetWebsiteCartQuery(cartIdentity, {
+    skip: !cartIdentity || isUserLoading,
+  });
+
+  // ==================================================
+  // ADD CART ITEM
+  // ==================================================
+
+  const [addWebsiteCartItem] = useAddWebsiteCartItemMutation();
+
+  const [addingProductId, setAddingProductId] = useState<string | null>(null);
 
   // ==================================================
   // PRODUCTS
@@ -81,7 +204,7 @@ const Products = () => {
     searchText: "",
     categories: category ? [category] : null,
     page,
-    pageSize,
+    pageSize: PAGE_SIZE,
     sort: "newest",
   });
 
@@ -97,7 +220,7 @@ const Products = () => {
           searchText: "",
           categories: category ? [category] : null,
           page: page + 1,
-          pageSize,
+          pageSize: PAGE_SIZE,
           sort: "newest",
         },
         {
@@ -117,6 +240,14 @@ const Products = () => {
   // SERVER CART ITEM MAP
   // ==================================================
 
+  /**
+   * Server cart is the source of truth.
+   *
+   * This works for both:
+   *
+   * - logged-in customer cart
+   * - guest cart
+   */
   const cartItemMap = useMemo(() => {
     const items = cartResponse?.items ?? [];
 
@@ -146,7 +277,15 @@ const Products = () => {
   };
 
   // ==================================================
-  // BAG
+  // VIEW BAG
+  // ==================================================
+
+  const handleViewBag = () => {
+    navigate(ROUTE_URL.WEBSITE.CART);
+  };
+
+  // ==================================================
+  // ADD TO CART
   // ==================================================
 
   const addToCart = async (product: IProductData) => {
@@ -154,6 +293,9 @@ const Products = () => {
       return;
     }
 
+    /**
+     * Always use the server cart as the source of truth.
+     */
     const existingCartItem = cartItemMap.get(product.id);
 
     if (existingCartItem) {
@@ -161,17 +303,42 @@ const Products = () => {
       return;
     }
 
+    /**
+     * Cart identity must already be available.
+     */
+    if (!cartIdentity) {
+      return;
+    }
+
     try {
       setAddingProductId(product.id);
 
+      /**
+       * Logged-in:
+       *
+       *     customerId
+       *
+       * Guest:
+       *
+       *     guestCartId
+       *
+       * We build the payload dynamically so we never
+       * accidentally send both.
+       */
       await addWebsiteCartItem({
-        customerId: null,
-        guestCartId,
+        ...cartIdentity,
         productId: product.id,
         productType: "physical",
         quantity: 1,
       }).unwrap();
 
+      /**
+       * Keep Redux shopping bag synchronized for any
+       * existing parts of the application that still
+       * consume shoppingBagSlice.
+       *
+       * The server cart remains authoritative.
+       */
       dispatch(
         addItemToBag({
           id: product.id,
@@ -181,15 +348,17 @@ const Products = () => {
           quantity: 1,
         }),
       );
+
+      /**
+       * Make sure the latest server cart is reflected
+       * immediately in this component.
+       */
+      await refetchCart();
     } catch (error) {
       console.error("Unable to add product to cart:", error);
     } finally {
       setAddingProductId(null);
     }
-  };
-
-  const handleViewBag = () => {
-    navigate(ROUTE_URL.WEBSITE.CART);
   };
 
   // ==================================================
@@ -240,6 +409,7 @@ const Products = () => {
           <div className="row g-3 g-md-4">
             {filteredProducts.map((product) => {
               const cartItem = cartItemMap.get(product.id);
+
               const quantity = cartItem?.quantity ?? 0;
 
               const isAdding = addingProductId === product.id;
@@ -297,7 +467,11 @@ const Products = () => {
                             className="add-to-cart-btn"
                             onClick={() => addToCart(product)}
                             disabled={
-                              isAdding || isCartLoading || isCartFetching
+                              isAdding ||
+                              isUserLoading ||
+                              isCartLoading ||
+                              isCartFetching ||
+                              !cartIdentity
                             }
                           >
                             <i
@@ -443,7 +617,7 @@ const Products = () => {
             <button
               type="button"
               className="pagination-btn"
-              disabled={products.length < pageSize || isFetching}
+              disabled={products.length < PAGE_SIZE || isFetching}
               onClick={() => setPage((previous) => previous + 1)}
             >
               Next

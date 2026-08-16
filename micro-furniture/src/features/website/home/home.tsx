@@ -10,7 +10,7 @@ import { GetEnvConfig } from "../../../app.config";
 import type { IProductData } from "../../store/catalog/interface/product/product.model";
 import { ROUTE_URL } from "../../../routes/constants/routes.const";
 import ShopByCategoryApp from "./shop-by-category/shop-by-category";
-import { addItemToBag } from "../../../app/redux/core/shopping-bag/shopping-bag.slice";
+import { addItemToBag } from "../../../app/redux/crm/core/shopping-bag/shopping-bag.slice";
 import { useDispatch } from "react-redux";
 import { useGetProductsQuery } from "../../../app/redux/website/product/website-product.api";
 

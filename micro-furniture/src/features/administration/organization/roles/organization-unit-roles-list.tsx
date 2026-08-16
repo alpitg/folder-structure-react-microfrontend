@@ -4,7 +4,7 @@ import { Controller, useForm } from "react-hook-form";
 import {
   useAddRoleToOrganizationUnitMutation,
   useGetRolesFromOrganizationUnitQuery,
-} from "../../../../app/redux/administration/organization-units/organization-units.api";
+} from "../../../../app/redux/crm/administration/organization-units/organization-units.api";
 
 import RolesFilterApp from "../../roles/list/filter/roles-filter";
 import type { sortType } from "../../../../interfaces/sort";

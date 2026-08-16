@@ -7,7 +7,7 @@ import PaymentBadge, {
 import { ROUTE_URL } from "../../../../../routes/constants/routes.const";
 import ErrorPage from "../../../../../components/ui/error/error-page";
 import OrderFilterApp from "./filter/order-filter";
-import { useGetOrdersQuery } from "../../../../../app/redux/sales/order/order.api";
+import { useGetOrdersQuery } from "../../../../../app/redux/crm/sales/order/order.api";
 import PageHeaderApp from "../../../../../components/header/page-header/page-header";
 
 type sortType = "newest" | "oldest";

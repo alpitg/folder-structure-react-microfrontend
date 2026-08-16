@@ -7,8 +7,8 @@ import type {
 } from "../../../../../interfaces/order/order.model";
 
 import { ADDITIONAL_SERVICE_CODE } from "../../../../../constants/global/global-key.const";
-import type { IFrameType } from "../../../../../app/redux/master/frame-types/frame-types.slice";
-import type { IGlassType } from "../../../../../app/redux/master/glass-types/glass-types.slice";
+import type { IFrameType } from "../../../../../app/redux/crm/master/frame-types/frame-types.slice";
+import type { IGlassType } from "../../../../../app/redux/crm/master/glass-types/glass-types.slice";
 import type { IProductPrice } from "../../interface/product/product.model";
 
 export class BillCalculation {

@@ -6,16 +6,16 @@ import {
 } from "../../../../../interfaces/order/order.model";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, AppState } from "../../../../../app/store";
-import { fetchProfile } from "../../../../../app/redux/core/profile/profile-detail.thunk";
-import { fetchFrameTypes } from "../../../../../app/redux/master/frame-types/frame-types.thunk";
-import { fetchGlassTypes } from "../../../../../app/redux/master/glass-types/glass-types.thunk";
-import { fetchMiscCharges } from "../../../../../app/redux/master/misc-charges/misc-charges.thunk";
-import { useGetPaginatedCustomersQuery } from "../../../../../app/redux/customer/customer.api";
+import { fetchProfile } from "../../../../../app/redux/crm/core/profile/profile-detail.thunk";
+import { fetchFrameTypes } from "../../../../../app/redux/crm/master/frame-types/frame-types.thunk";
+import { fetchGlassTypes } from "../../../../../app/redux/crm/master/glass-types/glass-types.thunk";
+import { fetchMiscCharges } from "../../../../../app/redux/crm/master/misc-charges/misc-charges.thunk";
+import { useGetPaginatedCustomersQuery } from "../../../../../app/redux/crm/customer/customer.api";
 import {
   useGetDetailQuery,
   usePlaceOrderMutation,
   useUpdateOrderMutation,
-} from "../../../../../app/redux/sales/order/order.api";
+} from "../../../../../app/redux/crm/sales/order/order.api";
 import { NavLink, useNavigate, useParams } from "react-router";
 import { ROUTE_URL } from "../../../../../routes/constants/routes.const";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";

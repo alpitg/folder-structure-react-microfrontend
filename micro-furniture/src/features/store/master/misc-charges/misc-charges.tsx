@@ -1,7 +1,7 @@
 import type { AppDispatch, AppState } from "../../../../app/store";
 import { useDispatch, useSelector } from "react-redux";
 
-import { fetchMiscCharges } from "../../../../app/redux/master/misc-charges/misc-charges.thunk";
+import { fetchMiscCharges } from "../../../../app/redux/crm/master/misc-charges/misc-charges.thunk";
 import { useEffect } from "react";
 
 const MiscChargesMasterApp = () => {

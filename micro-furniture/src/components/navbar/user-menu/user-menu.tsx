@@ -1,6 +1,6 @@
 import { useState, type FC } from "react";
-import { clearCredentials } from "../../../app/redux/administration/auth/auth.slice";
-import { useLogoutMutation } from "../../../app/redux/administration/auth/auth.api";
+import { clearCredentials } from "../../../app/redux/crm/administration/auth/auth.slice";
+import { useLogoutMutation } from "../../../app/redux/crm/administration/auth/auth.api";
 import { useDispatch } from "react-redux";
 import ChangePasswordApp from "./change-password/change-password";
 import UserSettingApp from "./user-setting/user-setting";

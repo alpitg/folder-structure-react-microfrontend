@@ -1,4 +1,4 @@
-// import type { useGetUploadUrlMutation } from "../../app/redux/blob/blob.api";
+// import type { useGetUploadUrlMutation } from "../../app/redux/crm/blob/blob.api";
 
 // export const uploadToAzureBlob = async (
 //   file: File,

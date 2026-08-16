@@ -6,7 +6,7 @@ import type {
 
 import ModelApp from "../../../../../components/ui/model/model";
 import OrganizationTreeFormApp from "../form/organization-tree-form";
-import { useGetOrganizationUnitsQuery } from "../../../../../app/redux/administration/organization-units/organization-units.api";
+import { useGetOrganizationUnitsQuery } from "../../../../../app/redux/crm/administration/organization-units/organization-units.api";
 import { useState } from "react";
 
 /** Extend the props so parent can pass selectedId + onSelect */

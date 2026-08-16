@@ -1,4 +1,4 @@
-import { rehydrate } from "../app/redux/administration/auth/auth.slice";
+import { rehydrate } from "../app/redux/crm/administration/auth/auth.slice";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 

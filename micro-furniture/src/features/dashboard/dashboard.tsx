@@ -1,7 +1,7 @@
 import "./dashboard.scss";
 
 import CountUp from "react-countup";
-import { useGetDashboardStatsQuery } from "../../app/redux/dashboard/dashboard.api";
+import { useGetDashboardStatsQuery } from "../../app/redux/crm/dashboard/dashboard.api";
 
 const DashboardApp = () => {
   const { data: stats = [], isLoading, isError } = useGetDashboardStatsQuery();

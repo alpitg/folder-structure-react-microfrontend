@@ -4,13 +4,13 @@ import { useAuth } from "../../../../hooks/use-auth";
 import {
   useGetCurrentUserProfileQuery,
   useUpdateCurrentUserProfileMutation,
-} from "../../../../app/redux/administration/auth/auth.api";
+} from "../../../../app/redux/crm/administration/auth/auth.api";
 
 import ModelApp from "../../../ui/model/model";
 import PageHeaderApp from "../../../header/page-header/page-header";
 import SomethingWentWrongPage from "../../../ui/error/something-went-wrong/something-went-wrong";
 import { useDispatch } from "react-redux";
-import { setToast } from "../../../../app/redux/core/app-settings/app-settings.slice";
+import { setToast } from "../../../../app/redux/crm/core/app-settings/app-settings.slice";
 
 type FormValues = {
   user: {

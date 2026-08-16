@@ -1,7 +1,7 @@
 import OrganizationTreeApp from "../tree/organization-tree";
 import PageHeaderApp from "../../../../components/header/page-header/page-header";
 import { useEffect } from "react";
-import { useGetOrganizationUnitsQuery } from "../../../../app/redux/administration/organization-units/organization-units.api";
+import { useGetOrganizationUnitsQuery } from "../../../../app/redux/crm/administration/organization-units/organization-units.api";
 import { useLocation } from "react-router";
 
 const OrganizationUnitsListApp = () => {

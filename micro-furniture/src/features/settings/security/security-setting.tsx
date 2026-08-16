@@ -1,5 +1,5 @@
-import { setToast } from "../../../app/redux/core/app-settings/app-settings.slice";
-// import { useUpdateSecuritySettingsMutation } from "../../../../app/redux/administration/security/security.api";
+import { setToast } from "../../../app/redux/crm/core/app-settings/app-settings.slice";
+// import { useUpdateSecuritySettingsMutation } from "../../../../app/redux/crm/administration/security/security.api";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { useState } from "react";

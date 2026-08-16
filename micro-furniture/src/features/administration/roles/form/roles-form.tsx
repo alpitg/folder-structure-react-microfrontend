@@ -6,7 +6,7 @@ import {
   useGetPermissionsQuery,
   useGetRolesDetailQuery,
   useUpdateRolesMutation,
-} from "../../../../app/redux/administration/roles/roles.api";
+} from "../../../../app/redux/crm/administration/roles/roles.api";
 import type {
   IRolesData,
   IRoleWithPermissions,
@@ -16,7 +16,7 @@ import { buildPermissionTree, mapRolesForApi } from "./roles-tree.util";
 import SomethingWentWrongPage from "../../../../components/ui/error/something-went-wrong/something-went-wrong";
 import { useAutoFocus } from "../../../../hooks/use-auto-focus";
 import { useDispatch } from "react-redux";
-import { setToast } from "../../../../app/redux/core/app-settings/app-settings.slice";
+import { setToast } from "../../../../app/redux/crm/core/app-settings/app-settings.slice";
 
 type RolesFormAppProps = {
   mode: "add" | "edit";

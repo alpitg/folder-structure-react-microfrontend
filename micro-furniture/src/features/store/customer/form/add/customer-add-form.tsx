@@ -4,7 +4,7 @@ import {
   useAddCustomerMutation,
   useGetCustomerDetailQuery,
   useUpdateCustomerMutation,
-} from "../../../../../app/redux/customer/customer.api";
+} from "../../../../../app/redux/crm/customer/customer.api";
 
 import CustomerAddressForm from "./address/customer-add-address";
 import CustomerBasicInfo from "./basic-info/customer-add-basic-info";

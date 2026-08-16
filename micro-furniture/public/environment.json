@@ -113,7 +113,8 @@
         "addItem": "/api/store/cart/add-item",
         "updateItem": "/api/store/cart/update-item",
         "removeItem": "/api/store/cart/remove-item",
-        "clear": "/api/store/cart/clear"
+        "clear": "/api/store/cart/clear",
+        "merge": "/api/store/cart/merge"
       }
     },
     "dashboard": {

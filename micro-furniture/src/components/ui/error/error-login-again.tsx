@@ -1,9 +1,9 @@
-import { useNavigate } from "react-router";
-import { useDispatch } from "react-redux";
-import { clearCredentials } from "../../../app/redux/administration/auth/auth.slice";
-import { ROUTE_URL } from "../../../routes/constants/routes.const";
 import { LOCALSTORAGE_AUTH_KEY } from "../../../constants/global/global-key.const";
+import { ROUTE_URL } from "../../../routes/constants/routes.const";
+import { clearCredentials } from "../../../app/redux/crm/administration/auth/auth.slice";
 import errorImage from "/static/media/img/svg/error-404.svg";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
 
 const ErrorLoginAgainApp = ({ description }: { description?: string }) => {
   const navigate = useNavigate();

@@ -2,10 +2,10 @@ import { FormProvider, useForm, type SubmitHandler } from "react-hook-form";
 
 import ModelApp from "../../../ui/model/model";
 import PageHeaderApp from "../../../header/page-header/page-header";
-import { useUpdatePasswordMutation } from "../../../../app/redux/administration/auth/auth.api";
+import { useUpdatePasswordMutation } from "../../../../app/redux/crm/administration/auth/auth.api";
 import { useAuth } from "../../../../hooks/use-auth";
 import { useDispatch } from "react-redux";
-import { setToast } from "../../../../app/redux/core/app-settings/app-settings.slice";
+import { setToast } from "../../../../app/redux/crm/core/app-settings/app-settings.slice";
 import { useEffect } from "react";
 import { useAutoFocus } from "../../../../hooks/use-auto-focus";
 

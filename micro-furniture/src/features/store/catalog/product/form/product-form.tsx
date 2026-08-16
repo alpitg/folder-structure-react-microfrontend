@@ -4,7 +4,7 @@ import {
   useAddProductMutation,
   useGetProductDetailQuery,
   useUpdateProductMutation,
-} from "../../../../../app/redux/catalog/product/product.api";
+} from "../../../../../app/redux/crm/catalog/product/product.api";
 
 import type { IProductData } from "../../interface/product/product.model";
 import ProductCategoryTag from "./category-tag/product-category-tag";

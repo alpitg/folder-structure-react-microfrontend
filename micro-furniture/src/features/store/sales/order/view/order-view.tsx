@@ -5,7 +5,7 @@ import ErrorPage from "../../../../../components/ui/error/error-page";
 import NoRecordApp from "../list/no-record/no-record";
 import PageHeaderApp from "../../../../../components/header/page-header/page-header";
 import { ROUTE_URL } from "../../../../../routes/constants/routes.const";
-import { useGetDetailQuery } from "../../../../../app/redux/sales/order/order.api";
+import { useGetDetailQuery } from "../../../../../app/redux/crm/sales/order/order.api";
 
 const OrderViewApp = () => {
   const { orderId } = useParams(); //

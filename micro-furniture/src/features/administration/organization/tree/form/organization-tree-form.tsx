@@ -3,7 +3,7 @@ import type {
   IOrganizationUnitsData,
 } from "../../../interfaces/organization-units.model";
 
-import { useAddOrganizationUnitsMutation } from "../../../../../app/redux/administration/organization-units/organization-units.api";
+import { useAddOrganizationUnitsMutation } from "../../../../../app/redux/crm/administration/organization-units/organization-units.api";
 import { useAutoFocus } from "../../../../../hooks/use-auto-focus";
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";

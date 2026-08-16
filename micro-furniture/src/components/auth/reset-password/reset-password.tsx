@@ -1,9 +1,9 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { useResetPasswordMutation } from "../../../app/redux/administration/auth/auth.api";
+import { useResetPasswordMutation } from "../../../app/redux/crm/administration/auth/auth.api";
 import { ROUTE_URL } from "../../../routes/constants/routes.const";
 import { NavLink, useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
-import { setToast } from "../../../app/redux/core/app-settings/app-settings.slice";
+import { setToast } from "../../../app/redux/crm/core/app-settings/app-settings.slice";
 
 export interface IResetPasswordForm {
   code: string;

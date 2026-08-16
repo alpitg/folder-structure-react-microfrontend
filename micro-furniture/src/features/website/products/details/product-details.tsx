@@ -7,7 +7,7 @@ import { useNavigate, useParams } from "react-router";
 import type { AppState } from "../../../../app/store";
 import { GetEnvConfig } from "../../../../app.config";
 import { ROUTE_URL } from "../../../../routes/constants/routes.const";
-import { addItemToBag } from "../../../../app/redux/core/shopping-bag/shopping-bag.slice";
+import { addItemToBag } from "../../../../app/redux/crm/core/shopping-bag/shopping-bag.slice";
 import { useGetProductDetailQuery } from "../../../../app/redux/website/product/website-product.api";
 
 const ProductDetails = () => {

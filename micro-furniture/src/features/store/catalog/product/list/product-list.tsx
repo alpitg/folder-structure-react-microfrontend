@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import PageHeaderApp from "../../../../../components/header/page-header/page-header";
 import ProductFilterApp from "./filter/product-filter";
 import { ROUTE_URL } from "../../../../../routes/constants/routes.const";
-import { useGetProductsQuery } from "../../../../../app/redux/catalog/product/product.api";
+import { useGetProductsQuery } from "../../../../../app/redux/crm/catalog/product/product.api";
 
 type sortType = "newest" | "oldest";
 

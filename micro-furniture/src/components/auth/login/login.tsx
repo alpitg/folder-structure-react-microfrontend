@@ -1,8 +1,8 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useEffect, useState } from "react";
-import { useLoginMutation } from "../../../app/redux/administration/auth/auth.api";
+import { useLoginMutation } from "../../../app/redux/crm/administration/auth/auth.api";
 import { NavLink, useNavigate } from "react-router";
-import { setCredentials } from "../../../app/redux/administration/auth/auth.slice";
+import { setCredentials } from "../../../app/redux/crm/administration/auth/auth.slice";
 import { useDispatch } from "react-redux";
 import { useAutoFocus } from "../../../hooks/use-auto-focus";
 import { ROUTE_URL } from "../../../routes/constants/routes.const";

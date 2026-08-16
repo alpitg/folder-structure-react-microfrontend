@@ -5,7 +5,7 @@ import {
   useAddUsersMutation,
   useGetUsersDetailQuery,
   useUpdateUsersMutation,
-} from "../../../../app/redux/administration/users/users.api";
+} from "../../../../app/redux/crm/administration/users/users.api";
 import type {
   IUsersData,
   IUserWithPermissionsForm,
@@ -16,7 +16,7 @@ import UserRolesFormApp from "./user-roles/user-roles-form";
 import UserOrganisationUnitsFormApp from "./organisation-units/user-organisation-units-form";
 import SomethingWentWrongPage from "../../../../components/ui/error/something-went-wrong/something-went-wrong";
 import { useDispatch } from "react-redux";
-import { setToast } from "../../../../app/redux/core/app-settings/app-settings.slice";
+import { setToast } from "../../../../app/redux/crm/core/app-settings/app-settings.slice";
 
 type UsersFormAppProps = {
   mode: "add" | "edit";

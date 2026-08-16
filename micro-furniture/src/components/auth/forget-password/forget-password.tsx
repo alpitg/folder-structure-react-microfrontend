@@ -1,5 +1,5 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { useForgotPasswordMutation } from "../../../app/redux/administration/auth/auth.api";
+import { useForgotPasswordMutation } from "../../../app/redux/crm/administration/auth/auth.api";
 import { useAutoFocus } from "../../../hooks/use-auto-focus";
 import { ROUTE_URL } from "../../../routes/constants/routes.const";
 import { NavLink } from "react-router";

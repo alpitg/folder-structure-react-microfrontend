@@ -5,7 +5,7 @@ import {
   addItemToBag,
   decreaseBagItemQuantity,
   removeBagItem,
-} from "../../../../../app/redux/core/shopping-bag/shopping-bag.slice";
+} from "../../../../../app/redux/crm/core/shopping-bag/shopping-bag.slice";
 import { useDispatch, useSelector } from "react-redux";
 
 import type { IProductData } from "../../../../store/catalog/interface/product/product.model";

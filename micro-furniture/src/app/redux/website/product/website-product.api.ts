@@ -5,12 +5,12 @@ import type {
 } from "../../../../features/store/catalog/interface/product/product.model";
 
 import { GetEnvConfig } from "../../../../app.config";
-import { baseQuery } from "../../base.api";
 import { createApi } from "@reduxjs/toolkit/query/react";
+import { websiteBaseQuery } from "../base.api";
 
 export const websiteProductApi = createApi({
   reducerPath: "websiteProductApi",
-  baseQuery,
+  baseQuery: websiteBaseQuery,
   tagTypes: ["Products"],
   endpoints: (builder) => ({
     getProducts: builder.query<PaginatedProducts, GetProductsParams>({

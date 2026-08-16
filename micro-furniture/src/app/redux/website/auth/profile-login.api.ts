@@ -1,6 +1,6 @@
 import { GetEnvConfig } from "../../../../app.config";
-import { baseQuery } from "../../base.api";
 import { createApi } from "@reduxjs/toolkit/query/react";
+import { websiteBaseQuery } from "../base.api";
 
 //#region
 
@@ -120,9 +120,7 @@ export interface LogoutResponse {
 
 export const profileLoginApi = createApi({
   reducerPath: "profileLoginApi",
-
-  baseQuery,
-
+  baseQuery: websiteBaseQuery,
   tagTypes: ["ProfileLogin", "Profile"],
 
   endpoints: (builder) => ({

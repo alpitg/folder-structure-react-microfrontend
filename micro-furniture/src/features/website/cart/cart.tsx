@@ -1,759 +1,479 @@
 import "./cart.scss";
 
-import { NavLink, useNavigate } from "react-router";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router";
+
 import {
-  useClearWebsiteCartMutation,
   useGetWebsiteCartQuery,
-  useRemoveWebsiteCartItemMutation,
-  useUpdateWebsiteCartItemMutation,
+  type CartIdentity,
 } from "../../../app/redux/website/cart/cart.api";
+
 import {
-  useCreateWebsiteOrderMutation,
-  useVerifyWebsitePaymentMutation,
-} from "../../../app/redux/website/order/website-order.api";
+  useGetCurrentUserQuery,
+  type WebsiteUser,
+} from "../../../app/redux/website/auth/profile-login.api";
 
-import EmptyCartApp from "./empty-cart/empty-cart";
-import { GetEnvConfig } from "../../../app.config";
-import { ROUTE_URL } from "../../../routes/constants/routes.const";
+// Child components
+import CartSteps from "./components/cart-steps/cart-steps";
+import CartItems from "./components/cart-items/cart-items";
+import CartPriceDetails from "./components/cart-price-details/cart-price-details";
+import CartEmpty from "./components/cart-empty/cart-empty";
+import CartAddress from "./components/cart-address/cart-address";
+import CartPayment from "./components/cart-payment/cart-payment";
 import UserLoginApp from "../auth/login/user-login";
-import { useState } from "react";
 
-interface RazorpayOptions {
-  key: string;
-  amount: number;
-  currency: string;
-  name: string;
-  description: string;
-  order_id: string;
-  handler: (response: RazorpayResponse) => void;
-  prefill?: {
-    name?: string;
-    email?: string;
-    contact?: string;
-  };
-  theme?: {
-    color?: string;
-  };
-  modal?: {
-    ondismiss?: () => void;
-  };
+import type { DeliveryAddress } from "../checkout/checkout";
+
+// ==================================================
+// TYPES
+// ==================================================
+
+type CartStep = "bag" | "address" | "payment";
+
+interface CartProps {
+  /**
+   * Optional callback when cart checkout is closed.
+   */
+  onClose?: () => void;
 }
 
-interface RazorpayResponse {
-  razorpay_payment_id: string;
-  razorpay_order_id: string;
-  razorpay_signature: string;
-}
+// ==================================================
+// CONSTANTS
+// ==================================================
 
-interface RazorpayInstance {
-  open: () => void;
-  on: (event: string, callback: (response: any) => void) => void;
-}
+const GUEST_CART_KEY = "website_guest_cart_id";
 
-interface Customer {
-  id: string;
-  mobile: string;
-  name?: string;
-  email?: string;
-}
+// ==================================================
+// HELPERS
+// ==================================================
 
-declare global {
-  interface Window {
-    Razorpay: new (options: RazorpayOptions) => RazorpayInstance;
+const getGuestCartId = (): string => {
+  const existingGuestId = localStorage.getItem(GUEST_CART_KEY);
+
+  if (existingGuestId) {
+    return existingGuestId;
   }
-}
 
-const GUEST_CART_ID_KEY = "website_guest_cart_id";
+  const newGuestId = crypto.randomUUID();
 
-const ACCESS_TOKEN_KEY = "access_token";
+  localStorage.setItem(GUEST_CART_KEY, newGuestId);
 
-const CUSTOMER_ID_KEY = "customer_id";
+  return newGuestId;
+};
 
-const CUSTOMER_MOBILE_KEY = "customer_mobile";
+// ==================================================
+// COMPONENT
+// ==================================================
 
-const CUSTOMER_NAME_KEY = "customer_name";
-
-const CUSTOMER_EMAIL_KEY = "customer_email";
-
-const CartApp = () => {
+const CartApp = ({ onClose }: CartProps) => {
   const navigate = useNavigate();
-  const appSettings = GetEnvConfig();
 
-  const [isOpen, setIsOpen] = useState(false);
+  // --------------------------------------------------
+  // CURRENT CHECKOUT STEP
+  // --------------------------------------------------
 
-  const [customer, setCustomer] = useState<Customer | null>(() => {
-    const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
+  const [currentStep, setCurrentStep] = useState<CartStep>("bag");
 
-    const customerId = localStorage.getItem(CUSTOMER_ID_KEY);
+  // --------------------------------------------------
+  // GUEST CART ID
+  // --------------------------------------------------
 
-    if (!accessToken || !customerId) {
-      return null;
+  const [guestCartId, setGuestCartId] = useState<string | null>(null);
+
+  // --------------------------------------------------
+  // CUSTOMER
+  // --------------------------------------------------
+
+  const [customer, setCustomer] = useState<WebsiteUser | null>(null);
+
+  // --------------------------------------------------
+  // SELECTED ADDRESS
+  // --------------------------------------------------
+
+  const [selectedAddress, setSelectedAddress] =
+    useState<DeliveryAddress | null>(null);
+
+  // --------------------------------------------------
+  // INITIALIZE GUEST CART
+  // --------------------------------------------------
+
+  useEffect(() => {
+    const id = getGuestCartId();
+
+    setGuestCartId(id);
+  }, []);
+
+  // --------------------------------------------------
+  // CURRENT USER
+  // --------------------------------------------------
+
+  const {
+    data: currentUserResponse,
+    isLoading: isUserLoading,
+    refetch: refetchCurrentUser,
+  } = useGetCurrentUserQuery();
+
+  // --------------------------------------------------
+  // SET CUSTOMER
+  // --------------------------------------------------
+
+  useEffect(() => {
+    if (currentUserResponse?.user) {
+      setCustomer(currentUserResponse.user);
+      return;
     }
 
-    return {
-      id: customerId,
-      mobile: localStorage.getItem(CUSTOMER_MOBILE_KEY) || "",
-      name: localStorage.getItem(CUSTOMER_NAME_KEY) || undefined,
-      email: localStorage.getItem(CUSTOMER_EMAIL_KEY) || undefined,
-    };
-  });
+    setCustomer(null);
+  }, [currentUserResponse]);
 
-  const guestCartId = localStorage.getItem(GUEST_CART_ID_KEY);
+  // --------------------------------------------------
+  // CART IDENTITY
+  // --------------------------------------------------
+
+  /**
+   * Logged-in customer:
+   *
+   * {
+   *   customerId: customer.id
+   * }
+   *
+   * Guest:
+   *
+   * {
+   *   guestCartId
+   * }
+   *
+   * Never send both identities at the same time.
+   */
+
+  const cartIdentity = useMemo<CartIdentity | undefined>(() => {
+    if (customer?.id) {
+      return {
+        customerId: String(customer.id),
+      };
+    }
+
+    if (guestCartId) {
+      return {
+        guestCartId,
+      };
+    }
+
+    return undefined;
+  }, [customer?.id, guestCartId]);
+
+  // --------------------------------------------------
+  // GET CART
+  // --------------------------------------------------
 
   const {
     data: cart,
     isLoading: isCartLoading,
-    error: cartError,
-  } = useGetWebsiteCartQuery(
-    {
-      guestCartId,
-    },
-    {
-      skip: !guestCartId,
-    },
-  );
+    isFetching: isCartFetching,
+    isError: isCartError,
+    refetch: refetchCart,
+  } = useGetWebsiteCartQuery(cartIdentity, {
+    skip: !cartIdentity,
+  });
 
-  const [
-    updateWebsiteCartItem,
-    { isLoading: isUpdatingItem, error: updateItemError },
-  ] = useUpdateWebsiteCartItemMutation();
+  // --------------------------------------------------
+  // CART STATE
+  // --------------------------------------------------
 
-  const [
-    removeWebsiteCartItem,
-    { isLoading: isRemovingItem, error: removeItemError },
-  ] = useRemoveWebsiteCartItemMutation();
+  const hasItems = Boolean(cart?.items?.length);
 
-  const [
-    clearWebsiteCart,
-    { isLoading: isClearingCart, error: clearCartError },
-  ] = useClearWebsiteCartMutation();
+  // --------------------------------------------------
+  // STEP NAVIGATION
+  // --------------------------------------------------
 
-  const [
-    createWebsiteOrder,
-    { isLoading: isCreatingOrder, error: createOrderError },
-  ] = useCreateWebsiteOrderMutation();
-
-  const [
-    verifyWebsitePayment,
-    { isLoading: isVerifyingPayment, error: verifyPaymentError },
-  ] = useVerifyWebsitePaymentMutation();
-
-  const items = cart?.items ?? [];
-  const summary = cart?.summary;
-
-  const increase = async (productId: string) => {
-    const item = items.find((item) => item.productId === productId);
-
-    if (!item || !guestCartId) {
+  const handleStepChange = (step: CartStep) => {
+    if (!hasItems) {
       return;
     }
 
-    try {
-      await updateWebsiteCartItem({
-        guestCartId,
-        productId,
-        quantity: item.quantity + 1,
-        customizedDetails: item.customizedDetails,
-      }).unwrap();
-    } catch (error) {
-      console.error("Unable to increase cart quantity:", error);
-    }
-  };
-
-  const decrease = async (productId: string) => {
-    const item = items.find((item) => item.productId === productId);
-
-    if (!item || !guestCartId) {
-      return;
-    }
-
-    if (item.quantity <= 1) {
-      return;
-    }
-
-    try {
-      await updateWebsiteCartItem({
-        guestCartId,
-        productId,
-        quantity: item.quantity - 1,
-        customizedDetails: item.customizedDetails,
-      }).unwrap();
-    } catch (error) {
-      console.error("Unable to decrease cart quantity:", error);
-    }
-  };
-
-  const remove = async (productId: string) => {
-    if (!guestCartId) {
-      return;
-    }
-
-    try {
-      await removeWebsiteCartItem({
-        guestCartId,
-        productId,
-      }).unwrap();
-    } catch (error) {
-      console.error("Unable to remove cart item:", error);
-    }
-  };
-
-  const clearCart = async () => {
-    if (!guestCartId) {
-      return;
-    }
-
-    try {
-      await clearWebsiteCart({
-        guestCartId,
-      }).unwrap();
-    } catch (error) {
-      console.error("Unable to clear cart:", error);
-    }
-  };
-
-  const handleEnquiry = () => {
-    if (items.length === 0) {
-      return;
-    }
-
-    const frontUrl = window.location.origin;
-
-    const message = [
-      "Hello! I would like to place an order for the following items:",
-
-      ...items.map(
-        (item) =>
-          `- ${item.name} x${item.quantity} @ ₹ ${item.price.sellingPrice.toFixed(
-            2,
-          )} each = ₹ ${item.itemTotal.toFixed(
-            2,
-          )}\n  ${frontUrl}/products/${item.productId}`,
-      ),
-
-      "",
-
-      `Subtotal: ₹ ${(summary?.subtotal ?? 0).toFixed(2)}`,
-      `Discount: ₹ ${(summary?.discount ?? 0).toFixed(2)}`,
-      `Tax: ₹ ${(summary?.taxToAdd ?? 0).toFixed(2)}`,
-      `Shipping: ₹ ${(summary?.shipping ?? 0).toFixed(2)}`,
-      `Total: ₹ ${(summary?.grandTotal ?? 0).toFixed(2)}`,
-    ].join("\n");
-
-    const whatsappNumber =
-      appSettings?.homePage?.contactDetails?.whatsapp?.number;
-
-    const whatsappUrl = whatsappNumber
-      ? `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`
-      : `https://wa.me/?text=${encodeURIComponent(message)}`;
-
-    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
-  };
-
-  const loadRazorpayScript = (): Promise<boolean> => {
-    return new Promise((resolve) => {
-      if (window.Razorpay) {
-        resolve(true);
-        return;
-      }
-
-      const existingScript = document.querySelector(
-        'script[src="https://checkout.razorpay.com/v1/checkout.js"]',
-      );
-
-      if (existingScript) {
-        existingScript.addEventListener("load", () => resolve(true));
-
-        existingScript.addEventListener("error", () => resolve(false));
-
-        return;
-      }
-
-      const script = document.createElement("script");
-
-      script.src = "https://checkout.razorpay.com/v1/checkout.js";
-
-      script.async = true;
-
-      script.onload = () => resolve(true);
-
-      script.onerror = () => resolve(false);
-
-      document.body.appendChild(script);
-    });
-  };
-
-  const handleCheckout = async () => {
-    if (items.length === 0) {
-      return;
-    }
-
-    const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
-
-    /*
-     * Customer must be authenticated
-     * before creating the order.
+    /**
+     * Payment should only be reachable after
+     * selecting an address.
      */
-    if (!accessToken || !customer?.id) {
-      setIsOpen(true);
+    if (step === "payment" && !selectedAddress) {
+      setCurrentStep("address");
       return;
     }
 
-    try {
-      if (appSettings?.cartPage?.enablePayment) {
-        const razorpayLoaded = await loadRazorpayScript();
+    setCurrentStep(step);
+  };
 
-        if (!razorpayLoaded) {
-          alert("Unable to load payment gateway. Please try again.");
+  // --------------------------------------------------
+  // BAG -> ADDRESS
+  // --------------------------------------------------
 
-          return;
-        }
-      }
-
-      const payload = {
-        customerName: customer.name || "Customer",
-
-        customerId: customer.id,
-
-        guestCartId,
-
-        items: items.map((item) => ({
-          productId: item.productId,
-
-          productType: item.productType ?? "physical",
-
-          quantity: item.quantity,
-
-          customizedDetails: item.customizedDetails,
-        })),
-
-        miscCharges: [],
-        note: "Website order",
-        likelyDateOfDelivery: null,
-      };
-
-      const result = await createWebsiteOrder(payload).unwrap();
-
-      if (!result?.payment) {
-        throw new Error("Payment information was not returned.");
-      }
-
-      if (appSettings?.cartPage?.enablePayment) {
-        const payment = result.payment;
-
-        if (!payment.keyId || !payment.razorpayOrderId) {
-          throw new Error("Razorpay order was not created.");
-        }
-
-        const order = result.order as {
-          id?: string;
-          orderCode?: string;
-          customerName?: string;
-          customerEmail?: string;
-          customerMobile?: string;
-        };
-
-        const options: RazorpayOptions = {
-          key: payment.keyId,
-          amount: payment.amount,
-          currency: payment.currency,
-          name: appSettings?.name ?? "Artisan Studios",
-          description: `Order ${order.orderCode || ""}`,
-          order_id: payment.razorpayOrderId,
-
-          handler: async (response: RazorpayResponse) => {
-            try {
-              if (!order.id) {
-                throw new Error("Order ID is missing.");
-              }
-
-              await verifyWebsitePayment({
-                orderId: order.id,
-
-                razorpayPaymentId: response.razorpay_payment_id,
-
-                razorpayOrderId: response.razorpay_order_id,
-
-                razorpaySignature: response.razorpay_signature,
-              }).unwrap();
-
-              if (guestCartId) {
-                localStorage.removeItem(GUEST_CART_ID_KEY);
-              }
-
-              navigate(
-                `${ROUTE_URL.WEBSITE.ORDER_SUCCESS}?orderId=${order.orderCode}`,
-              );
-            } catch (error) {
-              console.error("Payment verification failed:", error);
-
-              alert(
-                "Payment was received, but we could not verify it yet. Please contact support.",
-              );
-            }
-          },
-
-          prefill: {
-            name: order.customerName || customer.name || "Customer",
-
-            email: order.customerEmail || customer.email,
-
-            contact: order.customerMobile || customer.mobile,
-          },
-
-          theme: {
-            color: "#ff3f6c",
-          },
-
-          modal: {
-            ondismiss: () => {
-              console.log("Razorpay checkout closed");
-            },
-          },
-        };
-
-        const razorpay = new window.Razorpay(options);
-
-        razorpay.on("payment.failed", (response: any) => {
-          console.error("Razorpay payment failed:", response);
-
-          const errorMessage =
-            response?.error?.description || "Payment failed. Please try again.";
-
-          alert(errorMessage);
-        });
-
-        razorpay.open();
-      } else {
-        /*
-         * If payment is disabled,
-         * go directly to order success.
-         */
-        if (guestCartId) {
-          localStorage.removeItem(GUEST_CART_ID_KEY);
-        }
-
-        navigate(
-          `${ROUTE_URL.WEBSITE.ORDER_SUCCESS}?orderId=${result?.order?.orderCode}`,
-        );
-      }
-    } catch (error: any) {
-      console.error("Checkout initialization failed:", error);
-
-      const message =
-        error?.data?.detail ||
-        error?.data?.message ||
-        error?.message ||
-        "Unable to start checkout. Please try again.";
-
-      alert(message);
+  const handleBagContinue = () => {
+    if (!hasItems) {
+      return;
     }
+
+    setCurrentStep("address");
   };
 
-  const handleLogin = (customerId: string, mobile: string) => {
-    const loggedInCustomer: Customer = {
-      id: customerId,
-      mobile,
-      name: localStorage.getItem(CUSTOMER_NAME_KEY) || undefined,
-      email: localStorage.getItem(CUSTOMER_EMAIL_KEY) || undefined,
-    };
+  // --------------------------------------------------
+  // ADDRESS -> PAYMENT
+  // --------------------------------------------------
 
-    setCustomer(loggedInCustomer);
+  const handleAddressContinue = () => {
+    if (!hasItems || !selectedAddress || !customer) {
+      return;
+    }
 
-    setIsOpen(false);
+    setCurrentStep("payment");
   };
 
-  const isProcessing =
-    isUpdatingItem ||
-    isRemovingItem ||
-    isClearingCart ||
-    isCreatingOrder ||
-    isVerifyingPayment;
+  // --------------------------------------------------
+  // LOGIN SUCCESS
+  // --------------------------------------------------
 
-  const errorMessage =
-    (cartError as any)?.data?.detail ||
-    (cartError as any)?.data?.message ||
-    (updateItemError as any)?.data?.detail ||
-    (updateItemError as any)?.data?.message ||
-    (removeItemError as any)?.data?.detail ||
-    (removeItemError as any)?.data?.message ||
-    (clearCartError as any)?.data?.detail ||
-    (clearCartError as any)?.data?.message ||
-    (createOrderError as any)?.data?.detail ||
-    (createOrderError as any)?.data?.message ||
-    (verifyPaymentError as any)?.data?.detail ||
-    (verifyPaymentError as any)?.data?.message ||
-    null;
+  const handleLogin = async () => {
+    /**
+     * Login stores the website authentication token.
+     *
+     * Refetch the current-user endpoint so:
+     *
+     * customer
+     *   ↓
+     * cartIdentity
+     *   ↓
+     * customer cart
+     *
+     * gets updated automatically.
+     */
+    try {
+      await refetchCurrentUser();
+    } catch {
+      // The current-user query will expose its own error state.
+    }
 
-  if (isCartLoading) {
-    return <div>Loading cart...</div>;
+    /**
+     * Cart identity will automatically change once
+     * customer state is updated.
+     *
+     * Explicit refetch is still useful when the cart
+     * endpoint is already cached.
+     */
+    await refetchCart();
+  };
+
+  // --------------------------------------------------
+  // PAYMENT SUCCESS
+  // --------------------------------------------------
+
+  const handleOrderSuccess = (orderId: string) => {
+    navigate(`/order-success?orderId=${encodeURIComponent(orderId)}`);
+  };
+
+  // --------------------------------------------------
+  // CLOSE CART
+  // --------------------------------------------------
+
+  const handleClose = () => {
+    if (onClose) {
+      onClose();
+      return;
+    }
+
+    navigate("/");
+  };
+
+  // --------------------------------------------------
+  // LOADING
+  // --------------------------------------------------
+
+  if (isUserLoading || isCartLoading || !cartIdentity) {
+    return (
+      <section className="cart-app">
+        <div className="container">
+          <div className="cart-app-loading">
+            <div
+              className="spinner-border"
+              role="status"
+              aria-label="Loading cart"
+            />
+
+            <p>Loading your bag...</p>
+          </div>
+        </div>
+      </section>
+    );
   }
 
-  if (items.length === 0) {
-    return <EmptyCartApp />;
+  // --------------------------------------------------
+  // ERROR
+  // --------------------------------------------------
+
+  if (isCartError) {
+    return (
+      <section className="cart-app">
+        <div className="container">
+          <div className="cart-app-error">
+            <div className="cart-app-error-icon">
+              <i className="bi bi-exclamation-circle" />
+            </div>
+
+            <h5>Unable to load your bag</h5>
+
+            <p>
+              Something went wrong while loading your cart. Please try again.
+            </p>
+
+            <button
+              type="button"
+              className="cart-app-error-btn"
+              onClick={() => refetchCart()}
+            >
+              <i className="bi bi-arrow-clockwise" />
+              Try Again
+            </button>
+          </div>
+        </div>
+      </section>
+    );
   }
+
+  // --------------------------------------------------
+  // EMPTY CART
+  // --------------------------------------------------
+
+  if (!cart || !hasItems) {
+    return (
+      <section className="cart-app">
+        <div className="container">
+          <CartEmpty onContinueShopping={() => navigate("/products")} />
+        </div>
+      </section>
+    );
+  }
+
+  // --------------------------------------------------
+  // MAIN CART
+  // --------------------------------------------------
 
   return (
     <section className="cart-app">
       <div className="container">
+        {/* ==========================================
+            HEADER
+        ========================================== */}
+
         <div className="cart-app-header">
-          <h4>
-            Shopping Bag
-            <span>({items.length} Items)</span>
-          </h4>
-        </div>
-        <div className="row g-4">
-          <div className="col-lg-8">
-            <div className="cart-items">
-              {items.map((item) => (
-                <div className="cart-item" key={item.productId}>
-                  <NavLink
-                    to={`/products/${item.productId}`}
-                    className="cart-item-image-link"
-                  >
-                    <img
-                      src={
-                        item.image || "/static/media/img/svg/blank-image.svg"
-                      }
-                      alt={item.name}
-                      className="cart-image"
-                    />
-                  </NavLink>
+          <div>
+            <h1 className="cart-app-title">Your Bag</h1>
 
-                  <div className="cart-item-details">
-                    <div className="cart-item-heading">
-                      <div>
-                        <NavLink
-                          to={`/products/${item.productId}`}
-                          className="cart-product-name"
-                        >
-                          {item.name}
-                        </NavLink>
-
-                        <p className="cart-product-description">
-                          Regular fit • Casual wear
-                        </p>
-                      </div>
-
-                      <button
-                        type="button"
-                        className="remove-item"
-                        onClick={() => remove(item.productId)}
-                        disabled={isProcessing}
-                        aria-label={`Remove ${item.name}`}
-                      >
-                        <i className="bi bi-x-lg"></i>
-                      </button>
-                    </div>
-
-                    <div className="cart-price">
-                      <span className="current-price">
-                        ₹{item.price.sellingPrice.toFixed(2)}
-                      </span>
-
-                      {item.price.mrp !== item.price.sellingPrice && (
-                        <span className="original-price">
-                          ₹{item.price.mrp.toFixed(2)}
-                        </span>
-                      )}
-
-                      {item.price.discount && (
-                        <span>
-                          {item?.price?.discount?.type === "percentage" &&
-                            item.price.discount.value != null && (
-                              <span className="discount">
-                                {item.price.discount.value}% OFF
-                              </span>
-                            )}
-
-                          {item?.price?.discount?.type === "fixed" && (
-                            <span className="discount">
-                              ₹
-                              {(
-                                item.price.mrp - item.price.sellingPrice
-                              )?.toFixed(2)}
-                              <span> OFF</span>
-                            </span>
-                          )}
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="cart-item-bottom">
-                      <div className="quantity-box">
-                        <button
-                          type="button"
-                          className="btn-qty"
-                          onClick={() => decrease(item.productId)}
-                          disabled={isProcessing || item.quantity <= 1}
-                        >
-                          -
-                        </button>
-
-                        <input
-                          readOnly
-                          value={item.quantity}
-                          aria-label="Quantity"
-                        />
-
-                        <button
-                          type="button"
-                          className="btn-qty"
-                          onClick={() => increase(item.productId)}
-                          disabled={isProcessing}
-                        >
-                          +
-                        </button>
-                      </div>
-
-                      <div className="item-total">
-                        ₹{item.itemTotal.toFixed(2)}
-                      </div>
-                    </div>
-
-                    <div className="delivery-info">
-                      <i className="bi bi-truck"></i>
-
-                      <span>Delivery available to your location</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="cart-actions d-flex gap-5">
-              <NavLink
-                className="continue-shopping"
-                to={ROUTE_URL.WEBSITE.PRODUCTS}
-              >
-                <i className="bi bi-arrow-left"></i>
-                Continue Shopping
-              </NavLink>
-
-              <button
-                type="button"
-                className="btn btn-outline-secondary clear-cart"
-                onClick={clearCart}
-                disabled={isProcessing}
-              >
-                Clear Cart
-              </button>
-            </div>
+            <p className="cart-app-description">
+              Review your items and complete your order.
+            </p>
           </div>
 
-          <div className="col-lg-4">
-            <div className="price-details">
-              <h6 className="price-details-title">PRICE DETAILS</h6>
+          <button
+            type="button"
+            className="cart-app-close"
+            onClick={handleClose}
+            aria-label="Close cart"
+          >
+            <i className="bi bi-x-lg" />
+          </button>
+        </div>
 
-              <div className="price-row">
-                <span>Total MRP</span>
+        {/* ==========================================
+            STEPS
+        ========================================== */}
 
-                <span>₹{(summary?.mrp ?? 0).toFixed(2)}</span>
-              </div>
+        <CartSteps currentStep={currentStep} onStepChange={handleStepChange} />
 
-              <div className="price-row">
-                <span>Discount on MRP</span>
+        {/* ==========================================
+            BAG
+        ========================================== */}
 
-                <span className="discount-value">
-                  - ₹{(summary?.discount ?? 0).toFixed(2)}
-                </span>
-              </div>
-
-              <div className="price-row">
-                <span>Platform Fee</span>
-
-                <span>₹{(summary?.miscCharges ?? 0).toFixed(2)}</span>
-              </div>
-
-              <div className="price-row">
-                <span>Shipping Fee</span>
-
-                <span className="free">
-                  {(summary?.shipping ?? 0) === 0
-                    ? "FREE"
-                    : `₹${(summary?.shipping ?? 0).toFixed(2)}`}
-                </span>
-              </div>
-
-              {(summary?.taxToAdd ?? 0) > 0 && (
-                <div className="price-row">
-                  <span>Tax</span>
-
-                  <span>₹{(summary?.taxToAdd ?? 0).toFixed(2)}</span>
-                </div>
-              )}
-
-              <div className="price-divider"></div>
-
-              <div className="price-total">
-                <span>Total Amount</span>
-
-                <span>₹{(summary?.grandTotal ?? 0).toFixed(2)}</span>
-              </div>
-
-              <button
-                type="button"
-                className="place-order-btn"
-                onClick={handleCheckout}
-                disabled={isProcessing || items.length === 0}
-              >
-                {isCreatingOrder
-                  ? "CREATING ORDER..."
-                  : isVerifyingPayment
-                    ? "VERIFYING PAYMENT..."
-                    : "PLACE ORDER"}
-              </button>
-
-              <div className="secure-payment">
-                <i className="bi bi-shield-check"></i>
-
-                <span>Safe and Secure Payments. 100% Authentic Products.</span>
-              </div>
-
-              <div className="text-center small text-muted py-2">
-                By placing the order, you agree to {appSettings?.name}'s{" "}
-                <NavLink
-                  to={ROUTE_URL.WEBSITE.TERMS_OF_USE}
-                  className="text-decoration-none"
-                  target="_blank"
-                >
-                  Terms of Use
-                </NavLink>
-                <span>{" and "}</span>
-                <NavLink
-                  to={ROUTE_URL.WEBSITE.PRIVACY_POLICY}
-                  className="text-decoration-none"
-                  target="_blank"
-                >
-                  Privacy Policy
-                </NavLink>
-              </div>
-
-              <div>
-                <div className="account-divider">
-                  <span>OR</span>
-                </div>
-
-                <button
-                  className="btn btn-dark w-100 mt-4 mb-5"
-                  onClick={handleEnquiry}
-                  disabled={isProcessing}
-                >
-                  Send Enquiry by WhatsApp
-                  <i className="bi bi-whatsapp ms-2"></i>
-                </button>
-              </div>
+        {currentStep === "bag" && (
+          <div className="cart-app-content">
+            <div className="cart-app-main">
+              <CartItems
+                items={cart.items ?? []}
+                identity={cartIdentity}
+                isFetching={isCartFetching}
+                onCartUpdated={refetchCart}
+              />
             </div>
+
+            <aside className="cart-app-sidebar">
+              <CartPriceDetails cart={cart} onContinue={handleBagContinue} />
+            </aside>
+          </div>
+        )}
+
+        {/* ==========================================
+            ADDRESS
+        ========================================== */}
+
+        {currentStep === "address" && (
+          <div className="cart-app-content">
+            <div className="cart-app-main">
+              {!customer ? (
+                <UserLoginApp onLogin={handleLogin} />
+              ) : (
+                <CartAddress
+                  customer={customer}
+                  selectedAddress={selectedAddress}
+                  onAddressSelected={setSelectedAddress}
+                  onContinue={handleAddressContinue}
+                  onBack={() => setCurrentStep("bag")}
+                />
+              )}
+            </div>
+
+            <aside className="cart-app-sidebar">
+              <CartPriceDetails cart={cart} />
+            </aside>
+          </div>
+        )}
+
+        {/* ==========================================
+            PAYMENT
+        ========================================== */}
+
+        {currentStep === "payment" && (
+          <div className="cart-app-content">
+            <div className="cart-app-main">
+              {customer && (
+                <CartPayment
+                  customer={customer}
+                  cart={cart}
+                  selectedAddress={selectedAddress}
+                  onBack={() => setCurrentStep("address")}
+                  onOrderSuccess={handleOrderSuccess}
+                />
+              )}
+            </div>
+
+            <aside className="cart-app-sidebar">
+              <CartPriceDetails cart={cart} />
+            </aside>
+          </div>
+        )}
+
+        {/* ==========================================
+            FOOTER
+        ========================================== */}
+
+        <div className="cart-app-footer">
+          <div className="cart-app-footer-security">
+            <i className="bi bi-shield-check" />
+
+            <span>Safe and secure shopping</span>
+          </div>
+
+          <div className="cart-app-footer-support">
+            Need help? <button type="button">Contact Support</button>
           </div>
         </div>
       </div>
-
-      {errorMessage && (
-        <div className="alert alert-danger mt-4">{errorMessage}</div>
-      )}
-      {isOpen && (
-        <UserLoginApp onLogin={handleLogin} onClose={() => setIsOpen(false)} />
-      )}
     </section>
   );
 };

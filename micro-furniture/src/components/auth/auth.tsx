@@ -1,6 +1,6 @@
 import { Outlet } from "react-router";
 import ToastApp from "../ui/toast/toast";
-import { clearToast } from "../../app/redux/core/app-settings/app-settings.slice";
+import { clearToast } from "../../app/redux/crm/core/app-settings/app-settings.slice";
 import { useDispatch } from "react-redux";
 import { useToast } from "../../hooks/use-toast";
 

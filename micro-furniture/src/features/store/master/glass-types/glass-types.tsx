@@ -1,7 +1,7 @@
 import type { AppDispatch, AppState } from "../../../../app/store";
 import { useDispatch, useSelector } from "react-redux";
 
-import { fetchGlassTypes } from "../../../../app/redux/master/glass-types/glass-types.thunk";
+import { fetchGlassTypes } from "../../../../app/redux/crm/master/glass-types/glass-types.thunk";
 import { useEffect } from "react";
 
 const GlassTypesMasterApp = () => {

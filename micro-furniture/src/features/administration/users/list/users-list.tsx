@@ -1,7 +1,7 @@
 import {
   useDeleteUserMutation,
   useGetUsersQuery,
-} from "../../../../app/redux/administration/users/users.api";
+} from "../../../../app/redux/crm/administration/users/users.api";
 import { useEffect, useState } from "react";
 
 import DeleteModelApp from "../../../../components/delete-model/delete-model";

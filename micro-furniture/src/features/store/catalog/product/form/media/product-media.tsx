@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import type { IProductData } from "../../../interface/product/product.model";
 import { uploadToAzureBlob } from "../../../../../blob/upload.helper";
 import { useFormContext } from "react-hook-form";
-import { useGetUploadUrlMutation } from "../../../../../../app/redux/blob/blob.api";
+import { useGetUploadUrlMutation } from "../../../../../../app/redux/crm/blob/blob.api";
 
 type UploadedFile = {
   file: File;

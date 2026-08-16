@@ -10,22 +10,44 @@ import {
 import { GetEnvConfig } from "../../../../app.config";
 import { NavLink } from "react-router";
 import { ROUTE_URL } from "../../../../routes/constants/routes.const";
+import { WEBSITE_AUTH_KEY } from "../../../../constants/global/global-key.const";
+
+interface LoginCustomer {
+  id?: string;
+  name?: string;
+  email?: string;
+  mobile?: string;
+}
 
 interface UserLoginAppProps {
-  onLogin?: (customerId: string, mobile: string) => void;
+  onLogin?: (
+    customerId: string,
+    mobile: string,
+    customer?: LoginCustomer,
+  ) => void;
   onClose?: () => void;
 }
 
 type LoginStep = "mobile" | "otp";
 
+interface ApiError {
+  data?: {
+    detail?: string | Array<{ msg?: string }>;
+    message?: string;
+  };
+  error?: string;
+  message?: string;
+}
+
+const OTP_LENGTH = 6;
+const DEFAULT_RESEND_TIMER = 30;
+
 const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
   const [step, setStep] = useState<LoginStep>("mobile");
-
   const [mobile, setMobile] = useState("");
-  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-
+  const [otp, setOtp] = useState<string[]>(() => Array(OTP_LENGTH).fill(""));
   const [error, setError] = useState("");
-  const [resendTimer, setResendTimer] = useState(30);
+  const [resendTimer, setResendTimer] = useState(DEFAULT_RESEND_TIMER);
 
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -62,13 +84,51 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
     };
   }, [step, resendTimer]);
 
+  const resetOtp = () => {
+    setOtp(Array(OTP_LENGTH).fill(""));
+  };
+
+  const focusFirstOtpInput = () => {
+    window.setTimeout(() => {
+      otpRefs.current[0]?.focus();
+    }, 100);
+  };
+
+  const getApiErrorMessage = (error: unknown, fallback: string): string => {
+    const apiError = error as ApiError;
+
+    const detail = apiError?.data?.detail;
+
+    if (typeof detail === "string") {
+      return detail;
+    }
+
+    if (Array.isArray(detail) && detail.length > 0) {
+      return (
+        detail
+          .map((item) => item?.msg)
+          .filter(Boolean)
+          .join(", ") || fallback
+      );
+    }
+
+    return (
+      apiError?.data?.message ||
+      apiError?.message ||
+      apiError?.error ||
+      fallback
+    );
+  };
+
   const handleSendOtp = async () => {
-    if (!mobile) {
+    const cleanMobile = mobile.replace(/\D/g, "");
+
+    if (!cleanMobile) {
       setError("Please enter your mobile number.");
       return;
     }
 
-    if (mobile.length !== 10) {
+    if (cleanMobile.length !== 10) {
       setError("Please enter a valid 10-digit mobile number.");
       return;
     }
@@ -77,7 +137,7 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
 
     try {
       const response = await sendLoginOtp({
-        mobile,
+        mobile: cleanMobile,
       }).unwrap();
 
       if (!response?.success) {
@@ -85,19 +145,17 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
         return;
       }
 
-      setOtp(["", "", "", "", "", ""]);
-      setResendTimer(response?.retryAfter || 30);
+      setMobile(cleanMobile);
+      resetOtp();
+
+      setResendTimer(response?.retryAfter || DEFAULT_RESEND_TIMER);
+
       setStep("otp");
 
-      window.setTimeout(() => {
-        otpRefs.current[0]?.focus();
-      }, 100);
-    } catch (error: any) {
+      focusFirstOtpInput();
+    } catch (error) {
       setError(
-        error?.data?.detail ||
-          error?.data?.message ||
-          error?.message ||
-          "Unable to send OTP. Please try again.",
+        getApiErrorMessage(error, "Unable to send OTP. Please try again."),
       );
     }
   };
@@ -106,9 +164,9 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
     const numericValue = value.replace(/\D/g, "");
 
     if (numericValue.length > 1) {
-      const pastedOtp = numericValue.slice(0, 6).split("");
+      const pastedOtp = numericValue.slice(0, OTP_LENGTH).split("");
 
-      const nextOtp = ["", "", "", "", "", ""];
+      const nextOtp = Array(OTP_LENGTH).fill("");
 
       pastedOtp.forEach((digit, pasteIndex) => {
         nextOtp[pasteIndex] = digit;
@@ -117,7 +175,7 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
       setOtp(nextOtp);
       setError("");
 
-      const focusIndex = Math.min(pastedOtp.length, 5);
+      const focusIndex = Math.min(pastedOtp.length, OTP_LENGTH - 1);
 
       window.setTimeout(() => {
         otpRefs.current[focusIndex]?.focus();
@@ -133,12 +191,15 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
     setOtp(nextOtp);
     setError("");
 
-    if (numericValue && index < 5) {
+    if (numericValue && index < OTP_LENGTH - 1) {
       otpRefs.current[index + 1]?.focus();
     }
   };
 
-  const handleOtpKeyDown = (index: number, event: React.KeyboardEvent) => {
+  const handleOtpKeyDown = (
+    index: number,
+    event: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
     if (event.key === "Backspace") {
       if (!otp[index] && index > 0) {
         otpRefs.current[index - 1]?.focus();
@@ -155,7 +216,7 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
       return;
     }
 
-    if (event.key === "ArrowRight" && index < 5) {
+    if (event.key === "ArrowRight" && index < OTP_LENGTH - 1) {
       event.preventDefault();
 
       otpRefs.current[index + 1]?.focus();
@@ -171,10 +232,14 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
   };
 
   const handleVerifyOtp = async () => {
+    if (isLoading) {
+      return;
+    }
+
     const enteredOtp = otp.join("");
 
-    if (enteredOtp.length !== 6) {
-      setError("Please enter the 6-digit OTP.");
+    if (enteredOtp.length !== OTP_LENGTH) {
+      setError(`Please enter the ${OTP_LENGTH}-digit OTP.`);
       return;
     }
 
@@ -197,7 +262,6 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
       }
 
       const customer = response?.customer;
-
       const customerId = customer?.id;
 
       if (!customerId) {
@@ -214,36 +278,45 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
         return;
       }
 
-      localStorage.setItem("access_token", response.access_token);
-
-      if (response?.refresh_token) {
-        localStorage.setItem("refresh_token", response.refresh_token);
+      if (!response?.refresh_token) {
+        setError("Login successful, but refresh token was not received.");
+        return;
       }
 
-      localStorage.setItem("token_type", response?.token_type || "bearer");
+      /*
+       * Store website authentication.
+       *
+       * IMPORTANT:
+       * Your backend refresh endpoint expects:
+       *
+       * {
+       *   "refresh_token": "..."
+       * }
+       *
+       * Therefore refreshToken MUST be stored here.
+       */
+      const websiteAuth = {
+        accessToken: response.access_token,
+        refreshToken: response.refresh_token,
+        tokenType: response.token_type || "bearer",
+        customerId: String(customerId),
+        mobile: customer?.mobile || mobile,
+        name: customer?.name || "",
+        email: customer?.email || "",
+      };
 
-      localStorage.setItem("customer_id", String(customerId));
+      localStorage.setItem(WEBSITE_AUTH_KEY, JSON.stringify(websiteAuth));
 
-      localStorage.setItem("customer_mobile", customer?.mobile || mobile);
-
-      if (customer?.name) {
-        localStorage.setItem("customer_name", customer.name);
-      }
-
-      if (customer?.email) {
-        localStorage.setItem("customer_email", customer.email);
-      }
-
-      onLogin?.(String(customerId), customer?.mobile || mobile);
+      onLogin?.(String(customerId), customer?.mobile || mobile, {
+        id: String(customerId),
+        name: customer?.name,
+        email: customer?.email,
+        mobile: customer?.mobile || mobile,
+      });
 
       onClose?.();
-    } catch (error: any) {
-      setError(
-        error?.data?.detail ||
-          error?.data?.message ||
-          error?.message ||
-          "Invalid OTP. Please try again.",
-      );
+    } catch (error) {
+      setError(getApiErrorMessage(error, "Invalid OTP. Please try again."));
     }
   };
 
@@ -269,30 +342,35 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
         return;
       }
 
-      setOtp(["", "", "", "", "", ""]);
+      resetOtp();
 
-      setResendTimer(response?.retryAfter || 30);
+      setResendTimer(response?.retryAfter || DEFAULT_RESEND_TIMER);
 
-      window.setTimeout(() => {
-        otpRefs.current[0]?.focus();
-      }, 100);
-    } catch (error: any) {
+      focusFirstOtpInput();
+    } catch (error) {
       setError(
-        error?.data?.detail ||
-          error?.data?.message ||
-          error?.message ||
-          "Unable to resend OTP. Please try again.",
+        getApiErrorMessage(error, "Unable to resend OTP. Please try again."),
       );
     }
   };
 
   const handleChangeMobile = () => {
+    if (isLoading) {
+      return;
+    }
+
     setStep("mobile");
-
-    setOtp(["", "", "", "", "", ""]);
-
+    resetOtp();
     setError("");
-    setResendTimer(30);
+    setResendTimer(DEFAULT_RESEND_TIMER);
+  };
+
+  const handleClose = () => {
+    if (isLoading) {
+      return;
+    }
+
+    onClose?.();
   };
 
   return (
@@ -320,7 +398,8 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
                   <button
                     type="button"
                     className="user-login-close"
-                    onClick={onClose}
+                    onClick={handleClose}
+                    disabled={isLoading}
                     aria-label="Close"
                   >
                     <i className="bi bi-x-lg" />
@@ -363,7 +442,7 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
                   </div>
 
                   {error && (
-                    <div className="account-error">
+                    <div className="account-error" role="alert">
                       <i className="bi bi-exclamation-circle" />
                       <span>{error}</span>
                     </div>
@@ -400,7 +479,6 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
 
                     <div>
                       <strong>Easy Orders</strong>
-
                       <span>Track all your orders</span>
                     </div>
                   </div>
@@ -412,7 +490,6 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
 
                     <div>
                       <strong>Wishlist</strong>
-
                       <span>Save products you love</span>
                     </div>
                   </div>
@@ -424,7 +501,6 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
 
                     <div>
                       <strong>Faster Checkout</strong>
-
                       <span>Save your details securely</span>
                     </div>
                   </div>
@@ -438,8 +514,8 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
                     rel="noopener noreferrer"
                   >
                     Terms of Use
-                  </NavLink>
-                  {" and "}
+                  </NavLink>{" "}
+                  and{" "}
                   <NavLink
                     to={ROUTE_URL.WEBSITE.PRIVACY_POLICY}
                     target="_blank"
@@ -471,7 +547,8 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
                   <button
                     type="button"
                     className="user-login-close"
-                    onClick={onClose}
+                    onClick={handleClose}
+                    disabled={isLoading}
                     aria-label="Close"
                   >
                     <i className="bi bi-x-lg" />
@@ -498,7 +575,7 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
                   <div className="otp-inputs">
                     {otp.map((digit, index) => (
                       <input
-                        key={index}
+                        key={`otp-${index}`}
                         id={`otp-${index}`}
                         ref={(element) => {
                           otpRefs.current[index] = element;
@@ -519,22 +596,27 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
                           const pastedValue = event.clipboardData
                             .getData("text")
                             .replace(/\D/g, "")
-                            .slice(0, 6);
+                            .slice(0, OTP_LENGTH);
 
                           if (!pastedValue) {
                             return;
                           }
 
-                          const nextOtp = ["", "", "", "", "", ""];
+                          const nextOtp = Array(OTP_LENGTH).fill("");
 
-                          pastedValue.split("").forEach((digit, pasteIndex) => {
-                            nextOtp[pasteIndex] = digit;
-                          });
+                          pastedValue
+                            .split("")
+                            .forEach((pastedDigit, pasteIndex) => {
+                              nextOtp[pasteIndex] = pastedDigit;
+                            });
 
                           setOtp(nextOtp);
                           setError("");
 
-                          const focusIndex = Math.min(pastedValue.length, 5);
+                          const focusIndex = Math.min(
+                            pastedValue.length,
+                            OTP_LENGTH - 1,
+                          );
 
                           window.setTimeout(() => {
                             otpRefs.current[focusIndex]?.focus();
@@ -547,9 +629,8 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
                   </div>
 
                   {error && (
-                    <div className="account-error otp-error">
+                    <div className="account-error otp-error" role="alert">
                       <i className="bi bi-exclamation-circle" />
-
                       <span>{error}</span>
                     </div>
                   )}
@@ -579,7 +660,7 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
                   type="button"
                   className="account-login-action otp-verify-action"
                   onClick={handleVerifyOtp}
-                  disabled={isLoading || otp.join("").length !== 6}
+                  disabled={isLoading || otp.join("").length !== OTP_LENGTH}
                 >
                   <span>
                     {isVerifyingOtp ? "Verifying..." : "Verify & Continue"}
@@ -611,8 +692,8 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
                     rel="noopener noreferrer"
                   >
                     Terms of Use
-                  </NavLink>
-                  {" and "}
+                  </NavLink>{" "}
+                  and{" "}
                   <NavLink
                     to={ROUTE_URL.WEBSITE.PRIVACY_POLICY}
                     target="_blank"

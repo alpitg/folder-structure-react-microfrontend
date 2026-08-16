@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
-import { useGetProductsQuery } from "../../../../../../app/redux/catalog/product/product.api";
+import { useGetProductsQuery } from "../../../../../../app/redux/crm/catalog/product/product.api";
 import type { sortType } from "../../../../../../interfaces/sort";
 import type { IProductData } from "../../../../catalog/interface/product/product.model";
 import { calculateDiscountAmount } from "../../../../catalog/product/utils/costing.util";

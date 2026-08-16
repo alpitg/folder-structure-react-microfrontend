@@ -7,7 +7,7 @@ import {
   useAddOrganizationUnitsMutation,
   useGetRolesFromOrganizationUnitQuery,
   useRemoveRoleFromOrganizationUnitMutation,
-} from "../../../../app/redux/administration/organization-units/organization-units.api";
+} from "../../../../app/redux/crm/administration/organization-units/organization-units.api";
 import { useEffect, useState } from "react";
 
 import DeleteModelApp from "../../../../components/delete-model/delete-model";

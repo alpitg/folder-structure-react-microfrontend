@@ -1,12 +1,11 @@
 import { GetEnvConfig } from "../../../../app.config";
-import { baseQuery } from "../../base.api";
 import { createApi } from "@reduxjs/toolkit/query/react";
+import { websiteBaseQuery } from "../base.api";
 
 export interface PublicOrderItem {
   productId: string;
   productType?: string;
   quantity: number;
-  customizedDetails?: Record<string, unknown>;
 }
 
 export interface PublicOrderRequest {
@@ -51,7 +50,7 @@ export interface VerifyPaymentResponse {
 
 export const websiteOrderApi = createApi({
   reducerPath: "websiteOrderApi",
-  baseQuery,
+  baseQuery: websiteBaseQuery,
   tagTypes: ["WebsiteOrder"],
 
   endpoints: (builder) => ({

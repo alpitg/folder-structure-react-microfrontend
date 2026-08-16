@@ -2,7 +2,12 @@ import "./profile.scss";
 
 import { GetEnvConfig } from "../../../../app.config";
 import UserLoginApp from "../login/user-login";
+import { WEBSITE_AUTH_KEY } from "../../../../constants/global/global-key.const";
 import { useState } from "react";
+
+// ============================================================
+// TYPES
+// ============================================================
 
 interface ProfileUser {
   id?: string;
@@ -17,24 +22,61 @@ interface ProfileProps {
   user?: ProfileUser;
 }
 
-interface LoginCustomer {
-  id?: string;
+interface WebsiteAuth {
+  accessToken?: string;
+  refreshToken?: string;
+  tokenType?: string;
+
+  customerId?: string;
+  mobile?: string;
   name?: string;
   email?: string;
-  mobile?: string;
 }
+
+// ============================================================
+// HELPERS
+// ============================================================
+
+const getStoredWebsiteAuth = (): WebsiteAuth | null => {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const authString = localStorage.getItem(WEBSITE_AUTH_KEY);
+
+  if (!authString) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(authString) as WebsiteAuth;
+  } catch (error) {
+    console.error("Invalid website authentication data:", error);
+
+    return null;
+  }
+};
+
+// ============================================================
+// COMPONENT
+// ============================================================
 
 const Profile = ({ isLoggedIn = false, user }: ProfileProps) => {
   const appSettings = GetEnvConfig();
 
-  const storedCustomerId = localStorage.getItem("customerId");
-  const storedCustomerMobile = localStorage.getItem("customerMobile");
-  const storedCustomerName = localStorage.getItem("customerName");
-  const storedCustomerEmail = localStorage.getItem("customerEmail");
+  // ==========================================================
+  // STORED WEBSITE AUTH
+  // ==========================================================
+
+  const storedAuth = getStoredWebsiteAuth();
 
   const hasStoredLogin = Boolean(
-    storedCustomerId || localStorage.getItem("access_token"),
+    storedAuth?.accessToken && storedAuth?.customerId,
   );
+
+  // ==========================================================
+  // STATE
+  // ==========================================================
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -42,61 +84,92 @@ const Profile = ({ isLoggedIn = false, user }: ProfileProps) => {
 
   const [currentUser, setCurrentUser] = useState<ProfileUser | undefined>(
     user || {
-      id: storedCustomerId || undefined,
-      name: storedCustomerName || undefined,
-      email: storedCustomerEmail || undefined,
-      phone: storedCustomerMobile || undefined,
-      mobile: storedCustomerMobile || undefined,
+      id: storedAuth?.customerId,
+
+      name: storedAuth?.name,
+
+      email: storedAuth?.email,
+
+      phone: storedAuth?.mobile,
+
+      mobile: storedAuth?.mobile,
     },
   );
 
+  // ==========================================================
+  // OPEN LOGIN / PROFILE
+  // ==========================================================
+
   const openProfile = () => {
     if (loggedIn) {
+      // TODO:
+      // Navigate to actual profile page when implemented.
       return;
     }
 
     setIsOpen(true);
   };
 
+  // ==========================================================
+  // CLOSE LOGIN
+  // ==========================================================
+
   const closeProfile = () => {
     setIsOpen(false);
   };
 
-  const handleLogin = (
-    customerId: string,
-    mobile: string,
-    customer?: LoginCustomer,
-  ) => {
-    localStorage.setItem("customerId", customerId);
-    localStorage.setItem("customerMobile", mobile);
+  // ==========================================================
+  // LOGIN SUCCESS
+  // ==========================================================
 
-    if (customer?.name) {
-      localStorage.setItem("customerName", customer.name);
-    }
+  const handleLogin = (customerId: string, mobile: string) => {
+    /**
+     * UserLoginApp already stores the complete
+     * website authentication object.
+     *
+     * Read it again here so Profile stays in sync
+     * with the authentication source of truth.
+     */
+    const auth = getStoredWebsiteAuth();
 
-    if (customer?.email) {
-      localStorage.setItem("customerEmail", customer.email);
-    }
-
-    setCurrentUser({
+    const customer = {
       id: customerId,
-      mobile: mobile,
-      phone: mobile,
-      name: customer?.name,
-      email: customer?.email,
-    });
+
+      mobile: auth?.mobile || mobile,
+
+      phone: auth?.mobile || mobile,
+
+      name: auth?.name,
+
+      email: auth?.email,
+    };
+
+    setCurrentUser(customer);
 
     setLoggedIn(true);
+
     setIsOpen(false);
   };
+
+  // ==========================================================
+  // RENDER
+  // ==========================================================
 
   return (
     <div className="profile-app">
       <section className="profile-container">
         <div className="profile-login-card">
+          {/* ==================================================
+              ICON
+          ================================================== */}
+
           <div className="profile-login-icon">
-            <i className="bi bi-person"></i>
+            <i className="bi bi-person" />
           </div>
+
+          {/* ==================================================
+              TITLE
+          ================================================== */}
 
           <h1>
             {loggedIn
@@ -104,11 +177,19 @@ const Profile = ({ isLoggedIn = false, user }: ProfileProps) => {
               : `Welcome to ${appSettings?.name}`}
           </h1>
 
+          {/* ==================================================
+              DESCRIPTION
+          ================================================== */}
+
           <p>
             {loggedIn
               ? "Manage your profile, orders, wishlist and saved addresses."
               : "Login to access your profile, orders, wishlist and saved addresses."}
           </p>
+
+          {/* ==================================================
+              ACTION
+          ================================================== */}
 
           <button
             type="button"
@@ -123,6 +204,10 @@ const Profile = ({ isLoggedIn = false, user }: ProfileProps) => {
           </button>
         </div>
       </section>
+
+      {/* ======================================================
+          LOGIN MODAL
+      ====================================================== */}
 
       {isOpen && <UserLoginApp onLogin={handleLogin} onClose={closeProfile} />}
     </div>

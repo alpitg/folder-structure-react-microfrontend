@@ -1,7 +1,7 @@
 import {
   useDeleteRoleMutation,
   useGetRolesQuery,
-} from "../../../../app/redux/administration/roles/roles.api";
+} from "../../../../app/redux/crm/administration/roles/roles.api";
 import { useEffect, useState } from "react";
 
 import DeleteModelApp from "../../../../components/delete-model/delete-model";

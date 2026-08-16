@@ -1,11 +1,11 @@
 import ErrorLoginAgainApp from "../components/ui/error/error-login-again";
 import LoadingApp from "../components/loading/loading";
 import { Outlet } from "react-router";
-import { setAppInitialData } from "../app/redux/administration/auth/auth.slice";
+import { setAppInitialData } from "../app/redux/crm/administration/auth/auth.slice";
 import { useAuth } from "../hooks/use-auth";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { useGetAppInitialDataQuery } from "../app/redux/administration/auth/auth.api";
+import { useGetAppInitialDataQuery } from "../app/redux/crm/administration/auth/auth.api";
 
 const AppInitializer = () => {
   const { isAuthenticated, hydrated } = useAuth();
