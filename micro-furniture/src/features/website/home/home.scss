@@ -7,6 +7,7 @@ $color-border: #eaeaec;
 $color-background-light: #f5f5f6;
 $color-background: #fff;
 $color-success: #03a685;
+$color-white: #fff;
 
 .home-page {
   background: $color-background;
@@ -398,36 +399,49 @@ $color-success: #03a685;
         font-weight: 700;
       }
 
-      .home-product-wishlist {
+      .wishlist-btn {
         position: absolute;
-        top: 10px;
-        right: 10px;
-        width: 34px;
-        height: 34px;
+        top: 12px;
+        right: 12px;
+
+        z-index: 3;
+
+        width: 36px;
+        height: 36px;
+
         display: flex;
         align-items: center;
         justify-content: center;
+
         padding: 0;
-        border: 0;
+
+        border: none;
         border-radius: 50%;
-        background: rgba(255, 255, 255, 0.95);
+
+        background: $color-background;
         color: $color-dark;
+
         cursor: pointer;
-        transition:
-          transform 0.2s ease,
-          background 0.2s ease;
+
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+
+        transition: all 0.2s ease;
 
         i {
-          color: $color-dark;
-          font-size: 15px;
-          transition: color 0.2s ease;
+          display: block;
+
+          color: $color-primary;
+
+          font-size: 18px;
+          line-height: 1;
         }
 
         &:hover {
-          transform: scale(1.05);
+          background: $color-primary;
+          color: $color-background;
 
           i {
-            color: $color-primary;
+            color: $color-background;
           }
         }
       }

@@ -518,7 +518,7 @@ const Home = () => {
 
                     <button
                       type="button"
-                      className="home-product-wishlist"
+                      className="wishlist-btn"
                       aria-label={
                         isWishlisted
                           ? `Remove ${product?.name} from wishlist`

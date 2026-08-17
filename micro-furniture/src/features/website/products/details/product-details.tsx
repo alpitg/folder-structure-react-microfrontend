@@ -1,21 +1,68 @@
 import "./product-details.scss";
 
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type MouseEvent } from "react";
 import { useNavigate, useParams } from "react-router";
 
 import type { AppState } from "../../../../app/store";
 import { GetEnvConfig } from "../../../../app.config";
 import { ROUTE_URL } from "../../../../routes/constants/routes.const";
+
+import {
+  useAddWebsiteCartItemMutation,
+  useGetWebsiteCartQuery,
+  type CartIdentity,
+} from "../../../../app/redux/website/cart/cart.api";
+
+import {
+  useGetCurrentUserQuery,
+  type WebsiteUser,
+} from "../../../../app/redux/website/auth/profile-login.api";
+
 import { addItemToBag } from "../../../../app/redux/crm/core/shopping-bag/shopping-bag.slice";
+
 import { useGetProductDetailQuery } from "../../../../app/redux/website/product/website-product.api";
+
+import {
+  useAddWishlistItemMutation,
+  useGetWishlistQuery,
+  useRemoveWishlistItemMutation,
+} from "../../../../app/redux/website/wishlist/website-wishlist.api";
+
+// ============================================================
+// CONSTANTS
+// ============================================================
+
+const blankImage = "/static/media/img/svg/blank-image.svg";
+
+const GUEST_CART_KEY = "website_guest_cart_id";
+
+// ============================================================
+// GUEST CART
+// ============================================================
+
+const getOrCreateGuestCartId = (): string => {
+  const existingGuestCartId = localStorage.getItem(GUEST_CART_KEY);
+
+  if (existingGuestCartId) {
+    return existingGuestCartId;
+  }
+
+  const guestCartId = crypto.randomUUID();
+
+  localStorage.setItem(GUEST_CART_KEY, guestCartId);
+
+  return guestCartId;
+};
+
+// ============================================================
+// COMPONENT
+// ============================================================
 
 const ProductDetails = () => {
   // ==================================================
   // VARIABLES
   // ==================================================
-
-  const blankImage = "/static/media/img/svg/blank-image.svg";
 
   const appSettings = GetEnvConfig();
 
@@ -30,35 +77,133 @@ const ProductDetails = () => {
   // ==================================================
 
   const [selectedImage, setSelectedImage] = useState(0);
+
   const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
-  const [isWishlisted, setIsWishlisted] = useState(false);
+
   const [pincode, setPincode] = useState("");
+
   const [deliveryChecked, setDeliveryChecked] = useState(false);
 
   /*
    * Mobile sticky CTA visibility.
-   *
-   * true:
-   *   Show fixed bottom CTA.
-   *
-   * false:
-   *   Let the normal action section be visible.
    */
   const [showMobileStickyActions, setShowMobileStickyActions] = useState(true);
 
   /*
-   * Reference to the normal Add to Bag / Wishlist
-   * section.
+   * Reference to normal Add to Bag / Wishlist section.
    */
   const productActionsRef = useRef<HTMLDivElement | null>(null);
 
+  /*
+   * Product currently being added to cart.
+   */
+  const [isAddingToBag, setIsAddingToBag] = useState(false);
+
+  /*
+   * Product currently being updated in wishlist.
+   */
+  const [isUpdatingWishlist, setIsUpdatingWishlist] = useState(false);
+
   // ==================================================
-  // BAG
+  // CURRENT USER
   // ==================================================
 
-  const bagItems = useSelector(
-    (state: AppState) => state.core.shoppingBag.items,
-  );
+  const { data: currentUserResponse, isLoading: isUserLoading } =
+    useGetCurrentUserQuery();
+
+  const customer: WebsiteUser | null = currentUserResponse?.user ?? null;
+
+  const customerId = customer?.id ?? null;
+
+  // ==================================================
+  // GUEST CART
+  // ==================================================
+
+  const [guestCartId, setGuestCartId] = useState<string | null>(null);
+
+  useEffect(() => {
+    /*
+     * Logged-in customer does not need guest cart identity.
+     */
+    if (customerId) {
+      setGuestCartId(null);
+
+      return;
+    }
+
+    /*
+     * Create guest cart ID only for guests.
+     */
+    const id = getOrCreateGuestCartId();
+
+    setGuestCartId(id);
+  }, [customerId]);
+
+  // ==================================================
+  // CART IDENTITY
+  // ==================================================
+
+  const cartIdentity = useMemo<CartIdentity | undefined>(() => {
+    if (customerId) {
+      return {
+        customerId: String(customerId),
+      };
+    }
+
+    if (guestCartId) {
+      return {
+        guestCartId,
+      };
+    }
+
+    return undefined;
+  }, [customerId, guestCartId]);
+
+  // ==================================================
+  // CART
+  // ==================================================
+
+  const {
+    data: cartResponse,
+    isLoading: isCartLoading,
+    refetch: refetchCart,
+  } = useGetWebsiteCartQuery(cartIdentity as CartIdentity, {
+    skip: !cartIdentity || isUserLoading,
+  });
+
+  // ==================================================
+  // ADD CART ITEM API
+  // ==================================================
+
+  const [addWebsiteCartItem] = useAddWebsiteCartItemMutation();
+
+  // ==================================================
+  // CART ITEM MAP
+  // ==================================================
+
+  /*
+   * IMPORTANT:
+   *
+   * The server cart is now the source of truth.
+   *
+   * Previously ProductDetails was checking:
+   *
+   *     state.core.shoppingBag.items
+   *
+   * That can become stale when:
+   *
+   * - the page is refreshed
+   * - the cart is changed from another page
+   * - the user logs in
+   * - a guest cart is restored
+   *
+   * We therefore use the API cart here.
+   */
+  const cartItemMap = useMemo(() => {
+    const items = cartResponse?.items ?? [];
+
+    return new Map(items.map((item) => [item.productId, item]));
+  }, [cartResponse]);
 
   // ==================================================
   // PRODUCT
@@ -66,7 +211,7 @@ const ProductDetails = () => {
 
   const {
     data: productsResponse,
-    isLoading,
+    isLoading: isProductLoading,
     isError,
   } = useGetProductDetailQuery(id ?? "");
 
@@ -79,6 +224,82 @@ const ProductDetails = () => {
   }, [productsFromStore, productsResponse]);
 
   // ==================================================
+  // PRODUCT CART STATUS
+  // ==================================================
+
+  /*
+   * This is the important fix.
+   *
+   * Product is considered "in bag" ONLY when it exists
+   * in the server cart.
+   */
+  const cartItem = useMemo(() => {
+    if (!product?.id) {
+      return undefined;
+    }
+
+    return cartItemMap.get(product.id);
+  }, [cartItemMap, product?.id]);
+
+  const isInBag = Boolean(cartItem);
+
+  const quantityInBag = cartItem?.quantity ?? 0;
+
+  // ==================================================
+  // WISHLIST IDENTITY
+  // ==================================================
+
+  const wishlistIdentity = useMemo(() => {
+    if (customerId) {
+      return {
+        customerId: String(customerId),
+      };
+    }
+
+    if (guestCartId) {
+      return {
+        guestCartId,
+      };
+    }
+
+    return undefined;
+  }, [customerId, guestCartId]);
+
+  // ==================================================
+  // WISHLIST
+  // ==================================================
+
+  const {
+    data: wishlistResponse,
+    isLoading: isWishlistLoading,
+    refetch: refetchWishlist,
+  } = useGetWishlistQuery(wishlistIdentity!, {
+    skip: !wishlistIdentity || isUserLoading,
+  });
+
+  // ==================================================
+  // WISHLIST MUTATIONS
+  // ==================================================
+
+  const [addWishlistItem] = useAddWishlistItemMutation();
+
+  const [removeWishlistItem] = useRemoveWishlistItemMutation();
+
+  // ==================================================
+  // CURRENT PRODUCT WISHLIST STATUS
+  // ==================================================
+
+  const isWishlisted = useMemo(() => {
+    if (!product?.id) {
+      return false;
+    }
+
+    const items = wishlistResponse?.items ?? [];
+
+    return items.some((item) => item.productId === product.id);
+  }, [wishlistResponse, product?.id]);
+
+  // ==================================================
   // MOBILE STICKY ACTION OBSERVER
   // ==================================================
 
@@ -87,25 +308,16 @@ const ProductDetails = () => {
       return;
     }
 
-    /*
-     * We only want this behavior on mobile.
-     */
     const mediaQuery = window.matchMedia("(max-width: 767px)");
 
     if (!mediaQuery.matches) {
       setShowMobileStickyActions(false);
+
       return;
     }
 
     const actionElement = productActionsRef.current;
 
-    /*
-     * When the normal action section becomes visible,
-     * hide the fixed bottom action.
-     *
-     * When it leaves the viewport again,
-     * show the fixed bottom action.
-     */
     const observer = new IntersectionObserver(
       ([entry]) => {
         setShowMobileStickyActions(!entry.isIntersecting);
@@ -148,7 +360,7 @@ const ProductDetails = () => {
   // LOADING
   // ==================================================
 
-  if (isLoading) {
+  if (isProductLoading) {
     return (
       <section className="product-details-app">
         <div className="product-page-container">
@@ -210,16 +422,12 @@ const ProductDetails = () => {
 
   const images = productImages.length > 0 ? productImages : [blankImage];
 
-  const activeImage = images[selectedImage] || blankImage;
+  /*
+   * Prevent invalid selected image index if product data changes.
+   */
+  const safeSelectedImage = selectedImage >= images.length ? 0 : selectedImage;
 
-  // ==================================================
-  // BAG STATUS
-  // ==================================================
-
-  const quantityInBag =
-    bagItems.find((item) => item.id === product.id)?.quantity ?? 0;
-
-  const isInBag = quantityInBag > 0;
+  const activeImage = images[safeSelectedImage] || blankImage;
 
   // ==================================================
   // PRICING
@@ -240,16 +448,150 @@ const ProductDetails = () => {
   // ADD TO BAG
   // ==================================================
 
-  const addToBag = () => {
-    dispatch(
-      addItemToBag({
-        id: product.id,
-        name: product.name,
-        image: images[0] ?? blankImage,
-        price: sellingPrice,
+  const addToBag = async () => {
+    if (!product?.id) {
+      return;
+    }
+
+    /*
+     * Do not allow duplicate requests.
+     */
+    if (isAddingToBag) {
+      return;
+    }
+
+    /*
+     * If cart is already loading, wait until we know
+     * whether this product is already present.
+     */
+    if (isCartLoading) {
+      return;
+    }
+
+    /*
+     * SERVER CART CHECK
+     *
+     * This is the key fix.
+     */
+    const existingCartItem = cartItemMap.get(product.id);
+
+    if (existingCartItem) {
+      navigate(ROUTE_URL.WEBSITE.CART);
+
+      return;
+    }
+
+    /*
+     * Need a valid cart identity.
+     */
+    if (!cartIdentity) {
+      console.error("Cart identity is not available.");
+
+      return;
+    }
+
+    try {
+      setIsAddingToBag(true);
+
+      /*
+       * Add to server cart.
+       */
+      await addWebsiteCartItem({
+        ...cartIdentity,
+        productId: product.id,
+        productType: "physical",
         quantity: 1,
-      }),
-    );
+      }).unwrap();
+
+      /*
+       * Keep existing Redux shopping bag synchronized.
+       *
+       * IMPORTANT:
+       * This is no longer used to decide whether the
+       * product is already in the cart.
+       */
+      dispatch(
+        addItemToBag({
+          id: product.id,
+          name: product.name,
+          image: images[0] ?? blankImage,
+          price: sellingPrice,
+          quantity: 1,
+        }),
+      );
+
+      /*
+       * Refresh server cart so UI immediately changes
+       * from "Add to Bag" to "Go to Bag".
+       */
+      await refetchCart();
+    } catch (error) {
+      console.error("Unable to add product to cart:", error);
+    } finally {
+      setIsAddingToBag(false);
+    }
+  };
+
+  // ==================================================
+  // WISHLIST TOGGLE
+  // ==================================================
+
+  const toggleWishlist = async (event?: MouseEvent<HTMLButtonElement>) => {
+    event?.preventDefault();
+
+    event?.stopPropagation();
+
+    if (!product?.id) {
+      return;
+    }
+
+    if (isUpdatingWishlist) {
+      return;
+    }
+
+    if (isWishlistLoading) {
+      return;
+    }
+
+    if (!wishlistIdentity) {
+      console.error("Wishlist identity is not available.");
+
+      return;
+    }
+
+    try {
+      setIsUpdatingWishlist(true);
+
+      if (isWishlisted) {
+        /*
+         * Remove existing wishlist item.
+         */
+        await removeWishlistItem({
+          ...wishlistIdentity,
+          productId: product.id,
+        }).unwrap();
+      } else {
+        /*
+         * Add product to wishlist.
+         */
+        await addWishlistItem({
+          ...wishlistIdentity,
+          productId: product.id,
+        }).unwrap();
+      }
+
+      /*
+       * Refresh wishlist from server.
+       *
+       * This keeps every wishlist button on this page
+       * synchronized.
+       */
+      await refetchWishlist();
+    } catch (error) {
+      console.error("Unable to update wishlist:", error);
+    } finally {
+      setIsUpdatingWishlist(false);
+    }
   };
 
   // ==================================================
@@ -269,20 +611,13 @@ const ProductDetails = () => {
   };
 
   // ==================================================
-  // WISHLIST
-  // ==================================================
-
-  const toggleWishlist = () => {
-    setIsWishlisted((value) => !value);
-  };
-
-  // ==================================================
   // DELIVERY
   // ==================================================
 
   const checkDelivery = () => {
     if (/^\d{6}$/.test(pincode)) {
       setDeliveryChecked(true);
+
       return;
     }
 
@@ -298,6 +633,23 @@ const ProductDetails = () => {
       ?.split(",")
       .map((color) => color.trim())
       .filter(Boolean) ?? [];
+
+  // ==================================================
+  // WISHLIST BUTTON STATE
+  // ==================================================
+
+  const wishlistButtonDisabled =
+    isUpdatingWishlist ||
+    isWishlistLoading ||
+    isUserLoading ||
+    !wishlistIdentity;
+
+  // ==================================================
+  // CART BUTTON STATE
+  // ==================================================
+
+  const cartButtonDisabled =
+    isAddingToBag || isCartLoading || isUserLoading || !cartIdentity;
 
   // ==================================================
   // RENDER
@@ -343,7 +695,7 @@ const ProductDetails = () => {
                       type="button"
                       key={`${image}-${index}`}
                       className={`product-thumbnail ${
-                        selectedImage === index ? "active" : ""
+                        safeSelectedImage === index ? "active" : ""
                       }`}
                       onClick={() => setSelectedImage(index)}
                       aria-label={`View product image ${index + 1}`}
@@ -390,19 +742,28 @@ const ProductDetails = () => {
 
                 <button
                   type="button"
-                  className={`product-wishlist-btn ${
+                  className={`wishlist-btn ${
                     isWishlisted ? "active" : ""
                   }`}
                   onClick={toggleWishlist}
+                  disabled={wishlistButtonDisabled}
                   aria-label={
                     isWishlisted ? "Remove from wishlist" : "Add to wishlist"
                   }
                 >
-                  <i
-                    className={
-                      isWishlisted ? "bi bi-heart-fill" : "bi bi-heart"
-                    }
-                  ></i>
+                  {isUpdatingWishlist ? (
+                    <span
+                      className="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    <i
+                      className={
+                        isWishlisted ? "bi bi-heart-fill" : "bi bi-heart"
+                      }
+                    ></i>
+                  )}
                 </button>
 
                 {/* Image navigation */}
@@ -430,7 +791,7 @@ const ProductDetails = () => {
                 )}
 
                 <div className="gallery-counter">
-                  {selectedImage + 1} / {images.length}
+                  {safeSelectedImage + 1} / {images.length}
                 </div>
               </div>
             </div>
@@ -444,7 +805,7 @@ const ProductDetails = () => {
                     type="button"
                     key={`mobile-${image}-${index}`}
                     className={`product-thumbnail ${
-                      selectedImage === index ? "active" : ""
+                      safeSelectedImage === index ? "active" : ""
                     }`}
                     onClick={() => setSelectedImage(index)}
                     aria-label={`View product image ${index + 1}`}
@@ -477,23 +838,34 @@ const ProductDetails = () => {
               <div className="product-title-row">
                 <div className="d-grid">
                   <h1>{product.name}</h1>
+
                   <p>{product.description}</p>
                 </div>
+
                 <button
                   type="button"
                   className={`mobile-title-wishlist ${
                     isWishlisted ? "active" : ""
                   }`}
                   onClick={toggleWishlist}
+                  disabled={wishlistButtonDisabled}
                   aria-label={
                     isWishlisted ? "Remove from wishlist" : "Add to wishlist"
                   }
                 >
-                  <i
-                    className={
-                      isWishlisted ? "bi bi-heart-fill" : "bi bi-heart"
-                    }
-                  ></i>
+                  {isUpdatingWishlist ? (
+                    <span
+                      className="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    <i
+                      className={
+                        isWishlisted ? "bi bi-heart-fill" : "bi bi-heart"
+                      }
+                    ></i>
+                  )}
                 </button>
               </div>
 
@@ -514,8 +886,8 @@ const ProductDetails = () => {
                   <div className="product-rating">
                     <span>
                       {product?.rating?.toFixed
-                        ? product?.rating?.toFixed(1)
-                        : product?.rating}
+                        ? product.rating.toFixed(1)
+                        : product.rating}
                     </span>
 
                     <i className="bi bi-star-fill"></i>
@@ -527,7 +899,7 @@ const ProductDetails = () => {
                     <span className="rating-separator">|</span>
 
                     <span className="review-count">
-                      {product?.reviews} Reviews
+                      {product.reviews} Reviews
                     </span>
                   </>
                 )}
@@ -611,8 +983,12 @@ const ProductDetails = () => {
                     type="button"
                     className="view-cart-btn"
                     onClick={() => navigate(ROUTE_URL.WEBSITE.CART)}
+                    disabled={isCartLoading}
                   >
-                    Go to Bag
+                    {quantityInBag > 1
+                      ? `Go to Bag (${quantityInBag})`
+                      : "Go to Bag"}
+
                     <i className="bi bi-arrow-right"></i>
                   </button>
                 ) : (
@@ -620,9 +996,19 @@ const ProductDetails = () => {
                     type="button"
                     className="add-to-cart-btn"
                     onClick={addToBag}
+                    disabled={cartButtonDisabled}
                   >
-                    <i className="bi bi-bag-plus"></i>
-                    <span>Add to Bag</span>
+                    {isAddingToBag ? (
+                      <span
+                        className="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <i className="bi bi-bag-plus"></i>
+                    )}
+
+                    <span>{isAddingToBag ? "Adding..." : "Add to Bag"}</span>
                   </button>
                 )}
 
@@ -630,12 +1016,21 @@ const ProductDetails = () => {
                   type="button"
                   className={`wishlist-btn ${isWishlisted ? "active" : ""}`}
                   onClick={toggleWishlist}
+                  disabled={wishlistButtonDisabled}
                 >
-                  <i
-                    className={
-                      isWishlisted ? "bi bi-heart-fill" : "bi bi-heart"
-                    }
-                  ></i>
+                  {isUpdatingWishlist ? (
+                    <span
+                      className="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    <i
+                      className={
+                        isWishlisted ? "bi bi-heart-fill" : "bi bi-heart"
+                      }
+                    ></i>
+                  )}
 
                   <span>{isWishlisted ? "Wishlisted" : "Wishlist"}</span>
                 </button>
@@ -852,13 +1247,22 @@ const ProductDetails = () => {
             type="button"
             className={`mobile-sticky-wishlist ${isWishlisted ? "active" : ""}`}
             onClick={toggleWishlist}
+            disabled={wishlistButtonDisabled}
             aria-label={
               isWishlisted ? "Remove from wishlist" : "Add to wishlist"
             }
           >
-            <i
-              className={isWishlisted ? "bi bi-heart-fill" : "bi bi-heart"}
-            ></i>
+            {isUpdatingWishlist ? (
+              <span
+                className="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              />
+            ) : (
+              <i
+                className={isWishlisted ? "bi bi-heart-fill" : "bi bi-heart"}
+              ></i>
+            )}
           </button>
 
           {isInBag ? (
@@ -866,8 +1270,10 @@ const ProductDetails = () => {
               type="button"
               className="mobile-sticky-bag-btn view"
               onClick={() => navigate(ROUTE_URL.WEBSITE.CART)}
+              disabled={isCartLoading}
             >
-              Go to Bag
+              {quantityInBag > 1 ? `Go to Bag (${quantityInBag})` : "Go to Bag"}
+
               <i className="bi bi-arrow-right"></i>
             </button>
           ) : (
@@ -875,9 +1281,19 @@ const ProductDetails = () => {
               type="button"
               className="mobile-sticky-bag-btn"
               onClick={addToBag}
+              disabled={cartButtonDisabled}
             >
-              <i className="bi bi-bag-plus"></i>
-              <span>Add to Bag</span>
+              {isAddingToBag ? (
+                <span
+                  className="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                />
+              ) : (
+                <i className="bi bi-bag-plus"></i>
+              )}
+
+              <span>{isAddingToBag ? "Adding..." : "Add to Bag"}</span>
             </button>
           )}
         </div>
@@ -942,7 +1358,7 @@ const ProductDetails = () => {
           )}
 
           <div className="viewer-counter">
-            {selectedImage + 1} / {images.length}
+            {safeSelectedImage + 1} / {images.length}
           </div>
         </div>
       )}
