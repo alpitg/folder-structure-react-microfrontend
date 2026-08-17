@@ -7,7 +7,7 @@ import { websiteBaseQuery } from "../base.api";
 // ============================================================
 
 export interface WebsiteAddress {
-  id?: string;
+  id: string;
   name: string;
   mobile: string;
   addressType: string; //"home" | "work" | "other";
@@ -17,8 +17,41 @@ export interface WebsiteAddress {
   city: string;
   state: string;
   pincode: string;
+  isDefault: boolean;
+  customerId?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface CreateWebsiteAddressRequest {
+  name: string;
+  mobile: string;
+  addressType?: string; //"home" | "work" | "other";
+  addressLine1: string;
+  addressLine2?: string | null;
+  landmark?: string | null;
+  city: string;
+  state: string;
+  pincode: string;
   isDefault?: boolean;
 }
+
+export interface UpdateWebsiteAddressRequest {
+  name?: string;
+  mobile?: string;
+  addressType?: string; //"home" | "work" | "other";
+  addressLine1?: string;
+  addressLine2?: string | null;
+  landmark?: string | null;
+  city?: string;
+  state?: string;
+  pincode?: string;
+  isDefault?: boolean;
+}
+
+// ============================================================
+// RESPONSE TYPES
+// ============================================================
 
 export interface WebsiteAddressesResponse {
   success: boolean;
@@ -27,10 +60,14 @@ export interface WebsiteAddressesResponse {
 
 export interface WebsiteAddressResponse {
   success: boolean;
+  message?: string;
   address: WebsiteAddress;
 }
 
-export interface UpdateWebsiteAddressRequest extends Partial<WebsiteAddress> {}
+export interface WebsiteAddressDeleteResponse {
+  success: boolean;
+  message?: string;
+}
 
 // ============================================================
 // API
@@ -39,9 +76,7 @@ export interface UpdateWebsiteAddressRequest extends Partial<WebsiteAddress> {}
 export const websiteAddressApi = createApi({
   reducerPath: "websiteAddressApi",
   baseQuery: websiteBaseQuery,
-
   tagTypes: ["WebsiteAddresses"],
-
   endpoints: (builder) => ({
     // ========================================================
     // GET ADDRESSES
@@ -55,12 +90,15 @@ export const websiteAddressApi = createApi({
           url:
             config?.api?.website?.apiUrl +
             config?.api?.website?.auth?.addresses,
-
           method: "GET",
         };
       },
-
-      providesTags: ["WebsiteAddresses"],
+      providesTags: [
+        {
+          type: "WebsiteAddresses",
+          id: "LIST",
+        },
+      ],
     }),
 
     // ========================================================
@@ -69,7 +107,7 @@ export const websiteAddressApi = createApi({
 
     createWebsiteAddress: builder.mutation<
       WebsiteAddressResponse,
-      WebsiteAddress
+      CreateWebsiteAddressRequest
     >({
       query: (body) => {
         const config = GetEnvConfig();
@@ -78,14 +116,16 @@ export const websiteAddressApi = createApi({
           url:
             config?.api?.website?.apiUrl +
             config?.api?.website?.auth?.addresses,
-
           method: "POST",
-
           body,
         };
       },
-
-      invalidatesTags: ["WebsiteAddresses"],
+      invalidatesTags: [
+        {
+          type: "WebsiteAddresses",
+          id: "LIST",
+        },
+      ],
     }),
 
     // ========================================================
@@ -106,21 +146,26 @@ export const websiteAddressApi = createApi({
           url: `${
             config?.api?.website?.apiUrl + config?.api?.website?.auth?.addresses
           }/${addressId}`,
-
           method: "PATCH",
-
           body,
         };
       },
-
-      invalidatesTags: ["WebsiteAddresses"],
+      invalidatesTags: [
+        {
+          type: "WebsiteAddresses",
+          id: "LIST",
+        },
+      ],
     }),
 
     // ========================================================
     // DELETE ADDRESS
     // ========================================================
 
-    deleteWebsiteAddress: builder.mutation<unknown, string>({
+    deleteWebsiteAddress: builder.mutation<
+      WebsiteAddressDeleteResponse,
+      string
+    >({
       query: (addressId) => {
         const config = GetEnvConfig();
 
@@ -128,16 +173,19 @@ export const websiteAddressApi = createApi({
           url: `${
             config?.api?.website?.apiUrl + config?.api?.website?.auth?.addresses
           }/${addressId}`,
-
           method: "DELETE",
         };
       },
-
-      invalidatesTags: ["WebsiteAddresses"],
+      invalidatesTags: [
+        {
+          type: "WebsiteAddresses",
+          id: "LIST",
+        },
+      ],
     }),
 
     // ========================================================
-    // SET DEFAULT
+    // SET DEFAULT ADDRESS
     // ========================================================
 
     setDefaultWebsiteAddress: builder.mutation<WebsiteAddressResponse, string>({
@@ -148,15 +196,22 @@ export const websiteAddressApi = createApi({
           url: `${
             config?.api?.website?.apiUrl + config?.api?.website?.auth?.addresses
           }/${addressId}/default`,
-
           method: "POST",
         };
       },
-
-      invalidatesTags: ["WebsiteAddresses"],
+      invalidatesTags: [
+        {
+          type: "WebsiteAddresses",
+          id: "LIST",
+        },
+      ],
     }),
   }),
 });
+
+// ============================================================
+// HOOKS
+// ============================================================
 
 export const {
   useGetWebsiteAddressesQuery,

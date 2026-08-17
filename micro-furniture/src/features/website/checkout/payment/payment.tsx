@@ -78,6 +78,10 @@ const PaymentApp = ({
 
   const items = cart?.items ?? [];
 
+  // ============================================================
+  // LOAD RAZORPAY SCRIPT
+  // ============================================================
+
   const loadRazorpayScript = (): Promise<boolean> => {
     return new Promise((resolve) => {
       if (window.Razorpay) {
@@ -104,11 +108,16 @@ const PaymentApp = ({
       script.async = true;
 
       script.onload = () => resolve(true);
+
       script.onerror = () => resolve(false);
 
       document.body.appendChild(script);
     });
   };
+
+  // ============================================================
+  // HANDLE PAYMENT
+  // ============================================================
 
   const handlePayment = async () => {
     if (!customer?.id) {
@@ -121,14 +130,17 @@ const PaymentApp = ({
       return;
     }
 
+    if (!items.length) {
+      setError("Your cart is empty.");
+      return;
+    }
+
     setError("");
 
     try {
-      /*
-       * ============================================
-       * LOAD RAZORPAY
-       * ============================================
-       */
+      // ========================================================
+      // LOAD RAZORPAY
+      // ========================================================
 
       if (appSettings?.cartPage?.enablePayment) {
         const razorpayLoaded = await loadRazorpayScript();
@@ -140,34 +152,46 @@ const PaymentApp = ({
         }
       }
 
-      /*
-       * ============================================
-       * ORDER PAYLOAD
-       * ============================================
-       */
+      // ========================================================
+      // ORDER PAYLOAD
+      // ========================================================
 
       const payload = {
         customerName: customer.name || address.name || "Customer",
 
         customerId: customer.id,
 
+        /*
+         * IMPORTANT
+         *
+         * Send the guest cart ID to the backend.
+         *
+         * The backend should store this on the order so that
+         * after successful payment it knows exactly which
+         * guest cart needs to be cleared.
+         */
         guestCartId,
 
         items: items.map((item: any) => ({
           productId: item.productId,
+
           productType: item.productType ?? "physical",
+
           quantity: item.quantity,
         })),
 
         /*
          * IMPORTANT
          *
-         * Your backend should accept this field.
-         * If your API uses another name such as
-         * shippingAddress, deliveryAddress, etc.,
-         * change this key to match your API.
+         * Backend PublicOrderIn expects:
+         *
+         * deliveryAddress
+         *
+         * NOT:
+         *
+         * shippingAddress
          */
-        shippingAddress: address,
+        deliveryAddress: address,
 
         miscCharges: [],
 
@@ -176,11 +200,9 @@ const PaymentApp = ({
         likelyDateOfDelivery: null,
       };
 
-      /*
-       * ============================================
-       * CREATE ORDER
-       * ============================================
-       */
+      // ========================================================
+      // CREATE ORDER
+      // ========================================================
 
       const result = await createWebsiteOrder(payload).unwrap();
 
@@ -188,13 +210,17 @@ const PaymentApp = ({
         throw new Error("Payment information was not returned.");
       }
 
-      /*
-       * ============================================
-       * PAYMENT DISABLED
-       * ============================================
-       */
+      // ========================================================
+      // PAYMENT DISABLED
+      // ========================================================
 
       if (!appSettings?.cartPage?.enablePayment) {
+        /*
+         * This only removes the browser's stored guest cart ID.
+         *
+         * The backend should also clear the actual cart
+         * from MongoDB during order completion.
+         */
         if (guestCartId) {
           localStorage.removeItem(GUEST_CART_ID_KEY);
         }
@@ -206,11 +232,9 @@ const PaymentApp = ({
         return;
       }
 
-      /*
-       * ============================================
-       * RAZORPAY
-       * ============================================
-       */
+      // ========================================================
+      // RAZORPAY
+      // ========================================================
 
       const payment = result.payment;
 
@@ -226,6 +250,10 @@ const PaymentApp = ({
         customerMobile?: string;
       };
 
+      // ========================================================
+      // RAZORPAY OPTIONS
+      // ========================================================
+
       const options: RazorpayOptions = {
         key: payment.keyId,
 
@@ -239,11 +267,19 @@ const PaymentApp = ({
 
         order_id: payment.razorpayOrderId,
 
+        // ======================================================
+        // PAYMENT SUCCESS
+        // ======================================================
+
         handler: async (response: RazorpayResponse) => {
           try {
             if (!order.id) {
               throw new Error("Order ID is missing.");
             }
+
+            // -----------------------------------------------
+            // VERIFY PAYMENT ON BACKEND
+            // -----------------------------------------------
 
             await verifyWebsitePayment({
               orderId: order.id,
@@ -255,9 +291,22 @@ const PaymentApp = ({
               razorpaySignature: response.razorpay_signature,
             }).unwrap();
 
+            /*
+             * IMPORTANT
+             *
+             * Database cart clearing should already have
+             * happened inside the backend after successful
+             * payment verification.
+             *
+             * This only removes the local browser reference.
+             */
             if (guestCartId) {
               localStorage.removeItem(GUEST_CART_ID_KEY);
             }
+
+            // -----------------------------------------------
+            // ORDER SUCCESS
+            // -----------------------------------------------
 
             navigate(
               `${ROUTE_URL.WEBSITE.ORDER_SUCCESS}?orderId=${order.orderCode}`,
@@ -271,6 +320,10 @@ const PaymentApp = ({
           }
         },
 
+        // ======================================================
+        // PREFILL
+        // ======================================================
+
         prefill: {
           name:
             order.customerName || customer.name || address.name || "Customer",
@@ -280,9 +333,17 @@ const PaymentApp = ({
           contact: order.customerMobile || address.mobile || customer.mobile,
         },
 
+        // ======================================================
+        // THEME
+        // ======================================================
+
         theme: {
           color: "#ff3f6c",
         },
+
+        // ======================================================
+        // MODAL
+        // ======================================================
 
         modal: {
           ondismiss: () => {
@@ -291,7 +352,15 @@ const PaymentApp = ({
         },
       };
 
+      // ========================================================
+      // CREATE RAZORPAY INSTANCE
+      // ========================================================
+
       const razorpay = new window.Razorpay(options);
+
+      // ========================================================
+      // PAYMENT FAILED
+      // ========================================================
 
       razorpay.on("payment.failed", (response: any) => {
         console.error("Razorpay payment failed:", response);
@@ -300,6 +369,10 @@ const PaymentApp = ({
           response?.error?.description || "Payment failed. Please try again.",
         );
       });
+
+      // ========================================================
+      // OPEN RAZORPAY
+      // ========================================================
 
       razorpay.open();
     } catch (error: any) {
@@ -313,6 +386,10 @@ const PaymentApp = ({
       );
     }
   };
+
+  // ============================================================
+  // UI
+  // ============================================================
 
   return (
     <div className="payment-container">
@@ -340,7 +417,9 @@ const PaymentApp = ({
         {/* ========================================= */}
 
         <div className="payment-left">
+          {/* ======================================= */}
           {/* ADDRESS */}
+          {/* ======================================= */}
 
           <div className="payment-section">
             <div className="payment-section-header">
@@ -377,7 +456,9 @@ const PaymentApp = ({
             </div>
           </div>
 
+          {/* ======================================= */}
           {/* PAYMENT METHOD */}
+          {/* ======================================= */}
 
           <div className="payment-section">
             <div className="payment-section-header">
@@ -411,11 +492,15 @@ const PaymentApp = ({
           <div className="payment-summary">
             <h6>PRICE DETAILS</h6>
 
+            {/* MRP */}
+
             <div className="payment-summary-row">
               <span>Total MRP</span>
 
               <span>₹{(summary?.mrp ?? 0).toFixed(2)}</span>
             </div>
+
+            {/* DISCOUNT */}
 
             <div className="payment-summary-row">
               <span>Discount on MRP</span>
@@ -425,11 +510,15 @@ const PaymentApp = ({
               </span>
             </div>
 
+            {/* PLATFORM FEE */}
+
             <div className="payment-summary-row">
               <span>Platform Fee</span>
 
               <span>₹{(summary?.miscCharges ?? 0).toFixed(2)}</span>
             </div>
+
+            {/* SHIPPING */}
 
             <div className="payment-summary-row">
               <span>Shipping Fee</span>
@@ -441,6 +530,8 @@ const PaymentApp = ({
               </span>
             </div>
 
+            {/* TAX */}
+
             {(summary?.taxToAdd ?? 0) > 0 && (
               <div className="payment-summary-row">
                 <span>Tax</span>
@@ -451,11 +542,15 @@ const PaymentApp = ({
 
             <div className="payment-summary-divider" />
 
+            {/* TOTAL */}
+
             <div className="payment-summary-total">
               <span>Total Amount</span>
 
               <span>₹{(summary?.grandTotal ?? 0).toFixed(2)}</span>
             </div>
+
+            {/* ERROR */}
 
             {error && (
               <div className="payment-error">
@@ -464,6 +559,8 @@ const PaymentApp = ({
                 <span>{error}</span>
               </div>
             )}
+
+            {/* PAY */}
 
             <button
               type="button"
@@ -477,6 +574,8 @@ const PaymentApp = ({
                   ? "VERIFYING PAYMENT..."
                   : `PAY ₹${(summary?.grandTotal ?? 0).toFixed(2)}`}
             </button>
+
+            {/* SECURE */}
 
             <div className="payment-secure">
               <i className="bi bi-shield-check" />

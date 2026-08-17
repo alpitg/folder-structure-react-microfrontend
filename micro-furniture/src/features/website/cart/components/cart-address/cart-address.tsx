@@ -64,11 +64,10 @@ const CartAddress = ({
 }: CartAddressProps) => {
   const [showAddressSelection, setShowAddressSelection] = useState(false);
 
+  const [isChangingAddress, setIsChangingAddress] = useState(false);
+
   // ==========================================================
   // GET SAVED ADDRESSES
-  //
-  // This query only runs while CartAddress is mounted.
-  // CartAddress is mounted only on the address step.
   // ==========================================================
 
   const {
@@ -98,7 +97,6 @@ const CartAddress = ({
   // ==========================================================
 
   useEffect(() => {
-    // Already selected.
     if (selectedAddress) {
       return;
     }
@@ -128,9 +126,18 @@ const CartAddress = ({
   // ==========================================================
 
   const handleAddressSelected = (address: DeliveryAddress) => {
+    setIsChangingAddress(true);
+
     onAddressSelected(address);
 
-    setShowAddressSelection(false);
+    /*
+     * Keep loader visible briefly so the user can see
+     * that the address is being changed.
+     */
+    setTimeout(() => {
+      setIsChangingAddress(false);
+      setShowAddressSelection(false);
+    }, 500);
   };
 
   // ==========================================================
@@ -138,7 +145,7 @@ const CartAddress = ({
   // ==========================================================
 
   const handleContinue = () => {
-    if (!selectedAddress) {
+    if (!selectedAddress || isChangingAddress) {
       return;
     }
 
@@ -159,6 +166,7 @@ const CartAddress = ({
               className="cart-address-back-button"
               onClick={() => setShowAddressSelection(false)}
               aria-label="Back to address"
+              disabled={isChangingAddress}
             >
               <i className="bi bi-arrow-left" />
             </button>
@@ -172,14 +180,50 @@ const CartAddress = ({
             </div>
           </div>
 
-          <AddressSelectionApp
-            customer={addressCustomer}
-            selectedAddress={selectedAddress}
-            onAddressSelected={handleAddressSelected}
-            onClose={() => setShowAddressSelection(false)}
-          />
+          {isChangingAddress ? (
+            <div className="cart-address-content">
+              <div className="cart-address-empty">
+                <div
+                  className="spinner-border"
+                  role="status"
+                  aria-label="Changing address"
+                />
+
+                <p>Changing delivery address...</p>
+              </div>
+            </div>
+          ) : (
+            <AddressSelectionApp
+              customer={addressCustomer}
+              selectedAddress={selectedAddress}
+              onAddressSelected={handleAddressSelected}
+              onClose={() => setShowAddressSelection(false)}
+            />
+          )}
         </div>
       </div>
+    );
+  }
+
+  // ==========================================================
+  // CHANGING ADDRESS LOADER
+  // ==========================================================
+
+  if (isChangingAddress) {
+    return (
+      <section className="cart-address">
+        <div className="cart-address-content">
+          <div className="cart-address-empty">
+            <div
+              className="spinner-border"
+              role="status"
+              aria-label="Changing address"
+            />
+
+            <p>Changing delivery address...</p>
+          </div>
+        </div>
+      </section>
     );
   }
 
@@ -257,6 +301,7 @@ const CartAddress = ({
             type="button"
             className="cart-address-change-button"
             onClick={() => setShowAddressSelection(true)}
+            disabled={isChangingAddress}
           >
             Change
           </button>
@@ -307,6 +352,7 @@ const CartAddress = ({
                 type="button"
                 className="cart-address-edit-button"
                 onClick={() => setShowAddressSelection(true)}
+                disabled={isChangingAddress}
               >
                 Edit
               </button>
@@ -360,6 +406,7 @@ const CartAddress = ({
             type="button"
             className="cart-address-back-footer-button"
             onClick={onBack}
+            disabled={isChangingAddress}
           >
             <i className="bi bi-arrow-left" />
 
@@ -370,12 +417,26 @@ const CartAddress = ({
         <button
           type="button"
           className="cart-address-continue-button"
-          disabled={!selectedAddress}
+          disabled={!selectedAddress || isChangingAddress}
           onClick={handleContinue}
         >
-          <span>Continue to Payment</span>
+          {isChangingAddress ? (
+            <>
+              <span
+                className="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              />
 
-          <i className="bi bi-arrow-right" />
+              <span>Changing Address...</span>
+            </>
+          ) : (
+            <>
+              <span>Continue to Payment</span>
+
+              <i className="bi bi-arrow-right" />
+            </>
+          )}
         </button>
       </div>
     </section>

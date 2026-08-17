@@ -2,7 +2,7 @@ import "./wishlist.scss";
 
 import { useMemo, useState } from "react";
 
-import { NavLink, useNavigate } from "react-router";
+import { NavLink } from "react-router";
 
 import { ROUTE_URL } from "../../../routes/constants/routes.const";
 
@@ -45,8 +45,6 @@ const blankImage = "/static/media/img/svg/blank-image.svg";
 // ============================================================
 
 const WishlistApp = () => {
-  const navigate = useNavigate();
-
   // ==========================================================
   // CURRENT USER
   // ==========================================================

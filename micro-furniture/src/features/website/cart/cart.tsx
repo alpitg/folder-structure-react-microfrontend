@@ -110,7 +110,7 @@ const CartApp = ({ onClose }: CartProps) => {
   const customer: WebsiteUser | null = currentUserResponse?.user ?? null;
 
   // ==========================================================
-  // MERGE
+  // MERGE GUEST CART
   // ==========================================================
 
   const [mergeGuestCart, { isLoading: isMergingCart }] =
@@ -119,7 +119,6 @@ const CartApp = ({ onClose }: CartProps) => {
   useEffect(() => {
     if (!customer?.id) {
       setHasProcessedCustomer(false);
-
       setIsCartMerged(false);
 
       return;
@@ -208,7 +207,7 @@ const CartApp = ({ onClose }: CartProps) => {
   const hasItems = Boolean(cart?.items?.length);
 
   // ==========================================================
-  // MUTATIONS
+  // ORDER MUTATIONS
   // ==========================================================
 
   const [createWebsiteOrder, { isLoading: isCreatingOrder }] =
@@ -225,6 +224,14 @@ const CartApp = ({ onClose }: CartProps) => {
     setSelectedAddress(null);
     setCurrentStep("bag");
   }, [customer?.id]);
+
+  // ==========================================================
+  // ADDRESS SELECTED
+  // ==========================================================
+
+  const handleAddressSelected = (address: DeliveryAddress) => {
+    setSelectedAddress(address);
+  };
 
   // ==========================================================
   // STEP CHANGE
@@ -256,7 +263,7 @@ const CartApp = ({ onClose }: CartProps) => {
   };
 
   // ==========================================================
-  // BAG
+  // BAG CONTINUE
   // ==========================================================
 
   const handleBagContinue = () => {
@@ -268,7 +275,7 @@ const CartApp = ({ onClose }: CartProps) => {
   };
 
   // ==========================================================
-  // ADDRESS
+  // ADDRESS CONTINUE
   // ==========================================================
 
   const handleAddressContinue = () => {
@@ -306,16 +313,59 @@ const CartApp = ({ onClose }: CartProps) => {
       throw new Error("Please select a delivery address.");
     }
 
+    if (!selectedAddress.id) {
+      throw new Error("Selected delivery address is invalid.");
+    }
+
     if (!cart?.items?.length) {
       throw new Error("Your cart is empty.");
     }
+
+    // ========================================================
+    // BUILD BACKEND-SAFE ADDRESS
+    //
+    // DeliveryAddress has optional isDefault.
+    // CreateWebsiteOrderRequest requires boolean.
+    // Therefore explicitly convert it to boolean.
+    // ========================================================
+
+    const deliveryAddress = {
+      id: selectedAddress.id,
+
+      name: selectedAddress.name,
+
+      mobile: selectedAddress.mobile,
+
+      addressType: selectedAddress.addressType,
+
+      addressLine1: selectedAddress.addressLine1,
+
+      addressLine2: selectedAddress.addressLine2 ?? null,
+
+      landmark: selectedAddress.landmark ?? null,
+
+      city: selectedAddress.city,
+
+      state: selectedAddress.state,
+
+      pincode: selectedAddress.pincode,
+
+      isDefault: Boolean(selectedAddress.isDefault),
+    };
+
+    // ========================================================
+    // BUILD ORDER PAYLOAD
+    // ========================================================
 
     const orderPayload = {
       ...payload,
 
       customerId: String(customer.id),
-      customerName: customer.name || payload.customerName || "",
-      deliveryAddress: selectedAddress,
+
+      customerName:
+        customer.name || payload.customerName || selectedAddress.name || "",
+
+      deliveryAddress,
     };
 
     const response = await createWebsiteOrder(orderPayload).unwrap();
@@ -346,12 +396,10 @@ const CartApp = ({ onClose }: CartProps) => {
   };
 
   // ==========================================================
-  // SUCCESS
+  // ORDER SUCCESS
   // ==========================================================
 
   const handleOrderSuccess = async (orderId: string) => {
-    // Refresh the cart so stale cart
-    // data is not left in RTK cache.
     try {
       await refetchCart();
     } catch {
@@ -448,6 +496,10 @@ const CartApp = ({ onClose }: CartProps) => {
   return (
     <section className="cart-app">
       <div className="container">
+        {/* ================================================== */}
+        {/* HEADER */}
+        {/* ================================================== */}
+
         <div className="cart-app-header">
           <div>
             <h1 className="cart-app-title">Your Bag</h1>
@@ -467,7 +519,15 @@ const CartApp = ({ onClose }: CartProps) => {
           </button>
         </div>
 
+        {/* ================================================== */}
+        {/* STEPS */}
+        {/* ================================================== */}
+
         <CartSteps currentStep={currentStep} onStepChange={handleStepChange} />
+
+        {/* ================================================== */}
+        {/* BAG */}
+        {/* ================================================== */}
 
         {currentStep === "bag" && (
           <div className="cart-app-content">
@@ -486,6 +546,10 @@ const CartApp = ({ onClose }: CartProps) => {
           </div>
         )}
 
+        {/* ================================================== */}
+        {/* ADDRESS */}
+        {/* ================================================== */}
+
         {currentStep === "address" && (
           <div className="cart-app-content">
             <div className="cart-app-main">
@@ -495,7 +559,7 @@ const CartApp = ({ onClose }: CartProps) => {
                 <CartAddress
                   customer={customer}
                   selectedAddress={selectedAddress}
-                  onAddressSelected={setSelectedAddress}
+                  onAddressSelected={handleAddressSelected}
                   onContinue={handleAddressContinue}
                   onBack={() => setCurrentStep("bag")}
                 />
@@ -507,6 +571,10 @@ const CartApp = ({ onClose }: CartProps) => {
             </aside>
           </div>
         )}
+
+        {/* ================================================== */}
+        {/* PAYMENT */}
+        {/* ================================================== */}
 
         {currentStep === "payment" && (
           <div className="cart-app-content">
@@ -530,6 +598,10 @@ const CartApp = ({ onClose }: CartProps) => {
             </aside>
           </div>
         )}
+
+        {/* ================================================== */}
+        {/* FOOTER */}
+        {/* ================================================== */}
 
         <div className="cart-app-footer">
           <div className="cart-app-footer-support">
