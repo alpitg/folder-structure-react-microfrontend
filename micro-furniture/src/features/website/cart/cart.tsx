@@ -532,12 +532,6 @@ const CartApp = ({ onClose }: CartProps) => {
         )}
 
         <div className="cart-app-footer">
-          <div className="cart-app-footer-security">
-            <i className="bi bi-shield-check" />
-
-            <span>Safe and secure shopping</span>
-          </div>
-
           <div className="cart-app-footer-support">
             Need help? <button type="button">Contact Support</button>
           </div>
