@@ -116,6 +116,12 @@
         "removeItem": "/api/store/cart/remove-item",
         "clear": "/api/store/cart/clear",
         "merge": "/api/store/cart/merge"
+      },
+      "wishlist": {
+        "list": "/api/store/wishlist",
+        "add": "/api/store/wishlist/items",
+        "remove": "/api/store/wishlist/items/{productId}",
+        "merge": "/api/store/wishlist/merge"
       }
     },
     "dashboard": {

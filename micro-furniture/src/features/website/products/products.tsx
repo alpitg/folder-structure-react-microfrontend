@@ -18,6 +18,12 @@ import {
   websiteProductApi,
 } from "../../../app/redux/website/product/website-product.api";
 
+import {
+  useAddWishlistItemMutation,
+  useGetWishlistQuery,
+  useRemoveWishlistItemMutation,
+} from "../../../app/redux/website/wishlist/website-wishlist.api";
+
 import { useLocation, useNavigate } from "react-router";
 
 import type { AppDispatch } from "../../../app/store";
@@ -87,17 +93,6 @@ const Products = () => {
   // CUSTOMER
   // ==================================================
 
-  /**
-   * Current website user.
-   *
-   * If user is authenticated:
-   *
-   *     currentUserResponse.user.id
-   *
-   * If user is not authenticated:
-   *
-   *     undefined
-   */
   const { data: currentUserResponse, isLoading: isUserLoading } =
     useGetCurrentUserQuery();
 
@@ -109,22 +104,10 @@ const Products = () => {
   // GUEST CART
   // ==================================================
 
-  /**
-   * We only need a guest cart ID when the user
-   * is NOT authenticated.
-   *
-   * This ID is never used for authenticated users.
-   */
   const [guestCartId, setGuestCartId] = useState<string | null>(null);
 
   useEffect(() => {
     if (customerId) {
-      /**
-       * User is authenticated.
-       *
-       * We don't need a guest cart ID as the active
-       * cart identity.
-       */
       return;
     }
 
@@ -137,23 +120,6 @@ const Products = () => {
   // CART IDENTITY
   // ==================================================
 
-  /**
-   * IMPORTANT:
-   *
-   * Logged-in:
-   *
-   *     {
-   *       customerId: "..."
-   *     }
-   *
-   * Guest:
-   *
-   *     {
-   *       guestCartId: "..."
-   *     }
-   *
-   * Never send both.
-   */
   const cartIdentity = useMemo<CartIdentity | undefined>(() => {
     if (customerId) {
       return {
@@ -188,13 +154,90 @@ const Products = () => {
 
   const [addWebsiteCartItem] = useAddWebsiteCartItemMutation();
 
-  /**
-   * Stores only the product currently being added.
-   *
-   * This means the loading/disabled state is isolated
-   * to the clicked product.
-   */
   const [addingProductId, setAddingProductId] = useState<string | null>(null);
+
+  // ==================================================
+  // WISHLIST IDENTITY
+  // ==================================================
+
+  const wishlistIdentity = useMemo(() => {
+    if (customerId) {
+      return {
+        customerId: String(customerId),
+      };
+    }
+
+    if (guestCartId) {
+      return {
+        guestCartId,
+      };
+    }
+
+    return undefined;
+  }, [customerId, guestCartId]);
+
+  // ==================================================
+  // WISHLIST
+  // ==================================================
+
+  const { data: wishlistResponse, isLoading: isWishlistLoading } =
+    useGetWishlistQuery(wishlistIdentity, {
+      skip: !wishlistIdentity || isUserLoading,
+    });
+
+  const [addWishlistItem, { isLoading: isAddingWishlistItem }] =
+    useAddWishlistItemMutation();
+
+  const [removeWishlistItem, { isLoading: isRemovingWishlistItem }] =
+    useRemoveWishlistItemMutation();
+
+  const [wishlistProductId, setWishlistProductId] = useState<string | null>(
+    null,
+  );
+
+  // ==================================================
+  // WISHLIST ITEM MAP
+  // ==================================================
+
+  const wishlistItemMap = useMemo(() => {
+    const items = wishlistResponse?.items ?? [];
+
+    return new Map(items.map((item) => [item.productId, item]));
+  }, [wishlistResponse]);
+
+  // ==================================================
+  // WISHLIST TOGGLE
+  // ==================================================
+
+  const handleWishlistToggle = async (productId: string) => {
+    if (!productId || !wishlistIdentity || wishlistProductId) {
+      return;
+    }
+
+    const existingWishlistItem = wishlistItemMap.get(productId);
+
+    try {
+      setWishlistProductId(productId);
+
+      if (existingWishlistItem) {
+        await removeWishlistItem({
+          ...wishlistIdentity,
+          productId,
+        }).unwrap();
+
+        return;
+      }
+
+      await addWishlistItem({
+        ...wishlistIdentity,
+        productId,
+      }).unwrap();
+    } catch (error) {
+      console.error("Unable to update wishlist:", error);
+    } finally {
+      setWishlistProductId(null);
+    }
+  };
 
   // ==================================================
   // PRODUCTS
@@ -245,14 +288,6 @@ const Products = () => {
   // SERVER CART ITEM MAP
   // ==================================================
 
-  /**
-   * Server cart is the source of truth.
-   *
-   * This works for both:
-   *
-   * - logged-in customer cart
-   * - guest cart
-   */
   const cartItemMap = useMemo(() => {
     const items = cartResponse?.items ?? [];
 
@@ -294,17 +329,10 @@ const Products = () => {
   // ==================================================
 
   const addToCart = async (product: IProductData) => {
-    /**
-     * Don't allow another add operation while
-     * an add operation is already running.
-     */
     if (!product?.id || addingProductId) {
       return;
     }
 
-    /**
-     * Always use the server cart as the source of truth.
-     */
     const existingCartItem = cartItemMap.get(product.id);
 
     if (existingCartItem) {
@@ -312,32 +340,13 @@ const Products = () => {
       return;
     }
 
-    /**
-     * Cart identity must already be available.
-     */
     if (!cartIdentity) {
       return;
     }
 
     try {
-      /**
-       * Only this product will now show the spinner
-       * and become disabled.
-       */
       setAddingProductId(product.id);
 
-      /**
-       * Logged-in:
-       *
-       *     customerId
-       *
-       * Guest:
-       *
-       *     guestCartId
-       *
-       * We build the payload dynamically so we never
-       * accidentally send both.
-       */
       await addWebsiteCartItem({
         ...cartIdentity,
         productId: product.id,
@@ -345,13 +354,6 @@ const Products = () => {
         quantity: 1,
       }).unwrap();
 
-      /**
-       * Keep Redux shopping bag synchronized for any
-       * existing parts of the application that still
-       * consume shoppingBagSlice.
-       *
-       * The server cart remains authoritative.
-       */
       dispatch(
         addItemToBag({
           id: product.id,
@@ -362,18 +364,10 @@ const Products = () => {
         }),
       );
 
-      /**
-       * Make sure the latest server cart is reflected
-       * immediately in this component.
-       */
       await refetchCart();
     } catch (error) {
       console.error("Unable to add product to cart:", error);
     } finally {
-      /**
-       * Remove the loading state only for the product
-       * that was being added.
-       */
       setAddingProductId(null);
     }
   };
@@ -429,10 +423,6 @@ const Products = () => {
 
               const quantity = cartItem?.quantity ?? 0;
 
-              /**
-               * TRUE only for the product currently
-               * being added.
-               */
               const isAdding = addingProductId === product.id;
 
               return (
@@ -469,13 +459,51 @@ const Products = () => {
                       {/* WISHLIST */}
                       {/* ================================================== */}
 
-                      <button
-                        type="button"
-                        className="wishlist-btn"
-                        aria-label={`Add ${product?.name} to wishlist`}
-                      >
-                        <i className="bi bi-heart"></i>
-                      </button>
+                      {(() => {
+                        const isWishlisted = wishlistItemMap.has(product.id);
+                        const isWishlistUpdating =
+                          wishlistProductId === product.id;
+
+                        return (
+                          <button
+                            type="button"
+                            className={`wishlist-btn${
+                              isWishlisted ? " active" : ""
+                            }`}
+                            onClick={() => handleWishlistToggle(product.id)}
+                            disabled={
+                              isWishlistUpdating ||
+                              isWishlistLoading ||
+                              isUserLoading ||
+                              !wishlistIdentity ||
+                              isAddingWishlistItem ||
+                              isRemovingWishlistItem
+                            }
+                            aria-label={
+                              isWishlisted
+                                ? `Remove ${product?.name} from wishlist`
+                                : `Add ${product?.name} to wishlist`
+                            }
+                            aria-pressed={isWishlisted}
+                          >
+                            {isWishlistUpdating ? (
+                              <span
+                                className="spinner-border spinner-border-sm"
+                                role="status"
+                                aria-hidden="true"
+                              />
+                            ) : (
+                              <i
+                                className={
+                                  isWishlisted
+                                    ? "bi bi-heart-fill"
+                                    : "bi bi-heart"
+                                }
+                              />
+                            )}
+                          </button>
+                        );
+                      })()}
 
                       {/* ================================================== */}
                       {/* PRODUCT ACTIONS */}

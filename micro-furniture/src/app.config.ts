@@ -93,6 +93,12 @@ let environment = {
         clear: "",
         merge: "",
       },
+      wishlist: {
+        list: "",
+        add: "",
+        remove: "",
+        merge: "",
+      },
     },
     dashboard: {
       stats: "",

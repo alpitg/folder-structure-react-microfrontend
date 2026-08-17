@@ -29,6 +29,12 @@ import { useDispatch } from "react-redux";
 
 import { useGetProductsQuery } from "../../../app/redux/website/product/website-product.api";
 
+import {
+  useAddWishlistItemMutation,
+  useGetWishlistQuery,
+  useRemoveWishlistItemMutation,
+} from "../../../app/redux/website/wishlist/website-wishlist.api";
+
 const blankImage = "/static/media/img/svg/blank-image.svg";
 
 const GUEST_CART_KEY = "website_guest_cart_id";
@@ -137,7 +143,6 @@ const Home = () => {
 
   const {
     data: cartResponse,
-    isLoading: isCartLoading,
     refetch: refetchCart,
   } = useGetWebsiteCartQuery(cartIdentity as CartIdentity, {
     skip: !cartIdentity || isUserLoading,
@@ -149,18 +154,64 @@ const Home = () => {
 
   const [addWebsiteCartItem] = useAddWebsiteCartItemMutation();
 
-  /**
-   * IMPORTANT:
-   *
-   * This stores only the product currently being added.
-   *
-   * Therefore:
-   *
-   * Product A -> Adding...
-   * Product B -> remains enabled
-   * Product C -> remains enabled
-   */
   const [addingProductId, setAddingProductId] = useState<string | null>(null);
+
+  // ==================================================
+  // WISHLIST IDENTITY
+  // ==================================================
+
+  const wishlistIdentity = useMemo(() => {
+    if (customerId) {
+      return {
+        customerId: String(customerId),
+      };
+    }
+
+    if (guestCartId) {
+      return {
+        guestCartId,
+      };
+    }
+
+    return undefined;
+  }, [customerId, guestCartId]);
+
+  // ==================================================
+  // WISHLIST
+  // ==================================================
+
+  const { data: wishlistResponse, isLoading: isWishlistLoading } =
+    useGetWishlistQuery(wishlistIdentity!, {
+      skip: !wishlistIdentity || isUserLoading,
+    });
+
+  // ==================================================
+  // WISHLIST MUTATIONS
+  // ==================================================
+
+  const [addWishlistItem, { isLoading: isAddingWishlist }] =
+    useAddWishlistItemMutation();
+
+  const [removeWishlistItem, { isLoading: isRemovingWishlist }] =
+    useRemoveWishlistItemMutation();
+
+  // ==================================================
+  // WISHLIST PRODUCT MAP
+  // ==================================================
+
+  const wishlistProductIds = useMemo(() => {
+    const items = wishlistResponse?.items ?? [];
+
+    return new Set(items.map((item) => item.productId));
+  }, [wishlistResponse]);
+
+  // ==================================================
+  // WISHLIST LOADING PRODUCT
+  // ==================================================
+
+  const [wishlistProductId, setWishlistProductId] = useState<string | null>(
+    null,
+  );
 
   // ==================================================
   // PRODUCTS
@@ -199,10 +250,6 @@ const Home = () => {
       return;
     }
 
-    /**
-     * Prevent multiple simultaneous additions
-     * from this component.
-     */
     if (addingProductId) {
       return;
     }
@@ -228,15 +275,7 @@ const Home = () => {
     }
 
     try {
-      // ==================================================
-      // ONLY CURRENT PRODUCT IS LOADING
-      // ==================================================
-
       setAddingProductId(product.id);
-
-      // ==================================================
-      // ADD TO SERVER CART
-      // ==================================================
 
       await addWebsiteCartItem({
         ...cartIdentity,
@@ -244,10 +283,6 @@ const Home = () => {
         productType: "physical",
         quantity: 1,
       }).unwrap();
-
-      // ==================================================
-      // KEEP REDUX BAG IN SYNC
-      // ==================================================
 
       dispatch(
         addItemToBag({
@@ -259,19 +294,58 @@ const Home = () => {
         }),
       );
 
-      // ==================================================
-      // REFRESH SERVER CART
-      // ==================================================
-
       await refetchCart();
     } catch (error) {
       console.error("Unable to add product to cart:", error);
     } finally {
-      // ==================================================
-      // ONLY CURRENT PRODUCT STOPS LOADING
-      // ==================================================
-
       setAddingProductId(null);
+    }
+  };
+
+  // ==================================================
+  // TOGGLE WISHLIST
+  // ==================================================
+
+  const handleWishlistToggle = async (
+    product: IProductData,
+    event: React.MouseEvent,
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (!product?.id) {
+      return;
+    }
+
+    if (!wishlistIdentity) {
+      console.error("Wishlist identity is not available.");
+      return;
+    }
+
+    if (wishlistProductId) {
+      return;
+    }
+
+    try {
+      setWishlistProductId(product.id);
+
+      const isWishlisted = wishlistProductIds.has(product.id);
+
+      if (isWishlisted) {
+        await removeWishlistItem({
+          ...wishlistIdentity,
+          productId: product.id,
+        }).unwrap();
+      } else {
+        await addWishlistItem({
+          ...wishlistIdentity,
+          productId: product.id,
+        }).unwrap();
+      }
+    } catch (error) {
+      console.error("Unable to update wishlist:", error);
+    } finally {
+      setWishlistProductId(null);
     }
   };
 
@@ -405,6 +479,12 @@ const Home = () => {
 
               const isAdding = addingProductId === product?.id;
 
+              const isWishlisted = wishlistProductIds.has(product?.id);
+
+              const isWishlistUpdating =
+                wishlistProductId === product?.id &&
+                (isAddingWishlist || isRemovingWishlist);
+
               return (
                 <article className="home-product-card" key={product?.id}>
                   {/* ================================================== */}
@@ -439,9 +519,32 @@ const Home = () => {
                     <button
                       type="button"
                       className="home-product-wishlist"
-                      aria-label="Add to wishlist"
+                      aria-label={
+                        isWishlisted
+                          ? `Remove ${product?.name} from wishlist`
+                          : `Add ${product?.name} to wishlist`
+                      }
+                      onClick={(event) => handleWishlistToggle(product, event)}
+                      disabled={
+                        isWishlistUpdating ||
+                        isWishlistLoading ||
+                        isUserLoading ||
+                        !wishlistIdentity
+                      }
                     >
-                      <i className="bi bi-heart" />
+                      {isWishlistUpdating ? (
+                        <span
+                          className="spinner-border spinner-border-sm"
+                          role="status"
+                          aria-hidden="true"
+                        />
+                      ) : (
+                        <i
+                          className={`bi ${
+                            isWishlisted ? "bi-heart-fill" : "bi-heart"
+                          }`}
+                        />
+                      )}
                     </button>
                   </div>
 
@@ -486,21 +589,7 @@ const Home = () => {
                       type="button"
                       className={`home-product-bag ${isInBag ? "added" : ""}`}
                       onClick={(event) => handleAddToBag(product, event)}
-                      disabled={
-                        /**
-                         * IMPORTANT:
-                         *
-                         * Do NOT use isCartLoading here
-                         * for every product.
-                         *
-                         * Otherwise a cart refresh can
-                         * disable all product buttons.
-                         *
-                         * Only the product currently being
-                         * added is disabled.
-                         */
-                        isAdding || isUserLoading || !cartIdentity
-                      }
+                      disabled={isAdding || isUserLoading || !cartIdentity}
                     >
                       {isAdding ? (
                         <span
