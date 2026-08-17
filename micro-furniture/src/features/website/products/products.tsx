@@ -177,7 +177,6 @@ const Products = () => {
   const {
     data: cartResponse,
     isLoading: isCartLoading,
-    isFetching: isCartFetching,
     refetch: refetchCart,
   } = useGetWebsiteCartQuery(cartIdentity as CartIdentity, {
     skip: !cartIdentity || isUserLoading,
@@ -189,6 +188,12 @@ const Products = () => {
 
   const [addWebsiteCartItem] = useAddWebsiteCartItemMutation();
 
+  /**
+   * Stores only the product currently being added.
+   *
+   * This means the loading/disabled state is isolated
+   * to the clicked product.
+   */
   const [addingProductId, setAddingProductId] = useState<string | null>(null);
 
   // ==================================================
@@ -289,6 +294,10 @@ const Products = () => {
   // ==================================================
 
   const addToCart = async (product: IProductData) => {
+    /**
+     * Don't allow another add operation while
+     * an add operation is already running.
+     */
     if (!product?.id || addingProductId) {
       return;
     }
@@ -311,6 +320,10 @@ const Products = () => {
     }
 
     try {
+      /**
+       * Only this product will now show the spinner
+       * and become disabled.
+       */
       setAddingProductId(product.id);
 
       /**
@@ -357,6 +370,10 @@ const Products = () => {
     } catch (error) {
       console.error("Unable to add product to cart:", error);
     } finally {
+      /**
+       * Remove the loading state only for the product
+       * that was being added.
+       */
       setAddingProductId(null);
     }
   };
@@ -384,7 +401,7 @@ const Products = () => {
 
       {isFetching && !isLoading && (
         <div className="products-updating">
-          <div className="spinner-border spinner-border-sm me-2" />
+          <div className="spinner-border spinner-border-sm text-dark me-2" />
           Updating products...
         </div>
       )}
@@ -412,6 +429,10 @@ const Products = () => {
 
               const quantity = cartItem?.quantity ?? 0;
 
+              /**
+               * TRUE only for the product currently
+               * being added.
+               */
               const isAdding = addingProductId === product.id;
 
               return (
@@ -470,15 +491,18 @@ const Products = () => {
                               isAdding ||
                               isUserLoading ||
                               isCartLoading ||
-                              isCartFetching ||
                               !cartIdentity
                             }
                           >
-                            <i
-                              className={`bi ${
-                                isAdding ? "bi-hourglass-split" : "bi-bag-plus"
-                              }`}
-                            ></i>
+                            {isAdding ? (
+                              <span
+                                className="spinner-border spinner-border-sm"
+                                role="status"
+                                aria-hidden="true"
+                              />
+                            ) : (
+                              <i className="bi bi-bag-plus"></i>
+                            )}
 
                             {isAdding ? "Adding..." : "Add to Bag"}
                           </button>
@@ -493,7 +517,10 @@ const Products = () => {
                           </button>
                         )}
 
-                        {/* Quick View */}
+                        {/* ================================================== */}
+                        {/* QUICK VIEW */}
+                        {/* ================================================== */}
+
                         <button
                           type="button"
                           className="quick-view-btn"

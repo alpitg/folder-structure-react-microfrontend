@@ -21,6 +21,10 @@ $color-success: #03a685;
     font: inherit;
   }
 
+  // ==================================================
+  // OFFER STRIP
+  // ==================================================
+
   .home-offer-strip {
     background: $color-dark;
     color: $color-background;
@@ -68,6 +72,10 @@ $color-success: #03a685;
       }
     }
   }
+
+  // ==================================================
+  // HERO
+  // ==================================================
 
   .home-hero {
     max-width: 1480px;
@@ -128,6 +136,9 @@ $color-success: #03a685;
         font-size: 12px;
         font-weight: 700;
         cursor: pointer;
+        transition:
+          background 0.2s ease,
+          transform 0.2s ease;
 
         i {
           color: $color-background;
@@ -135,6 +146,10 @@ $color-success: #03a685;
 
         &:hover {
           background: #1f2232;
+        }
+
+        &:active {
+          transform: translateY(1px);
         }
       }
     }
@@ -170,6 +185,10 @@ $color-success: #03a685;
       }
     }
   }
+
+  // ==================================================
+  // COMMON SECTION
+  // ==================================================
 
   .home-section {
     max-width: 1480px;
@@ -216,6 +235,10 @@ $color-success: #03a685;
     }
   }
 
+  // ==================================================
+  // CATEGORIES
+  // ==================================================
+
   .home-categories {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
@@ -259,6 +282,10 @@ $color-success: #03a685;
     }
   }
 
+  // ==================================================
+  // DEAL BANNER
+  // ==================================================
+
   .home-deal-banner {
     max-width: 1400px;
     margin: 45px auto 0;
@@ -300,12 +327,24 @@ $color-success: #03a685;
       font-size: 11px;
       font-weight: 700;
       cursor: pointer;
+      transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
 
       i {
         color: $color-background;
       }
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.45);
+      }
     }
   }
+
+  // ==================================================
+  // PRODUCTS SECTION
+  // ==================================================
 
   .home-products-section {
     padding-top: 45px;
@@ -316,6 +355,10 @@ $color-success: #03a685;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 20px;
   }
+
+  // ==================================================
+  // PRODUCT CARD
+  // ==================================================
 
   .home-product-card {
     min-width: 0;
@@ -332,7 +375,7 @@ $color-success: #03a685;
 
     .home-product-image {
       position: relative;
-      aspect-ratio: 3/4;
+      aspect-ratio: 3 / 4;
       overflow: hidden;
       background: $color-background-light;
 
@@ -370,13 +413,19 @@ $color-success: #03a685;
         background: rgba(255, 255, 255, 0.95);
         color: $color-dark;
         cursor: pointer;
+        transition:
+          transform 0.2s ease,
+          background 0.2s ease;
 
         i {
           color: $color-dark;
           font-size: 15px;
+          transition: color 0.2s ease;
         }
 
         &:hover {
+          transform: scale(1.05);
+
           i {
             color: $color-primary;
           }
@@ -390,6 +439,10 @@ $color-success: #03a685;
       }
     }
   }
+
+  // ==================================================
+  // PRODUCT CONTENT
+  // ==================================================
 
   .home-product-content {
     padding: 12px;
@@ -410,6 +463,10 @@ $color-success: #03a685;
       white-space: nowrap;
       text-overflow: ellipsis;
     }
+
+    // ==================================================
+    // PRICE
+    // ==================================================
 
     .home-product-price {
       display: flex;
@@ -436,56 +493,149 @@ $color-success: #03a685;
       }
     }
 
+    // ==================================================
+    // ADD TO BAG
+    // ==================================================
+
     .home-product-bag {
       width: 100%;
       height: 38px;
       margin-top: 12px;
+      padding: 0 12px;
+
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 7px;
+
       border: 1px solid $color-primary;
       background: $color-background;
       color: $color-primary;
+
       font-size: 10px;
       font-weight: 700;
+
       cursor: pointer;
+
+      transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        opacity 0.2s ease;
 
       i {
         color: $color-primary;
+        font-size: 13px;
+        transition: color 0.2s ease;
       }
 
-      &:hover,
+      &:hover:not(:disabled),
       &.added {
         background: $color-primary;
         color: $color-background;
+        border-color: $color-primary;
 
         i {
           color: $color-background;
         }
       }
+
+      // ==================================================
+      // LOADING STATE
+      // ==================================================
+
+      &:disabled {
+        cursor: not-allowed;
+      }
+
+      // IMPORTANT:
+      // Only the button belonging to the product currently
+      // being added receives this disabled/loading state.
+      &.loading {
+        background: $color-primary;
+        border-color: $color-primary;
+        color: $color-background;
+        cursor: wait;
+        opacity: 0.95;
+
+        i {
+          color: $color-background;
+        }
+      }
+
+      // ==================================================
+      // SPINNER
+      // ==================================================
+
+      .spinner-border {
+        width: 13px;
+        height: 13px;
+        flex: 0 0 13px;
+
+        border-width: 2px;
+        border-style: solid;
+        border-color: rgba(255, 255, 255, 0.35);
+        border-top-color: $color-primary;
+        border-radius: 50%;
+
+        animation: home-product-spinner 0.65s linear infinite;
+      }
     }
   }
 
-  .home-product-loading,
-  .home-empty {
+  // ==================================================
+  // PRODUCT LOADING
+  // ==================================================
+
+  .home-product-loading {
     min-height: 250px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: $color-muted;
     font-size: 12px;
+
+    span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+
+      &:before {
+        content: "";
+        width: 16px;
+        height: 16px;
+        display: inline-block;
+        border: 2px solid $color-border;
+        border-top-color: $color-primary;
+        border-radius: 50%;
+        animation: home-product-spinner 0.65s linear infinite;
+      }
+    }
   }
 
+  // ==================================================
+  // EMPTY PRODUCTS
+  // ==================================================
+
   .home-empty {
+    min-height: 250px;
+    display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
     gap: 10px;
+    color: $color-muted;
+    font-size: 12px;
 
     i {
       font-size: 30px;
       color: $color-muted;
     }
   }
+
+  // ==================================================
+  // TRUST FEATURES
+  // ==================================================
 
   .home-features {
     max-width: 1400px;
@@ -529,6 +679,24 @@ $color-success: #03a685;
     }
   }
 
+  // ==================================================
+  // SPINNER ANIMATION
+  // ==================================================
+
+  @keyframes home-product-spinner {
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  // ==================================================
+  // TABLET
+  // ==================================================
+
   @media (max-width: 1199px) {
     .home-hero {
       margin-left: 20px;
@@ -540,7 +708,15 @@ $color-success: #03a685;
     }
   }
 
+  // ==================================================
+  // MOBILE
+  // ==================================================
+
   @media (max-width: 767px) {
+    // --------------------------------------------------
+    // OFFER STRIP
+    // --------------------------------------------------
+
     .home-offer-strip {
       .home-offer-track {
         display: flex;
@@ -568,6 +744,10 @@ $color-success: #03a685;
       }
     }
 
+    // --------------------------------------------------
+    // HERO
+    // --------------------------------------------------
+
     .home-hero {
       min-height: 300px;
       margin: 12px;
@@ -579,8 +759,8 @@ $color-success: #03a685;
         }
 
         h1 {
-          font-size: 31px;
           max-width: 220px;
+          font-size: 31px;
         }
 
         p {
@@ -613,6 +793,10 @@ $color-success: #03a685;
       }
     }
 
+    // --------------------------------------------------
+    // SECTION
+    // --------------------------------------------------
+
     .home-section {
       padding: 30px 12px 0;
     }
@@ -632,6 +816,10 @@ $color-success: #03a685;
         font-size: 9px;
       }
     }
+
+    // --------------------------------------------------
+    // CATEGORIES
+    // --------------------------------------------------
 
     .home-categories {
       display: flex;
@@ -658,6 +846,10 @@ $color-success: #03a685;
       }
     }
 
+    // --------------------------------------------------
+    // DEAL BANNER
+    // --------------------------------------------------
+
     .home-deal-banner {
       margin: 30px 12px 0;
       padding: 20px;
@@ -672,6 +864,10 @@ $color-success: #03a685;
         font-size: 9px;
       }
     }
+
+    // --------------------------------------------------
+    // PRODUCTS
+    // --------------------------------------------------
 
     .home-products {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -703,8 +899,24 @@ $color-success: #03a685;
       .home-product-bag {
         height: 34px;
         font-size: 9px;
+        gap: 5px;
+
+        i {
+          font-size: 11px;
+        }
+
+        .spinner-border {
+          width: 11px;
+          height: 11px;
+          flex-basis: 11px;
+          border-width: 2px;
+        }
       }
     }
+
+    // --------------------------------------------------
+    // WISHLIST
+    // --------------------------------------------------
 
     .home-product-wishlist {
       width: 30px;
@@ -714,6 +926,10 @@ $color-success: #03a685;
         font-size: 13px;
       }
     }
+
+    // --------------------------------------------------
+    // FEATURES
+    // --------------------------------------------------
 
     .home-features {
       margin: 35px 12px 0;
@@ -734,6 +950,10 @@ $color-success: #03a685;
       }
     }
   }
+
+  // ==================================================
+  // SMALL MOBILE
+  // ==================================================
 
   @media (max-width: 420px) {
     .home-hero-decoration {
