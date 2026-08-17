@@ -1,23 +1,53 @@
 src/
 └── components/
     └── website/
+        │
         ├── cart/
         │   ├── cart.tsx
         │   ├── cart.scss
+        │   │
         │   └── components/
-        │       ├── cart-steps.tsx
-        │       ├── cart-items.tsx
-        │       ├── cart-item.tsx
-        │       ├── cart-price-details.tsx
-        │       ├── cart-empty.tsx
-        │       ├── cart-address.tsx
-        │       ├── cart-payment.tsx
-        │       └── cart-login.tsx
+        │       │
+        │       ├── cart-steps/
+        │       │   ├── cart-steps.tsx
+        │       │   └── cart-steps.scss
+        │       │
+        │       ├── cart-items/
+        │       │   ├── cart-items.tsx
+        │       │   └── cart-items.scss
+        │       │
+        │       ├── cart-item/
+        │       │   ├── cart-item.tsx
+        │       │   └── cart-item.scss
+        │       │
+        │       ├── cart-price-details/
+        │       │   ├── cart-price-details.tsx
+        │       │   └── cart-price-details.scss
+        │       │
+        │       ├── cart-empty/
+        │       │   ├── cart-empty.tsx
+        │       │   └── cart-empty.scss
+        │       │
+        │       ├── cart-address/
+        │       │   ├── cart-address.tsx
+        │       │   └── cart-address.scss
+        │       │
+        │       ├── cart-payment/
+        │       │   ├── cart-payment.tsx
+        │       │   └── cart-payment.scss
+        │       │
+        │       └── cart-login/
+        │           ├── cart-login.tsx
+        │           └── cart-login.scss
+        │
+        ├── address/
+        │   └── address-selection/
+        │       ├── address-selection.tsx
+        │       └── address-selection.scss
         │
         └── order-success/
             ├── order-success.tsx
             └── order-success.scss
-
 
 ---
 

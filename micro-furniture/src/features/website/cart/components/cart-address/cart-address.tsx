@@ -3,8 +3,15 @@ import "./cart-address.scss";
 import type { Customer, DeliveryAddress } from "../../../checkout/checkout";
 
 import AddressSelectionApp from "../../../checkout/address-selection/address-selection";
+
 import type { WebsiteUser } from "../../../../../app/redux/website/auth/profile-login.api";
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
+
+import {
+  useGetWebsiteAddressesQuery,
+  type WebsiteAddress,
+} from "../../../../../app/redux/website/address/website-address.api";
 
 // ============================================================
 // TYPES
@@ -23,6 +30,28 @@ interface CartAddressProps {
 }
 
 // ============================================================
+// HELPERS
+// ============================================================
+
+const convertWebsiteAddressToDeliveryAddress = (
+  address: WebsiteAddress,
+): DeliveryAddress => {
+  return {
+    id: address.id,
+    name: address.name,
+    mobile: address.mobile,
+    addressType: address.addressType,
+    addressLine1: address.addressLine1,
+    addressLine2: address.addressLine2 ?? null,
+    landmark: address.landmark ?? null,
+    city: address.city,
+    state: address.state,
+    pincode: address.pincode,
+    isDefault: address.isDefault,
+  };
+};
+
+// ============================================================
 // COMPONENT
 // ============================================================
 
@@ -36,7 +65,23 @@ const CartAddress = ({
   const [showAddressSelection, setShowAddressSelection] = useState(false);
 
   // ==========================================================
-  // CONVERT WEBSITE USER TO CHECKOUT CUSTOMER
+  // GET SAVED ADDRESSES
+  //
+  // This query only runs while CartAddress is mounted.
+  // CartAddress is mounted only on the address step.
+  // ==========================================================
+
+  const {
+    data: addressesResponse,
+    isLoading: isAddressesLoading,
+    isError: isAddressesError,
+    refetch: refetchAddresses,
+  } = useGetWebsiteAddressesQuery(undefined, {
+    skip: !customer?.id,
+  });
+
+  // ==========================================================
+  // CONVERT USER TO CHECKOUT CUSTOMER
   // ==========================================================
 
   const addressCustomer: Customer | null = customer
@@ -49,7 +94,37 @@ const CartAddress = ({
     : null;
 
   // ==========================================================
-  // SELECT ADDRESS
+  // AUTO SELECT DEFAULT ADDRESS
+  // ==========================================================
+
+  useEffect(() => {
+    // Already selected.
+    if (selectedAddress) {
+      return;
+    }
+
+    const addresses = addressesResponse?.addresses ?? [];
+
+    if (addresses.length === 0) {
+      return;
+    }
+
+    const defaultAddress = addresses.find(
+      (address) => address.isDefault === true,
+    );
+
+    if (!defaultAddress) {
+      return;
+    }
+
+    const deliveryAddress =
+      convertWebsiteAddressToDeliveryAddress(defaultAddress);
+
+    onAddressSelected(deliveryAddress);
+  }, [addressesResponse, selectedAddress, onAddressSelected]);
+
+  // ==========================================================
+  // ADDRESS SELECTED
   // ==========================================================
 
   const handleAddressSelected = (address: DeliveryAddress) => {
@@ -71,7 +146,7 @@ const CartAddress = ({
   };
 
   // ==========================================================
-  // ADDRESS SELECTION
+  // ADDRESS SELECTION SCREEN
   // ==========================================================
 
   if (showAddressSelection) {
@@ -109,7 +184,61 @@ const CartAddress = ({
   }
 
   // ==========================================================
-  // MAIN ADDRESS STEP
+  // LOADING
+  // ==========================================================
+
+  if (isAddressesLoading) {
+    return (
+      <section className="cart-address">
+        <div className="cart-address-content">
+          <div className="cart-address-empty">
+            <div
+              className="spinner-border"
+              role="status"
+              aria-label="Loading addresses"
+            />
+
+            <p>Loading your delivery addresses...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // ==========================================================
+  // ERROR
+  // ==========================================================
+
+  if (isAddressesError) {
+    return (
+      <section className="cart-address">
+        <div className="cart-address-content">
+          <div className="cart-address-empty">
+            <div className="cart-address-empty-icon">
+              <i className="bi bi-exclamation-circle" />
+            </div>
+
+            <h5>Unable to load addresses</h5>
+
+            <p>We couldn't load your saved delivery addresses.</p>
+
+            <button
+              type="button"
+              className="cart-address-add-button"
+              onClick={() => refetchAddresses()}
+            >
+              <i className="bi bi-arrow-clockwise" />
+
+              <span>Try Again</span>
+            </button>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // ==========================================================
+  // MAIN
   // ==========================================================
 
   return (

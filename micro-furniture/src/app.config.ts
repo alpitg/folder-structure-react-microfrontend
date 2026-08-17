@@ -70,6 +70,7 @@ let environment = {
       auth: {
         refresh: "",
         me: "",
+        addresses: "",
         logout: "",
         sendOtp: "",
         resendOtp: "",

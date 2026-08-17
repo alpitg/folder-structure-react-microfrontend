@@ -2,13 +2,112 @@ import "./cart-payment.scss";
 
 import type { CartResponse } from "../../../../../app/redux/website/cart/cart.api";
 import type { DeliveryAddress } from "../../../checkout/checkout";
+import type { WebsiteOrderItemPayload } from "../../../../../app/redux/website/order/website-order.api";
 import type { WebsiteUser } from "../../../../../app/redux/website/auth/profile-login.api";
 import { useState } from "react";
 
-export type PaymentMethod = "cod" | "online";
+// ============================================================
+// PAYMENT
+// ============================================================
+
+export type PaymentMethod = "online";
 
 // ============================================================
-// TYPES
+// CREATE ORDER
+// ============================================================
+
+export interface CreateOrderPayload {
+  customerId: string;
+
+  customerName: string;
+  deliveryAddress: {
+    id?: string;
+    name: string;
+    mobile: string;
+    addressType: string;
+    addressLine1: string;
+    addressLine2?: string | null;
+    landmark?: string | null;
+    city: string;
+    state: string;
+    pincode: string;
+    isDefault?: boolean;
+  };
+  items: WebsiteOrderItemPayload[];
+
+  miscCharges?: Array<{
+    label: string;
+    amount: number;
+  }>;
+
+  note?: string;
+
+  discountAmount?: number;
+
+  likelyDateOfDelivery?: string;
+}
+
+// ============================================================
+// CREATE ORDER RESPONSE
+// ============================================================
+
+export interface CreateOrderResponse {
+  order: {
+    _id: string;
+    orderCode?: string;
+    customerId?: string | null;
+    customerName?: string;
+    totalAmount?: number;
+    orderStatus?: string;
+    invoiceId?: string | null;
+  };
+
+  invoice?: {
+    _id: string;
+    paymentStatus?: string;
+    totalAmount?: number;
+    balanceAmount?: number;
+  };
+
+  payment?: {
+    provider?: string;
+    keyId?: string;
+    razorpayOrderId?: string;
+    amount?: number;
+    currency?: string;
+  };
+}
+
+// ============================================================
+// VERIFY
+// ============================================================
+
+export interface VerifyPaymentPayload {
+  orderId: string;
+  razorpayPaymentId: string;
+  razorpayOrderId: string;
+  razorpaySignature: string;
+}
+
+export interface VerifyPaymentResponse {
+  success: boolean;
+
+  message?: string;
+
+  order?: {
+    _id: string;
+    orderStatus?: string;
+  };
+
+  invoice?: unknown;
+
+  payment?: unknown;
+
+  paidAt?: string;
+}
+
+// ============================================================
+// PROPS
 // ============================================================
 
 interface CartPaymentProps {
@@ -20,21 +119,95 @@ interface CartPaymentProps {
 
   onBack?: () => void;
 
-  /**
-   * Called after the payment/order flow succeeds.
-   */
   onOrderSuccess: (orderId: string) => void;
 
-  /**
-   * Optional external processing state.
-   */
+  createOrder: (payload: CreateOrderPayload) => Promise<CreateOrderResponse>;
+
+  verifyPayment: (
+    payload: VerifyPaymentPayload,
+  ) => Promise<VerifyPaymentResponse>;
+
   isProcessing?: boolean;
 
-  /**
-   * Optional error from parent/order API.
-   */
   error?: string;
 }
+
+// ============================================================
+// RAZORPAY
+// ============================================================
+
+interface RazorpayResponse {
+  razorpay_payment_id: string;
+  razorpay_order_id: string;
+  razorpay_signature: string;
+}
+
+interface RazorpayOptions {
+  key: string;
+
+  amount: number;
+
+  currency: string;
+
+  name: string;
+
+  description: string;
+
+  order_id: string;
+
+  prefill?: {
+    name?: string;
+    contact?: string;
+    email?: string;
+  };
+
+  handler: (response: RazorpayResponse) => void | Promise<void>;
+
+  modal?: {
+    ondismiss?: () => void;
+  };
+}
+
+// ============================================================
+// RAZORPAY SCRIPT
+// ============================================================
+
+const RAZORPAY_SCRIPT = "https://checkout.razorpay.com/v1/checkout.js";
+
+const loadRazorpayScript = (): Promise<boolean> => {
+  return new Promise((resolve) => {
+    if (window.Razorpay) {
+      resolve(true);
+      return;
+    }
+
+    const existingScript = document.querySelector<HTMLScriptElement>(
+      `script[src="${RAZORPAY_SCRIPT}"]`,
+    );
+
+    if (existingScript) {
+      existingScript.addEventListener("load", () => resolve(true), {
+        once: true,
+      });
+
+      existingScript.addEventListener("error", () => resolve(false), {
+        once: true,
+      });
+
+      return;
+    }
+
+    const script = document.createElement("script");
+
+    script.src = RAZORPAY_SCRIPT;
+    script.async = true;
+
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+
+    document.body.appendChild(script);
+  });
+};
 
 // ============================================================
 // COMPONENT
@@ -46,19 +219,23 @@ const CartPayment = ({
   selectedAddress,
   onBack,
   onOrderSuccess,
+  createOrder,
+  verifyPayment,
   isProcessing = false,
   error = "",
 }: CartPaymentProps) => {
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cod");
+  const [processing, setProcessing] = useState(false);
 
   const [localError, setLocalError] = useState("");
+
+  const isBusy = isProcessing || processing;
 
   // ==========================================================
   // CONTINUE
   // ==========================================================
 
   const handleContinue = async () => {
-    if (isProcessing) {
+    if (isBusy) {
       return;
     }
 
@@ -78,62 +255,200 @@ const CartPayment = ({
     }
 
     setLocalError("");
+    setProcessing(true);
 
-    /**
-     * IMPORTANT:
-     *
-     * This is where your create-order / payment API should be called.
-     *
-     * Example:
-     *
-     * const response = await createOrder({
-     *   customerId: customer.id,
-     *   cartId: cart.id,
-     *   addressId: selectedAddress.id,
-     *   paymentMethod,
-     * });
-     *
-     * Then:
-     *
-     * if (paymentMethod === "cod") {
-     *   onOrderSuccess(response.orderId);
-     * }
-     *
-     * if (paymentMethod === "online") {
-     *   // redirect/open payment gateway
-     * }
-     */
+    try {
+      // ======================================================
+      // CREATE ORDER PAYLOAD
+      // ======================================================
 
-    console.log("Checkout:", {
-      customerId: customer.id,
-      cart,
-      selectedAddress,
-      paymentMethod,
-    });
+      const payload: CreateOrderPayload = {
+        customerId: String(customer.id),
 
-    /**
-     * Temporary example.
-     *
-     * REMOVE this when your order API is connected.
-     */
-    // onOrderSuccess(response.orderId);
+        customerName:
+          customer.name || selectedAddress.name || "Website Customer",
+
+        deliveryAddress: selectedAddress,
+
+        items: cart.items.map((item) => ({
+          productId: String(item.productId),
+
+          productType: item.productType || "physical",
+
+          quantity: Number(item.quantity),
+
+          ...(item.customizedDetails !== undefined
+            ? {
+                customizedDetails: item.customizedDetails,
+              }
+            : {}),
+        })),
+
+        miscCharges: [],
+
+        note: "Website order",
+
+        discountAmount: 0,
+      };
+
+      // ======================================================
+      // CREATE INTERNAL ORDER + INVOICE + RAZORPAY ORDER
+      // ======================================================
+
+      const response = await createOrder(payload);
+
+      const orderId = response?.order?._id;
+
+      if (!orderId) {
+        throw new Error("Order was created but no order ID was returned.");
+      }
+
+      // ======================================================
+      // RAZORPAY DETAILS
+      // ======================================================
+
+      const razorpayOrderId = response.payment?.razorpayOrderId;
+
+      const razorpayKeyId = response.payment?.keyId;
+
+      const razorpayAmount = response.payment?.amount;
+
+      const razorpayCurrency = response.payment?.currency || "INR";
+
+      if (!razorpayOrderId) {
+        throw new Error("Razorpay order ID was not returned.");
+      }
+
+      if (!razorpayKeyId) {
+        throw new Error("Razorpay key ID was not returned.");
+      }
+
+      if (
+        razorpayAmount === undefined ||
+        razorpayAmount === null ||
+        razorpayAmount <= 0
+      ) {
+        throw new Error("Invalid Razorpay payment amount.");
+      }
+
+      // ======================================================
+      // LOAD RAZORPAY
+      // ======================================================
+
+      const loaded = await loadRazorpayScript();
+
+      if (!loaded || !window.Razorpay) {
+        throw new Error("Unable to load payment gateway. Please try again.");
+      }
+
+      // ======================================================
+      // RAZORPAY OPTIONS
+      // ======================================================
+
+      const options: RazorpayOptions = {
+        key: razorpayKeyId,
+
+        amount: razorpayAmount,
+
+        currency: razorpayCurrency,
+
+        name: "Your Store",
+
+        description: response.order.orderCode
+          ? `Order ${response.order.orderCode}`
+          : "Website Order",
+
+        order_id: razorpayOrderId,
+
+        prefill: {
+          name: customer.name || selectedAddress.name,
+
+          contact: customer.mobile || selectedAddress.mobile,
+
+          email: customer.email || undefined,
+        },
+
+        // ====================================================
+        // SUCCESS
+        // ====================================================
+
+        handler: async (razorpayResponse) => {
+          try {
+            setProcessing(true);
+            setLocalError("");
+
+            const verification = await verifyPayment({
+              orderId,
+
+              razorpayPaymentId: razorpayResponse.razorpay_payment_id,
+
+              razorpayOrderId: razorpayResponse.razorpay_order_id,
+
+              razorpaySignature: razorpayResponse.razorpay_signature,
+            });
+
+            if (!verification.success) {
+              throw new Error(
+                verification.message || "Payment verification failed.",
+              );
+            }
+
+            const verifiedOrderId = verification.order?._id || orderId;
+
+            onOrderSuccess(verifiedOrderId);
+          } catch (paymentError: unknown) {
+            console.error("Payment verification failed:", paymentError);
+
+            setLocalError(
+              paymentError instanceof Error
+                ? paymentError.message
+                : "Payment verification failed. Please contact support.",
+            );
+          } finally {
+            setProcessing(false);
+          }
+        },
+
+        // ====================================================
+        // DISMISSED
+        // ====================================================
+
+        modal: {
+          ondismiss: () => {
+            setProcessing(false);
+          },
+        },
+      };
+
+      const razorpay = new window.Razorpay(options);
+
+      razorpay.open();
+    } catch (orderError: unknown) {
+      console.error("Unable to place order:", orderError);
+
+      setLocalError(
+        orderError instanceof Error
+          ? orderError.message
+          : "Unable to place your order. Please try again.",
+      );
+
+      setProcessing(false);
+    }
   };
 
   // ==========================================================
-  // ERROR
+  // VALUES
   // ==========================================================
 
   const displayError = error || localError;
 
-  // ==========================================================
-  // TOTAL
-  // ==========================================================
+  const total = cart.summary?.grandTotal ?? 0;
 
-  const total = cart.summary?.grandTotal ?? cart.pricing?.total ?? 0;
-
-  const formatPrice = (amount: number) => {
-    return `₹${amount.toLocaleString("en-IN")}`;
-  };
+  const formatPrice = (amount: number) =>
+    `₹${amount.toLocaleString("en-IN", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`;
 
   // ==========================================================
   // RENDER
@@ -141,23 +456,19 @@ const CartPayment = ({
 
   return (
     <div className="cart-payment">
-      {/* ================================================== */}
-      {/* HEADER */}
-      {/* ================================================== */}
-
       <div className="cart-payment-header">
         <div>
           <h5 className="cart-payment-title">Payment</h5>
 
           <p className="cart-payment-description">
-            Choose your preferred payment method to place your order.
+            Complete your order securely using Razorpay.
           </p>
         </div>
       </div>
 
-      {/* ================================================== */}
-      {/* ADDRESS SUMMARY */}
-      {/* ================================================== */}
+      {/* ====================================================
+          ADDRESS
+      ==================================================== */}
 
       {selectedAddress && (
         <div className="cart-payment-address">
@@ -173,7 +484,7 @@ const CartPayment = ({
                 type="button"
                 className="cart-payment-change-btn"
                 onClick={onBack}
-                disabled={isProcessing}
+                disabled={isBusy}
               >
                 Change
               </button>
@@ -191,6 +502,7 @@ const CartPayment = ({
 
             <p>
               {selectedAddress.addressLine1}
+
               {selectedAddress.addressLine2 &&
                 `, ${selectedAddress.addressLine2}`}
             </p>
@@ -211,64 +523,18 @@ const CartPayment = ({
         </div>
       )}
 
-      {/* ================================================== */}
-      {/* PAYMENT METHODS */}
-      {/* ================================================== */}
+      {/* ====================================================
+          PAYMENT METHOD
+      ==================================================== */}
 
       <div className="cart-payment-methods">
         <div className="cart-payment-section-heading">
-          <h6>Choose Payment Method</h6>
+          <h6>Payment Method</h6>
         </div>
 
-        {/* COD */}
-        <button
-          type="button"
-          className={`cart-payment-method ${
-            paymentMethod === "cod" ? "cart-payment-method-selected" : ""
-          }`}
-          onClick={() => setPaymentMethod("cod")}
-          disabled={isProcessing}
-        >
+        <div className="cart-payment-method cart-payment-method-selected">
           <div className="cart-payment-method-radio">
-            <span
-              className={
-                paymentMethod === "cod" ? "cart-payment-radio-selected" : ""
-              }
-            />
-          </div>
-
-          <div className="cart-payment-method-icon">
-            <i className="bi bi-cash-stack" />
-          </div>
-
-          <div className="cart-payment-method-content">
-            <strong>Cash on Delivery</strong>
-
-            <span>Pay when your order is delivered to you.</span>
-          </div>
-
-          {paymentMethod === "cod" && (
-            <div className="cart-payment-method-check">
-              <i className="bi bi-check-circle-fill" />
-            </div>
-          )}
-        </button>
-
-        {/* ONLINE */}
-        <button
-          type="button"
-          className={`cart-payment-method ${
-            paymentMethod === "online" ? "cart-payment-method-selected" : ""
-          }`}
-          onClick={() => setPaymentMethod("online")}
-          disabled={isProcessing}
-        >
-          <div className="cart-payment-method-radio">
-            <span
-              className={
-                paymentMethod === "online" ? "cart-payment-radio-selected" : ""
-              }
-            />
+            <span className="cart-payment-radio-selected" />
           </div>
 
           <div className="cart-payment-method-icon">
@@ -281,17 +547,15 @@ const CartPayment = ({
             <span>Pay securely using UPI, card, net banking or wallet.</span>
           </div>
 
-          {paymentMethod === "online" && (
-            <div className="cart-payment-method-check">
-              <i className="bi bi-check-circle-fill" />
-            </div>
-          )}
-        </button>
+          <div className="cart-payment-method-check">
+            <i className="bi bi-check-circle-fill" />
+          </div>
+        </div>
       </div>
 
-      {/* ================================================== */}
-      {/* SECURITY MESSAGE */}
-      {/* ================================================== */}
+      {/* ====================================================
+          SECURITY
+      ==================================================== */}
 
       <div className="cart-payment-security">
         <div className="cart-payment-security-icon">
@@ -301,13 +565,13 @@ const CartPayment = ({
         <div>
           <strong>Safe and secure payments</strong>
 
-          <p>Your payment information is encrypted and securely processed.</p>
+          <p>Your payment is securely processed by Razorpay.</p>
         </div>
       </div>
 
-      {/* ================================================== */}
-      {/* ERROR */}
-      {/* ================================================== */}
+      {/* ====================================================
+          ERROR
+      ==================================================== */}
 
       {displayError && (
         <div className="cart-payment-error">
@@ -317,9 +581,9 @@ const CartPayment = ({
         </div>
       )}
 
-      {/* ================================================== */}
-      {/* PAYMENT SUMMARY */}
-      {/* ================================================== */}
+      {/* ====================================================
+          SUMMARY
+      ==================================================== */}
 
       <div className="cart-payment-summary">
         <div className="cart-payment-summary-row">
@@ -331,33 +595,30 @@ const CartPayment = ({
         <div className="cart-payment-summary-row">
           <span>Subtotal</span>
 
-          <span>
-            {formatPrice(cart.summary?.subtotal ?? cart.pricing?.subtotal ?? 0)}
-          </span>
+          <span>{formatPrice(cart.summary?.subtotal ?? 0)}</span>
         </div>
 
-        {(cart.summary?.discount ?? cart.pricing?.discount ?? 0) > 0 && (
+        {cart.summary?.discount > 0 && (
           <div className="cart-payment-summary-row cart-payment-discount">
             <span>Discount</span>
 
-            <span>
-              -
-              {formatPrice(
-                cart.summary?.discount ?? cart.pricing?.discount ?? 0,
-              )}
-            </span>
+            <span>-{formatPrice(cart.summary.discount)}</span>
           </div>
         )}
 
-        {(cart.summary?.shipping ?? cart.pricing?.shipping ?? 0) > 0 && (
+        {cart.summary?.shipping > 0 && (
           <div className="cart-payment-summary-row">
             <span>Shipping</span>
 
-            <span>
-              {formatPrice(
-                cart.summary?.shipping ?? cart.pricing?.shipping ?? 0,
-              )}
-            </span>
+            <span>{formatPrice(cart.summary.shipping)}</span>
+          </div>
+        )}
+
+        {cart.summary?.totalTax > 0 && (
+          <div className="cart-payment-summary-row">
+            <span>Tax</span>
+
+            <span>{formatPrice(cart.summary.totalTax)}</span>
           </div>
         )}
 
@@ -368,9 +629,9 @@ const CartPayment = ({
         </div>
       </div>
 
-      {/* ================================================== */}
-      {/* FOOTER */}
-      {/* ================================================== */}
+      {/* ====================================================
+          FOOTER
+      ==================================================== */}
 
       <div className="cart-payment-footer">
         {onBack && (
@@ -378,7 +639,7 @@ const CartPayment = ({
             type="button"
             className="cart-payment-back-btn"
             onClick={onBack}
-            disabled={isProcessing}
+            disabled={isBusy}
           >
             <i className="bi bi-arrow-left" />
             Back
@@ -389,9 +650,9 @@ const CartPayment = ({
           type="button"
           className="cart-payment-place-order-btn"
           onClick={handleContinue}
-          disabled={!selectedAddress || isProcessing}
+          disabled={!selectedAddress || isBusy}
         >
-          {isProcessing ? (
+          {isBusy ? (
             <>
               <span
                 className="spinner-border spinner-border-sm"
@@ -401,8 +662,7 @@ const CartPayment = ({
             </>
           ) : (
             <>
-              {paymentMethod === "cod" ? "Place Order" : "Continue to Payment"}
-
+              Continue to Payment
               <i className="bi bi-arrow-right" />
             </>
           )}

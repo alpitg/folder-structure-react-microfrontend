@@ -41,20 +41,19 @@ const CartPriceDetails = ({
 }: CartPriceDetailsProps) => {
   const summary = cart.summary;
 
-  const totalMrp = summary?.mrp ?? cart.pricing?.totalMrp ?? 0;
+  const totalMrp = summary?.mrp ?? 0;
 
-  const discount = summary?.discount ?? cart.pricing?.discount ?? 0;
+  const discount = summary?.discount ?? 0;
 
-  const subtotal = summary?.subtotal ?? cart.pricing?.subtotal ?? 0;
+  const subtotal = summary?.subtotal ?? 0;
 
-  const shipping = summary?.shipping ?? cart.pricing?.shipping ?? 0;
+  const shipping = summary?.shipping ?? 0;
 
-  const totalTax =
-    summary?.totalTax ?? summary?.taxToAdd ?? cart.pricing?.tax ?? 0;
+  const totalTax = summary?.totalTax ?? summary?.taxToAdd ?? 0;
 
-  const miscCharges = summary?.miscCharges ?? cart.pricing?.miscCharges ?? 0;
+  const miscCharges = summary?.miscCharges ?? 0;
 
-  const grandTotal = summary?.grandTotal ?? cart.pricing?.total ?? 0;
+  const grandTotal = summary?.grandTotal ?? 0;
 
   const totalQuantity = summary?.totalQuantity ?? 0;
 

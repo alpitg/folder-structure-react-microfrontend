@@ -1,85 +1,198 @@
 import { GetEnvConfig } from "../../../../app.config";
+import type { WebsiteAddress } from "../address/website-address.api";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { websiteBaseQuery } from "../base.api";
 
-export interface PublicOrderItem {
+// ============================================================
+// TYPES
+// ============================================================
+
+export type PaymentMethod = "online";
+
+// ============================================================
+// ORDER ITEM
+// ============================================================
+
+export interface WebsiteOrderItemPayload {
   productId: string;
+
   productType?: string;
+
   quantity: number;
+
+  customizedDetails?: unknown;
 }
 
-export interface PublicOrderRequest {
+// ============================================================
+// CREATE ORDER REQUEST
+// ============================================================
+
+export interface CreateWebsiteOrderRequest {
+  customerId: string;
+
   customerName: string;
-  customerId?: string | null;
-  items: PublicOrderItem[];
-  miscCharges?: {
+
+  deliveryAddress: WebsiteAddress;
+
+  items: WebsiteOrderItemPayload[];
+
+  miscCharges?: Array<{
     label: string;
     amount: number;
-  }[];
+  }>;
+
   note?: string;
-  likelyDateOfDelivery?: string | null;
+
+  discountAmount?: number;
+
+  likelyDateOfDelivery?: string;
 }
 
-export interface RazorpayPaymentData {
-  provider: string;
-  keyId: string;
-  razorpayOrderId: string;
-  amount: number;
-  currency: string;
+// ============================================================
+// ORDER
+// ============================================================
+
+export interface WebsiteOrder {
+  _id: string;
+
+  orderCode?: string;
+
+  customerId?: string | null;
+
+  customerName?: string;
+
+  totalAmount?: number;
+
+  orderStatus?: string;
+
+  invoiceId?: string | null;
 }
 
-export interface WebsiteOrderResponse {
-  order: Record<string, unknown>;
-  invoice: Record<string, unknown> | null;
-  payment: RazorpayPaymentData;
+// ============================================================
+// INVOICE
+// ============================================================
+
+export interface WebsiteInvoice {
+  _id: string;
+
+  paymentStatus?: string;
+
+  totalAmount?: number;
+
+  balanceAmount?: number;
 }
 
-export interface VerifyPaymentRequest {
+// ============================================================
+// PAYMENT
+// ============================================================
+
+export interface WebsitePayment {
+  provider?: string;
+
+  keyId?: string;
+
+  razorpayOrderId?: string;
+
+  amount?: number;
+
+  currency?: string;
+}
+
+// ============================================================
+// CREATE ORDER RESPONSE
+// ============================================================
+
+export interface CreateWebsiteOrderResponse {
+  order: WebsiteOrder;
+
+  invoice?: WebsiteInvoice;
+
+  payment?: WebsitePayment;
+}
+
+// ============================================================
+// VERIFY PAYMENT
+// ============================================================
+
+export interface VerifyWebsitePaymentRequest {
   orderId: string;
+
   razorpayPaymentId: string;
+
   razorpayOrderId: string;
+
   razorpaySignature: string;
 }
 
-export interface VerifyPaymentResponse {
+export interface VerifyWebsitePaymentResponse {
   success: boolean;
-  message: string;
-  order: Record<string, unknown>;
-  invoice: Record<string, unknown> | null;
+
+  message?: string;
+
+  order?: WebsiteOrder;
+
+  invoice?: WebsiteInvoice;
+
+  payment?: Record<string, unknown> | null;
+
+  paidAt?: string;
 }
+
+// ============================================================
+// API
+// ============================================================
 
 export const websiteOrderApi = createApi({
   reducerPath: "websiteOrderApi",
+
   baseQuery: websiteBaseQuery,
+
   tagTypes: ["WebsiteOrder"],
 
   endpoints: (builder) => ({
+    // ========================================================
+    // CREATE ORDER
+    // ========================================================
+
     createWebsiteOrder: builder.mutation<
-      WebsiteOrderResponse,
-      PublicOrderRequest
+      CreateWebsiteOrderResponse,
+      CreateWebsiteOrderRequest
     >({
-      query: (payload) => ({
-        url:
-          GetEnvConfig()?.api?.website?.apiUrl +
-          GetEnvConfig()?.api?.website?.order?.create,
-        method: "POST",
-        body: payload,
-      }),
+      query: (body) => {
+        const config = GetEnvConfig();
+
+        return {
+          url: config?.api?.baseUrl + config?.api?.website?.order?.create,
+
+          method: "POST",
+
+          body,
+        };
+      },
 
       invalidatesTags: ["WebsiteOrder"],
     }),
 
+    // ========================================================
+    // VERIFY PAYMENT
+    // ========================================================
+
     verifyWebsitePayment: builder.mutation<
-      VerifyPaymentResponse,
-      VerifyPaymentRequest
+      VerifyWebsitePaymentResponse,
+      VerifyWebsitePaymentRequest
     >({
-      query: (payload) => ({
-        url:
-          GetEnvConfig()?.api?.website?.apiUrl +
-          GetEnvConfig()?.api?.website?.order?.verifyPayment,
-        method: "POST",
-        body: payload,
-      }),
+      query: (body) => {
+        const config = GetEnvConfig();
+
+        return {
+          url:
+            config?.api?.baseUrl + config?.api?.website?.order?.verifyPayment,
+
+          method: "POST",
+
+          body,
+        };
+      },
 
       invalidatesTags: ["WebsiteOrder"],
     }),

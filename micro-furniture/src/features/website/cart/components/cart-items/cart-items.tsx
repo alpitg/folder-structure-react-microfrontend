@@ -77,7 +77,7 @@ const CartItems = ({
     try {
       setError("");
 
-      setUpdatingItemId(item.id);
+      setUpdatingItemId(item.productId);
 
       await updateWebsiteCartItem({
         ...identity,
@@ -107,7 +107,7 @@ const CartItems = ({
     try {
       setError("");
 
-      setUpdatingItemId(item.id);
+      setUpdatingItemId(item.productId);
 
       await removeWebsiteCartItem({
         ...identity,

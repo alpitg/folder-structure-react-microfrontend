@@ -3,7 +3,7 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { websiteBaseQuery } from "../base.api";
 
 // ============================================================
-// CART TYPES
+// TYPES
 // ============================================================
 
 export interface CartDiscount {
@@ -11,168 +11,89 @@ export interface CartDiscount {
   value: number;
 }
 
+export interface CartTax {
+  rate: number;
+  included: boolean;
+  className?: string | null;
+  amount: number;
+}
+
 export interface CartPrice {
   mrp: number;
   sellingPrice: number;
   discount: CartDiscount;
+  tax?: CartTax;
 }
 
 export interface CartItem {
-  id: string;
+  id?: string;
   productId: string;
   productType?: string;
-
   quantity: number;
-
   name: string;
   description?: string;
   image?: string;
-
   price: CartPrice;
-
   itemTotal: number;
-
-}
-
-export interface CartPricing {
-  subtotal: number;
-  totalMrp: number;
-  discount: number;
-
-  tax: number;
-  shipping: number;
-  miscCharges: number;
-
-  total: number;
+  customizedDetails?: unknown;
 }
 
 export interface CartSummary {
   totalItems: number;
   totalQuantity: number;
-
   mrp: number;
   discount: number;
-
   subtotal: number;
-
   shipping: number;
-
   taxToAdd: number;
   totalTax: number;
-
   miscCharges: number;
-
   grandTotal: number;
 }
 
 export interface CartResponse {
-  id?: string;
-
+  id?: string | null;
   customerId?: string | null;
   guestCartId?: string | null;
-
   items: CartItem[];
-
-  pricing: CartPricing;
-
   currency?: string;
-
   summary: CartSummary;
 }
 
 // ============================================================
-// CART IDENTITY
+// IDENTITY
 // ============================================================
 
-/**
- * Guest Cart
- *
- * {
- *   guestCartId: "guest-xxxx"
- * }
- *
- * Logged-in Customer
- *
- * {
- *   customerId: "customer-xxxx"
- * }
- *
- * During merge
- *
- * {
- *   guestCartId: "guest-xxxx",
- *   customerId: "customer-xxxx"
- * }
- */
 export interface CartIdentity {
   customerId?: string | null;
   guestCartId?: string | null;
 }
 
 // ============================================================
-// GET CART
+// REQUESTS
 // ============================================================
 
 export type GetCartRequest = CartIdentity;
-
-// ============================================================
-// ADD CART ITEM
-// ============================================================
 
 export interface AddCartItemRequest extends CartIdentity {
   productId: string;
   productType?: string;
   quantity?: number;
-
+  customizedDetails?: unknown;
 }
-
-// ============================================================
-// UPDATE CART ITEM
-// ============================================================
 
 export interface UpdateCartItemRequest extends CartIdentity {
   productId: string;
   quantity: number;
+  customizedDetails?: unknown;
 }
-
-// ============================================================
-// REMOVE CART ITEM
-// ============================================================
 
 export type RemoveCartItemRequest = CartIdentity & {
   productId: string;
 };
 
-// ============================================================
-// CLEAR CART
-// ============================================================
-
 export type ClearCartRequest = CartIdentity;
 
-// ============================================================
-// MERGE GUEST CART
-// ============================================================
-
-/**
- * Called after a guest user logs in.
- *
- * Example:
- *
- * {
- *   guestCartId: "guest-123",
- *   customerId: "customer-456"
- * }
- *
- * Backend should:
- *
- * 1. Find guest cart
- * 2. Find customer cart
- * 3. Merge items
- * 4. Resolve duplicate products/quantities
- * 5. Assign final cart to customer
- * 6. Remove/close guest cart
- * 7. Return final customer cart
- */
 export interface MergeGuestCartRequest {
   guestCartId: string;
   customerId: string;
@@ -185,19 +106,17 @@ export interface MergeGuestCartRequest {
 export const websiteCartApi = createApi({
   reducerPath: "websiteCartApi",
   baseQuery: websiteBaseQuery,
+
   tagTypes: ["WebsiteCart"],
 
   endpoints: (builder) => ({
     // ========================================================
-    // GET CART
+    // GET
     // ========================================================
 
-    getWebsiteCart: builder.query<CartResponse, GetCartRequest | void>({
+    getWebsiteCart: builder.query<CartResponse, GetCartRequest>({
       query: (identity) => {
         const config = GetEnvConfig();
-
-        const customerId = identity?.customerId;
-        const guestCartId = identity?.guestCartId;
 
         return {
           url: config?.api?.baseUrl + config?.api?.website?.cart?.get,
@@ -205,8 +124,11 @@ export const websiteCartApi = createApi({
           method: "GET",
 
           params: {
-            ...(customerId ? { customerId } : {}),
-            ...(guestCartId ? { guestCartId } : {}),
+            ...(identity.customerId ? { customerId: identity.customerId } : {}),
+
+            ...(identity.guestCartId
+              ? { guestCartId: identity.guestCartId }
+              : {}),
           },
         };
       },
@@ -215,7 +137,7 @@ export const websiteCartApi = createApi({
     }),
 
     // ========================================================
-    // ADD CART ITEM
+    // ADD
     // ========================================================
 
     addWebsiteCartItem: builder.mutation<CartResponse, AddCartItemRequest>({
@@ -226,7 +148,6 @@ export const websiteCartApi = createApi({
           url: config?.api?.baseUrl + config?.api?.website?.cart?.addItem,
 
           method: "POST",
-
           body: payload,
         };
       },
@@ -235,7 +156,7 @@ export const websiteCartApi = createApi({
     }),
 
     // ========================================================
-    // UPDATE CART ITEM
+    // UPDATE
     // ========================================================
 
     updateWebsiteCartItem: builder.mutation<
@@ -249,7 +170,6 @@ export const websiteCartApi = createApi({
           url: config?.api?.baseUrl + config?.api?.website?.cart?.updateItem,
 
           method: "PUT",
-
           body: payload,
         };
       },
@@ -258,7 +178,7 @@ export const websiteCartApi = createApi({
     }),
 
     // ========================================================
-    // REMOVE CART ITEM
+    // REMOVE
     // ========================================================
 
     removeWebsiteCartItem: builder.mutation<
@@ -272,7 +192,6 @@ export const websiteCartApi = createApi({
           url: config?.api?.baseUrl + config?.api?.website?.cart?.removeItem,
 
           method: "DELETE",
-
           body: payload,
         };
       },
@@ -281,7 +200,7 @@ export const websiteCartApi = createApi({
     }),
 
     // ========================================================
-    // CLEAR CART
+    // CLEAR
     // ========================================================
 
     clearWebsiteCart: builder.mutation<CartResponse, ClearCartRequest>({
@@ -292,7 +211,6 @@ export const websiteCartApi = createApi({
           url: config?.api?.baseUrl + config?.api?.website?.cart?.clear,
 
           method: "DELETE",
-
           body: payload,
         };
       },
@@ -301,21 +219,9 @@ export const websiteCartApi = createApi({
     }),
 
     // ========================================================
-    // MERGE GUEST CART
+    // MERGE
     // ========================================================
 
-    /**
-     * Guest → Customer cart merge.
-     *
-     * This should be called immediately after successful login.
-     *
-     * Example:
-     *
-     * await mergeGuestCart({
-     *   guestCartId,
-     *   customerId,
-     * });
-     */
     mergeGuestCart: builder.mutation<CartResponse, MergeGuestCartRequest>({
       query: (payload) => {
         const config = GetEnvConfig();
@@ -324,7 +230,6 @@ export const websiteCartApi = createApi({
           url: config?.api?.baseUrl + config?.api?.website?.cart?.merge,
 
           method: "POST",
-
           body: payload,
         };
       },
@@ -334,27 +239,12 @@ export const websiteCartApi = createApi({
   }),
 });
 
-// ============================================================
-// HOOKS
-// ============================================================
-
 export const {
-  // GET
   useGetWebsiteCartQuery,
   useLazyGetWebsiteCartQuery,
-
-  // ADD
   useAddWebsiteCartItemMutation,
-
-  // UPDATE
   useUpdateWebsiteCartItemMutation,
-
-  // REMOVE
   useRemoveWebsiteCartItemMutation,
-
-  // CLEAR
   useClearWebsiteCartMutation,
-
-  // MERGE
   useMergeGuestCartMutation,
 } = websiteCartApi;

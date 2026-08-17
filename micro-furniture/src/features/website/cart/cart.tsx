@@ -1,10 +1,12 @@
 import "./cart.scss";
 
 import { useEffect, useMemo, useState } from "react";
+
 import { useNavigate } from "react-router";
 
 import {
   useGetWebsiteCartQuery,
+  useMergeGuestCartMutation,
   type CartIdentity,
 } from "../../../app/redux/website/cart/cart.api";
 
@@ -13,99 +15,91 @@ import {
   type WebsiteUser,
 } from "../../../app/redux/website/auth/profile-login.api";
 
-// Child components
 import CartSteps from "./components/cart-steps/cart-steps";
 import CartItems from "./components/cart-items/cart-items";
 import CartPriceDetails from "./components/cart-price-details/cart-price-details";
 import CartEmpty from "./components/cart-empty/cart-empty";
 import CartAddress from "./components/cart-address/cart-address";
-import CartPayment from "./components/cart-payment/cart-payment";
+
+import CartPayment, {
+  type CreateOrderPayload,
+  type CreateOrderResponse,
+  type VerifyPaymentPayload,
+  type VerifyPaymentResponse,
+} from "./components/cart-payment/cart-payment";
+
 import UserLoginApp from "../auth/login/user-login";
 
 import type { DeliveryAddress } from "../checkout/checkout";
 
-// ==================================================
+import {
+  useCreateWebsiteOrderMutation,
+  useVerifyWebsitePaymentMutation,
+} from "../../../app/redux/website/order/website-order.api";
+
+// ============================================================
 // TYPES
-// ==================================================
+// ============================================================
 
 type CartStep = "bag" | "address" | "payment";
 
 interface CartProps {
-  /**
-   * Optional callback when cart checkout is closed.
-   */
   onClose?: () => void;
 }
 
-// ==================================================
+// ============================================================
 // CONSTANTS
-// ==================================================
+// ============================================================
 
 const GUEST_CART_KEY = "website_guest_cart_id";
 
-// ==================================================
+// ============================================================
 // HELPERS
-// ==================================================
+// ============================================================
 
 const getGuestCartId = (): string => {
-  const existingGuestId = localStorage.getItem(GUEST_CART_KEY);
+  const existing = localStorage.getItem(GUEST_CART_KEY);
 
-  if (existingGuestId) {
-    return existingGuestId;
+  if (existing) {
+    return existing;
   }
 
-  const newGuestId = crypto.randomUUID();
+  const id = crypto.randomUUID();
 
-  localStorage.setItem(GUEST_CART_KEY, newGuestId);
+  localStorage.setItem(GUEST_CART_KEY, id);
 
-  return newGuestId;
+  return id;
 };
 
-// ==================================================
+// ============================================================
 // COMPONENT
-// ==================================================
+// ============================================================
 
 const CartApp = ({ onClose }: CartProps) => {
   const navigate = useNavigate();
 
-  // --------------------------------------------------
-  // CURRENT CHECKOUT STEP
-  // --------------------------------------------------
-
   const [currentStep, setCurrentStep] = useState<CartStep>("bag");
-
-  // --------------------------------------------------
-  // GUEST CART ID
-  // --------------------------------------------------
 
   const [guestCartId, setGuestCartId] = useState<string | null>(null);
 
-  // --------------------------------------------------
-  // CUSTOMER
-  // --------------------------------------------------
+  const [hasProcessedCustomer, setHasProcessedCustomer] = useState(false);
 
-  const [customer, setCustomer] = useState<WebsiteUser | null>(null);
-
-  // --------------------------------------------------
-  // SELECTED ADDRESS
-  // --------------------------------------------------
+  const [isCartMerged, setIsCartMerged] = useState(false);
 
   const [selectedAddress, setSelectedAddress] =
     useState<DeliveryAddress | null>(null);
 
-  // --------------------------------------------------
+  // ==========================================================
   // INITIALIZE GUEST CART
-  // --------------------------------------------------
+  // ==========================================================
 
   useEffect(() => {
-    const id = getGuestCartId();
-
-    setGuestCartId(id);
+    setGuestCartId(getGuestCartId());
   }, []);
 
-  // --------------------------------------------------
+  // ==========================================================
   // CURRENT USER
-  // --------------------------------------------------
+  // ==========================================================
 
   const {
     data: currentUserResponse,
@@ -113,41 +107,76 @@ const CartApp = ({ onClose }: CartProps) => {
     refetch: refetchCurrentUser,
   } = useGetCurrentUserQuery();
 
-  // --------------------------------------------------
-  // SET CUSTOMER
-  // --------------------------------------------------
+  const customer: WebsiteUser | null = currentUserResponse?.user ?? null;
+
+  // ==========================================================
+  // MERGE
+  // ==========================================================
+
+  const [mergeGuestCart, { isLoading: isMergingCart }] =
+    useMergeGuestCartMutation();
 
   useEffect(() => {
-    if (currentUserResponse?.user) {
-      setCustomer(currentUserResponse.user);
+    if (!customer?.id) {
+      setHasProcessedCustomer(false);
+
+      setIsCartMerged(false);
+
       return;
     }
 
-    setCustomer(null);
-  }, [currentUserResponse]);
+    if (!guestCartId) {
+      setIsCartMerged(true);
+      setHasProcessedCustomer(true);
 
-  // --------------------------------------------------
+      return;
+    }
+
+    let cancelled = false;
+
+    const merge = async () => {
+      try {
+        await mergeGuestCart({
+          guestCartId,
+          customerId: String(customer.id),
+        }).unwrap();
+
+        localStorage.removeItem(GUEST_CART_KEY);
+
+        if (cancelled) {
+          return;
+        }
+
+        setGuestCartId(null);
+        setIsCartMerged(true);
+        setHasProcessedCustomer(true);
+      } catch (error) {
+        console.error("Unable to merge guest cart:", error);
+
+        if (!cancelled) {
+          setIsCartMerged(false);
+          setHasProcessedCustomer(false);
+        }
+      }
+    };
+
+    merge();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [customer?.id, guestCartId, mergeGuestCart]);
+
+  // ==========================================================
   // CART IDENTITY
-  // --------------------------------------------------
-
-  /**
-   * Logged-in customer:
-   *
-   * {
-   *   customerId: customer.id
-   * }
-   *
-   * Guest:
-   *
-   * {
-   *   guestCartId
-   * }
-   *
-   * Never send both identities at the same time.
-   */
+  // ==========================================================
 
   const cartIdentity = useMemo<CartIdentity | undefined>(() => {
     if (customer?.id) {
+      if (!hasProcessedCustomer || !isCartMerged) {
+        return undefined;
+      }
+
       return {
         customerId: String(customer.id),
       };
@@ -160,11 +189,11 @@ const CartApp = ({ onClose }: CartProps) => {
     }
 
     return undefined;
-  }, [customer?.id, guestCartId]);
+  }, [customer?.id, guestCartId, hasProcessedCustomer, isCartMerged]);
 
-  // --------------------------------------------------
-  // GET CART
-  // --------------------------------------------------
+  // ==========================================================
+  // CART
+  // ==========================================================
 
   const {
     data: cart,
@@ -172,30 +201,53 @@ const CartApp = ({ onClose }: CartProps) => {
     isFetching: isCartFetching,
     isError: isCartError,
     refetch: refetchCart,
-  } = useGetWebsiteCartQuery(cartIdentity, {
+  } = useGetWebsiteCartQuery(cartIdentity as CartIdentity, {
     skip: !cartIdentity,
   });
 
-  // --------------------------------------------------
-  // CART STATE
-  // --------------------------------------------------
-
   const hasItems = Boolean(cart?.items?.length);
 
-  // --------------------------------------------------
-  // STEP NAVIGATION
-  // --------------------------------------------------
+  // ==========================================================
+  // MUTATIONS
+  // ==========================================================
+
+  const [createWebsiteOrder, { isLoading: isCreatingOrder }] =
+    useCreateWebsiteOrderMutation();
+
+  const [verifyWebsitePayment, { isLoading: isVerifyingPayment }] =
+    useVerifyWebsitePaymentMutation();
+
+  // ==========================================================
+  // CUSTOMER CHANGE
+  // ==========================================================
+
+  useEffect(() => {
+    setSelectedAddress(null);
+    setCurrentStep("bag");
+  }, [customer?.id]);
+
+  // ==========================================================
+  // STEP CHANGE
+  // ==========================================================
 
   const handleStepChange = (step: CartStep) => {
     if (!hasItems) {
       return;
     }
 
-    /**
-     * Payment should only be reachable after
-     * selecting an address.
-     */
-    if (step === "payment" && !selectedAddress) {
+    if (step === "payment") {
+      if (!customer) {
+        setCurrentStep("address");
+        return;
+      }
+
+      if (!selectedAddress) {
+        setCurrentStep("address");
+        return;
+      }
+    }
+
+    if (step === "address" && !customer) {
       setCurrentStep("address");
       return;
     }
@@ -203,9 +255,9 @@ const CartApp = ({ onClose }: CartProps) => {
     setCurrentStep(step);
   };
 
-  // --------------------------------------------------
-  // BAG -> ADDRESS
-  // --------------------------------------------------
+  // ==========================================================
+  // BAG
+  // ==========================================================
 
   const handleBagContinue = () => {
     if (!hasItems) {
@@ -215,63 +267,103 @@ const CartApp = ({ onClose }: CartProps) => {
     setCurrentStep("address");
   };
 
-  // --------------------------------------------------
-  // ADDRESS -> PAYMENT
-  // --------------------------------------------------
+  // ==========================================================
+  // ADDRESS
+  // ==========================================================
 
   const handleAddressContinue = () => {
-    if (!hasItems || !selectedAddress || !customer) {
+    if (!hasItems || !customer || !selectedAddress) {
       return;
     }
 
     setCurrentStep("payment");
   };
 
-  // --------------------------------------------------
-  // LOGIN SUCCESS
-  // --------------------------------------------------
+  // ==========================================================
+  // LOGIN
+  // ==========================================================
 
   const handleLogin = async () => {
-    /**
-     * Login stores the website authentication token.
-     *
-     * Refetch the current-user endpoint so:
-     *
-     * customer
-     *   ↓
-     * cartIdentity
-     *   ↓
-     * customer cart
-     *
-     * gets updated automatically.
-     */
     try {
       await refetchCurrentUser();
     } catch {
-      // The current-user query will expose its own error state.
+      // Query owns error state.
     }
-
-    /**
-     * Cart identity will automatically change once
-     * customer state is updated.
-     *
-     * Explicit refetch is still useful when the cart
-     * endpoint is already cached.
-     */
-    await refetchCart();
   };
 
-  // --------------------------------------------------
-  // PAYMENT SUCCESS
-  // --------------------------------------------------
+  // ==========================================================
+  // CREATE ORDER
+  // ==========================================================
 
-  const handleOrderSuccess = (orderId: string) => {
+  const handleCreateOrder = async (
+    payload: CreateOrderPayload,
+  ): Promise<CreateOrderResponse> => {
+    if (!customer?.id) {
+      throw new Error("Customer information is missing.");
+    }
+
+    if (!selectedAddress) {
+      throw new Error("Please select a delivery address.");
+    }
+
+    if (!cart?.items?.length) {
+      throw new Error("Your cart is empty.");
+    }
+
+    const orderPayload = {
+      ...payload,
+
+      customerId: String(customer.id),
+      customerName: customer.name || payload.customerName || "",
+      deliveryAddress: selectedAddress,
+    };
+
+    const response = await createWebsiteOrder(orderPayload).unwrap();
+
+    if (!response?.order?._id) {
+      throw new Error(
+        "Order was created but the backend did not return an order ID.",
+      );
+    }
+
+    return response;
+  };
+
+  // ==========================================================
+  // VERIFY PAYMENT
+  // ==========================================================
+
+  const handleVerifyPayment = async (
+    payload: VerifyPaymentPayload,
+  ): Promise<VerifyPaymentResponse> => {
+    const response = await verifyWebsitePayment(payload).unwrap();
+
+    if (!response.success) {
+      throw new Error(response.message || "Payment verification failed.");
+    }
+
+    return response;
+  };
+
+  // ==========================================================
+  // SUCCESS
+  // ==========================================================
+
+  const handleOrderSuccess = async (orderId: string) => {
+    // Refresh the cart so stale cart
+    // data is not left in RTK cache.
+    try {
+      await refetchCart();
+    } catch {
+      // Navigation should still continue.
+    }
+
     navigate(`/order-success?orderId=${encodeURIComponent(orderId)}`);
   };
 
-  // --------------------------------------------------
-  // CLOSE CART
-  // --------------------------------------------------
+  // ==========================================================
+  // CLOSE
+  // ==========================================================
 
   const handleClose = () => {
     if (onClose) {
@@ -282,11 +374,11 @@ const CartApp = ({ onClose }: CartProps) => {
     navigate("/");
   };
 
-  // --------------------------------------------------
+  // ==========================================================
   // LOADING
-  // --------------------------------------------------
+  // ==========================================================
 
-  if (isUserLoading || isCartLoading || !cartIdentity) {
+  if (isUserLoading || isCartLoading || isMergingCart || !cartIdentity) {
     return (
       <section className="cart-app">
         <div className="container">
@@ -304,9 +396,9 @@ const CartApp = ({ onClose }: CartProps) => {
     );
   }
 
-  // --------------------------------------------------
+  // ==========================================================
   // ERROR
-  // --------------------------------------------------
+  // ==========================================================
 
   if (isCartError) {
     return (
@@ -319,9 +411,7 @@ const CartApp = ({ onClose }: CartProps) => {
 
             <h5>Unable to load your bag</h5>
 
-            <p>
-              Something went wrong while loading your cart. Please try again.
-            </p>
+            <p>Something went wrong while loading your cart.</p>
 
             <button
               type="button"
@@ -337,9 +427,9 @@ const CartApp = ({ onClose }: CartProps) => {
     );
   }
 
-  // --------------------------------------------------
-  // EMPTY CART
-  // --------------------------------------------------
+  // ==========================================================
+  // EMPTY
+  // ==========================================================
 
   if (!cart || !hasItems) {
     return (
@@ -351,17 +441,13 @@ const CartApp = ({ onClose }: CartProps) => {
     );
   }
 
-  // --------------------------------------------------
-  // MAIN CART
-  // --------------------------------------------------
+  // ==========================================================
+  // MAIN
+  // ==========================================================
 
   return (
     <section className="cart-app">
       <div className="container">
-        {/* ==========================================
-            HEADER
-        ========================================== */}
-
         <div className="cart-app-header">
           <div>
             <h1 className="cart-app-title">Your Bag</h1>
@@ -381,15 +467,7 @@ const CartApp = ({ onClose }: CartProps) => {
           </button>
         </div>
 
-        {/* ==========================================
-            STEPS
-        ========================================== */}
-
         <CartSteps currentStep={currentStep} onStepChange={handleStepChange} />
-
-        {/* ==========================================
-            BAG
-        ========================================== */}
 
         {currentStep === "bag" && (
           <div className="cart-app-content">
@@ -407,10 +485,6 @@ const CartApp = ({ onClose }: CartProps) => {
             </aside>
           </div>
         )}
-
-        {/* ==========================================
-            ADDRESS
-        ========================================== */}
 
         {currentStep === "address" && (
           <div className="cart-app-content">
@@ -434,10 +508,6 @@ const CartApp = ({ onClose }: CartProps) => {
           </div>
         )}
 
-        {/* ==========================================
-            PAYMENT
-        ========================================== */}
-
         {currentStep === "payment" && (
           <div className="cart-app-content">
             <div className="cart-app-main">
@@ -448,6 +518,9 @@ const CartApp = ({ onClose }: CartProps) => {
                   selectedAddress={selectedAddress}
                   onBack={() => setCurrentStep("address")}
                   onOrderSuccess={handleOrderSuccess}
+                  createOrder={handleCreateOrder}
+                  verifyPayment={handleVerifyPayment}
+                  isProcessing={isCreatingOrder || isVerifyingPayment}
                 />
               )}
             </div>
@@ -457,10 +530,6 @@ const CartApp = ({ onClose }: CartProps) => {
             </aside>
           </div>
         )}
-
-        {/* ==========================================
-            FOOTER
-        ========================================== */}
 
         <div className="cart-app-footer">
           <div className="cart-app-footer-security">

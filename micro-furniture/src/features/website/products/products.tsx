@@ -179,7 +179,7 @@ const Products = () => {
     isLoading: isCartLoading,
     isFetching: isCartFetching,
     refetch: refetchCart,
-  } = useGetWebsiteCartQuery(cartIdentity, {
+  } = useGetWebsiteCartQuery(cartIdentity as CartIdentity, {
     skip: !cartIdentity || isUserLoading,
   });
 

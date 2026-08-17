@@ -1,3 +1,5 @@
+@use "sass:color";
+
 // ==================================================
 // CART ITEMS COLORS
 // ==================================================
@@ -25,16 +27,11 @@ $color-error-background: #fce8e6;
 
 .cart-items {
   width: 100%;
-
   background: $color-background;
-
   border: 1px solid $color-border;
   border-radius: 4px;
-
   overflow: hidden;
-
   color: $color-text;
-
   transition:
     opacity 0.2s ease,
     box-shadow 0.2s ease;
@@ -56,36 +53,26 @@ $color-error-background: #fce8e6;
 
   .cart-items-header {
     min-height: 72px;
-
     padding: 16px 20px;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     gap: 15px;
-
     background: $color-background;
-
     border-bottom: 1px solid $color-border-light;
   }
 
   .cart-items-title {
     margin: 0 0 4px;
-
     color: $color-dark;
-
     font-size: 16px;
     font-weight: 600;
-
     line-height: 1.4;
   }
 
   .cart-items-subtitle {
     margin: 0;
-
     color: $color-muted;
-
     font-size: 12px;
     line-height: 1.5;
   }
@@ -97,22 +84,16 @@ $color-error-background: #fce8e6;
   .cart-items-refreshing {
     display: inline-flex;
     align-items: center;
-
     gap: 7px;
-
     color: $color-muted;
-
     font-size: 11px;
     font-weight: 500;
-
     white-space: nowrap;
 
     .spinner-border {
       width: 14px;
       height: 14px;
-
       color: $color-primary;
-
       border-width: 2px;
     }
   }
@@ -123,29 +104,20 @@ $color-error-background: #fce8e6;
 
   .cart-items-error {
     margin: 12px 20px 0;
-
     min-height: 42px;
-
     padding: 10px 12px;
-
     display: flex;
     align-items: center;
-
     gap: 9px;
-
     color: $color-danger;
-
     background: $color-error-background;
-
     border: 1px solid rgba($color-danger, 0.12);
     border-radius: 3px;
-
     font-size: 12px;
     line-height: 1.4;
 
     i {
       flex: 0 0 auto;
-
       font-size: 15px;
     }
 
@@ -158,25 +130,16 @@ $color-error-background: #fce8e6;
   .cart-items-error-close {
     width: 24px;
     height: 24px;
-
     padding: 0;
-
     flex: 0 0 auto;
-
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
     color: $color-danger;
-
     background: transparent;
-
     border: 0;
-
     border-radius: 3px;
-
     cursor: pointer;
-
     transition:
       color 0.2s ease,
       background-color 0.2s ease;
@@ -187,8 +150,7 @@ $color-error-background: #fce8e6;
     }
 
     &:hover {
-      color: darken($color-danger, 8%);
-
+      color: color.adjust($color-danger, $lightness: -8%);
       background: rgba($color-danger, 0.08);
     }
 
@@ -204,9 +166,7 @@ $color-error-background: #fce8e6;
 
   .cart-items-list {
     width: 100%;
-
     background: $color-background;
-
     transition: opacity 0.2s ease;
   }
 
@@ -239,7 +199,6 @@ $color-error-background: #fce8e6;
   @media (max-width: 767.98px) {
     .cart-items-header {
       min-height: 64px;
-
       padding: 14px 16px;
     }
 
@@ -266,7 +225,6 @@ $color-error-background: #fce8e6;
 
     .cart-items-header {
       padding: 13px 14px;
-
       gap: 10px;
     }
 
@@ -280,7 +238,6 @@ $color-error-background: #fce8e6;
 
     .cart-items-refreshing {
       font-size: 10px;
-
       gap: 5px;
 
       .spinner-border {
@@ -291,9 +248,7 @@ $color-error-background: #fce8e6;
 
     .cart-items-error {
       margin: 10px 14px 0;
-
       padding: 9px 10px;
-
       font-size: 11px;
     }
 

@@ -94,6 +94,7 @@
       "auth": {
         "refresh": "/api/website/auth/refresh",
         "me": "/api/website/auth/me",
+        "addresses": "/api/website/auth/me/addresses",
         "logout": "/api/website/auth/logout",
         "sendOtp": "/api/website/auth/otp/send",
         "resendOtp": "/api/website/auth/otp/resend",
@@ -105,7 +106,7 @@
         "detail": "/api/store/products/{id}"
       },
       "order": {
-        "create": "/api/store/orders/create",
+        "create": "/api/store/orders/checkout",
         "verifyPayment": "/api/store/orders/verify-payment"
       },
       "cart": {

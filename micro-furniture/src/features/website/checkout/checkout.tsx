@@ -14,16 +14,16 @@ export interface Customer {
 }
 
 export interface DeliveryAddress {
-  id: string;
+  id?: string;
   name: string;
   mobile: string;
   addressLine1: string;
-  addressLine2?: string;
-  landmark?: string;
+  addressLine2?: string | null;
+  landmark?: string | null;
   city: string;
   state: string;
   pincode: string;
-  addressType: "home" | "office" | "other";
+  addressType: string;
   isDefault?: boolean;
 }
 

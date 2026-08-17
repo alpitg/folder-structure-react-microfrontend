@@ -1,7 +1,26 @@
 import "./address-selection.scss";
 
-import type { Customer, DeliveryAddress } from "../checkout";
 import { useEffect, useState } from "react";
+
+import type { Customer, DeliveryAddress } from "../checkout";
+
+import {
+  useCreateWebsiteAddressMutation,
+  useGetWebsiteAddressesQuery,
+  type WebsiteAddress,
+} from "../../../../app/redux/website/address/website-address.api";
+
+interface AddressForm {
+  name: string;
+  mobile: string;
+  addressLine1: string;
+  addressLine2: string;
+  landmark: string;
+  city: string;
+  state: string;
+  pincode: string;
+  addressType: string; //"home" | "office" | "other";
+}
 
 interface AddressSelectionAppProps {
   customer: Customer | null;
@@ -10,9 +29,7 @@ interface AddressSelectionAppProps {
   onClose?: () => void;
 }
 
-const ADDRESS_KEY = "website_customer_addresses";
-
-const emptyForm: Omit<DeliveryAddress, "id"> = {
+const emptyForm: AddressForm = {
   name: "",
   mobile: "",
   addressLine1: "",
@@ -22,7 +39,25 @@ const emptyForm: Omit<DeliveryAddress, "id"> = {
   state: "",
   pincode: "",
   addressType: "home",
-  isDefault: false,
+};
+
+const mapWebsiteAddressToDeliveryAddress = (
+  address: WebsiteAddress,
+): DeliveryAddress => {
+  return {
+    id: String(address.id),
+    name: address.name,
+    mobile: address.mobile,
+    addressLine1: address.addressLine1,
+    addressLine2: address.addressLine2 ?? "",
+    landmark: address.landmark ?? "",
+    city: address.city,
+    state: address.state,
+    pincode: address.pincode,
+    addressType:
+      address.addressType === "work" ? "office" : address.addressType,
+    isDefault: address.isDefault,
+  };
 };
 
 const AddressSelectionApp = ({
@@ -31,42 +66,42 @@ const AddressSelectionApp = ({
   onAddressSelected,
   onClose,
 }: AddressSelectionAppProps) => {
-  const [addresses, setAddresses] = useState<DeliveryAddress[]>([]);
   const [isAddingAddress, setIsAddingAddress] = useState(false);
-
-  const [form, setForm] = useState<Omit<DeliveryAddress, "id">>(emptyForm);
-
+  const [form, setForm] = useState<AddressForm>(emptyForm);
   const [error, setError] = useState("");
 
+  const {
+    data: addressesResponse,
+    isLoading: isAddressesLoading,
+    isFetching: isAddressesFetching,
+    isError: isAddressesError,
+    refetch: refetchAddresses,
+  } = useGetWebsiteAddressesQuery(undefined, {
+    skip: !customer?.id,
+  });
+
+  const [createAddress, { isLoading: isCreatingAddress }] =
+    useCreateWebsiteAddressMutation();
+
+  const addresses: DeliveryAddress[] = (addressesResponse?.addresses ?? []).map(
+    mapWebsiteAddressToDeliveryAddress,
+  );
+
   useEffect(() => {
-    const stored = localStorage.getItem(ADDRESS_KEY);
-
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-
-        if (Array.isArray(parsed)) {
-          setAddresses(parsed);
-        }
-      } catch {
-        setAddresses([]);
-      }
+    if (!customer) {
+      return;
     }
-  }, []);
 
-  useEffect(() => {
-    if (customer?.mobile && !form.mobile) {
-      setForm((current) => ({
-        ...current,
-        mobile: customer.mobile,
-        name: customer.name || "",
-      }));
-    }
+    setForm((current) => ({
+      ...current,
+      name: current.name || customer.name || "",
+      mobile: current.mobile || customer.mobile || "",
+    }));
   }, [customer]);
 
-  const handleFormChange = (
-    field: keyof Omit<DeliveryAddress, "id">,
-    value: string | boolean,
+  const handleFormChange = <K extends keyof AddressForm>(
+    field: K,
+    value: AddressForm[K],
   ) => {
     setForm((current) => ({
       ...current,
@@ -80,67 +115,116 @@ const AddressSelectionApp = ({
     onAddressSelected(address);
   };
 
-  const handleSaveAddress = () => {
+  const validateForm = (): boolean => {
     if (!form.name.trim()) {
       setError("Please enter your full name.");
-      return;
+      return false;
     }
 
     if (!/^\d{10}$/.test(form.mobile)) {
       setError("Please enter a valid 10-digit mobile number.");
-      return;
+      return false;
     }
 
     if (!form.addressLine1.trim()) {
       setError("Please enter your address.");
-      return;
+      return false;
     }
 
     if (!form.city.trim()) {
       setError("Please enter your city.");
-      return;
+      return false;
     }
 
     if (!form.state.trim()) {
       setError("Please enter your state.");
-      return;
+      return false;
     }
 
     if (!/^\d{6}$/.test(form.pincode)) {
       setError("Please enter a valid 6-digit pincode.");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSaveAddress = async () => {
+    if (isCreatingAddress) {
       return;
     }
 
-    const newAddress: DeliveryAddress = {
-      id: crypto.randomUUID(),
-      ...form,
-      isDefault: addresses.length === 0,
-    };
+    if (!customer?.id) {
+      setError("Please login to save a delivery address.");
+      return;
+    }
 
-    const nextAddresses = [
-      ...addresses.map((address) => ({
-        ...address,
-        isDefault:
-          newAddress.isDefault && address.isDefault ? false : address.isDefault,
-      })),
-      newAddress,
-    ];
+    if (!validateForm()) {
+      return;
+    }
 
-    localStorage.setItem(ADDRESS_KEY, JSON.stringify(nextAddresses));
+    try {
+      setError("");
 
-    setAddresses(nextAddresses);
+      const response = await createAddress({
+        name: form.name.trim(),
+        mobile: form.mobile,
+        addressLine1: form.addressLine1.trim(),
+        addressLine2: form.addressLine2.trim() || undefined,
+        landmark: form.landmark.trim() || undefined,
+        city: form.city.trim(),
+        state: form.state.trim(),
+        pincode: form.pincode,
+        addressType: form.addressType === "office" ? "work" : form.addressType,
+        isDefault: addresses.length === 0,
+      }).unwrap();
 
-    setForm({
-      ...emptyForm,
-      mobile: customer?.mobile || "",
-      name: customer?.name || "",
-    });
+      const newAddress = mapWebsiteAddressToDeliveryAddress(response.address);
 
-    setIsAddingAddress(false);
-    setError("");
+      onAddressSelected(newAddress);
 
-    onAddressSelected(newAddress);
+      setForm({
+        ...emptyForm,
+        mobile: customer.mobile || "",
+        name: customer.name || "",
+      });
+
+      setIsAddingAddress(false);
+      setError("");
+
+      await refetchAddresses();
+    } catch (error: unknown) {
+      console.error("Unable to save address:", error);
+
+      if (typeof error === "object" && error !== null && "data" in error) {
+        const apiError = error as {
+          data?: {
+            detail?: string;
+            message?: string;
+          };
+        };
+
+        setError(
+          apiError.data?.detail ||
+            apiError.data?.message ||
+            "Unable to save address. Please try again.",
+        );
+
+        return;
+      }
+
+      if (error instanceof Error) {
+        setError(error.message);
+        return;
+      }
+
+      setError("Unable to save address. Please try again.");
+    }
   };
+
+  const addressLoadError = isAddressesError
+    ? "Unable to load your saved addresses."
+    : "";
 
   return (
     <div
@@ -181,7 +265,39 @@ const AddressSelectionApp = ({
       {!isAddingAddress ? (
         <>
           <div className="address-selection-body">
-            {addresses.length === 0 ? (
+            {isAddressesLoading || isAddressesFetching ? (
+              <div className="address-empty-state">
+                <div className="address-empty-icon">
+                  <span
+                    className="spinner-border spinner-border-sm"
+                    aria-hidden="true"
+                  />
+                </div>
+
+                <h6>Loading saved addresses</h6>
+
+                <p>Please wait while we load your addresses.</p>
+              </div>
+            ) : addressLoadError ? (
+              <div className="address-empty-state">
+                <div className="address-empty-icon">
+                  <i className="bi bi-exclamation-circle" />
+                </div>
+
+                <h6>Unable to load addresses</h6>
+
+                <p>{addressLoadError}</p>
+
+                <button
+                  type="button"
+                  className="address-add-btn"
+                  onClick={() => refetchAddresses()}
+                >
+                  <i className="bi bi-arrow-clockwise" />
+                  Try Again
+                </button>
+              </div>
+            ) : addresses.length === 0 ? (
               <div className="address-empty-state">
                 <div className="address-empty-icon">
                   <i className="bi bi-geo-alt" />
@@ -318,6 +434,7 @@ const AddressSelectionApp = ({
                   setIsAddingAddress(false);
                   setError("");
                 }}
+                disabled={isCreatingAddress}
               >
                 <i className="bi bi-arrow-left" />
               </button>
@@ -339,6 +456,7 @@ const AddressSelectionApp = ({
                     type="text"
                     value={form.name}
                     placeholder="Enter full name"
+                    disabled={isCreatingAddress}
                     onChange={(event) =>
                       handleFormChange("name", event.target.value)
                     }
@@ -355,6 +473,7 @@ const AddressSelectionApp = ({
                     maxLength={10}
                     value={form.mobile}
                     placeholder="10-digit mobile number"
+                    disabled={isCreatingAddress}
                     onChange={(event) =>
                       handleFormChange(
                         "mobile",
@@ -373,6 +492,7 @@ const AddressSelectionApp = ({
                   type="text"
                   value={form.addressLine1}
                   placeholder="House No., Building, Street"
+                  disabled={isCreatingAddress}
                   onChange={(event) =>
                     handleFormChange("addressLine1", event.target.value)
                   }
@@ -387,6 +507,7 @@ const AddressSelectionApp = ({
                   type="text"
                   value={form.addressLine2}
                   placeholder="Area, locality"
+                  disabled={isCreatingAddress}
                   onChange={(event) =>
                     handleFormChange("addressLine2", event.target.value)
                   }
@@ -401,6 +522,7 @@ const AddressSelectionApp = ({
                   type="text"
                   value={form.landmark}
                   placeholder="Nearby landmark (optional)"
+                  disabled={isCreatingAddress}
                   onChange={(event) =>
                     handleFormChange("landmark", event.target.value)
                   }
@@ -416,6 +538,7 @@ const AddressSelectionApp = ({
                     type="text"
                     value={form.city}
                     placeholder="City"
+                    disabled={isCreatingAddress}
                     onChange={(event) =>
                       handleFormChange("city", event.target.value)
                     }
@@ -430,6 +553,7 @@ const AddressSelectionApp = ({
                     type="text"
                     value={form.state}
                     placeholder="State"
+                    disabled={isCreatingAddress}
                     onChange={(event) =>
                       handleFormChange("state", event.target.value)
                     }
@@ -448,6 +572,7 @@ const AddressSelectionApp = ({
                     maxLength={6}
                     value={form.pincode}
                     placeholder="6-digit pincode"
+                    disabled={isCreatingAddress}
                     onChange={(event) =>
                       handleFormChange(
                         "pincode",
@@ -471,6 +596,7 @@ const AddressSelectionApp = ({
                             : "address-type-option"
                         }
                         onClick={() => handleFormChange("addressType", type)}
+                        disabled={isCreatingAddress}
                       >
                         {type.charAt(0).toUpperCase() + type.slice(1)}
                       </button>
@@ -494,8 +620,19 @@ const AddressSelectionApp = ({
               type="button"
               className="address-save-btn"
               onClick={handleSaveAddress}
+              disabled={isCreatingAddress}
             >
-              Save Address
+              {isCreatingAddress ? (
+                <>
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  />
+                  Saving Address...
+                </>
+              ) : (
+                "Save Address"
+              )}
             </button>
           </div>
         </>
