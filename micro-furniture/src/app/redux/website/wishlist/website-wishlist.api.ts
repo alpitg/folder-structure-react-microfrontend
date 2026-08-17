@@ -1,4 +1,5 @@
 import { GetEnvConfig } from "../../../../app.config";
+import type { IProductData } from "../../../../features/store/catalog/interface/product/product.model";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { websiteBaseQuery } from "../base.api";
 
@@ -22,6 +23,7 @@ export interface WebsiteWishlistItem {
   productId: string;
   customerId?: string;
   guestCartId?: string;
+  product?: IProductData;
   createdAt?: string;
   updatedAt?: string;
 }
