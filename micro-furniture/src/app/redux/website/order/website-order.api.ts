@@ -45,7 +45,8 @@ export interface CreateWebsiteOrderRequest {
 // ============================================================
 
 export interface WebsiteOrder {
-  id: string;
+  _id: string;
+  id?: string;
   orderCode?: string;
   customerId?: string | null;
   customerName?: string;
