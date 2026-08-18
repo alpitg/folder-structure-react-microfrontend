@@ -85,6 +85,7 @@ let environment = {
       order: {
         create: "",
         verifyPayment: "",
+        list: "",
       },
       cart: {
         get: "",

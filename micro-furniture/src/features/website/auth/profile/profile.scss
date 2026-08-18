@@ -28,7 +28,7 @@ $color-info: #1d9bf0;
   width: 100%;
   min-height: 100vh;
 
-  background: $color-background-light;
+  background: $color-background;
 
   color: $color-dark;
 
@@ -1468,66 +1468,98 @@ $color-info: #1d9bf0;
   width: 100%;
 
   // ==========================================================
-  // ORDERS LIST
+  // HEADER FETCHING
   // ==========================================================
 
-  .profile-orders-list {
-    display: flex;
+  .profile-orders-fetching {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: $color-muted;
+    font-size: 12px;
 
-    flex-direction: column;
-
-    gap: 12px;
+    i {
+      font-size: 13px;
+    }
   }
 
   // ==========================================================
-  // ORDER EMPTY STATE
+  // LOADER
+  // ==========================================================
+
+  .profile-orders-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 360px;
+    padding: 40px;
+    border: 1px solid $color-border;
+    border-radius: 4px;
+    background: $color-background;
+    color: $color-muted;
+    text-align: center;
+
+    p {
+      margin: 12px 0 0;
+      font-size: 13px;
+    }
+  }
+
+  .profile-orders-loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(255, 63, 108, 0.08);
+    color: $color-primary;
+
+    i {
+      font-size: 22px;
+      animation: profile-orders-spin 1s linear infinite;
+    }
+  }
+
+  .profile-orders-spin {
+    display: inline-block;
+    animation: profile-orders-spin 1s linear infinite;
+  }
+
+  // ==========================================================
+  // EMPTY STATE
   // ==========================================================
 
   .profile-empty-state {
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
     justify-content: center;
-
     min-height: 360px;
-
     padding: 40px;
-
     border: 1px solid $color-border;
-
     border-radius: 4px;
-
     background: $color-background;
-
     text-align: center;
-
-    .profile-primary-btn {
-      margin-top: 20px;
-    }
 
     h3 {
       margin: 18px 0 7px;
-
       color: $color-dark;
-
       font-size: 17px;
-
       font-weight: 700;
     }
 
     p {
       max-width: 360px;
-
       margin: 0;
-
       color: $color-muted;
-
       font-size: 13px;
-
       line-height: 1.5;
+    }
+
+    .profile-primary-btn {
+      margin-top: 20px;
     }
   }
 
@@ -1537,22 +1569,535 @@ $color-info: #1d9bf0;
 
   .profile-empty-icon {
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     width: 64px;
-
     height: 64px;
-
     border-radius: 50%;
-
-    background: #fff0f4;
-
+    background: rgba(255, 63, 108, 0.08);
     color: $color-primary;
-
     font-size: 25px;
+  }
+
+  // ==========================================================
+  // ORDER LIST
+  // ==========================================================
+
+  .profile-orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  // ==========================================================
+  // ORDER CARD
+  // ==========================================================
+
+  .profile-order-card {
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid $color-border;
+    border-radius: 4px;
+    background: $color-background;
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+
+    &:hover {
+      border-color: rgba(0, 0, 0, 0.14);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+    }
+  }
+
+  // ==========================================================
+  // ORDER HEADER
+  // ==========================================================
+
+  .profile-order-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 16px 18px;
+    border-bottom: 1px solid $color-border;
+  }
+
+  .profile-order-header-left {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    min-width: 0;
+
+    > div {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    span {
+      color: $color-muted;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    strong {
+      overflow: hidden;
+      color: $color-dark;
+      font-size: 12px;
+      font-weight: 700;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  // ==========================================================
+  // STATUS
+  // ==========================================================
+
+  .profile-order-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    flex-shrink: 0;
+    padding: 6px 10px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+
+    > span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    &.active {
+      background: rgba(245, 158, 11, 0.08);
+      color: #b77900;
+    }
+
+    &.shipped {
+      background: rgba(37, 99, 235, 0.08);
+      color: $color-info;
+    }
+
+    &.delivered {
+      background: rgba(22, 163, 74, 0.08);
+      color: $color-success;
+    }
+
+    &.cancelled {
+      background: rgba(220, 38, 38, 0.08);
+      color: $color-danger;
+    }
+  }
+
+  // ==========================================================
+  // ORDER ITEMS
+  // ==========================================================
+
+  .profile-order-items {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .profile-order-item {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 16px;
+    padding: 18px;
+    border-bottom: 1px solid $color-border;
+
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+
+  // ==========================================================
+  // PRODUCT IMAGE
+  // ==========================================================
+
+  .profile-order-item-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 84px;
+    overflow: hidden;
+    border: 1px solid $color-border;
+    border-radius: 3px;
+    background: $color-background-light;
+    color: $color-muted;
+
+    i {
+      font-size: 23px;
+    }
+  }
+
+  // ==========================================================
+  // PRODUCT CONTENT
+  // ==========================================================
+
+  .profile-order-item-content {
+    min-width: 0;
+
+    h3 {
+      overflow: hidden;
+      margin: 0;
+      color: $color-dark;
+      font-size: 13px;
+      font-weight: 600;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    p {
+      overflow: hidden;
+      margin: 5px 0 0;
+      color: $color-muted;
+      font-size: 11px;
+      line-height: 1.45;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  // ==========================================================
+  // ITEM META
+  // ==========================================================
+
+  .profile-order-item-meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 9px;
+
+    span {
+      color: $color-muted;
+      font-size: 11px;
+    }
+  }
+
+  // ==========================================================
+  // ITEM TOTAL
+  // ==========================================================
+
+  .profile-order-item-total {
+    min-width: 80px;
+    text-align: right;
+
+    strong {
+      color: $color-dark;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+  }
+
+  // ==========================================================
+  // ORDER FOOTER
+  // ==========================================================
+
+  .profile-order-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 24px;
+    padding: 14px 18px;
+    border-top: 1px solid $color-border;
+    background: $color-background;
+  }
+
+  // ==========================================================
+  // PAYMENT
+  // ==========================================================
+
+  .profile-order-payment {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-right: auto;
+
+    span {
+      color: $color-muted;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    strong {
+      color: $color-success;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+  }
+
+  // ==========================================================
+  // TOTAL
+  // ==========================================================
+
+  .profile-order-total {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-align: right;
+
+    span {
+      color: $color-muted;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    strong {
+      color: $color-dark;
+      font-size: 14px;
+      font-weight: 700;
+    }
+  }
+
+  // ==========================================================
+  // VIEW DETAILS
+  // ==========================================================
+
+  .profile-order-view-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 36px;
+    padding: 0 13px;
+    border: 1px solid $color-border;
+    border-radius: 3px;
+    background: $color-background;
+    color: $color-text;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    transition:
+      border-color 0.2s ease,
+      color 0.2s ease,
+      background 0.2s ease;
+
+    i {
+      font-size: 10px;
+      transition: transform 0.2s ease;
+    }
+
+    &:hover {
+      border-color: $color-primary;
+      color: $color-primary;
+      background: $color-background;
+
+      i {
+        transform: translateX(2px);
+      }
+    }
+
+    &:focus-visible {
+      outline: none;
+      border-color: $color-primary;
+      box-shadow: 0 0 0 3px rgba(255, 63, 108, 0.08);
+    }
+  }
+
+  // ==========================================================
+  // PAGINATION
+  // ==========================================================
+
+  .profile-orders-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    margin-top: 20px;
+
+    > span {
+      color: $color-muted;
+      font-size: 12px;
+
+      strong {
+        color: $color-dark;
+        font-weight: 700;
+      }
+    }
+
+    button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 34px;
+      padding: 0 12px;
+      border: 1px solid $color-border;
+      border-radius: 3px;
+      background: $color-background;
+      color: $color-text;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      transition:
+        border-color 0.2s ease,
+        color 0.2s ease,
+        background 0.2s ease;
+
+      &:hover:not(:disabled) {
+        border-color: $color-primary;
+        color: $color-primary;
+      }
+
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.45;
+      }
+
+      i {
+        font-size: 10px;
+      }
+    }
+  }
+
+  // ==========================================================
+  // TABLET
+  // ==========================================================
+
+  @media (max-width: 700px) {
+    .profile-order-header {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .profile-order-header-left {
+      width: 100%;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .profile-order-status {
+      align-self: flex-start;
+    }
+
+    .profile-order-footer {
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      gap: 14px;
+    }
+
+    .profile-order-payment {
+      width: 100%;
+      margin-right: 0;
+    }
+
+    .profile-order-total {
+      margin-right: auto;
+      text-align: left;
+    }
+  }
+
+  // ==========================================================
+  // MOBILE
+  // ==========================================================
+
+  @media (max-width: 480px) {
+    .profile-order-card {
+      border-radius: 3px;
+    }
+
+    .profile-order-header {
+      padding: 14px;
+    }
+
+    .profile-order-header-left {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .profile-order-item {
+      grid-template-columns: 58px minmax(0, 1fr);
+      gap: 12px;
+      padding: 14px;
+    }
+
+    .profile-order-item-image {
+      width: 58px;
+      height: 68px;
+
+      i {
+        font-size: 19px;
+      }
+    }
+
+    .profile-order-item-total {
+      display: none;
+    }
+
+    .profile-order-item-content {
+      h3 {
+        font-size: 12px;
+      }
+
+      p {
+        font-size: 10px;
+      }
+    }
+
+    .profile-order-footer {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 14px;
+    }
+
+    .profile-order-payment {
+      grid-column: span 2;
+    }
+
+    .profile-order-total {
+      margin: 0;
+    }
+
+    .profile-order-view-btn {
+      width: 100%;
+    }
+
+    .profile-orders-pagination {
+      gap: 10px;
+
+      > span {
+        font-size: 11px;
+      }
+
+      button {
+        span {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+// ============================================================
+// ANIMATION
+// ============================================================
+
+@keyframes profile-orders-spin {
+  from {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(360deg);
   }
 }
 

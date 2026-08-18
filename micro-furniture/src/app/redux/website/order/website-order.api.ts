@@ -15,11 +15,8 @@ export type PaymentMethod = "online";
 
 export interface WebsiteOrderItemPayload {
   productId: string;
-
   productType?: string;
-
   quantity: number;
-
   customizedDetails?: unknown;
 }
 
@@ -29,11 +26,8 @@ export interface WebsiteOrderItemPayload {
 
 export interface CreateWebsiteOrderRequest {
   customerId: string;
-
   customerName: string;
-
   deliveryAddress: WebsiteAddress;
-
   items: WebsiteOrderItemPayload[];
 
   miscCharges?: Array<{
@@ -42,9 +36,7 @@ export interface CreateWebsiteOrderRequest {
   }>;
 
   note?: string;
-
   discountAmount?: number;
-
   likelyDateOfDelivery?: string;
 }
 
@@ -53,19 +45,73 @@ export interface CreateWebsiteOrderRequest {
 // ============================================================
 
 export interface WebsiteOrder {
-  _id: string;
-
+  id: string;
   orderCode?: string;
-
   customerId?: string | null;
-
   customerName?: string;
-
   totalAmount?: number;
-
   orderStatus?: string;
-
+  paymentMethod?: string;
+  paymentStatus?: string;
+  shippingAmount?: number;
+  subtotal?: number;
+  totalDiscountAmount?: number;
+  totalTaxAmount?: number;
+  cancelledAmount?: number;
   invoiceId?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
+  likelyDateOfDelivery?: string | null;
+  note?: string | null;
+  items?: WebsiteOrderItem[];
+  deliveryAddress?: WebsiteOrderDeliveryAddress | null;
+}
+
+// ============================================================
+// ORDER ITEM RESPONSE
+// ============================================================
+
+export interface WebsiteOrderItem {
+  productId: string;
+  productType?: string;
+  name?: string;
+  description?: string | null;
+  quantity: number;
+  unitPrice?: number;
+  mrp?: number;
+  discountedQuantity?: number;
+  discountAmount?: number;
+  cancelledQty?: number;
+  taxSnapshot?: Array<{
+    className?: string;
+    rate?: number;
+    included?: boolean;
+    amount?: number;
+  }>;
+}
+
+// ============================================================
+// DELIVERY ADDRESS
+// ============================================================
+
+export interface WebsiteOrderDeliveryAddress {
+  name?: string;
+
+  mobile?: string;
+
+  addressType?: string;
+
+  addressLine1?: string;
+
+  addressLine2?: string | null;
+
+  landmark?: string | null;
+
+  city?: string;
+
+  state?: string;
+
+  pincode?: string;
 }
 
 // ============================================================
@@ -108,6 +154,28 @@ export interface CreateWebsiteOrderResponse {
   invoice?: WebsiteInvoice;
 
   payment?: WebsitePayment;
+}
+
+// ============================================================
+// GET ORDERS RESPONSE
+// ============================================================
+
+export interface WebsiteOrdersPagination {
+  page: number;
+
+  limit: number;
+
+  total: number;
+
+  pages: number;
+}
+
+export interface GetWebsiteOrdersResponse {
+  success: boolean;
+
+  orders: WebsiteOrder[];
+
+  pagination: WebsiteOrdersPagination;
 }
 
 // ============================================================
@@ -174,6 +242,55 @@ export const websiteOrderApi = createApi({
     }),
 
     // ========================================================
+    // GET MY ORDERS
+    // ========================================================
+
+    getWebsiteOrders: builder.query<
+      GetWebsiteOrdersResponse,
+      {
+        page?: number;
+
+        limit?: number;
+      }
+    >({
+      query: ({ page = 1, limit = 10 } = {}) => {
+        const config = GetEnvConfig();
+
+        return {
+          url: config?.api?.baseUrl + config?.api?.website?.order?.list,
+
+          method: "GET",
+
+          params: {
+            page,
+
+            limit,
+          },
+        };
+      },
+
+      providesTags: (result) =>
+        result
+          ? [
+              {
+                type: "WebsiteOrder",
+                id: "LIST",
+              },
+              ...result.orders.map((order) => ({
+                type: "WebsiteOrder" as const,
+
+                id: order.id,
+              })),
+            ]
+          : [
+              {
+                type: "WebsiteOrder",
+                id: "LIST",
+              },
+            ],
+    }),
+
+    // ========================================================
     // VERIFY PAYMENT
     // ========================================================
 
@@ -199,7 +316,12 @@ export const websiteOrderApi = createApi({
   }),
 });
 
+// ============================================================
+// HOOKS
+// ============================================================
+
 export const {
   useCreateWebsiteOrderMutation,
+  useGetWebsiteOrdersQuery,
   useVerifyWebsitePaymentMutation,
 } = websiteOrderApi;

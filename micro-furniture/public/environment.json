@@ -108,7 +108,8 @@
       },
       "order": {
         "create": "/api/store/orders/checkout",
-        "verifyPayment": "/api/store/orders/verify-payment"
+        "verifyPayment": "/api/store/orders/verify-payment",
+        "list": "/api/store/orders/search"
       },
       "cart": {
         "get": "/api/store/cart/create",
