@@ -7,7 +7,7 @@ const FooterApp = () => {
   return (
     <footer className="footer-app" id="contactus">
       <div className="container">
-        <div className="row g-5 py-5">
+        <div className="row g-5 py-5 mt-5">
           <div className="col-lg-4">
             <a href="#" className="footer-logo">
               {appSettings?.name}

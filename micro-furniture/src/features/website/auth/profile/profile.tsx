@@ -1,6 +1,11 @@
 import "./profile.scss";
 
 import { GetEnvConfig } from "../../../../app.config";
+import ProfileAddresses from "./components/profile-addresses";
+import ProfileOrders from "./components/profile-orders";
+import ProfileOverview from "./components/profile-overview";
+import ProfileSidebar from "./components/profile-sidebar";
+import ProfileWishlist from "./components/profile-wishlist";
 import UserLoginApp from "../login/user-login";
 import { WEBSITE_AUTH_KEY } from "../../../../constants/global/global-key.const";
 import { useState } from "react";
@@ -9,7 +14,7 @@ import { useState } from "react";
 // TYPES
 // ============================================================
 
-interface ProfileUser {
+export interface ProfileUser {
   id?: string;
   name?: string;
   email?: string;
@@ -17,12 +22,7 @@ interface ProfileUser {
   mobile?: string;
 }
 
-interface ProfileProps {
-  isLoggedIn?: boolean;
-  user?: ProfileUser;
-}
-
-interface WebsiteAuth {
+export interface WebsiteAuth {
   accessToken?: string;
   refreshToken?: string;
   tokenType?: string;
@@ -31,6 +31,18 @@ interface WebsiteAuth {
   mobile?: string;
   name?: string;
   email?: string;
+}
+
+export type ProfileSection =
+  | "overview"
+  | "orders"
+  | "addresses"
+  | "wishlist"
+  | "settings";
+
+interface ProfileProps {
+  isLoggedIn?: boolean;
+  user?: ProfileUser;
 }
 
 // ============================================================
@@ -65,7 +77,7 @@ const Profile = ({ isLoggedIn = false, user }: ProfileProps) => {
   const appSettings = GetEnvConfig();
 
   // ==========================================================
-  // STORED WEBSITE AUTH
+  // AUTH
   // ==========================================================
 
   const storedAuth = getStoredWebsiteAuth();
@@ -78,7 +90,7 @@ const Profile = ({ isLoggedIn = false, user }: ProfileProps) => {
   // STATE
   // ==========================================================
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   const [loggedIn, setLoggedIn] = useState(isLoggedIn || hasStoredLogin);
 
@@ -96,43 +108,17 @@ const Profile = ({ isLoggedIn = false, user }: ProfileProps) => {
     },
   );
 
-  // ==========================================================
-  // OPEN LOGIN / PROFILE
-  // ==========================================================
-
-  const openProfile = () => {
-    if (loggedIn) {
-      // TODO:
-      // Navigate to actual profile page when implemented.
-      return;
-    }
-
-    setIsOpen(true);
-  };
+  const [activeSection, setActiveSection] =
+    useState<ProfileSection>("overview");
 
   // ==========================================================
-  // CLOSE LOGIN
-  // ==========================================================
-
-  const closeProfile = () => {
-    setIsOpen(false);
-  };
-
-  // ==========================================================
-  // LOGIN SUCCESS
+  // LOGIN
   // ==========================================================
 
   const handleLogin = (customerId: string, mobile: string) => {
-    /**
-     * UserLoginApp already stores the complete
-     * website authentication object.
-     *
-     * Read it again here so Profile stays in sync
-     * with the authentication source of truth.
-     */
     const auth = getStoredWebsiteAuth();
 
-    const customer = {
+    const customer: ProfileUser = {
       id: customerId,
 
       mobile: auth?.mobile || mobile,
@@ -148,7 +134,104 @@ const Profile = ({ isLoggedIn = false, user }: ProfileProps) => {
 
     setLoggedIn(true);
 
-    setIsOpen(false);
+    setIsLoginOpen(false);
+
+    setActiveSection("overview");
+  };
+
+  // ==========================================================
+  // LOGOUT
+  // ==========================================================
+
+  const handleLogout = () => {
+    localStorage.removeItem(WEBSITE_AUTH_KEY);
+
+    setLoggedIn(false);
+
+    setCurrentUser(undefined);
+
+    setActiveSection("overview");
+  };
+
+  // ==========================================================
+  // LOGIN SCREEN
+  // ==========================================================
+
+  if (!loggedIn) {
+    return (
+      <div className="profile-app">
+        <section className="profile-login-page">
+          <div className="profile-login-card">
+            <div className="profile-login-icon">
+              <i className="bi bi-person" />
+            </div>
+
+            <h1>Welcome to {appSettings?.name}</h1>
+
+            <p>
+              Login to access your profile, orders, wishlist and saved
+              addresses.
+            </p>
+
+            <button
+              type="button"
+              className="profile-login-btn"
+              onClick={() => setIsLoginOpen(true)}
+            >
+              <i className="bi bi-box-arrow-in-right" />
+
+              <span>Login / Signup</span>
+            </button>
+          </div>
+        </section>
+
+        {isLoginOpen && (
+          <UserLoginApp
+            onLogin={handleLogin}
+            onClose={() => setIsLoginOpen(false)}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // ==========================================================
+  // PROFILE CONTENT
+  // ==========================================================
+
+  const renderContent = () => {
+    switch (activeSection) {
+      case "orders":
+        return <ProfileOrders />;
+
+      case "addresses":
+        return <ProfileAddresses />;
+
+      case "wishlist":
+        return <ProfileWishlist />;
+
+      case "settings":
+        return (
+          <div className="profile-empty-state">
+            <div className="profile-empty-icon">
+              <i className="bi bi-gear" />
+            </div>
+
+            <h3>Account Settings</h3>
+
+            <p>Manage your account preferences here.</p>
+          </div>
+        );
+
+      case "overview":
+      default:
+        return (
+          <ProfileOverview
+            user={currentUser}
+            onSectionChange={setActiveSection}
+          />
+        );
+    }
   };
 
   // ==========================================================
@@ -157,59 +240,42 @@ const Profile = ({ isLoggedIn = false, user }: ProfileProps) => {
 
   return (
     <div className="profile-app">
-      <section className="profile-container">
-        <div className="profile-login-card">
-          {/* ==================================================
-              ICON
-          ================================================== */}
+      <div className="profile-page">
+        {/* ==================================================
+            PAGE HEADER
+        ================================================== */}
 
-          <div className="profile-login-icon">
-            <i className="bi bi-person" />
+        <div className="profile-page-header">
+          <div>
+            <h1>My Account</h1>
+
+            <p>Manage your account, orders and preferences.</p>
           </div>
-
-          {/* ==================================================
-              TITLE
-          ================================================== */}
-
-          <h1>
-            {loggedIn
-              ? `Welcome ${currentUser?.name || "User"}`
-              : `Welcome to ${appSettings?.name}`}
-          </h1>
-
-          {/* ==================================================
-              DESCRIPTION
-          ================================================== */}
-
-          <p>
-            {loggedIn
-              ? "Manage your profile, orders, wishlist and saved addresses."
-              : "Login to access your profile, orders, wishlist and saved addresses."}
-          </p>
-
-          {/* ==================================================
-              ACTION
-          ================================================== */}
-
-          <button
-            type="button"
-            className="profile-login-btn"
-            onClick={openProfile}
-          >
-            <i
-              className={loggedIn ? "bi bi-person" : "bi bi-box-arrow-in-right"}
-            />
-
-            <span>{loggedIn ? "My Profile" : "Login / Signup"}</span>
-          </button>
         </div>
-      </section>
 
-      {/* ======================================================
-          LOGIN MODAL
-      ====================================================== */}
+        {/* ==================================================
+            PROFILE LAYOUT
+        ================================================== */}
 
-      {isOpen && <UserLoginApp onLogin={handleLogin} onClose={closeProfile} />}
+        <div className="profile-layout">
+          {/* ==================================================
+              SIDEBAR
+          ================================================== */}
+
+          <ProfileSidebar
+            user={currentUser}
+            activeSection={activeSection}
+            onSectionChange={setActiveSection}
+            onLogout={handleLogout}
+          />
+
+          {/* ==================================================
+              CONTENT
+          ================================================== */}
+
+          <main className="profile-content">{renderContent()}</main>
+        </div>
+      </div>
     </div>
   );
 };
