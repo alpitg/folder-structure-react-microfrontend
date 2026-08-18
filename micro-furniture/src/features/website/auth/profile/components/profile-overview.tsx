@@ -43,11 +43,8 @@ const ProfileEditForm = ({
 
   const [formData, setFormData] = useState<UpdateWebsiteProfileRequest>({
     name: customer.name ?? "",
-
     email: customer.email ?? "",
-
     mobile: customer.mobile ?? "",
-
     description: customer.description ?? "",
   });
 
@@ -142,25 +139,6 @@ const ProfileEditForm = ({
         </div>
 
         {/* ==================================================
-            DESCRIPTION
-        ================================================== */}
-
-        <div className="profile-overview-field">
-          <label htmlFor="profile-description">Description</label>
-
-          <textarea
-            id="profile-description"
-            value={formData.description ?? ""}
-            onChange={(event) =>
-              handleChange("description", event.target.value)
-            }
-            placeholder="Tell us a little about yourself"
-            disabled={isLoading}
-            rows={4}
-          />
-        </div>
-
-        {/* ==================================================
             ACTIONS
         ================================================== */}
 
@@ -216,13 +194,9 @@ const ProfileOverview = ({ onSectionChange }: ProfileOverviewProps) => {
 
   const {
     data: customer,
-
     isLoading,
-
     isFetching,
-
     isError,
-
     refetch,
   } = useGetWebsiteProfileQuery();
 
@@ -404,14 +378,6 @@ const ProfileOverview = ({ onSectionChange }: ProfileOverviewProps) => {
             <span>Email Address</span>
 
             <strong>{customer.email || "Not added"}</strong>
-          </div>
-
-          {/* DESCRIPTION */}
-
-          <div className="profile-detail-item">
-            <span>Description</span>
-
-            <strong>{customer.description || "Not added"}</strong>
           </div>
         </div>
       </div>
