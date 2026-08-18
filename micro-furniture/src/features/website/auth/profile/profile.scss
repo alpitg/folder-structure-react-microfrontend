@@ -788,18 +788,8 @@ $color-info: #1d9bf0;
 
     .profile-menu-item {
       min-height: 48px;
-
       padding: 0 14px;
-
-      border-left: 0;
-
       border-bottom: 2px solid transparent;
-
-      &.active {
-        border-left: 0;
-
-        border-bottom-color: $color-primary;
-      }
     }
 
     .profile-sidebar-footer {
@@ -2967,8 +2957,6 @@ $color-info: #1d9bf0;
   @media (max-width: 400px) {
     .profile-address-top {
       align-items: flex-start;
-
-      flex-direction: column;
     }
 
     .profile-address-actions {
