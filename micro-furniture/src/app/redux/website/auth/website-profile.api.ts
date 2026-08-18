@@ -8,19 +8,12 @@ import { websiteBaseQuery } from "../base.api";
 
 export interface WebsiteProfile {
   id: string;
-
   name: string;
-
   email: string;
-
   mobile?: string | null;
-
   description?: string | null;
-
   isActive: boolean;
-
   createdAt?: string;
-
   updatedAt?: string;
 }
 
@@ -30,11 +23,8 @@ export interface WebsiteProfile {
 
 export interface UpdateWebsiteProfileRequest {
   name: string;
-
   email: string;
-
-  mobile: string;
-
+  mobile?: string;
   description?: string | null;
 }
 

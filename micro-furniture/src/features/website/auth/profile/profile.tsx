@@ -225,12 +225,7 @@ const Profile = ({ isLoggedIn = false, user }: ProfileProps) => {
 
       case "overview":
       default:
-        return (
-          <ProfileOverview
-            user={currentUser}
-            onSectionChange={setActiveSection}
-          />
-        );
+        return <ProfileOverview onSectionChange={setActiveSection} />;
     }
   };
 

@@ -75,11 +75,7 @@ const ProfileEditForm = ({
 
     onSubmit({
       name: formData.name.trim(),
-
       email: formData.email.trim(),
-
-      mobile: formData.mobile.trim(),
-
       description: formData.description?.trim() || null,
     });
   };
