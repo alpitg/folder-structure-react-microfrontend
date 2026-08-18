@@ -71,6 +71,7 @@ let environment = {
         refresh: "",
         me: "",
         addresses: "",
+        profile: "",
         logout: "",
         sendOtp: "",
         resendOtp: "",

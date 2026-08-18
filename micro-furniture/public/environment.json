@@ -95,6 +95,7 @@
         "refresh": "/api/website/auth/refresh",
         "me": "/api/website/auth/me",
         "addresses": "/api/website/auth/me/addresses",
+        "profile": "/api/website/auth/profile",
         "logout": "/api/website/auth/logout",
         "sendOtp": "/api/website/auth/otp/send",
         "resendOtp": "/api/website/auth/otp/resend",
