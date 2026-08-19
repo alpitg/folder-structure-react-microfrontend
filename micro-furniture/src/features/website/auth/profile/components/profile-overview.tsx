@@ -42,10 +42,10 @@ const ProfileEditForm = ({
   // ==========================================================
 
   const [formData, setFormData] = useState<UpdateWebsiteProfileRequest>({
-    name: customer.name ?? "",
-    email: customer.email ?? "",
-    mobile: customer.mobile ?? "",
-    description: customer.description ?? "",
+    name: customer?.name ?? "",
+    email: customer?.email ?? "",
+    mobile: customer?.mobile ?? "",
+    description: customer?.description ?? "",
   });
 
   // ==========================================================
@@ -369,7 +369,7 @@ const ProfileOverview = ({ onSectionChange }: ProfileOverviewProps) => {
           <div className="profile-detail-item">
             <span>Name</span>
 
-            <strong>{customer.name || "Not added"}</strong>
+            <strong>{customer?.name || "Not added"}</strong>
           </div>
 
           {/* EMAIL */}
@@ -377,7 +377,7 @@ const ProfileOverview = ({ onSectionChange }: ProfileOverviewProps) => {
           <div className="profile-detail-item">
             <span>Email Address</span>
 
-            <strong>{customer.email || "Not added"}</strong>
+            <strong>{customer?.email || "Not added"}</strong>
           </div>
         </div>
       </div>
@@ -411,7 +411,7 @@ const ProfileOverview = ({ onSectionChange }: ProfileOverviewProps) => {
           <div>
             <span>Customer ID</span>
 
-            <strong>{customer.id || "—"}</strong>
+            <strong>{customer?.id || "—"}</strong>
           </div>
 
           {/* ACCOUNT STATUS */}
@@ -421,12 +421,12 @@ const ProfileOverview = ({ onSectionChange }: ProfileOverviewProps) => {
 
             <strong
               className={
-                customer.isActive
+                customer?.isActive
                   ? "profile-status-active"
                   : "profile-status-inactive"
               }
             >
-              {customer.isActive ? "Active" : "Inactive"}
+              {customer?.isActive ? "Active" : "Inactive"}
             </strong>
           </div>
 
@@ -436,8 +436,8 @@ const ProfileOverview = ({ onSectionChange }: ProfileOverviewProps) => {
             <span>Created</span>
 
             <strong>
-              {customer.createdAt
-                ? new Date(customer.createdAt).toLocaleDateString()
+              {customer?.createdAt
+                ? new Date(customer?.createdAt).toLocaleDateString()
                 : "—"}
             </strong>
           </div>
@@ -448,8 +448,8 @@ const ProfileOverview = ({ onSectionChange }: ProfileOverviewProps) => {
             <span>Last Updated</span>
 
             <strong>
-              {customer.updatedAt
-                ? new Date(customer.updatedAt).toLocaleDateString()
+              {customer?.updatedAt
+                ? new Date(customer?.updatedAt).toLocaleDateString()
                 : "—"}
             </strong>
           </div>
