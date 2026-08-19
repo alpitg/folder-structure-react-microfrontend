@@ -4,6 +4,8 @@ import {
   useGetWebsiteOrdersQuery,
   type WebsiteOrder,
 } from "../../../../../app/redux/website/order/website-order.api";
+import { NavLink } from "react-router";
+import { ROUTE_URL } from "../../../../../routes/constants/routes.const";
 
 // ============================================================
 // COMPONENT
@@ -206,11 +208,15 @@ const ProfileOrders = () => {
 
           <p>When you place an order, it will appear here.</p>
 
-          <button type="button" className="profile-primary-btn">
+          <NavLink
+            to={ROUTE_URL.WEBSITE.PRODUCTS}
+            type="button"
+            className="profile-primary-btn"
+          >
             <span>Start Shopping</span>
 
             <i className="bi bi-arrow-right" />
-          </button>
+          </NavLink>
         </div>
       </div>
     );
