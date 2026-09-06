@@ -40,6 +40,10 @@ const FooterApp = () => {
                     <h4 className="footer-title">Contact</h4>
 
                     <p className="footer-text mb-1">
+                      <strong>Name:</strong> {contact?.name}
+                    </p>
+
+                    <p className="footer-text mb-1">
                       <strong>Phone:</strong> {contact?.contactnumber}
                     </p>
 

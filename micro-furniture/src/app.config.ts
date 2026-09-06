@@ -10,6 +10,7 @@ let environment = {
     subtitle: "subtitle here",
     description: "description here",
     contactDetails: {
+      name: "",
       address: "",
       contactnumber: "",
       email: "",
