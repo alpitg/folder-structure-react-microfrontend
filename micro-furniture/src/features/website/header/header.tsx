@@ -112,7 +112,7 @@ const HeaderApp = () => {
           <ul className="navbar-nav header-actions ms-auto">
             <li className="nav-item">
               <NavLink
-                to={ROUTE_URL.WEBSITE.PROFILE_EDIT}
+                to={ROUTE_URL.WEBSITE.PROFILE.EDIT}
                 className="action-link"
                 onClick={closeNavbar}
               >

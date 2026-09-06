@@ -39,6 +39,7 @@ const SettingsApp = lazy(() => import("../features/settings/settings"));
 const WishlistApp = lazy(() => import("../features/website/wishlist/wishlist"));
 
 const ProfileApp = lazy(() => import("../features/website/auth/profile/profile"));
+const OrderDetailsApp = lazy(() => import("../features/website/orders/order-details/order-details"));
 
 //#endregion
 
@@ -80,8 +81,13 @@ const RoutesApp = () => {
               />
 
               <Route
-                path={ROUTE_URL.WEBSITE.PROFILE_EDIT}
+                path={ROUTE_URL.WEBSITE.PROFILE.EDIT}
                 element={<ProfileApp />}
+              />
+
+              <Route
+                path={ROUTE_URL.WEBSITE.PROFILE.ORDER_DETAILS}
+                element={<OrderDetailsApp />}
               />
 
               {LegalRoutes()}

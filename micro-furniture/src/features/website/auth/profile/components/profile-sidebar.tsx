@@ -36,25 +36,21 @@ const ProfileSidebar = ({
       label: "Profile",
       icon: "bi-person",
     },
-
     {
       id: "orders",
       label: "Orders",
       icon: "bi-bag",
     },
-
     {
       id: "addresses",
       label: "Saved Addresses",
       icon: "bi-geo-alt",
     },
-
     {
       id: "wishlist",
       label: "Wishlist",
       icon: "bi-heart",
     },
-
     {
       id: "settings",
       label: "Account Settings",

@@ -1,6 +1,7 @@
 import "./profile.scss";
 
 import { GetEnvConfig } from "../../../../app.config";
+import OrderDetails from "../../orders/order-details/order-details";
 import ProfileAddresses from "./components/profile-addresses";
 import ProfileOrders from "./components/profile-orders";
 import ProfileOverview from "./components/profile-overview";
@@ -97,13 +98,9 @@ const Profile = ({ isLoggedIn = false, user }: ProfileProps) => {
   const [currentUser, setCurrentUser] = useState<ProfileUser | undefined>(
     user || {
       id: storedAuth?.customerId,
-
       name: storedAuth?.name,
-
       email: storedAuth?.email,
-
       phone: storedAuth?.mobile,
-
       mobile: storedAuth?.mobile,
     },
   );
@@ -120,22 +117,15 @@ const Profile = ({ isLoggedIn = false, user }: ProfileProps) => {
 
     const customer: ProfileUser = {
       id: customerId,
-
       mobile: auth?.mobile || mobile,
-
       phone: auth?.mobile || mobile,
-
       name: auth?.name,
-
       email: auth?.email,
     };
 
     setCurrentUser(customer);
-
     setLoggedIn(true);
-
     setIsLoginOpen(false);
-
     setActiveSection("overview");
   };
 
@@ -147,9 +137,7 @@ const Profile = ({ isLoggedIn = false, user }: ProfileProps) => {
     localStorage.removeItem(WEBSITE_AUTH_KEY);
 
     setLoggedIn(false);
-
     setCurrentUser(undefined);
-
     setActiveSection("overview");
   };
 

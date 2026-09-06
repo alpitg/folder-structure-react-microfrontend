@@ -416,11 +416,14 @@ const ProfileOrderCard = ({
           <strong>{formatAmount(order.totalAmount)}</strong>
         </div>
 
-        <button type="button" className="profile-order-view-btn">
+        <NavLink
+          to={ROUTE_URL.WEBSITE.PROFILE.ORDER_DETAILS.replace(":orderId", String(order.id))}
+          type="button"
+          className="profile-order-view-btn"
+        >
           <span>View Details</span>
-
           <i className="bi bi-chevron-right" />
-        </button>
+        </NavLink>
       </div>
     </article>
   );
