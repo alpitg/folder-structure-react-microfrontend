@@ -1,7 +1,6 @@
 import "./profile.scss";
 
 import { GetEnvConfig } from "../../../../app.config";
-import OrderDetails from "../../orders/order-details/order-details";
 import ProfileAddresses from "./components/profile-addresses";
 import ProfileOrders from "./components/profile-orders";
 import ProfileOverview from "./components/profile-overview";
