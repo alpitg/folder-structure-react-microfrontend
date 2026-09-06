@@ -592,6 +592,7 @@
 
   .order-details-summary {
     padding-bottom: 20px;
+    width: 100%;
   }
 
   .order-details-summary .order-details-card-header {
@@ -660,6 +661,7 @@
 
   .order-details-info {
     padding-bottom: 8px;
+    width: 100%;
 
     h2 {
       margin: 0;
@@ -828,6 +830,7 @@
 
     .order-details-actions {
       display: flex;
+      width: stretch;
     }
   }
 
