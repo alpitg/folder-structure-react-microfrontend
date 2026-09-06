@@ -672,7 +672,9 @@ const Products = () => {
             <button
               type="button"
               className="pagination-btn"
-              disabled={products.length < PAGE_SIZE || isFetching}
+              disabled={
+                page * PAGE_SIZE >= (productsResponse?.total ?? 0) || isFetching
+              }
               onClick={() => setPage((previous) => previous + 1)}
             >
               Next
