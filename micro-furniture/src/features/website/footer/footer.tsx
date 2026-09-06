@@ -1,6 +1,8 @@
 import "./footer.scss";
 
 import { GetEnvConfig } from "../../../app.config";
+import { NavLink } from "react-router";
+import { ROUTE_URL } from "../../../routes/constants/routes.const";
 
 const FooterApp = () => {
   const appSettings = GetEnvConfig();
@@ -119,6 +121,12 @@ const FooterApp = () => {
               <p className="mb-0 footer-copyright">
                 Copyright &copy; {new Date().getFullYear()} {appSettings?.name}.
                 All Rights Reserved.
+                <NavLink
+                  to={ROUTE_URL.WEBSITE.TERMS_OF_USE}
+                  className="footer-link ps-2"
+                >
+                  Terms of Use
+                </NavLink>
               </p>
             </div>
           </div>

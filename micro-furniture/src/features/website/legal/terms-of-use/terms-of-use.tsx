@@ -433,6 +433,9 @@ const TermsOfUseApp = () => {
               <p className="mb-0">
                 Website: {appSettings?.homePage?.contactDetails?.site}
               </p>
+              <p className="mb-0">
+                Owner: {appSettings?.homePage?.contactDetails?.name}
+              </p>
             </div>
           </section>
 
