@@ -1,4 +1,4 @@
-@use "../../../../../assets/scss/website_variables" as *;
+@use "../../../../../assets/scss/variables" as colors;
 
 .new-arrivals-app {
   .product-slide {
@@ -10,14 +10,15 @@
     height: 100%;
     border-radius: 14px;
     overflow: hidden;
-    background: var(--bs-white);
+    background: colors.$color-white;
+    border: 1px solid colors.$color-border-light;
     transition:
       transform 0.3s ease,
       box-shadow 0.3s ease;
 
     &:hover {
       transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 8px 24px rgba(40, 44, 63, 0.1);
     }
 
     .card-body {
@@ -27,7 +28,7 @@
 
   .product-img {
     position: relative;
-    background: $lighter;
+    background: colors.$color-background-light;
     overflow: hidden;
     aspect-ratio: 4 / 3;
 
@@ -60,6 +61,7 @@
       font-size: 12px;
       padding: 5px 12px;
       white-space: nowrap;
+      border-radius: 4px;
     }
 
     .icon-cross {
@@ -74,15 +76,16 @@
       align-items: center;
       justify-content: center;
       border-radius: 50%;
-      color: var(--bs-light);
-      background: transparent;
+      color: colors.$color-white;
+      background: colors.$color-primary;
       font-size: 16px;
       line-height: 1;
+      border: none;
       transition: all 0.2s ease;
 
       &:hover {
-        color: var(--bs-dark);
-        background: var(--bs-light);
+        color: colors.$color-white;
+        background: colors.$color-primary-hover;
       }
     }
   }
@@ -95,6 +98,8 @@
 
   .product-content {
     h6 {
+      color: colors.$color-dark;
+      font-weight: 600;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
@@ -105,7 +110,38 @@
 
   .product-price {
     font-weight: 700;
-    color: var(--bs-dark);
+    color: colors.$color-dark;
+  }
+
+  .product-original-price {
+    color: colors.$color-muted;
+    text-decoration: line-through;
+  }
+
+  .product-discount {
+    color: colors.$color-discount;
+    font-weight: 600;
+  }
+
+  .product-add-btn {
+    background: colors.$color-primary;
+    color: colors.$color-white;
+    border: 1px solid colors.$color-primary;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: colors.$color-primary-hover;
+      border-color: colors.$color-primary-hover;
+      color: colors.$color-white;
+    }
+  }
+
+  .product-success {
+    color: colors.$color-success;
+  }
+
+  .product-error {
+    color: colors.$color-danger;
   }
 
   @media (max-width: 768px) {

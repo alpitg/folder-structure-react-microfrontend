@@ -1,3 +1,5 @@
+import "./footer.scss";
+
 import { GetEnvConfig } from "../../../app.config";
 
 const FooterApp = () => {
