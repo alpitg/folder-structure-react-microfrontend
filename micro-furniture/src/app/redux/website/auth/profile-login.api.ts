@@ -9,16 +9,19 @@ import { websiteBaseQuery } from "../base.api";
 // ============================================================
 
 export interface SendOtpRequest {
-  mobile: string;
+  mobile?: string;
+  email?: string;
 }
 
 export interface VerifyOtpRequest {
-  mobile: string;
+  mobile?: string;
+  email?: string;
   otp: string;
 }
 
 export interface ResendOtpRequest {
-  mobile: string;
+  mobile?: string;
+  email?: string;
 }
 
 export interface RefreshTokenRequest {

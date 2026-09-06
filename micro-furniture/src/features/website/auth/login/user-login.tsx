@@ -28,7 +28,8 @@ interface UserLoginAppProps {
   onClose?: () => void;
 }
 
-type LoginStep = "mobile" | "otp";
+type LoginStep = "identifier" | "otp";
+type LoginType = "email" | "mobile";
 
 interface ApiError {
   data?: {
@@ -43,10 +44,19 @@ const OTP_LENGTH = 6;
 const DEFAULT_RESEND_TIMER = 30;
 
 const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
-  const [step, setStep] = useState<LoginStep>("mobile");
-  const [mobile, setMobile] = useState("");
+  /*
+   * Email is the default login method.
+   */
+  const [loginType, setLoginType] = useState<LoginType>("email");
+
+  const [step, setStep] = useState<LoginStep>("identifier");
+
+  const [identifier, setIdentifier] = useState("");
+
   const [otp, setOtp] = useState<string[]>(() => Array(OTP_LENGTH).fill(""));
+
   const [error, setError] = useState("");
+
   const [resendTimer, setResendTimer] = useState(DEFAULT_RESEND_TIMER);
 
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -63,6 +73,9 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
 
   const isLoading = isSendingOtp || isVerifyingOtp || isResendingOtp;
 
+  /*
+   * OTP countdown timer.
+   */
   useEffect(() => {
     if (step !== "otp" || resendTimer <= 0) {
       return;
@@ -84,16 +97,25 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
     };
   }, [step, resendTimer]);
 
+  /*
+   * Reset OTP fields.
+   */
   const resetOtp = () => {
     setOtp(Array(OTP_LENGTH).fill(""));
   };
 
+  /*
+   * Focus first OTP input.
+   */
   const focusFirstOtpInput = () => {
     window.setTimeout(() => {
       otpRefs.current[0]?.focus();
     }, 100);
   };
 
+  /*
+   * Extract API error message.
+   */
   const getApiErrorMessage = (error: unknown, fallback: string): string => {
     const apiError = error as ApiError;
 
@@ -120,32 +142,79 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
     );
   };
 
-  const handleSendOtp = async () => {
-    const cleanMobile = mobile.replace(/\D/g, "");
+  /*
+   * Validate email/mobile.
+   */
+  const validateIdentifier = (): boolean => {
+    const value = identifier.trim();
 
-    if (!cleanMobile) {
-      setError("Please enter your mobile number.");
-      return;
+    if (!value) {
+      setError(
+        loginType === "email"
+          ? "Please enter your email address."
+          : "Please enter your mobile number.",
+      );
+
+      return false;
     }
+
+    if (loginType === "email") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!emailRegex.test(value)) {
+        setError("Please enter a valid email address.");
+
+        return false;
+      }
+
+      return true;
+    }
+
+    const cleanMobile = value.replace(/\D/g, "");
 
     if (cleanMobile.length !== 10) {
       setError("Please enter a valid 10-digit mobile number.");
+
+      return false;
+    }
+
+    setIdentifier(cleanMobile);
+
+    return true;
+  };
+
+  /*
+   * Send OTP.
+   */
+  const handleSendOtp = async () => {
+    if (isLoading) {
+      return;
+    }
+
+    if (!validateIdentifier()) {
       return;
     }
 
     setError("");
 
     try {
-      const response = await sendLoginOtp({
-        mobile: cleanMobile,
-      }).unwrap();
+      const value = identifier.trim();
+
+      const response =
+        loginType === "email"
+          ? await sendLoginOtp({
+              email: value,
+            }).unwrap()
+          : await sendLoginOtp({
+              mobile: value,
+            }).unwrap();
 
       if (!response?.success) {
         setError(response?.message || "Unable to send OTP. Please try again.");
+
         return;
       }
 
-      setMobile(cleanMobile);
       resetOtp();
 
       setResendTimer(response?.retryAfter || DEFAULT_RESEND_TIMER);
@@ -160,9 +229,42 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
     }
   };
 
+  /*
+   * Change Email / Mobile.
+   */
+  const handleChangeLogin = () => {
+    if (isLoading) {
+      return;
+    }
+
+    setStep("identifier");
+    resetOtp();
+    setError("");
+    setResendTimer(DEFAULT_RESEND_TIMER);
+  };
+
+  /*
+   * Change login type.
+   */
+  const handleChangeLoginType = (type: LoginType) => {
+    if (isLoading) {
+      return;
+    }
+
+    setLoginType(type);
+    setIdentifier("");
+    setError("");
+  };
+
+  /*
+   * OTP input change.
+   */
   const handleOtpChange = (index: number, value: string) => {
     const numericValue = value.replace(/\D/g, "");
 
+    /*
+     * Handle pasted/multiple digits.
+     */
     if (numericValue.length > 1) {
       const pastedOtp = numericValue.slice(0, OTP_LENGTH).split("");
 
@@ -196,6 +298,9 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
     }
   };
 
+  /*
+   * OTP keyboard handling.
+   */
   const handleOtpKeyDown = (
     index: number,
     event: React.KeyboardEvent<HTMLInputElement>,
@@ -231,6 +336,9 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
     }
   };
 
+  /*
+   * Verify OTP.
+   */
   const handleVerifyOtp = async () => {
     if (isLoading) {
       return;
@@ -240,34 +348,51 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
 
     if (enteredOtp.length !== OTP_LENGTH) {
       setError(`Please enter the ${OTP_LENGTH}-digit OTP.`);
+
       return;
     }
 
-    if (!mobile || mobile.length !== 10) {
-      setError("Invalid mobile number. Please try again.");
+    if (!identifier.trim()) {
+      setError(
+        loginType === "email"
+          ? "Email address is missing. Please try again."
+          : "Mobile number is missing. Please try again.",
+      );
+
       return;
     }
 
     setError("");
 
     try {
-      const response = await verifyLoginOtp({
-        mobile,
-        otp: enteredOtp,
-      }).unwrap();
+      const value = identifier.trim();
+
+      const response =
+        loginType === "email"
+          ? await verifyLoginOtp({
+              email: value,
+              otp: enteredOtp,
+            }).unwrap()
+          : await verifyLoginOtp({
+              mobile: value,
+              otp: enteredOtp,
+            }).unwrap();
 
       if (!response?.success) {
         setError(response?.message || "Invalid OTP. Please try again.");
+
         return;
       }
 
       const customer = response?.customer;
+
       const customerId = customer?.id;
 
       if (!customerId) {
         setError(
           "Login successful, but customer information was not received.",
         );
+
         return;
       }
 
@@ -275,44 +400,54 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
         setError(
           "Login successful, but authentication token was not received.",
         );
+
         return;
       }
 
       if (!response?.refresh_token) {
         setError("Login successful, but refresh token was not received.");
+
         return;
       }
 
       /*
        * Store website authentication.
        *
-       * IMPORTANT:
-       * Your backend refresh endpoint expects:
+       * Backend refresh endpoint expects:
        *
        * {
        *   "refresh_token": "..."
        * }
-       *
-       * Therefore refreshToken MUST be stored here.
        */
       const websiteAuth = {
         accessToken: response.access_token,
         refreshToken: response.refresh_token,
         tokenType: response.token_type || "bearer",
         customerId: String(customerId),
-        mobile: customer?.mobile || mobile,
+        mobile: customer?.mobile || (loginType === "mobile" ? value : ""),
         name: customer?.name || "",
-        email: customer?.email || "",
+        email: customer?.email || (loginType === "email" ? value : ""),
       };
 
       localStorage.setItem(WEBSITE_AUTH_KEY, JSON.stringify(websiteAuth));
 
-      onLogin?.(String(customerId), customer?.mobile || mobile, {
-        id: String(customerId),
-        name: customer?.name,
-        email: customer?.email,
-        mobile: customer?.mobile || mobile,
-      });
+      /*
+       * Existing onLogin callback expects mobile.
+       *
+       * For email login, use the customer's mobile
+       * if available, otherwise pass an empty string.
+       */
+      onLogin?.(
+        String(customerId),
+        customer?.mobile || (loginType === "mobile" ? value : ""),
+        {
+          id: String(customerId),
+          name: customer?.name,
+          email: customer?.email || (loginType === "email" ? value : undefined),
+          mobile:
+            customer?.mobile || (loginType === "mobile" ? value : undefined),
+        },
+      );
 
       onClose?.();
     } catch (error) {
@@ -320,25 +455,37 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
     }
   };
 
+  /*
+   * Resend OTP.
+   */
   const handleResendOtp = async () => {
     if (resendTimer > 0 || isLoading) {
       return;
     }
 
-    if (!mobile) {
-      setError("Mobile number is missing. Please try again.");
+    if (!identifier.trim()) {
+      setError("Login information is missing. Please try again.");
+
       return;
     }
 
     setError("");
 
     try {
-      const response = await resendLoginOtp({
-        mobile,
-      }).unwrap();
+      const value = identifier.trim();
+
+      const response =
+        loginType === "email"
+          ? await resendLoginOtp({
+              email: value,
+            }).unwrap()
+          : await resendLoginOtp({
+              mobile: value,
+            }).unwrap();
 
       if (!response?.success) {
         setError(response?.message || "Unable to resend OTP.");
+
         return;
       }
 
@@ -354,17 +501,9 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
     }
   };
 
-  const handleChangeMobile = () => {
-    if (isLoading) {
-      return;
-    }
-
-    setStep("mobile");
-    resetOtp();
-    setError("");
-    setResendTimer(DEFAULT_RESEND_TIMER);
-  };
-
+  /*
+   * Close login modal.
+   */
   const handleClose = () => {
     if (isLoading) {
       return;
@@ -373,6 +512,14 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
     onClose?.();
   };
 
+  /*
+   * Displayed identifier.
+   */
+  const formattedIdentifier =
+    loginType === "mobile"
+      ? `+91 ${identifier.slice(0, 5)} ${identifier.slice(5)}`
+      : identifier;
+
   return (
     <div className="user-login-app">
       <div className="user-login-backdrop">
@@ -380,17 +527,17 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
           className="user-login-container"
           role="dialog"
           aria-modal="true"
-          aria-label={step === "mobile" ? "Login" : "Verify OTP"}
+          aria-label={step === "identifier" ? "Login" : "Verify OTP"}
         >
-          {step === "mobile" ? (
+          {step === "identifier" ? (
             <>
               <div className="user-login-header">
                 <div>
                   <h5 className="user-login-title">Login to your account</h5>
 
                   <p className="user-login-description">
-                    Enter your mobile number to continue shopping and manage
-                    your orders.
+                    Enter your email or mobile number to continue shopping and
+                    manage your orders.
                   </p>
                 </div>
 
@@ -408,29 +555,69 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
               </div>
 
               <div className="user-login-body">
+                {/* Login Type Switcher */}
+                <div className="d-flex border-bottom mb-4">
+                  <button
+                    type="button"
+                    className={`flex-fill btn rounded-0 border-0 fw-semibold ${
+                      loginType === "email"
+                        ? "text-dark border-bottom border-2 border-dark"
+                        : "text-muted"
+                    }`}
+                    onClick={() => handleChangeLoginType("email")}
+                    disabled={isLoading}
+                  >
+                    EMAIL
+                  </button>
+
+                  <button
+                    type="button"
+                    className={`flex-fill btn rounded-0 border-0 fw-semibold ${
+                      loginType === "mobile"
+                        ? "text-dark border-bottom border-2 border-dark"
+                        : "text-muted"
+                    }`}
+                    onClick={() => handleChangeLoginType("mobile")}
+                    disabled={isLoading}
+                  >
+                    MOBILE
+                  </button>
+                </div>
+
                 <div className="account-field">
-                  <label htmlFor="user-mobile">Mobile Number</label>
+                  <label htmlFor="user-identifier">
+                    {loginType === "email" ? "Email Address" : "Mobile Number"}
+                  </label>
 
                   <div
                     className={`account-input ${
                       error ? "account-input-error" : ""
                     }`}
                   >
-                    <span className="account-input-prefix">+91</span>
+                    {loginType === "mobile" && (
+                      <span className="account-input-prefix">+91</span>
+                    )}
 
                     <input
-                      id="user-mobile"
-                      type="tel"
-                      value={mobile}
-                      maxLength={10}
-                      inputMode="numeric"
-                      autoComplete="tel"
-                      placeholder="Enter mobile number"
+                      id="user-identifier"
+                      type={loginType === "email" ? "email" : "tel"}
+                      value={identifier}
+                      maxLength={loginType === "mobile" ? 10 : undefined}
+                      inputMode={loginType === "email" ? "email" : "numeric"}
+                      autoComplete={loginType === "email" ? "email" : "tel"}
+                      placeholder={
+                        loginType === "email"
+                          ? "Enter email address"
+                          : "Enter mobile number"
+                      }
                       disabled={isLoading}
                       onChange={(event) => {
-                        const value = event.target.value.replace(/\D/g, "");
+                        const value =
+                          loginType === "mobile"
+                            ? event.target.value.replace(/\D/g, "")
+                            : event.target.value;
 
-                        setMobile(value);
+                        setIdentifier(value);
                         setError("");
                       }}
                       onKeyDown={(event) => {
@@ -444,6 +631,7 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
                   {error && (
                     <div className="account-error" role="alert">
                       <i className="bi bi-exclamation-circle" />
+
                       <span>{error}</span>
                     </div>
                   )}
@@ -479,6 +667,7 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
 
                     <div>
                       <strong>Easy Orders</strong>
+
                       <span>Track all your orders</span>
                     </div>
                   </div>
@@ -490,6 +679,7 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
 
                     <div>
                       <strong>Wishlist</strong>
+
                       <span>Save products you love</span>
                     </div>
                   </div>
@@ -501,6 +691,7 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
 
                     <div>
                       <strong>Faster Checkout</strong>
+
                       <span>Save your details securely</span>
                     </div>
                   </div>
@@ -532,14 +723,12 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
               <div className="user-login-header otp-login-header">
                 <div>
                   <h5 className="user-login-title">
-                    Verify your mobile number
+                    Verify your{" "}
+                    {loginType === "email" ? "email" : "mobile number"}
                   </h5>
 
                   <p className="user-login-description">
-                    Enter the OTP sent to{" "}
-                    <strong>
-                      +91 {mobile.slice(0, 5)} {mobile.slice(5)}
-                    </strong>
+                    Enter the OTP sent to <strong>{formattedIdentifier}</strong>
                   </p>
                 </div>
 
@@ -558,14 +747,17 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
 
               <div className="user-login-body otp-login-body">
                 <div className="otp-change-mobile">
-                  <span>Wrong mobile number?</span>
+                  <span>
+                    Wrong{" "}
+                    {loginType === "email" ? "email address" : "mobile number"}?
+                  </span>
 
                   <button
                     type="button"
-                    onClick={handleChangeMobile}
+                    onClick={handleChangeLogin}
                     disabled={isLoading}
                   >
-                    Change number
+                    Change {loginType === "email" ? "email" : "number"}
                   </button>
                 </div>
 
@@ -631,6 +823,7 @@ const UserLoginApp = ({ onLogin, onClose }: UserLoginAppProps) => {
                   {error && (
                     <div className="account-error otp-error" role="alert">
                       <i className="bi bi-exclamation-circle" />
+
                       <span>{error}</span>
                     </div>
                   )}
