@@ -1,3 +1,13 @@
+## Very usefull links
+- https://secureserver.titan.email/mail/
+- https://dashboard.godaddy.com/
+- Mongo - https://cloud.mongodb.com/v2/6a67c2c5fbd33eec55bcea21#/overview
+- https://platform.openai.com/login?next=%2Fhome
+
+## Other usefull links
+- https://geeks-react.netlify.app/user/instructor
+- https://dashboard.render.com/login?next=%2Fstatic%2Fsrv-d5991gtactks73bne8e0%2Fdeploys%2Fdep-d5991h5actks73bne8jg
+
 ## Prompts
 - how to host api on dashboard.render.com?
 
