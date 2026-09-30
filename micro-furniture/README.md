@@ -6,6 +6,7 @@
 - https://platform.openai.com/login?next=%2Fhome
 - https://smartping.live/entity/login
 - https://portal.azure.com/
+- https://dev.azure.com/alpitgajbhiye
 
 ## Other usefull links
 - https://geeks-react.netlify.app/user/instructor
