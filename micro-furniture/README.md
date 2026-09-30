@@ -1,6 +1,7 @@
 ## Very usefull links
 - https://artisanstudios.in/
 - https://secureserver.titan.email/mail/
+- https://control.msg91.com/app/m/l/sms/templates
 - https://dashboard.godaddy.com/
 - Mongo - https://cloud.mongodb.com/v2/6a67c2c5fbd33eec55bcea21#/overview
 - https://platform.openai.com/login?next=%2Fhome
