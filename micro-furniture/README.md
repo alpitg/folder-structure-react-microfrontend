@@ -1,8 +1,11 @@
 ## Very usefull links
+- https://artisanstudios.in/
 - https://secureserver.titan.email/mail/
 - https://dashboard.godaddy.com/
 - Mongo - https://cloud.mongodb.com/v2/6a67c2c5fbd33eec55bcea21#/overview
 - https://platform.openai.com/login?next=%2Fhome
+- https://smartping.live/entity/login
+- https://portal.azure.com/
 
 ## Other usefull links
 - https://geeks-react.netlify.app/user/instructor
