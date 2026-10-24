@@ -111,7 +111,7 @@
     "website": {
       "apiUrl": "http://localhost:8000",
       "quote": {
-        "submit": "/api/website/quote/submit"
+        "submit": "/api/website/quotes"
       },
       "auth": {
         "refresh": "/api/website/auth/refresh",
