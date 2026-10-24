@@ -7,11 +7,11 @@ import AuthApp from "../components/auth/auth";
 import { CatalogRoutes } from "../features/store/catalog/routes/catalog.routes";
 import { CustomerRoutes } from "../features/store/customer/routes/customer.route";
 import ForgetPasswordApp from "../components/auth/forget-password/forget-password";
-import InitWebsiteApp from "../features/website/init-website/init-website";
-import { LegalRoutes } from "../features/website/legal/legal.routes";
+import InitWebsiteApp from "../features/website/components/init-website/init-website";
+import { LegalRoutes } from "../features/website/components/legal/legal.routes";
 import LoadingApp from "../components/loading/loading";
 import LoginApp from "../components/auth/login/login";
-import OrderSuccessApp from "../features/website/cart/order-success/order-success";
+// import OrderSuccessApp from "../features/website/components/cart/order-success/order-success";
 import PrivateRoute from "./private-route";
 import { ROUTE_URL } from "./constants/routes.const";
 import ResetPassword from "../components/auth/reset-password/reset-password";
@@ -19,14 +19,22 @@ import { SalesRoutes } from "../features/store/sales/routes/sales.routes";
 import ScrollToTop from "../hooks/scroll-to-top";
 import { useAuthInit } from "../hooks/use-auth-init";
 
-const HomeApp = lazy(() => import("../features/website/home/home"));
-const WebsiteApp = lazy(() => import("../features/website/website"));
-const ProductsApp = lazy(() => import("../features/website/products/products"));
-const ProductDetailsApp = lazy(
-  () => import("../features/website/products/details/product-details"),
+const ArtisanStudiosApp = lazy(
+  () => import("../features/website/artisanstudios/artisanstudios"),
 );
-
-const CartApp = lazy(() => import("../features/website/cart/cart"));
+// const HomeApp = lazy(() => import("../features/website/components/home/home"));
+// const EnquiryApp = lazy(
+//   () => import("../features/website/components/enquiry/enquiry"),
+// );
+// const WebsiteApp = lazy(() => import("../features/website/components/website"));
+// const ProductsApp = lazy(
+//   () => import("../features/website/components/products/products"),
+// );
+// const ProductDetailsApp = lazy(
+//   () =>
+//     import("../features/website/components/products/details/product-details"),
+// );
+// const CartApp = lazy(() => import("../features/website/components/cart/cart"));
 
 //#region admin panel
 const LandingPageApp = lazy(
@@ -36,10 +44,17 @@ const LandingPageApp = lazy(
 const DashboardApp = lazy(() => import("../features/dashboard/dashboard"));
 const UIApp = lazy(() => import("../components/ui/ui"));
 const SettingsApp = lazy(() => import("../features/settings/settings"));
-const WishlistApp = lazy(() => import("../features/website/wishlist/wishlist"));
+// const WishlistApp = lazy(
+//   () => import("../features/website/components/wishlist/wishlist"),
+// );
 
-const ProfileApp = lazy(() => import("../features/website/auth/profile/profile"));
-const OrderDetailsApp = lazy(() => import("../features/website/orders/order-details/order-details"));
+// const ProfileApp = lazy(
+//   () => import("../features/website/components/auth/profile/profile"),
+// );
+// const OrderDetailsApp = lazy(
+//   () =>
+//     import("../features/website/components/orders/order-details/order-details"),
+// );
 
 //#endregion
 
@@ -55,13 +70,34 @@ const RoutesApp = () => {
           {/* PUBLIC WEBSITE */}
 
           <Route element={<InitWebsiteApp />}>
-            <Route path={ROUTE_URL.WEBSITE.BASE} element={<WebsiteApp />}>
-              <Route index element={<HomeApp />} />
+            <Route path={ROUTE_URL.WEBSITE.BASE}>
+              <Route
+                path={ROUTE_URL.WEBSITE.BASE}
+                element={<ArtisanStudiosApp />}
+              />
+
+              {LegalRoutes()}
+
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Route>
+
+            {/* <Route path={ROUTE_URL.WEBSITE.BASE} element={<WebsiteApp />}>
+              <Route
+                path={ROUTE_URL.WEBSITE.BASE}
+                element={<ArtisanStudiosApp />}
+              />
+
+              <Route
+                path={ROUTE_URL.WEBSITE.ENQUIRY}
+                element={<EnquiryApp />}
+              />
 
               <Route
                 path={ROUTE_URL.WEBSITE.PRODUCTS}
                 element={<ProductsApp />}
               />
+
+              <Route path={ROUTE_URL.WEBSITE.SHOP} element={<HomeApp />} />
 
               <Route
                 path={ROUTE_URL.WEBSITE.PRODUCT_DETAILS}
@@ -93,7 +129,7 @@ const RoutesApp = () => {
               {LegalRoutes()}
 
               <Route path="*" element={<Navigate to="/" replace />} />
-            </Route>
+            </Route> */}
           </Route>
 
           {/* AUTH */}

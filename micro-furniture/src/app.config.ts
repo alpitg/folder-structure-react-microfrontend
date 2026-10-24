@@ -5,6 +5,24 @@ let environment = {
   description: "A microservice for managing data",
   author: "Team",
   logo: "/static/media/img/logo.png",
+  artisanStudios: {
+    name: "",
+    subName: "",
+    description: "",
+    logo: "",
+    contact: {
+      name: "",
+      address: "",
+      contactnumber: "",
+      email: "",
+      instagram: "instagram_handle",
+      whatsapp: {
+        number: "+1234567890",
+        message: "Hello, I would like to inquire about your services.",
+      },
+      site: "",
+    },
+  },
   homePage: {
     title: "title here",
     subtitle: "subtitle here",

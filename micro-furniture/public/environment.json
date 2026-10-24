@@ -5,6 +5,24 @@
   "description": "Modern, classic & aesthetic Furniture",
   "author": "Chaitanya Suryawanshi",
   "logo": "/static/media/img/logo.png",
+  "artisanStudios": {
+    "name": "Artisan",
+    "subName": "Studios",
+    "contact": {
+      "name": "Chaitanya Subhash Suryawanshi",
+      "address": "Manewada, Nagpur, Maharashtra, India",
+      "contactnumber": "+91 8149403097",
+      "email": "help@artisanstudios.in",
+      "instagram": "artisanstudiofurniture",
+      "whatsapp": {
+        "number": "+918149403097",
+        "message": "Hello ArtisanStudios Team, I am interested to know more about your home interior design/renovation services. Thank you!"
+      },
+      "site": "artisanstudios.in"
+    },
+    "description": "Modern, classic & aesthetic Furniture",
+    "logo": "/static/media/img/logo.png"
+  },
   "homePage": {
     "title": "Crafted Luxury Furniture",
     "subtitle": "Furniture designed with timeless craftsmanship and modern style.",
