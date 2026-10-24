@@ -5,6 +5,10 @@ import React, { useState } from "react";
 import { GetEnvConfig } from "../../../app.config";
 import { NavLink } from "react-router";
 import { ROUTE_URL } from "../../../routes/constants/routes.const";
+import {
+  useSubmitWebsiteQuoteMutation,
+  type QuoteHomeType,
+} from "../../../app/redux/website/quote/website-quote.api";
 
 const interiorCategories = [
   {
@@ -101,6 +105,9 @@ const offerCategories = [
 const ArtisanStudios = () => {
   const appSettings = GetEnvConfig();
 
+  const [submitWebsiteQuote, { isLoading: isSubmitting, error: submitError }] =
+    useSubmitWebsiteQuoteMutation();
+
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -120,14 +127,24 @@ const ArtisanStudios = () => {
     }));
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setSubmitted(true);
 
-    // Connect your lead-generation API here.
-    // Example: await submitInteriorLead(formData);
+    try {
+      const response = await submitWebsiteQuote({
+        name: formData.name.trim(),
+        phone: formData.phone.trim(),
+        homeType: formData.homeType as QuoteHomeType,
+      }).unwrap();
+
+      if (response.success) {
+        setSubmitted(true);
+      }
+    } catch {
+      // Keep the form visible and display an error message.
+      setSubmitted(false);
+    }
   };
-
   const scrollToQuote = () => {
     document.getElementById("quote")?.scrollIntoView({
       behavior: "smooth",
@@ -417,10 +434,26 @@ const ArtisanStudios = () => {
                 <option value="Villa">Villa / Independent House</option>
               </select>
 
-              <button className="primary-button form-submit" type="submit">
-                GET FREE QUOTE
-                <i className="bi bi-arrow-right" aria-hidden="true"></i>
+              <button
+                className="primary-button form-submit"
+                type="submit"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  "Submitting..."
+                ) : (
+                  <span>
+                    GET FREE QUOTE
+                    <i className="bi bi-arrow-right ps-2" aria-hidden="true"></i>
+                  </span>
+                )}
               </button>
+
+              {submitError && (
+                <p className="form-error" role="alert">
+                  We couldn't submit your request right now. Please try again.
+                </p>
+              )}
 
               <small className="form-disclaimer">
                 By submitting, you agree to be contacted about your interior

@@ -4,7 +4,7 @@
   min-height: 100vh;
   background: colors.$color-white;
   color: colors.$color-dark;
-//   font-family: Arial, Helvetica, sans-serif;
+  //   font-family: Arial, Helvetica, sans-serif;
   overflow: hidden;
 
   a {
@@ -456,6 +456,13 @@
     gap: 4rem;
     padding: 5rem 8%;
     background: colors.$color-background-light;
+
+    .form-error {
+      margin-top: 0.75rem;
+      color: colors.$color-danger;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
   }
 
   .quote-content {

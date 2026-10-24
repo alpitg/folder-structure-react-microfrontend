@@ -110,6 +110,9 @@
     "apiVersion": "v1",
     "website": {
       "apiUrl": "http://localhost:8000",
+      "quote": {
+        "submit": "/api/website/quote/submit"
+      },
       "auth": {
         "refresh": "/api/website/auth/refresh",
         "me": "/api/website/auth/me",

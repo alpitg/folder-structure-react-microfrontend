@@ -18,6 +18,7 @@ import { websiteCartApi } from "./redux/website/cart/cart.api";
 import { websiteOrderApi } from "./redux/website/order/website-order.api";
 import { websiteProductApi } from "./redux/website/product/website-product.api";
 import { websiteProfileApi } from "./redux/website/auth/website-profile.api";
+import { websiteQuoteApi } from "./redux/website/quote/website-quote.api";
 import websiteReducer from "./redux/website/website.reducer";
 import { websiteWishlistApi } from "./redux/website/wishlist/website-wishlist.api";
 
@@ -42,6 +43,7 @@ const store = configureStore({
 
     //#region website
     website: websiteReducer,
+    [websiteQuoteApi.reducerPath]: websiteQuoteApi.reducer,
     [websiteProductApi.reducerPath]: websiteProductApi.reducer,
     [websiteOrderApi.reducerPath]: websiteOrderApi.reducer,
     [profileLoginApi.reducerPath]: profileLoginApi.reducer,
@@ -68,6 +70,7 @@ const store = configureStore({
       dashboardApi.middleware,
 
       // website
+      websiteQuoteApi.middleware,
       websiteProductApi.middleware,
       websiteOrderApi.middleware,
       profileLoginApi.middleware,

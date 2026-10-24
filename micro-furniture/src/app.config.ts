@@ -86,6 +86,9 @@ let environment = {
     apiVersion: "",
     website: {
       apiUrl: "",
+      quote: {
+        submit: "",
+      },
       auth: {
         refresh: "",
         me: "",
