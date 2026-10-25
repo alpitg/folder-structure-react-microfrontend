@@ -16,25 +16,46 @@ const interiorCategories = [
     title: "Living Room",
     subtitle: "Comfort meets style",
     image:
-      "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=85",
+      "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1000&q=85",
+    galleryImages: [
+      "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=90",
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=90",
+      "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1400&q=90",
+      "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1400&q=90",
+    ],
   },
   {
     title: "Modular Kitchen",
     subtitle: "Designed around you",
     image:
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=85",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=85",
+    galleryImages: [
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=90",
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=90",
+      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1400&q=90",
+    ],
   },
   {
     title: "Master Bedroom",
     subtitle: "Your personal retreat",
     image:
-      "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=85",
+      "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1000&q=85",
+    galleryImages: [
+      "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1400&q=90",
+      "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1400&q=90",
+      "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=1400&q=90",
+    ],
   },
   {
     title: "Dining Room",
     subtitle: "Make every meal special",
     image:
-      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=85",
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=85",
+    galleryImages: [
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=90",
+      "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=90",
+      "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1400&q=90",
+    ],
   },
 ];
 
@@ -117,6 +138,33 @@ const ArtisanStudios = () => {
 
   const [submitted, setSubmitted] = useState(false);
   const [showQuoteForm, setShowQuoteForm] = useState(false);
+
+  const [selectedCategory, setSelectedCategory] = useState<
+    (typeof interiorCategories)[number] | null
+  >(null);
+
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+
+  const openGallery = (category: (typeof interiorCategories)[number]) => {
+    setSelectedCategory(category);
+    setActiveImageIndex(0);
+  };
+
+  const showPreviousImage = () => {
+    if (!selectedCategory) return;
+
+    setActiveImageIndex((current) =>
+      current === 0 ? selectedCategory.galleryImages.length - 1 : current - 1,
+    );
+  };
+
+  const showNextImage = () => {
+    if (!selectedCategory) return;
+
+    setActiveImageIndex(
+      (current) => (current + 1) % selectedCategory.galleryImages.length,
+    );
+  };
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -386,46 +434,57 @@ const ArtisanStudios = () => {
         </div>
       </section>
 
-      <section className="design-section" id="designs">
+      <div className="design-section">
         <div className="section-heading">
           <div>
             <span className="eyebrow">FIND YOUR STYLE</span>
             <h2>Spaces you'll love coming home to</h2>
             <p>Explore ideas for every corner of your home.</p>
           </div>
-
           <a className="text-link" href="#quote">
             Design my home →
           </a>
         </div>
-
         <div className="category-grid">
           {interiorCategories.map((category) => (
             <article className="category-card" key={category.title}>
-              <a
+              <div
                 className="category-image-link"
-                href="#quote"
-                aria-label={`Enquire about ${category.title} interiors`}
+                onClick={() => openGallery(category)}
+                data-bs-toggle="modal"
+                data-bs-target="#interiorGalleryModal"
+                aria-label={`View ${category.title} gallery`}
               >
                 <img
                   src={category.image}
-                  alt={`${category.title} interior inspiration`}
+                  alt={`${category.title} interior`}
                   loading="lazy"
                 />
 
                 <span className="category-arrow" aria-hidden="true">
-                  →
+                  ↗
                 </span>
-              </a>
+              </div>
 
               <div className="category-details">
                 <h3>{category.title}</h3>
                 <p>{category.subtitle}</p>
+
+                <button
+                  className="preview-link"
+                  type="button"
+                  onClick={() => openGallery(category)}
+                  data-bs-toggle="modal"
+                  data-bs-target="#interiorGalleryModal"
+                >
+                  View all designs
+                  <span aria-hidden="true">→</span>
+                </button>
               </div>
             </article>
           ))}
         </div>
-      </section>
+      </div>
 
       <section className="benefits-section" id="benefits">
         <div className="section-heading">
@@ -647,6 +706,92 @@ const ArtisanStudios = () => {
       >
         <QuoteForm />
       </ModelApp>
+
+      <div
+        className="modal fade interior-gallery-modal"
+        id="interiorGalleryModal"
+        tabIndex={-1}
+        aria-labelledby="interiorGalleryTitle"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered modal-xl">
+          <div className="modal-content">
+            <div className="modal-header">
+              <div>
+                <span className="eyebrow">DESIGN INSPIRATION</span>
+
+                <h2 className="gallery-title" id="interiorGalleryTitle">
+                  {selectedCategory?.title ?? "Explore designs"}
+                </h2>
+
+                <p className="gallery-subtitle">{selectedCategory?.subtitle}</p>
+              </div>
+
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close gallery"
+              />
+            </div>
+
+            {selectedCategory && (
+              <div className="gallery-content">
+                <div className="gallery-main-image">
+                  <img
+                    src={selectedCategory.galleryImages[activeImageIndex]}
+                    alt={`${selectedCategory.title} design ${activeImageIndex + 1}`}
+                  />
+
+                  {selectedCategory.galleryImages.length > 1 && (
+                    <>
+                      <button
+                        type="button"
+                        className="gallery-nav gallery-prev"
+                        onClick={showPreviousImage}
+                        aria-label="Previous image"
+                      >
+                        ‹
+                      </button>
+
+                      <button
+                        type="button"
+                        className="gallery-nav gallery-next"
+                        onClick={showNextImage}
+                        aria-label="Next image"
+                      >
+                        ›
+                      </button>
+                    </>
+                  )}
+
+                  <span className="gallery-counter">
+                    {activeImageIndex + 1} /{" "}
+                    {selectedCategory.galleryImages.length}
+                  </span>
+                </div>
+
+                <div className="gallery-thumbnails">
+                  {selectedCategory.galleryImages.map((image, index) => (
+                    <button
+                      type="button"
+                      className={`gallery-thumbnail ${
+                        activeImageIndex === index ? "active" : ""
+                      }`}
+                      key={`${image}-${index}`}
+                      onClick={() => setActiveImageIndex(index)}
+                      aria-label={`View image ${index + 1}`}
+                      aria-pressed={activeImageIndex === index}
+                    >
+                      <img src={image} alt="" loading="lazy" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </main>
   );
 };
