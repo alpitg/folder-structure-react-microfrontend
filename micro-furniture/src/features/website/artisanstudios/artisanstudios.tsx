@@ -444,7 +444,10 @@ const ArtisanStudios = () => {
                 ) : (
                   <span>
                     GET FREE QUOTE
-                    <i className="bi bi-arrow-right ps-2" aria-hidden="true"></i>
+                    <i
+                      className="bi bi-arrow-right ps-2"
+                      aria-hidden="true"
+                    ></i>
                   </span>
                 )}
               </button>
@@ -555,7 +558,9 @@ const ArtisanStudios = () => {
 
             <a
               className="contact-button whatsapp-button"
-              href="https://wa.me/919876543210?text=Hi%21%20I%27m%20interested%20in%20your%20home%20interior%20design%20services.%20Please%20share%20details%20about%20your%20designs%2C%20packages%2C%20pricing%2C%20and%20other%20services.%20I%27d%20also%20like%20to%20get%20a%20FREE%20QUOTE.%20Thank%20you%21"
+              href={`https://wa.me/${appSettings?.artisanStudios.contact.whatsapp.number}?text=${encodeURIComponent(
+                appSettings?.artisanStudios.contact.whatsapp.message || "",
+              )}`}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Contact us on WhatsApp"
