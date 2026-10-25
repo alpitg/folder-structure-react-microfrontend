@@ -23,9 +23,9 @@ const ArtisanStudiosApp = lazy(
   () => import("../features/website/artisanstudios/artisanstudios"),
 );
 // const HomeApp = lazy(() => import("../features/website/components/home/home"));
-// const EnquiryApp = lazy(
-//   () => import("../features/website/components/enquiry/enquiry"),
-// );
+const EnquiryApp = lazy(
+  () => import("../features/website/components/enquiry/enquiry"),
+);
 // const WebsiteApp = lazy(() => import("../features/website/components/website"));
 // const ProductsApp = lazy(
 //   () => import("../features/website/components/products/products"),
@@ -74,6 +74,11 @@ const RoutesApp = () => {
               <Route
                 path={ROUTE_URL.WEBSITE.BASE}
                 element={<ArtisanStudiosApp />}
+              />
+
+              <Route
+                path={ROUTE_URL.WEBSITE.ENQUIRY}
+                element={<EnquiryApp />}
               />
 
               {LegalRoutes()}
