@@ -1,6 +1,6 @@
 import "./artisanstudios.scss";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { GetEnvConfig } from "../../../app.config";
 import { NavLink } from "react-router";
@@ -117,10 +117,6 @@ const ArtisanStudios = () => {
 
   const [submitted, setSubmitted] = useState(false);
   const [showQuoteForm, setShowQuoteForm] = useState(false);
-
-  setTimeout(() => {
-    setShowQuoteForm(true);
-  }, 2000);
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -294,6 +290,12 @@ const ArtisanStudios = () => {
       </form>
     );
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShowQuoteForm(true);
+    }, 2000);
+  }, []);
 
   return (
     <main className="home-interiors">
