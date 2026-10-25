@@ -112,6 +112,13 @@
       outline: 2px solid colors.$color-dark;
       outline-offset: 3px;
     }
+
+    &:disabled {
+      background: colors.$color-primary-light;
+      color: colors.$color-white;
+      border-color: colors.$color-primary-light;
+      cursor: not-allowed;
+    }
   }
 
   .text-link {
@@ -446,13 +453,6 @@
     gap: 4rem;
     padding: 5rem 8%;
     background: colors.$color-background-light;
-
-    .form-error {
-      margin-top: 0.75rem;
-      color: colors.$color-danger;
-      font-size: 0.85rem;
-      line-height: 1.5;
-    }
   }
 
   .quote-content {
@@ -545,6 +545,13 @@
       color: colors.$color-muted;
       font-size: 0.7rem;
       line-height: 1.6;
+    }
+
+    .form-error {
+      margin-top: 0.75rem;
+      color: colors.$color-danger;
+      font-size: 0.85rem;
+      line-height: 1.5;
     }
   }
 

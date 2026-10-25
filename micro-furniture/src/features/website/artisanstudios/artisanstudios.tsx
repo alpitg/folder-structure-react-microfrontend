@@ -9,6 +9,7 @@ import {
   useSubmitWebsiteQuoteMutation,
   type QuoteHomeType,
 } from "../../../app/redux/website/quote/website-quote.api";
+import ModelApp from "../../../components/ui/model/model";
 
 const interiorCategories = [
   {
@@ -115,6 +116,11 @@ const ArtisanStudios = () => {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [showQuoteForm, setShowQuoteForm] = useState(false);
+
+  setTimeout(() => {
+    setShowQuoteForm(true);
+  }, 2000);
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -162,6 +168,132 @@ const ArtisanStudios = () => {
       <span>{appSettings.artisanStudios.subName}</span>
     </a>
   );
+
+  const QuoteSection = () => (
+    <section className="quote-section" id="quote">
+      <div className="quote-content">
+        <span className="eyebrow">LET'S CREATE YOUR DREAM HOME</span>
+
+        <h2>Ready to transform your space?</h2>
+
+        <p>
+          Share a few details. Our design team can help you explore
+          possibilities for your home.
+        </p>
+
+        <div className="quote-points">
+          <span>✓ Personalised design ideas</span>
+          <span>✓ Budget-focused recommendations</span>
+          <span>✓ A quote tailored to your home</span>
+        </div>
+      </div>
+
+      <QuoteForm />
+    </section>
+  );
+
+  const QuoteForm = () => {
+    return (
+      <form className="quote-form" onSubmit={handleSubmit}>
+        <h3>Get your free quote</h3>
+        <p>Share your details to receive a personalised estimate.</p>
+
+        {submitted ? (
+          <div className="success-message" role="status">
+            <h3>Thank You for Your Enquiry!</h3>
+            <p>
+              Your request for a free home interior quote has been received
+              successfully. Our design team will get in touch with you shortly
+              to discuss your requirements.
+            </p>
+            <p className="success-note">
+              <i>We look forward to helping you create your dream home.</i>
+            </p>
+            <button
+              className="btn btn-success"
+              type="button"
+              onClick={() => setSubmitted(false)}
+            >
+              Submit another request
+              <i className="bi bi-arrow-right ps-2" aria-hidden="true"></i>
+            </button>
+          </div>
+        ) : (
+          <>
+            <label htmlFor="customer-name">Your name</label>
+            <input
+              id="customer-name"
+              name="name"
+              type="text"
+              placeholder="Enter your full name"
+              value={formData.name}
+              onChange={handleChange}
+              autoComplete="name"
+              required
+            />
+
+            <label htmlFor="customer-phone">Mobile number</label>
+            <input
+              id="customer-phone"
+              name="phone"
+              type="tel"
+              inputMode="numeric"
+              placeholder="10-digit mobile number"
+              value={formData.phone}
+              onChange={handleChange}
+              autoComplete="tel-national"
+              pattern="[6-9][0-9]{9}"
+              title="Enter a valid 10-digit Indian mobile number"
+              maxLength={10}
+              required
+            />
+
+            <label htmlFor="home-type">Your home type</label>
+            <select
+              id="home-type"
+              name="homeType"
+              value={formData.homeType}
+              onChange={handleChange}
+              required
+            >
+              <option value="1 BHK">1 BHK</option>
+              <option value="2 BHK">2 BHK</option>
+              <option value="3 BHK">3 BHK</option>
+              <option value="4+ BHK">4+ BHK</option>
+              <option value="Villa">Villa / Independent House</option>
+            </select>
+
+            <button
+              className="primary-button form-submit"
+              // className="btn btn-primary w-100 form-submit"
+              type="submit"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                "Submitting..."
+              ) : (
+                <span>
+                  GET FREE QUOTE
+                  <i className="bi bi-arrow-right ps-2" aria-hidden="true"></i>
+                </span>
+              )}
+            </button>
+
+            {submitError && (
+              <p className="form-error" role="alert">
+                We couldn't submit your request right now. Please try again.
+              </p>
+            )}
+
+            <small className="form-disclaimer">
+              By submitting, you agree to be contacted about your interior
+              design enquiry.
+            </small>
+          </>
+        )}
+      </form>
+    );
+  };
 
   return (
     <main className="home-interiors">
@@ -347,125 +479,7 @@ const ArtisanStudios = () => {
         />
       </section>
 
-      <section className="quote-section" id="quote">
-        <div className="quote-content">
-          <span className="eyebrow">LET'S CREATE YOUR DREAM HOME</span>
-
-          <h2>Ready to transform your space?</h2>
-
-          <p>
-            Share a few details. Our design team can help you explore
-            possibilities for your home.
-          </p>
-
-          <div className="quote-points">
-            <span>✓ Personalised design ideas</span>
-            <span>✓ Budget-focused recommendations</span>
-            <span>✓ A quote tailored to your home</span>
-          </div>
-        </div>
-
-        <form className="quote-form" onSubmit={handleSubmit}>
-          <h3>Get your free quote</h3>
-          <p>Share your details to receive a personalised estimate.</p>
-
-          {submitted ? (
-            <div className="success-message" role="status">
-              <h3>Thank You for Your Enquiry!</h3>
-              <p>
-                Your request for a free home interior quote has been received
-                successfully. Our design team will get in touch with you shortly
-                to discuss your requirements.
-              </p>
-              <p className="success-note">
-                <i>We look forward to helping you create your dream home.</i>
-              </p>
-              <button
-                className="btn btn-success"
-                type="button"
-                onClick={() => setSubmitted(false)}
-              >
-                Submit another request
-                <i className="bi bi-arrow-right ps-2" aria-hidden="true"></i>
-              </button>
-            </div>
-          ) : (
-            <>
-              <label htmlFor="customer-name">Your name</label>
-              <input
-                id="customer-name"
-                name="name"
-                type="text"
-                placeholder="Enter your full name"
-                value={formData.name}
-                onChange={handleChange}
-                autoComplete="name"
-                required
-              />
-
-              <label htmlFor="customer-phone">Mobile number</label>
-              <input
-                id="customer-phone"
-                name="phone"
-                type="tel"
-                inputMode="numeric"
-                placeholder="10-digit mobile number"
-                value={formData.phone}
-                onChange={handleChange}
-                autoComplete="tel-national"
-                pattern="[6-9][0-9]{9}"
-                title="Enter a valid 10-digit Indian mobile number"
-                maxLength={10}
-                required
-              />
-
-              <label htmlFor="home-type">Your home type</label>
-              <select
-                id="home-type"
-                name="homeType"
-                value={formData.homeType}
-                onChange={handleChange}
-                required
-              >
-                <option value="1 BHK">1 BHK</option>
-                <option value="2 BHK">2 BHK</option>
-                <option value="3 BHK">3 BHK</option>
-                <option value="4+ BHK">4+ BHK</option>
-                <option value="Villa">Villa / Independent House</option>
-              </select>
-
-              <button
-                className="primary-button form-submit"
-                type="submit"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? (
-                  "Submitting..."
-                ) : (
-                  <span>
-                    GET FREE QUOTE
-                    <i
-                      className="bi bi-arrow-right ps-2"
-                      aria-hidden="true"
-                    ></i>
-                  </span>
-                )}
-              </button>
-
-              {submitError && (
-                <p className="form-error" role="alert">
-                  We couldn't submit your request right now. Please try again.
-                </p>
-              )}
-
-              <small className="form-disclaimer">
-                By submitting, you agree to be contacted about your interior
-                design enquiry.
-              </small>
-            </>
-          )}
-        </form>
-      </section>
+      <QuoteSection />
 
       <section className="offers-section" id="offers">
         <div className="offers-container">
@@ -623,6 +637,14 @@ const ArtisanStudios = () => {
           <path d="M16.01 3C8.84 3 3 8.82 3 15.98c0 2.29.61 4.52 1.77 6.48L3 29l6.72-1.76a13.05 13.05 0 0 0 6.28 1.6h.01C23.17 28.84 29 23.02 29 15.86A12.83 12.83 0 0 0 16.01 3Zm0 23.68c-1.91 0-3.79-.51-5.42-1.49l-.39-.23-3.99 1.04 1.06-3.89-.25-.4a10.7 10.7 0 0 1-1.65-5.73c0-5.9 4.8-10.69 10.71-10.69 2.86 0 5.55 1.12 7.57 3.14a10.62 10.62 0 0 1 3.13 7.56c0 5.9-4.8 10.69-10.71 10.69Zm5.88-8.01c-.32-.16-1.89-.93-2.18-1.04-.29-.1-.5-.16-.71.16-.21.31-.81 1.04-.99 1.25-.18.21-.37.24-.69.08-.32-.16-1.35-.5-2.57-1.59-.95-.84-1.59-1.88-1.78-2.2-.18-.31-.02-.48.14-.64.15-.14.32-.37.48-.55.16-.18.21-.31.32-.52.1-.21.05-.39-.03-.55-.08-.16-.71-1.72-.97-2.35-.25-.61-.51-.53-.71-.54h-.61c-.21 0-.55.08-.84.39-.29.31-1.1 1.07-1.1 2.61 0 1.54 1.12 3.02 1.28 3.23.16.21 2.2 3.36 5.33 4.71.74.32 1.32.51 1.77.65.74.24 1.41.21 1.94.13.59-.09 1.89-.77 2.15-1.51.26-.74.26-1.38.18-1.51-.08-.13-.29-.21-.61-.37Z" />
         </svg>
       </a>
+
+      <ModelApp
+        show={showQuoteForm}
+        modelSize="sm"
+        onClose={() => setShowQuoteForm(false)}
+      >
+        <QuoteForm />
+      </ModelApp>
     </main>
   );
 };
