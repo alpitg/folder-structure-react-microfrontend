@@ -16,45 +16,49 @@ const interiorCategories = [
     title: "Living Room",
     subtitle: "Comfort meets style",
     image:
-      "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1000&q=85",
+      "https://artisanstudios.blob.core.windows.net/website/LivingRoom/FullSizeRender.jpg",
     galleryImages: [
-      "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=90",
-      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=90",
-      "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1400&q=90",
-      "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1400&q=90",
+      "https://artisanstudios.blob.core.windows.net/website/LivingRoom/FullSizeRender.jpg",
+      "https://artisanstudios.blob.core.windows.net/website/LivingRoom/FullSizeRender(1).jpg",
+      "https://artisanstudios.blob.core.windows.net/website/LivingRoom/IMG_0202.jpg",
+      "https://artisanstudios.blob.core.windows.net/website/LivingRoom/IMG_0220.jpg",
+      "https://artisanstudios.blob.core.windows.net/website/LivingRoom/IMG_2732.jpg",
+      "https://artisanstudios.blob.core.windows.net/website/LivingRoom/IMG_7032.jpg",
     ],
   },
   {
     title: "Modular Kitchen",
     subtitle: "Designed around you",
     image:
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=85",
+      "https://artisanstudios.blob.core.windows.net/website/ModularKitchen/FullSizeRender.jpg",
     galleryImages: [
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=90",
-      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=90",
-      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1400&q=90",
+      "https://artisanstudios.blob.core.windows.net/website/ModularKitchen/FullSizeRender.jpg",
+      "https://artisanstudios.blob.core.windows.net/website/ModularKitchen/FullSizeRender(1).jpg",
+      "https://artisanstudios.blob.core.windows.net/website/ModularKitchen/FullSizeRender(2).jpg",
+      "https://artisanstudios.blob.core.windows.net/website/ModularKitchen/FullSizeRender(3).jpg",
     ],
   },
   {
     title: "Master Bedroom",
     subtitle: "Your personal retreat",
     image:
-      "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1000&q=85",
+      "https://artisanstudios.blob.core.windows.net/website/MasterBedroom/C-15.JPEG",
     galleryImages: [
-      "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1400&q=90",
-      "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1400&q=90",
-      "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=1400&q=90",
+      "https://artisanstudios.blob.core.windows.net/website/MasterBedroom/C-15.JPEG",
+      "https://artisanstudios.blob.core.windows.net/website/MasterBedroom/DSC08470.JPEG",
+      "https://artisanstudios.blob.core.windows.net/website/MasterBedroom/IMG_2708.jpg",
+      "https://artisanstudios.blob.core.windows.net/website/MasterBedroom/IMG_7049.jpg",
+      "https://artisanstudios.blob.core.windows.net/website/MasterBedroom/IMG_7050.jpg",
+      "https://artisanstudios.blob.core.windows.net/website/MasterBedroom/F243D9CD-3544-477C-A337-7908515FB794.JPG",
     ],
   },
   {
     title: "Dining Room",
     subtitle: "Make every meal special",
     image:
-      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=85",
+      "https://artisanstudios.blob.core.windows.net/website/DiningRoom/IMG_5379.JPG",
     galleryImages: [
-      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=90",
-      "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=90",
-      "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1400&q=90",
+      "https://artisanstudios.blob.core.windows.net/website/DiningRoom/IMG_5379.JPG",
     ],
   },
 ];
@@ -434,7 +438,7 @@ const ArtisanStudios = () => {
         </div>
       </section>
 
-      <div className="design-section">
+      <div className="design-section" id="designs">
         <div className="section-heading">
           <div>
             <span className="eyebrow">FIND YOUR STYLE</span>
@@ -534,7 +538,7 @@ const ArtisanStudios = () => {
         </div>
 
         <img
-          src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1000&q=85"
+          src="https://artisanstudios.blob.core.windows.net/website/DesignConcepts/IMG_7018.JPG"
           alt="Elegant modern home interior"
           loading="lazy"
         />
