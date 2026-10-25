@@ -17,8 +17,8 @@ let environment = {
       email: "",
       instagram: "instagram_handle",
       whatsapp: {
-        number: "+1234567890",
-        message: "Hello, I would like to inquire about your services.",
+        number: "",
+        message: "",
       },
       site: "",
     },
@@ -34,8 +34,8 @@ let environment = {
       email: "",
       instagram: "instagram_handle",
       whatsapp: {
-        number: "+1234567890",
-        message: "Hello, I would like to inquire about your services.",
+        number: "",
+        message: "",
       },
       site: "",
     },
