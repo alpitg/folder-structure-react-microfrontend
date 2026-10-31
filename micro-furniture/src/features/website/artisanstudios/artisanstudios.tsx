@@ -465,9 +465,7 @@ const ArtisanStudios = () => {
                   loading="lazy"
                 />
 
-                <span className="category-arrow" aria-hidden="true">
-                  ↗
-                </span>
+                <i className="bi bi-arrow-up-right category-arrow"></i>
               </div>
 
               <div className="category-details">
