@@ -352,9 +352,10 @@ const ArtisanStudios = () => {
   return (
     <main className="home-interiors">
       <div className="announcement-bar">
-        Make your dream home a reality
         <span> · </span>
-        Get your free interior quote
+        Contact us on WhatsApp or call us at{" "}
+        {appSettings?.artisanStudios.contact.contactnumber}
+        <span> · </span>
       </div>
 
       <header className="site-header">
