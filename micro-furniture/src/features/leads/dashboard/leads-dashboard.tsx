@@ -1,8 +1,6 @@
 import React, { useMemo, useState } from "react";
 
-// ==================================================
-// TYPES
-// ==================================================
+import { useGetLeadsDashboardQuery } from "../../../app/redux/crm/leads/leads.api";
 
 type LeadStatus =
   | "new"
@@ -12,36 +10,57 @@ type LeadStatus =
   | "won"
   | "lost";
 
-interface Lead {
-  id: string;
-  name: string;
-  company: string;
-  source: string;
-  status: LeadStatus;
+interface DashboardStat {
   value: number;
-  owner: string;
-  createdOn: string;
+  changePercent: number;
 }
 
-interface Stat {
-  label: string;
-  value: string;
-  change: string;
-  trend: "up" | "down";
-  icon: string;
+interface DashboardStats {
+  totalLeads: DashboardStat;
+  qualifiedLeads: DashboardStat;
+  conversionRate: DashboardStat;
+  pipelineValue: DashboardStat;
+}
+
+interface PipelineItem {
+  status: LeadStatus;
+  count: number;
+  value: number;
 }
 
 interface FollowUp {
   id: string;
   title: string;
-  lead: string;
-  due: string;
-  overdue?: boolean;
+  leadId: string;
+  leadName: string;
+  dueAt: string;
+  isOverdue: boolean;
 }
 
-// ==================================================
-// STATIC DATA (replace with API calls in week 2)
-// ==================================================
+interface Lead {
+  name: string;
+  company: string;
+  email: string;
+  mobile: string;
+  source: string;
+  status: LeadStatus;
+  value: number;
+  owner: string;
+  quoteDetails: string;
+  description: string;
+  isActive: boolean;
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface LeadsDashboardResponse {
+  stats: DashboardStats;
+  pipeline: PipelineItem[];
+  followUps: FollowUp[];
+  followUpsPending: number;
+  recentLeads: Lead[];
+}
 
 const STATUS_LABELS: Record<LeadStatus, string> = {
   new: "New",
@@ -52,7 +71,6 @@ const STATUS_LABELS: Record<LeadStatus, string> = {
   lost: "Lost",
 };
 
-// Maps each lead status to a badge class that already exists in _theme.scss
 const STATUS_BADGES: Record<LeadStatus, string> = {
   new: "badge-light-info",
   contacted: "badge-light-warning",
@@ -61,148 +79,6 @@ const STATUS_BADGES: Record<LeadStatus, string> = {
   won: "badge-light-success",
   lost: "badge-light-danger",
 };
-
-const STATS: Stat[] = [
-  {
-    label: "Total leads",
-    value: "1,284",
-    change: "12.5%",
-    trend: "up",
-    icon: "bi-person-plus",
-  },
-  {
-    label: "Qualified",
-    value: "342",
-    change: "8.1%",
-    trend: "up",
-    icon: "bi-patch-check",
-  },
-  {
-    label: "Conversion rate",
-    value: "18.4%",
-    change: "2.3%",
-    trend: "down",
-    icon: "bi-graph-up-arrow",
-  },
-  {
-    label: "Pipeline value",
-    value: "₹48.6L",
-    change: "15.2%",
-    trend: "up",
-    icon: "bi-currency-rupee",
-  },
-];
-
-const LEADS: Lead[] = [
-  {
-    id: "L-1042",
-    name: "Aarav Mehta",
-    company: "Urban Nest Interiors",
-    source: "Website",
-    status: "new",
-    value: 245000,
-    owner: "Riya S.",
-    createdOn: "01 Nov 2026",
-  },
-  {
-    id: "L-1041",
-    name: "Neha Kulkarni",
-    company: "Kulkarni Residences",
-    source: "Referral",
-    status: "contacted",
-    value: 480000,
-    owner: "Karan P.",
-    createdOn: "31 Oct 2026",
-  },
-  {
-    id: "L-1040",
-    name: "Rohan Deshmukh",
-    company: "Casa Living",
-    source: "Instagram",
-    status: "qualified",
-    value: 125000,
-    owner: "Riya S.",
-    createdOn: "30 Oct 2026",
-  },
-  {
-    id: "L-1039",
-    name: "Sana Sheikh",
-    company: "Bluebell Hotels",
-    source: "Trade show",
-    status: "proposal",
-    value: 920000,
-    owner: "Meera J.",
-    createdOn: "29 Oct 2026",
-  },
-  {
-    id: "L-1038",
-    name: "Vikram Joshi",
-    company: "Joshi & Sons",
-    source: "Website",
-    status: "won",
-    value: 310000,
-    owner: "Karan P.",
-    createdOn: "27 Oct 2026",
-  },
-  {
-    id: "L-1037",
-    name: "Pooja Nair",
-    company: "Nair Studio",
-    source: "Google Ads",
-    status: "lost",
-    value: 90000,
-    owner: "Meera J.",
-    createdOn: "26 Oct 2026",
-  },
-  {
-    id: "L-1036",
-    name: "Imran Qureshi",
-    company: "Oak & Ivory",
-    source: "Referral",
-    status: "qualified",
-    value: 560000,
-    owner: "Riya S.",
-    createdOn: "25 Oct 2026",
-  },
-  {
-    id: "L-1035",
-    name: "Tanvi Bhosale",
-    company: "Home Hive",
-    source: "Instagram",
-    status: "contacted",
-    value: 175000,
-    owner: "Karan P.",
-    createdOn: "24 Oct 2026",
-  },
-];
-
-const FOLLOW_UPS: FollowUp[] = [
-  {
-    id: "f1",
-    title: "Send revised quote",
-    lead: "Sana Sheikh",
-    due: "Today, 4:00 PM",
-  },
-  {
-    id: "f2",
-    title: "Call to confirm site visit",
-    lead: "Neha Kulkarni",
-    due: "Tomorrow, 11:00 AM",
-  },
-  {
-    id: "f3",
-    title: "Share catalogue",
-    lead: "Rohan Deshmukh",
-    due: "Yesterday",
-    overdue: true,
-  },
-  {
-    id: "f4",
-    title: "Negotiate delivery timeline",
-    lead: "Imran Qureshi",
-    due: "05 Nov, 2:30 PM",
-  },
-];
 
 const PIPELINE_ORDER: LeadStatus[] = [
   "new",
@@ -213,63 +89,152 @@ const PIPELINE_ORDER: LeadStatus[] = [
   "lost",
 ];
 
-// ==================================================
-// HELPERS
-// ==================================================
-
 const formatCurrency = (value: number): string =>
-  `₹${value.toLocaleString("en-IN")}`;
+  `₹${(value || 0).toLocaleString("en-IN")}`;
 
 const getInitials = (name: string): string =>
-  name
+  (name || "")
     .split(" ")
+    .filter(Boolean)
     .map((part) => part[0])
     .slice(0, 2)
     .join("")
     .toUpperCase();
 
-// ==================================================
-// COMPONENT
-// ==================================================
+const formatDate = (date: string): string => {
+  if (!date) return "-";
+
+  const parsedDate = new Date(date);
+
+  if (Number.isNaN(parsedDate.getTime())) return "-";
+
+  return parsedDate.toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+};
+
+const formatFollowUpDate = (date: string): string => {
+  if (!date) return "-";
+
+  const parsedDate = new Date(date);
+
+  if (Number.isNaN(parsedDate.getTime())) return "-";
+
+  return parsedDate.toLocaleString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
 
 const LeadsDashboardApp: React.FC = () => {
-  const search = '';
-  // const [search, setSearch] = useState("");
+  const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<LeadStatus | "all">("all");
+
+  const {
+    data: leadData,
+    isLoading,
+    isError,
+    refetch,
+  } = useGetLeadsDashboardQuery({
+    recentLimit: 8,
+    followUpLimit: 5,
+  });
+
+  const dashboardData = leadData as LeadsDashboardResponse | undefined;
+
+  const stats = dashboardData?.stats;
+  const leads = dashboardData?.recentLeads ?? [];
+  const followUps = dashboardData?.followUps ?? [];
+  const pipeline = dashboardData?.pipeline ?? [];
+  const followUpsPending = dashboardData?.followUpsPending ?? 0;
+
+  const statCards = [
+    {
+      label: "Total leads",
+      value: (stats?.totalLeads?.value ?? 0).toLocaleString("en-IN"),
+      change: stats?.totalLeads?.changePercent ?? 0,
+      icon: "bi-person-plus",
+    },
+    {
+      label: "Qualified",
+      value: (stats?.qualifiedLeads?.value ?? 0).toLocaleString("en-IN"),
+      change: stats?.qualifiedLeads?.changePercent ?? 0,
+      icon: "bi-patch-check",
+    },
+    {
+      label: "Conversion rate",
+      value: `${stats?.conversionRate?.value ?? 0}%`,
+      change: stats?.conversionRate?.changePercent ?? 0,
+      icon: "bi-graph-up-arrow",
+    },
+    {
+      label: "Pipeline value",
+      value: formatCurrency(stats?.pipelineValue?.value ?? 0),
+      change: stats?.pipelineValue?.changePercent ?? 0,
+      icon: "bi-currency-rupee",
+    },
+  ];
 
   const filteredLeads = useMemo(() => {
     const query = search.trim().toLowerCase();
-    return LEADS.filter((lead) => {
+
+    return leads.filter((lead) => {
       const matchesStatus =
         statusFilter === "all" || lead.status === statusFilter;
+
       const matchesSearch =
         !query ||
-        lead.name.toLowerCase().includes(query) ||
-        lead.company.toLowerCase().includes(query) ||
-        lead.id.toLowerCase().includes(query);
+        lead.name?.toLowerCase().includes(query) ||
+        lead.company?.toLowerCase().includes(query) ||
+        lead.id?.toLowerCase().includes(query) ||
+        lead.email?.toLowerCase().includes(query) ||
+        lead.mobile?.toLowerCase().includes(query);
+
       return matchesStatus && matchesSearch;
     });
-  }, [search, statusFilter]);
+  }, [leads, search, statusFilter]);
 
-  const pipeline = useMemo(() => {
-    const counts = PIPELINE_ORDER.map((status) => ({
-      status,
-      count: LEADS.filter((lead) => lead.status === status).length,
-    }));
-    const max = Math.max(...counts.map((item) => item.count), 1);
-    return counts.map((item) => ({
-      ...item,
-      percent: (item.count / max) * 100,
-    }));
-  }, []);
+  const maxPipelineCount = useMemo(
+    () => Math.max(...pipeline.map((item) => item.count), 1),
+    [pipeline],
+  );
+
+  if (isLoading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center py-20">
+        <span className="spinner-border text-primary me-3"></span>
+        <span className="text-gray-600 fw-semibold">Loading dashboard...</span>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="card">
+        <div className="card-body text-center py-10">
+          <i className="bi bi-exclamation-circle fs-2x text-danger"></i>
+          <p className="text-danger mt-3">
+            We couldn't load your leads. Check your connection and try again.
+          </p>
+          <button className="btn btn-primary" onClick={() => refetch()}>
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="crm-dashboard d-flex">
-      {/* ================= MAIN ================= */}
       <main className="flex-grow-1 p-4 p-lg-6" style={{ minWidth: 0 }}>
-        {/* ----- Stats ----- */}
+        {/* STATS */}
+
         <section className="row g-5 mb-5">
-          {STATS.map((stat) => (
+          {statCards.map((stat) => (
             <div className="col-12 col-sm-6 col-xl-3" key={stat.label}>
               <div className="card h-100">
                 <div className="card-body d-flex align-items-start gap-4">
@@ -278,20 +243,29 @@ const LeadsDashboardApp: React.FC = () => {
                       <i className={`bi ${stat.icon} fs-2 text-primary`}></i>
                     </span>
                   </div>
+
                   <div>
                     <div className="fs-7 fw-semibold text-gray-500">
                       {stat.label}
                     </div>
+
                     <div className="fs-2x fw-bolder text-gray-900 lh-sm">
                       {stat.value}
                     </div>
+
                     <div
-                      className={`fs-8 fw-semibold mt-1 ${stat.trend === "up" ? "text-success" : "text-danger"}`}
+                      className={`fs-8 fw-semibold mt-1 ${
+                        stat.change >= 0 ? "text-success" : "text-danger"
+                      }`}
                     >
                       <i
-                        className={`bi ${stat.trend === "up" ? "bi-arrow-up-short" : "bi-arrow-down-short"}`}
+                        className={`bi ${
+                          stat.change >= 0
+                            ? "bi-arrow-up-short"
+                            : "bi-arrow-down-short"
+                        }`}
                       ></i>
-                      {stat.change} vs last week
+                      {Math.abs(stat.change)}% vs last week
                     </div>
                   </div>
                 </div>
@@ -300,98 +274,148 @@ const LeadsDashboardApp: React.FC = () => {
           ))}
         </section>
 
-        {/* ----- Pipeline + Follow-ups ----- */}
+        {/* PIPELINE + FOLLOW UPS */}
+
         <section className="row g-5 mb-5">
+          {/* PIPELINE */}
+
           <div className="col-12 col-xl-7 col-md-6">
             <div className="card h-100">
               <div className="card-header">
                 <h2 className="card-title fs-3 mb-0">Lead pipeline</h2>
+
                 <div className="card-toolbar fs-7 text-gray-500">
-                  {LEADS.length} leads
+                  {pipeline.reduce((total, item) => total + item.count, 0)}{" "}
+                  leads
                 </div>
               </div>
+
               <div className="card-body d-flex flex-column gap-4">
-                {pipeline.map((item) => (
-                  <div className="dashboard-pipeline-item" key={item.status}>
-                    <span className="fs-6 fw-semibold text-gray-600">
-                      {STATUS_LABELS[item.status]}
-                    </span>
-                    <div className="progress h-10px bg-light">
-                      <div
-                        className={`dashboard-pipeline-bar ${item.status}`}
-                        style={{ width: `${item.percent}%` }}
-                      ></div>
+                {PIPELINE_ORDER.map((status) => {
+                  const item = pipeline.find(
+                    (pipelineItem) => pipelineItem.status === status,
+                  );
+
+                  const count = item?.count ?? 0;
+                  const percent = (count / maxPipelineCount) * 100;
+
+                  return (
+                    <div className="dashboard-pipeline-item" key={status}>
+                      <span className="fs-6 fw-semibold text-gray-600">
+                        {STATUS_LABELS[status]}
+                      </span>
+
+                      <div className="progress h-10px bg-light">
+                        <div
+                          className={`dashboard-pipeline-bar ${status}`}
+                          style={{ width: `${percent}%` }}
+                        ></div>
+                      </div>
+
+                      <span className="fs-6 fw-bold text-gray-900 text-end">
+                        {count}
+                      </span>
                     </div>
-                    <span className="fs-6 fw-bold text-gray-900 text-end">
-                      {item.count}
-                    </span>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
+
+          {/* FOLLOW UPS */}
 
           <div className="col-12 col-xl-5 col-md-6">
             <div className="card h-100">
               <div className="card-header">
                 <h2 className="card-title fs-3 mb-0">Follow-ups</h2>
+
                 <div className="card-toolbar fs-7 text-gray-500">
-                  {FOLLOW_UPS.length} pending
+                  {followUpsPending} pending
                 </div>
               </div>
+
               <div className="card-body">
-                {FOLLOW_UPS.map((task) => (
-                  <div
-                    className="d-flex align-items-start gap-3 p-3 border-bottom border-dashed"
-                    key={task.id}
-                  >
-                    <i
-                      className={`bi ${
-                        task.overdue
-                          ? "bi-exclamation-circle-fill text-danger"
-                          : "bi-clock text-gray-500"
-                      } fs-5`}
-                    ></i>
-                    <div>
-                      <div className="fs-6 fw-bold text-gray-900">
-                        {task.title}
-                      </div>
-                      <div className="fs-7 text-gray-500">
-                        {task.lead} •{" "}
-                        <span
-                          className={
-                            task.overdue ? "text-danger fw-semibold" : ""
-                          }
-                        >
-                          {task.due}
-                        </span>
+                {followUps.length > 0 ? (
+                  followUps.map((task) => (
+                    <div
+                      className="d-flex align-items-start gap-3 p-3 border-bottom border-dashed"
+                      key={task.id}
+                    >
+                      <i
+                        className={`bi ${
+                          task.isOverdue
+                            ? "bi-exclamation-circle-fill text-danger"
+                            : "bi-clock text-gray-500"
+                        } fs-5`}
+                      ></i>
+
+                      <div>
+                        <div className="fs-6 fw-bold text-gray-900">
+                          {task.title}
+                        </div>
+
+                        <div className="fs-7 text-gray-500">
+                          {task.leadName} •{" "}
+                          <span
+                            className={
+                              task.isOverdue ? "text-danger fw-semibold" : ""
+                            }
+                          >
+                            {formatFollowUpDate(task.dueAt)}
+                          </span>
+                        </div>
+
+                        {task.isOverdue && (
+                          <span className="badge badge-light-danger mt-2">
+                            Overdue
+                          </span>
+                        )}
                       </div>
                     </div>
+                  ))
+                ) : (
+                  <div className="text-center text-gray-500 py-5">
+                    <i className="bi bi-check-circle fs-2x"></i>
+                    <p className="mt-2 mb-0">No pending follow-ups.</p>
                   </div>
-                ))}
+                )}
               </div>
             </div>
           </div>
         </section>
 
-        {/* ----- Leads table ----- */}
+        {/* RECENT LEADS */}
+
         <section className="card">
           <div className="card-header flex-wrap gap-3 py-4">
             <h2 className="card-title fs-3 mb-0">Recent leads</h2>
 
             <div className="card-toolbar d-flex flex-wrap gap-2">
+              <input
+                type="text"
+                className="form-control form-control-sm w-150px"
+                placeholder="Search leads..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+
               <button
                 type="button"
-                className={`dashboard-chip btn btn-sm ${statusFilter === "all" ? "btn-primary" : "btn-light"}`}
+                className={`dashboard-chip btn btn-sm ${
+                  statusFilter === "all" ? "btn-primary" : "btn-light"
+                }`}
                 onClick={() => setStatusFilter("all")}
               >
                 All
               </button>
+
               {PIPELINE_ORDER.map((status) => (
                 <button
                   type="button"
                   key={status}
-                  className={`dashboard-chip btn btn-sm ${statusFilter === status ? "btn-primary" : "btn-light"}`}
+                  className={`dashboard-chip btn btn-sm ${
+                    statusFilter === status ? "btn-primary" : "btn-light"
+                  }`}
                   onClick={() => setStatusFilter(status)}
                 >
                   {STATUS_LABELS[status]}
@@ -413,6 +437,7 @@ const LeadsDashboardApp: React.FC = () => {
                     <th>Created</th>
                   </tr>
                 </thead>
+
                 <tbody className="fs-6 text-gray-600">
                   {filteredLeads.map((lead) => (
                     <tr key={lead.id}>
@@ -423,27 +448,43 @@ const LeadsDashboardApp: React.FC = () => {
                               {getInitials(lead.name)}
                             </span>
                           </div>
+
                           <div>
                             <div className="fw-bold text-gray-900">
                               {lead.name}
                             </div>
+
                             <div className="fs-8 text-gray-500">
                               {lead.company} • {lead.id}
+                            </div>
+
+                            <div className="fs-8 text-gray-500">
+                              {lead.email}
                             </div>
                           </div>
                         </div>
                       </td>
-                      <td>{lead.source}</td>
+
+                      <td>{lead.source || "-"}</td>
+
                       <td>
-                        <span className={`badge ${STATUS_BADGES[lead.status]}`}>
-                          {STATUS_LABELS[lead.status]}
+                        <span
+                          className={`badge ${
+                            STATUS_BADGES[lead.status] ??
+                            "badge-light-secondary"
+                          }`}
+                        >
+                          {STATUS_LABELS[lead.status] ?? lead.status}
                         </span>
                       </td>
+
                       <td className="text-end fw-bold text-gray-900">
                         {formatCurrency(lead.value)}
                       </td>
-                      <td>{lead.owner}</td>
-                      <td>{lead.createdOn}</td>
+
+                      <td>{lead.owner || "-"}</td>
+
+                      <td>{formatDate(lead.createdAt)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -452,10 +493,7 @@ const LeadsDashboardApp: React.FC = () => {
               {filteredLeads.length === 0 && (
                 <div className="text-center text-gray-500 py-10">
                   <i className="bi bi-inbox fs-2x"></i>
-                  <p className="mt-2 mb-0 fs-6">
-                    No leads match your search. Clear the filter or add a new
-                    lead.
-                  </p>
+                  <p className="mt-2 mb-0 fs-6">No leads match your search.</p>
                 </div>
               )}
             </div>

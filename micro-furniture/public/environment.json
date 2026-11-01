@@ -153,11 +153,11 @@
     },
     "leads": {
       "list": "/api/leads/search",
-      "detail": "/api/leads/{id}",
+      "detail": "/api/leads/detail/{id}",
       "add": "/api/leads/public",
-      "update": "/api/leads/{id}",
-      "delete": "/api/leads/{id}",
-      "getById": "/api/leads/{id}",
+      "update": "/api/leads/detail/{id}",
+      "delete": "/api/leads/detail/{id}",
+      "getById": "/api/leads/detail/{id}",
       "dashboard": "/api/leads/dashboard"
     },
     "administration": {
