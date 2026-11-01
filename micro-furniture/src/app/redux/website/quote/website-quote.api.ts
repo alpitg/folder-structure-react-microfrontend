@@ -10,22 +10,25 @@ export type QuoteHomeType = "1 BHK" | "2 BHK" | "3 BHK" | "4+ BHK" | "Villa";
 
 export interface WebsiteQuotePayload {
   name: string;
-  phone: string;
+  mobile: string;
   homeType: QuoteHomeType;
 }
 
 export interface WebsiteQuoteResponse {
-  success: boolean;
-  message: string;
-  quoteId?: string;
-  data?: {
-    id?: string;
-    quoteId?: string;
-    name?: string;
-    phone?: string;
-    homeType?: QuoteHomeType;
-    createdAt?: string;
-  };
+  id: string;
+  name: string;
+  mobile: string;
+
+  company: string;
+  description: string;
+  email: string;
+  isActive: boolean;
+  owner: null;
+  source: null;
+  value: number;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 // ============================================================
@@ -47,22 +50,12 @@ export const websiteQuoteApi = createApi({
       WebsiteQuotePayload
     >({
       query: (body) => {
-        const websiteConfig = GetEnvConfig()?.api?.website;
-        const apiUrl = websiteConfig?.apiUrl;
-
-        // Add `quote.submit` to your website API config.
-        const submitUrl = websiteConfig?.quote?.submit;
-
-        if (!apiUrl || !submitUrl) {
-          throw new Error("Website quote API configuration is missing.");
-        }
-
         return {
-          url: `${apiUrl}${submitUrl}`,
+          url: GetEnvConfig()?.api?.baseUrl + GetEnvConfig()?.api?.leads?.add,
           method: "POST",
           body: {
             name: body.name.trim(),
-            phone: body.phone.trim(),
+            mobile: body.mobile.trim(),
             homeType: body.homeType,
           },
         };

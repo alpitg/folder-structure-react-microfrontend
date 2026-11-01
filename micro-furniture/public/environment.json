@@ -154,7 +154,7 @@
     "leads": {
       "list": "/api/leads/search",
       "detail": "/api/leads/{id}",
-      "add": "/api/leads",
+      "add": "/api/leads/public",
       "update": "/api/leads/{id}",
       "delete": "/api/leads/{id}",
       "getById": "/api/leads/{id}"

@@ -136,7 +136,7 @@ const ArtisanStudios = () => {
 
   const [formData, setFormData] = useState({
     name: "",
-    phone: "",
+    mobile: "",
     homeType: "2 BHK",
   });
 
@@ -187,11 +187,11 @@ const ArtisanStudios = () => {
     try {
       const response = await submitWebsiteQuote({
         name: formData.name.trim(),
-        phone: formData.phone.trim(),
+        mobile: formData.mobile.trim(),
         homeType: formData.homeType as QuoteHomeType,
       }).unwrap();
 
-      if (response.success) {
+      if (response?.id) {
         setSubmitted(true);
       }
     } catch {
@@ -280,14 +280,14 @@ const ArtisanStudios = () => {
               required
             />
 
-            <label htmlFor="customer-phone">Mobile number</label>
+            <label htmlFor="customer-mobile">Mobile number</label>
             <input
-              id="customer-phone"
-              name="phone"
+              id="customer-mobile"
+              name="mobile"
               type="tel"
               inputMode="numeric"
               placeholder="10-digit mobile number"
-              value={formData.phone}
+              value={formData.mobile}
               onChange={handleChange}
               autoComplete="tel-national"
               pattern="[6-9][0-9]{9}"
@@ -704,7 +704,7 @@ const ArtisanStudios = () => {
 
       <ModelApp
         show={showQuoteForm}
-        modelSize="sm"
+        modelSize="md"
         onClose={() => setShowQuoteForm(false)}
       >
         <QuoteForm />
