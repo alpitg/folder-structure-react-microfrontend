@@ -232,7 +232,7 @@ const getInitials = (name: string): string =>
 // COMPONENT
 // ==================================================
 
-const DashboardApp: React.FC = () => {
+const LeadsDashboardApp: React.FC = () => {
   const search = '';
   // const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<LeadStatus | "all">("all");
@@ -466,4 +466,4 @@ const DashboardApp: React.FC = () => {
   );
 };
 
-export default DashboardApp;
+export default LeadsDashboardApp;
