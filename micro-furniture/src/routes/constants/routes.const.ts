@@ -45,6 +45,9 @@ export const ROUTE_URL = {
       ORDERS: "/orders",
       ORDER_DETAILS: "/orders/:orderId",
     },
+    ADMIN: {
+      LEAD_DASHBOARD: "/admin/dashboard",
+    },
     SHOP: "/shop",
     ENQUIRY: "/enquiry",
     ABOUT: "/about",

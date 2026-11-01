@@ -1,3 +1,13 @@
+```prompt
+
+my friend has construction business.. end to end home design build, including interior designing + building architecture, at present he want leads. First thing i did was, i designed a website where user will fill a form and inquiry will be generated. 
+now how to automate the process, using the power of AI, mcp servers ans agentic ai systems?
+where the agent should crawl and get all the leads and then whatsapp or mail them for these services.. my present site :https://artisanstudios.in/
+
+suggest me proper plan in simple words, where i can use my skills to boost his business and for me it will be learning and mastering for new technilogy (consider what all require for FDE role)
+
+``
+
 ## Very usefull links
 - https://artisanstudios.in/
 - https://secureserver.titan.email/mail/

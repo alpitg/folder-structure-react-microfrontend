@@ -19,13 +19,21 @@ import { SalesRoutes } from "../features/store/sales/routes/sales.routes";
 import ScrollToTop from "../hooks/scroll-to-top";
 import { useAuthInit } from "../hooks/use-auth-init";
 
+// #region Artisan Studios leads Routes
 const ArtisanStudiosApp = lazy(
   () => import("../features/website/artisanstudios/artisanstudios"),
 );
-// const HomeApp = lazy(() => import("../features/website/components/home/home"));
 const EnquiryApp = lazy(
   () => import("../features/website/components/enquiry/enquiry"),
 );
+
+const LeadDashboardApp = lazy(
+  () => import("../features/website/admin/dashboard/dashboard"),
+);
+
+// #endregion
+
+// const HomeApp = lazy(() => import("../features/website/components/home/home"));
 // const WebsiteApp = lazy(() => import("../features/website/components/website"));
 // const ProductsApp = lazy(
 //   () => import("../features/website/components/products/products"),
@@ -79,6 +87,11 @@ const RoutesApp = () => {
               <Route
                 path={ROUTE_URL.WEBSITE.ENQUIRY}
                 element={<EnquiryApp />}
+              />
+
+              <Route
+                path={ROUTE_URL.WEBSITE.ADMIN.LEAD_DASHBOARD}
+                element={<LeadDashboardApp />}
               />
 
               {LegalRoutes()}
