@@ -188,7 +188,7 @@ const ArtisanStudios = () => {
       const response = await submitWebsiteQuote({
         name: formData.name.trim(),
         mobile: formData.mobile.trim(),
-        homeType: formData.homeType as QuoteHomeType,
+        quoteDetails: formData.homeType as QuoteHomeType,
       }).unwrap();
 
       if (response?.id) {

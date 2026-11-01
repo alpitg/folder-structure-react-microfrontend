@@ -1,4 +1,4 @@
-import { SORT_OPTIONS, STATUS_LABELS, STATUS_ORDER } from "../leads.constants";
+import { STATUS_LABELS, STATUS_ORDER } from "../leads.constants";
 
 import type { LeadStatus } from "../interfaces/leads.model";
 import { useAutoFocus } from "../../../../hooks/use-auto-focus";

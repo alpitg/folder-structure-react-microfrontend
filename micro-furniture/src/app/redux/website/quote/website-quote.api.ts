@@ -11,7 +11,7 @@ export type QuoteHomeType = "1 BHK" | "2 BHK" | "3 BHK" | "4+ BHK" | "Villa";
 export interface WebsiteQuotePayload {
   name: string;
   mobile: string;
-  homeType: QuoteHomeType;
+  quoteDetails: QuoteHomeType;
 }
 
 export interface WebsiteQuoteResponse {
@@ -56,7 +56,7 @@ export const websiteQuoteApi = createApi({
           body: {
             name: body.name.trim(),
             mobile: body.mobile.trim(),
-            homeType: body.homeType,
+            quoteDetails: body.quoteDetails.trim(),
           },
         };
       },

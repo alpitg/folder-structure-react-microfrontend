@@ -1,8 +1,5 @@
 import React, { useMemo, useState } from "react";
 
-import { NavLink } from "react-router";
-import { ROUTE_URL } from "../../../routes/constants/routes.const";
-
 // ==================================================
 // TYPES
 // ==================================================
@@ -64,39 +61,6 @@ const STATUS_BADGES: Record<LeadStatus, string> = {
   won: "badge-light-success",
   lost: "badge-light-danger",
 };
-
-const NAV_ITEMS = [
-  {
-    label: "Dashboard",
-    icon: "bi-grid-1x2-fill",
-    path: ROUTE_URL.LEADS.DASHBOARD,
-    active: true,
-  },
-  {
-    label: "Leads",
-    icon: "bi-person-lines-fill",
-    path: ROUTE_URL.LEADS.LIST,
-    active: false,
-  },
-  //   {
-  //     label: "Contacts",
-  //     icon: "bi-people",
-  //     path: ROUTE_URL.WEBSITE.ADMIN.CONTACTS,
-  //     active: false,
-  //   },
-  //   {
-  //     label: "Deals",
-  //     icon: "bi-bag-check",
-  //     path: ROUTE_URL.WEBSITE.ADMIN.DEALS,
-  //     active: false,
-  //   },
-  //   {
-  //     label: "Reports",
-  //     icon: "bi-bar-chart-line",
-  //     path: ROUTE_URL.WEBSITE.ADMIN.REPORTS,
-  //     active: false,
-  //   },
-];
 
 const STATS: Stat[] = [
   {
@@ -269,7 +233,8 @@ const getInitials = (name: string): string =>
 // ==================================================
 
 const DashboardApp: React.FC = () => {
-  const [search, setSearch] = useState("");
+  const search = '';
+  // const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<LeadStatus | "all">("all");
 
   const filteredLeads = useMemo(() => {
