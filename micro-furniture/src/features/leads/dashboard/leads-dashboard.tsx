@@ -274,119 +274,9 @@ const LeadsDashboardApp: React.FC = () => {
           ))}
         </section>
 
-        {/* PIPELINE + FOLLOW UPS */}
-
-        <section className="row g-5 mb-5">
-          {/* PIPELINE */}
-
-          <div className="col-12 col-xl-7 col-md-6">
-            <div className="card h-100">
-              <div className="card-header">
-                <h2 className="card-title fs-3 mb-0">Lead pipeline</h2>
-
-                <div className="card-toolbar fs-7 text-gray-500">
-                  {pipeline.reduce((total, item) => total + item.count, 0)}{" "}
-                  leads
-                </div>
-              </div>
-
-              <div className="card-body d-flex flex-column gap-4">
-                {PIPELINE_ORDER.map((status) => {
-                  const item = pipeline.find(
-                    (pipelineItem) => pipelineItem.status === status,
-                  );
-
-                  const count = item?.count ?? 0;
-                  const percent = (count / maxPipelineCount) * 100;
-
-                  return (
-                    <div className="dashboard-pipeline-item" key={status}>
-                      <span className="fs-6 fw-semibold text-gray-600">
-                        {STATUS_LABELS[status]}
-                      </span>
-
-                      <div className="progress h-10px bg-light">
-                        <div
-                          className={`dashboard-pipeline-bar ${status}`}
-                          style={{ width: `${percent}%` }}
-                        ></div>
-                      </div>
-
-                      <span className="fs-6 fw-bold text-gray-900 text-end">
-                        {count}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-
-          {/* FOLLOW UPS */}
-
-          <div className="col-12 col-xl-5 col-md-6">
-            <div className="card h-100">
-              <div className="card-header">
-                <h2 className="card-title fs-3 mb-0">Follow-ups</h2>
-
-                <div className="card-toolbar fs-7 text-gray-500">
-                  {followUpsPending} pending
-                </div>
-              </div>
-
-              <div className="card-body">
-                {followUps.length > 0 ? (
-                  followUps.map((task) => (
-                    <div
-                      className="d-flex align-items-start gap-3 p-3 border-bottom border-dashed"
-                      key={task.id}
-                    >
-                      <i
-                        className={`bi ${
-                          task.isOverdue
-                            ? "bi-exclamation-circle-fill text-danger"
-                            : "bi-clock text-gray-500"
-                        } fs-5`}
-                      ></i>
-
-                      <div>
-                        <div className="fs-6 fw-bold text-gray-900">
-                          {task.title}
-                        </div>
-
-                        <div className="fs-7 text-gray-500">
-                          {task.leadName} •{" "}
-                          <span
-                            className={
-                              task.isOverdue ? "text-danger fw-semibold" : ""
-                            }
-                          >
-                            {formatFollowUpDate(task.dueAt)}
-                          </span>
-                        </div>
-
-                        {task.isOverdue && (
-                          <span className="badge badge-light-danger mt-2">
-                            Overdue
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-center text-gray-500 py-5">
-                    <i className="bi bi-check-circle fs-2x"></i>
-                    <p className="mt-2 mb-0">No pending follow-ups.</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* RECENT LEADS */}
 
-        <section className="card">
+        <section className="card mb-5">
           <div className="card-header flex-wrap gap-3 py-4">
             <h2 className="card-title fs-3 mb-0">Recent leads</h2>
 
@@ -496,6 +386,116 @@ const LeadsDashboardApp: React.FC = () => {
                   <p className="mt-2 mb-0 fs-6">No leads match your search.</p>
                 </div>
               )}
+            </div>
+          </div>
+        </section>
+
+        {/* PIPELINE + FOLLOW UPS */}
+
+        <section className="row g-5 mb-5">
+          {/* PIPELINE */}
+
+          <div className="col-12 col-xl-7 col-md-6">
+            <div className="card h-100">
+              <div className="card-header">
+                <h2 className="card-title fs-3 mb-0">Lead pipeline</h2>
+
+                <div className="card-toolbar fs-7 text-gray-500">
+                  {pipeline.reduce((total, item) => total + item.count, 0)}{" "}
+                  leads
+                </div>
+              </div>
+
+              <div className="card-body d-flex flex-column gap-4">
+                {PIPELINE_ORDER.map((status) => {
+                  const item = pipeline.find(
+                    (pipelineItem) => pipelineItem.status === status,
+                  );
+
+                  const count = item?.count ?? 0;
+                  const percent = (count / maxPipelineCount) * 100;
+
+                  return (
+                    <div className="dashboard-pipeline-item" key={status}>
+                      <span className="fs-6 fw-semibold text-gray-600">
+                        {STATUS_LABELS[status]}
+                      </span>
+
+                      <div className="progress h-10px bg-light">
+                        <div
+                          className={`dashboard-pipeline-bar ${status}`}
+                          style={{ width: `${percent}%` }}
+                        ></div>
+                      </div>
+
+                      <span className="fs-6 fw-bold text-gray-900 text-end">
+                        {count}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* FOLLOW UPS */}
+
+          <div className="col-12 col-xl-5 col-md-6">
+            <div className="card h-100">
+              <div className="card-header">
+                <h2 className="card-title fs-3 mb-0">Follow-ups</h2>
+
+                <div className="card-toolbar fs-7 text-gray-500">
+                  {followUpsPending} pending
+                </div>
+              </div>
+
+              <div className="card-body">
+                {followUps.length > 0 ? (
+                  followUps.map((task) => (
+                    <div
+                      className="d-flex align-items-start gap-3 p-3 border-bottom border-dashed"
+                      key={task.id}
+                    >
+                      <i
+                        className={`bi ${
+                          task.isOverdue
+                            ? "bi-exclamation-circle-fill text-danger"
+                            : "bi-clock text-gray-500"
+                        } fs-5`}
+                      ></i>
+
+                      <div>
+                        <div className="fs-6 fw-bold text-gray-900">
+                          {task.title}
+                        </div>
+
+                        <div className="fs-7 text-gray-500">
+                          {task.leadName} •{" "}
+                          <span
+                            className={
+                              task.isOverdue ? "text-danger fw-semibold" : ""
+                            }
+                          >
+                            {formatFollowUpDate(task.dueAt)}
+                          </span>
+                        </div>
+
+                        {task.isOverdue && (
+                          <span className="badge badge-light-danger mt-2">
+                            Overdue
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center text-gray-500 py-5">
+                    <i className="bi bi-check-circle fs-2x"></i>
+                    <p className="mt-2 mb-0">No pending follow-ups.</p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </section>
