@@ -131,6 +131,7 @@ let environment = {
       update: "",
       delete: "",
       getById: "",
+      dashboard: "",
     },
     dashboard: {
       stats: "",

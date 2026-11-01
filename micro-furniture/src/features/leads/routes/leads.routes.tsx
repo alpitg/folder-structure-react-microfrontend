@@ -2,7 +2,7 @@ import { ROUTE_URL } from "../../../routes/constants/routes.const";
 import { Route } from "react-router";
 import { lazy } from "react";
 
-const LeadsDashboardApp = lazy(() => import("../dashboard/dashboard"));
+const LeadsDashboardApp = lazy(() => import("../dashboard/leads-dashboard"));
 
 const LeadsApp = lazy(() => import("../leads"));
 const LeadsListApp = lazy(() => import("../list/leads-list"));

@@ -2,6 +2,7 @@ import type {
   GetLeadsParams,
   ILead,
   ILeadForm,
+  LeadsDashboardResponse,
   PaginatedLeads,
 } from "../../../../features/leads/list/interfaces/leads.model";
 
@@ -14,6 +15,21 @@ export const leadsApi = createApi({
   baseQuery,
   tagTypes: ["Leads"],
   endpoints: (builder) => ({
+    getLeadsDashboard: builder.query<
+      LeadsDashboardResponse,
+      { recentLimit?: number; followUpLimit?: number } | void
+    >({
+      query: (params) => ({
+          url: GetEnvConfig()?.api?.baseUrl + GetEnvConfig()?.api?.leads?.dashboard,
+        method: "GET",
+        params: {
+          recentLimit: params?.recentLimit ?? 8,
+          followUpLimit: params?.followUpLimit ?? 5,
+        },
+      }),
+    }),
+
+    // #region LEADS
     getLeads: builder.query<PaginatedLeads, GetLeadsParams>({
       query: (params) => ({
         url: GetEnvConfig()?.api?.baseUrl + GetEnvConfig()?.api?.leads?.list,
@@ -58,10 +74,12 @@ export const leadsApi = createApi({
       }),
       invalidatesTags: ["Leads"], // list refetches automatically
     }),
+    // #endregion
   }),
 });
 
 export const {
+  useGetLeadsDashboardQuery,
   useGetLeadsQuery,
   useGetLeadDetailQuery,
   useAddLeadMutation,

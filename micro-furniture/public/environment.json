@@ -157,7 +157,8 @@
       "add": "/api/leads/public",
       "update": "/api/leads/{id}",
       "delete": "/api/leads/{id}",
-      "getById": "/api/leads/{id}"
+      "getById": "/api/leads/{id}",
+      "dashboard": "/api/leads/dashboard"
     },
     "administration": {
       "organizationUnits": {

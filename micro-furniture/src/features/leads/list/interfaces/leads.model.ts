@@ -4,6 +4,39 @@
 // total / pages like PaginatedUsers.
 // ==================================================
 
+// #region leads dashboard
+
+interface StatOut {
+  value: number;
+  changePercent: number | null;
+}
+
+export interface LeadsDashboardResponse {
+  stats: {
+    totalLeads: StatOut;
+    qualifiedLeads: StatOut;
+    conversionRate: StatOut;
+    pipelineValue: StatOut;
+  };
+  pipeline: {
+    status: LeadStatus;
+    count: number;
+    value: number;
+  }[];
+  followUps: {
+    id: string;
+    title: string;
+    leadId: string;
+    leadName: string | null;
+    dueAt: string;
+    isOverdue: boolean;
+  }[];
+  followUpsPending: number;
+  recentLeads: ILead[];
+}
+
+// #endregion
+
 export type LeadStatus =
   | "new"
   | "contacted"
