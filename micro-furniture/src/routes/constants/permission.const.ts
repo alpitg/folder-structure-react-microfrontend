@@ -3,6 +3,13 @@ export const PERMISSION = {
     DASHBOARD: {
       DEFAULT: "Pages.Dashboard",
     },
+    LEADS: {
+      DEFAULT: "Pages.Leads",
+      DETAIL: "Pages.Leads.Detail",
+      CREATE: "Pages.Leads.Create",
+      EDIT: "Pages.Leads.Edit",
+      DELETE: "Pages.Leads.Delete",
+    },
     ADMINISTRATION: {
       USERS: {
         DEFAULT: "Pages.Administration.Users",

@@ -83,6 +83,37 @@ const Sidebar = (props: { isOpen: boolean; toggleSidebar: () => void }) => {
       ],
     },
     {
+      id: "leads",
+      title: "Leads",
+      path: ROUTE_URL.LEADS.BASE,
+      icon: "bi bi-person-lines-fill fs-3",
+      claims: [PERMISSION.PAGES.LEADS.DEFAULT, PERMISSION.PAGES.LEADS.DETAIL],
+      subRoutes: [
+        {
+          id: "leads-dashboard",
+          title: "Leads Dashboard",
+          path: ROUTE_URL.LEADS.DASHBOARD,
+          icon: "bi bi-grid fs-3",
+          claims: [
+            PERMISSION.PAGES.LEADS.DEFAULT,
+            PERMISSION.PAGES.LEADS.DETAIL,
+          ],
+          subRoutes: [],
+        },
+        {
+          id: "leads-list",
+          title: "Leads Listing",
+          path: ROUTE_URL.LEADS.LIST,
+          icon: "bi bi-card-list fs-3",
+          claims: [
+            PERMISSION.PAGES.LEADS.DEFAULT,
+            PERMISSION.PAGES.LEADS.DETAIL,
+          ],
+          subRoutes: [],
+        },
+      ],
+    },
+    {
       id: "catalog",
       title: "Catalog",
       path: ROUTE_URL.CATALOG.BASE,

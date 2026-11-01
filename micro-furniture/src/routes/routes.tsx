@@ -8,6 +8,7 @@ import { CatalogRoutes } from "../features/store/catalog/routes/catalog.routes";
 import { CustomerRoutes } from "../features/store/customer/routes/customer.route";
 import ForgetPasswordApp from "../components/auth/forget-password/forget-password";
 import InitWebsiteApp from "../features/website/components/init-website/init-website";
+import { LeadsRoutes } from "../features/leads/routes/leads.routes";
 import { LegalRoutes } from "../features/website/components/legal/legal.routes";
 import LoadingApp from "../components/loading/loading";
 import LoginApp from "../components/auth/login/login";
@@ -25,10 +26,6 @@ const ArtisanStudiosApp = lazy(
 );
 const EnquiryApp = lazy(
   () => import("../features/website/components/enquiry/enquiry"),
-);
-
-const LeadDashboardApp = lazy(
-  () => import("../features/website/admin/dashboard/dashboard"),
 );
 
 // #endregion
@@ -87,11 +84,6 @@ const RoutesApp = () => {
               <Route
                 path={ROUTE_URL.WEBSITE.ENQUIRY}
                 element={<EnquiryApp />}
-              />
-
-              <Route
-                path={ROUTE_URL.WEBSITE.ADMIN.LEAD_DASHBOARD}
-                element={<LeadDashboardApp />}
               />
 
               {LegalRoutes()}
@@ -184,6 +176,7 @@ const RoutesApp = () => {
                 {AdministrationRoutes()}
                 {CatalogRoutes()}
                 {CustomerRoutes()}
+                {LeadsRoutes()}
 
                 <Route
                   path="*"

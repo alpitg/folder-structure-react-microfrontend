@@ -1,6 +1,7 @@
-import "./dashboard.scss";
-
 import React, { useMemo, useState } from "react";
+
+import { NavLink } from "react-router";
+import { ROUTE_URL } from "../../../routes/constants/routes.const";
 
 // ==================================================
 // TYPES
@@ -65,12 +66,36 @@ const STATUS_BADGES: Record<LeadStatus, string> = {
 };
 
 const NAV_ITEMS = [
-  { label: "Dashboard", icon: "bi-grid-1x2-fill", active: true },
-  { label: "Leads", icon: "bi-person-lines-fill", active: false },
-  { label: "Contacts", icon: "bi-people", active: false },
-  { label: "Deals", icon: "bi-bag-check", active: false },
-  { label: "Reports", icon: "bi-bar-chart-line", active: false },
-  { label: "Settings", icon: "bi-gear", active: false },
+  {
+    label: "Dashboard",
+    icon: "bi-grid-1x2-fill",
+    path: ROUTE_URL.LEADS.DASHBOARD,
+    active: true,
+  },
+  {
+    label: "Leads",
+    icon: "bi-person-lines-fill",
+    path: ROUTE_URL.LEADS.LIST,
+    active: false,
+  },
+  //   {
+  //     label: "Contacts",
+  //     icon: "bi-people",
+  //     path: ROUTE_URL.WEBSITE.ADMIN.CONTACTS,
+  //     active: false,
+  //   },
+  //   {
+  //     label: "Deals",
+  //     icon: "bi-bag-check",
+  //     path: ROUTE_URL.WEBSITE.ADMIN.DEALS,
+  //     active: false,
+  //   },
+  //   {
+  //     label: "Reports",
+  //     icon: "bi-bar-chart-line",
+  //     path: ROUTE_URL.WEBSITE.ADMIN.REPORTS,
+  //     active: false,
+  //   },
 ];
 
 const STATS: Stat[] = [
@@ -275,72 +300,8 @@ const DashboardApp: React.FC = () => {
 
   return (
     <div className="crm-dashboard d-flex">
-      {/* ================= SIDEBAR ================= */}
-      <aside className="dashboard-sidebar d-none d-lg-flex flex-column p-4">
-        <div className="d-flex align-items-center gap-3 px-3 pb-6">
-          <i className="bi bi-bag-heart-fill fs-1 text-primary"></i>
-          <span className="fs-3 fw-bolder text-gray-900">Furniture CRM</span>
-        </div>
-
-        <nav className="d-flex flex-column gap-1 flex-grow-1">
-          {NAV_ITEMS.map((item) => (
-            <a
-              key={item.label}
-              href="#"
-              className={`dashboard-nav-link d-flex align-items-center gap-3 px-3 py-3 rounded fw-semibold fs-6 ${
-                item.active ? "active" : ""
-              }`}
-              onClick={(event) => event.preventDefault()}
-            >
-              <i className={`bi ${item.icon} fs-5`}></i>
-              <span>{item.label}</span>
-            </a>
-          ))}
-        </nav>
-
-        <div className="d-flex align-items-center gap-3 pt-4 px-3 border-top">
-          <div className="symbol symbol-40px symbol-circle">
-            <span className="symbol-label bg-primary text-white fw-bold">
-              AG
-            </span>
-          </div>
-          <div>
-            <div className="fw-bold fs-6 text-gray-900">Alpit G.</div>
-            <div className="fs-7 text-gray-500">Admin</div>
-          </div>
-        </div>
-      </aside>
-
       {/* ================= MAIN ================= */}
       <main className="flex-grow-1 p-4 p-lg-6" style={{ minWidth: 0 }}>
-        {/* ----- Top bar ----- */}
-        <header className="d-flex flex-wrap align-items-center justify-content-between gap-4 mb-6">
-          <div>
-            <h1 className="mb-1">Dashboard</h1>
-            <p className="mb-0 fs-6 text-gray-500">
-              Track new leads and follow-ups in one place.
-            </p>
-          </div>
-
-          <div className="d-flex flex-wrap align-items-center gap-3">
-            <div className="dashboard-search">
-              <i className="bi bi-search"></i>
-              <input
-                type="text"
-                className="form-control form-control-solid"
-                placeholder="Search by name, company or ID"
-                value={search}
-                onChange={(event) => setSearch(event.target.value)}
-                aria-label="Search leads"
-              />
-            </div>
-            <button type="button" className="btn btn-primary">
-              <i className="bi bi-plus-lg me-2"></i>
-              Add lead
-            </button>
-          </div>
-        </header>
-
         {/* ----- Stats ----- */}
         <section className="row g-5 mb-5">
           {STATS.map((stat) => (
@@ -376,7 +337,7 @@ const DashboardApp: React.FC = () => {
 
         {/* ----- Pipeline + Follow-ups ----- */}
         <section className="row g-5 mb-5">
-          <div className="col-12 col-xl-7">
+          <div className="col-12 col-xl-7 col-md-6">
             <div className="card h-100">
               <div className="card-header">
                 <h2 className="card-title fs-3 mb-0">Lead pipeline</h2>
@@ -405,7 +366,7 @@ const DashboardApp: React.FC = () => {
             </div>
           </div>
 
-          <div className="col-12 col-xl-5">
+          <div className="col-12 col-xl-5 col-md-6">
             <div className="card h-100">
               <div className="card-header">
                 <h2 className="card-title fs-3 mb-0">Follow-ups</h2>

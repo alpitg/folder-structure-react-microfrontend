@@ -45,9 +45,6 @@ export const ROUTE_URL = {
       ORDERS: "/orders",
       ORDER_DETAILS: "/orders/:orderId",
     },
-    ADMIN: {
-      LEAD_DASHBOARD: "/admin/dashboard",
-    },
     SHOP: "/shop",
     ENQUIRY: "/enquiry",
     ABOUT: "/about",
@@ -61,7 +58,11 @@ export const ROUTE_URL = {
     TERMS_OF_USE: "/terms-of-use",
     PRIVACY_POLICY: "/privacy-policy",
   },
-
+  LEADS: {
+    BASE: "/crm/leads",
+    DASHBOARD: "/crm/leads/dashboard",
+    LIST: "/crm/leads/list",
+  },
   DASHBOARD: "/crm/dashboard",
   ADMIN_DASHBOARD: "/crm/admin-dashboard",
   LOGIN: "/crm/login",

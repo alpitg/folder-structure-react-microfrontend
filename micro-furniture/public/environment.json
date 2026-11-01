@@ -151,6 +151,14 @@
     "dashboard": {
       "stats": "/api/dashboard/stats"
     },
+    "leads": {
+      "list": "/api/leads/search",
+      "detail": "/api/leads/{id}",
+      "add": "/api/leads",
+      "update": "/api/leads/{id}",
+      "delete": "/api/leads/{id}",
+      "getById": "/api/leads/{id}"
+    },
     "administration": {
       "organizationUnits": {
         "list": "/api/organization-units",

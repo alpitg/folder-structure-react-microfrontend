@@ -124,6 +124,14 @@ let environment = {
         merge: "",
       },
     },
+    leads: {
+      list: "",
+      detail: "",
+      add: "",
+      update: "",
+      delete: "",
+      getById: "",
+    },
     dashboard: {
       stats: "",
     },
